@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <StartupObject>BadScript.Console.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BadScript.Http\BadScript.Http.csproj" />
+    <ProjectReference Include="..\BadScript.IO\BadScript.IO.csproj" />
+    <ProjectReference Include="..\BadScript.Json\BadScript.Json.csproj" />
+    <ProjectReference Include="..\BadScript.Math\BadScript.Math.csproj" />
+    <ProjectReference Include="..\BadScript.Process\BadScript.Process.csproj" />
+    <ProjectReference Include="..\BadScript.Zip\BadScript.Zip.csproj" />
+    <ProjectReference Include="..\BadScript\BadScript.csproj" />
+  </ItemGroup>
+
+</Project>
