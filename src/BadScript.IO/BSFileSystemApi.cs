@@ -2,10 +2,11 @@
 using System.IO;
 using System.Linq;
 
-using BadScript.Runtime;
-using BadScript.Runtime.Implementations;
+using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
-namespace BadScript.Apis.FileSystem
+namespace BadScript.IO
 {
 
     public static class BSFileSystemApi
@@ -15,243 +16,50 @@ namespace BadScript.Apis.FileSystem
 
         public static void AddApi()
         {
-            BSEngine.AddStatic("fs", GenerateFSApi());
-            BSEngine.AddStatic("path", GeneratePathApi());
+            BSEngine.AddStatic( "fs", GenerateFSApi() );
+            BSEngine.AddStatic( "path", GeneratePathApi() );
         }
 
         #endregion
-        private static void CopyDir(string src, string dst)
-        {
-            foreach (string dirPath in Directory.GetDirectories(
-                                                                src,
-                                                                "*",
-                                                                SearchOption.AllDirectories
-                                                               ))
-            {
-                Directory.CreateDirectory(dirPath.Replace(src, dst));
-            }
-            foreach (string newPath in Directory.GetFiles(
-                                                          src,
-                                                          "*.*",
-                                                          SearchOption.AllDirectories
-                                                         ))
-            {
-                File.Copy(newPath, newPath.Replace(src, dst), true);
-            }
-        }
+
         #region Private
 
-        private static BSRuntimeTable GeneratePathApi()
+        private static void CopyDir( string src, string dst )
         {
-            EngineRuntimeTable ret = new EngineRuntimeTable();
-            ret.InsertElement(
-                              new EngineRuntimeObject("getFullPath"),
-                              new BSRuntimeFunction(
-                                                    "function getFullPath(path)",
-                                                    args =>
-                                                    {
-                                                        BSRuntimeObject o = args[0];
+            foreach ( string dirPath in Directory.GetDirectories(
+                                                                 src,
+                                                                 "*",
+                                                                 SearchOption.AllDirectories
+                                                                ) )
+            {
+                Directory.CreateDirectory( dirPath.Replace( src, dst ) );
+            }
 
-                                                        while (o is BSRuntimeReference r)
-                                                        {
-                                                            o = r.Get();
-                                                        }
-
-                                                        if (o.TryConvertString(out string path))
-                                                        {
-                                                            return new EngineRuntimeObject(Path.GetFullPath(path));
-                                                        }
-
-                                                        throw new Exception("Expected String");
-                                                    }
-                                                   )
-                             );
-            ret.InsertElement(
-                              new EngineRuntimeObject("getDirectoryName"),
-                              new BSRuntimeFunction(
-                                                    "function getDirectoryName(path)",
-                                                    args =>
-                                                    {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        while (o is BSRuntimeReference r)
-                                                        {
-                                                            o = r.Get();
-                                                        }
-
-                                                        if (o.TryConvertString(out string path))
-                                                        {
-                                                            return new EngineRuntimeObject(Path.GetDirectoryName(path));
-                                                        }
-
-                                                        throw new Exception("Expected String");
-                                                    }
-                                                   )
-                             );
-
-            ret.InsertElement(
-                              new EngineRuntimeObject("getFileName"),
-                              new BSRuntimeFunction(
-                                                    "function getFileName(path)",
-                                                    args =>
-                                                    {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        while (o is BSRuntimeReference r)
-                                                        {
-                                                            o = r.Get();
-                                                        }
-
-                                                        if (o.TryConvertString(out string path))
-                                                        {
-                                                            return new EngineRuntimeObject(Path.GetFileName(path));
-                                                        }
-
-                                                        throw new Exception("Expected String");
-                                                    }
-                                                   )
-                             );
-
-            ret.InsertElement(
-                              new EngineRuntimeObject("getFileNameWithoutExtension"),
-                              new BSRuntimeFunction(
-                                                    "function getFileNameWithoutExtension(path)",
-                                                    args =>
-                                                    {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        while (o is BSRuntimeReference r)
-                                                        {
-                                                            o = r.Get();
-                                                        }
-
-                                                        if (o.TryConvertString(out string path))
-                                                        {
-                                                            return new EngineRuntimeObject(Path.GetFileNameWithoutExtension(path));
-                                                        }
-
-                                                        throw new Exception("Expected String");
-                                                    }
-                                                   )
-                             );
-            ret.InsertElement(
-                              new EngineRuntimeObject("getExtension"),
-                              new BSRuntimeFunction(
-                                                    "function getExtension(path)",
-                                                    args =>
-                                                    {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        while (o is BSRuntimeReference r)
-                                                        {
-                                                            o = r.Get();
-                                                        }
-
-                                                        if (o.TryConvertString(out string path))
-                                                        {
-                                                            return new EngineRuntimeObject(Path.GetExtension(path));
-                                                        }
-
-                                                        throw new Exception("Expected String");
-                                                    }
-                                                   )
-                             );
-
-            ret.InsertElement(
-                              new EngineRuntimeObject("getRandomFileName"),
-                              new BSRuntimeFunction(
-                                                    "function getRandomFileName()",
-                                                    args => new EngineRuntimeObject(Path.GetRandomFileName())
-                                                   )
-                             );
-
-            ret.InsertElement(
-                              new EngineRuntimeObject( "getTempFileName" ),
-                              new BSRuntimeFunction(
-                                                    "function getTempFileName()",
-                                                    args => new EngineRuntimeObject( Path.GetTempFileName() )
-                                                   )
-                             );
-            ret.InsertElement(
-                              new EngineRuntimeObject("getTempPath"),
-                              new BSRuntimeFunction(
-                                                    "function getTempPath()",
-                                                    args => new EngineRuntimeObject(Path.GetTempPath())
-                                                   )
-                             );
-
-            ret.InsertElement(
-                              new EngineRuntimeObject( "getTempPath" ),
-                              new BSRuntimeFunction(
-                                                    "function getTempPath()",
-                                                    args =>
-                                                    {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        while ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
-
-                                                        if ( o.TryConvertString( out string path ) )
-                                                        {
-                                                            return new EngineRuntimeObject(
-                                                                 ( decimal ) ( Path.HasExtension( path ) ? 1 : 0 )
-                                                                );
-                                                        }
-
-                                                        throw new Exception( "Expected String" );
-                                                    }
-                                                   )
-                             );
-
-            ret.InsertElement(
-                              new EngineRuntimeObject("combine"),
-                              new BSRuntimeFunction(
-                                                    "function combine(path0, path1, ...)",
-                                                    args =>
-                                                    {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        while (o is BSRuntimeReference r)
-                                                        {
-                                                            o = r.Get();
-                                                        }
-
-                                                        return new EngineRuntimeObject(
-                                                             Path.Combine(
-                                                                          args.Select( x => x.ConvertString() ).
-                                                                               ToArray()
-                                                                         )
-                                                            );
-                                                    }
-                                                   )
-        
-                              );
-
-            return ret;
+            foreach ( string newPath in Directory.GetFiles(
+                                                           src,
+                                                           "*.*",
+                                                           SearchOption.AllDirectories
+                                                          ) )
+            {
+                File.Copy( newPath, newPath.Replace( src, dst ), true );
+            }
         }
 
-        private static BSRuntimeTable GenerateFSApi()
+        private static ABSTable GenerateFSApi()
         {
-            EngineRuntimeTable ret = new EngineRuntimeTable();
+            BSTable ret = new BSTable();
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "exists" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "exists" ),
+                              new BSFunction(
                                                     "function exists(path)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        while ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertString( out string path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) ( File.Exists( path ) ||
                                                                                Directory.Exists( path )
                                                                                    ? 1
@@ -265,23 +73,18 @@ namespace BadScript.Apis.FileSystem
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "setCurrentDir" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "setCurrentDir" ),
+                              new BSFunction(
                                                     "function setCurrentDir(path)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        while ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertString( out string path ) )
                                                         {
                                                             Directory.SetCurrentDirectory( path );
 
-                                                            return new EngineRuntimeObject( null );
+                                                            return new BSObject( null );
                                                         }
 
                                                         throw new Exception( "Expected String" );
@@ -290,40 +93,37 @@ namespace BadScript.Apis.FileSystem
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject("getFiles"),
-                              new BSRuntimeFunction(
+                              new BSObject( "getFiles" ),
+                              new BSFunction(
                                                     "function getFiles(path)/getFiles(path, searchPattern)/getFiles(path, searchPattern, recurse)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
+                                                        ABSObject o = args[0].ResolveReference();
 
-                                                        while (o is BSRuntimeReference r)
+                                                        if ( !o.TryConvertString( out string path ) )
                                                         {
-                                                            o = r.Get();
-                                                        }
-                                                        if (!o.TryConvertString(out string path))
-                                                        {
-                                                            throw new Exception("Expected String");
+                                                            throw new Exception( "Expected String" );
                                                         }
 
-                                                        if (args.Length >= 1)
+                                                        if ( args.Length >= 1 )
                                                         {
-                                                            if (!args[1].TryConvertString(out string pattern))
+                                                            if ( !args[1].TryConvertString( out string pattern ) )
                                                             {
-                                                                throw new Exception("Expected String");
+                                                                throw new Exception( "Expected String" );
                                                             }
+
                                                             bool recurse = false;
 
-                                                            if (args.Length >= 2)
+                                                            if ( args.Length >= 2 )
                                                             {
-                                                                if (args.Length > 3)
+                                                                if ( args.Length > 3 )
                                                                 {
-                                                                    bool r = args[2].TryConvertBool(out bool rr);
+                                                                    bool r = args[2].TryConvertBool( out bool rr );
                                                                     recurse = r && rr;
                                                                 }
                                                             }
 
-                                                            return new EngineRuntimeArray(
+                                                            return new BSArray(
                                                                  Directory.GetFiles(
                                                                                 path,
                                                                                 pattern,
@@ -331,56 +131,54 @@ namespace BadScript.Apis.FileSystem
                                                                                     ? SearchOption.AllDirectories
                                                                                     : SearchOption.TopDirectoryOnly
                                                                                ).
-                                                                           Select(x => new EngineRuntimeObject(x))
+                                                                           Select( x => new BSObject( x ) )
                                                                 );
                                                         }
                                                         else
                                                         {
-                                                            return new EngineRuntimeArray(Directory.GetFiles(path).
-                                                                Select(x => new EngineRuntimeObject(x)));
+                                                            return new BSArray(
+                                                                 Directory.GetFiles( path ).
+                                                                           Select( x => new BSObject( x ) )
+                                                                );
                                                         }
 
-
-                                                        throw new Exception("Expected String");
+                                                        throw new Exception( "Expected String" );
                                                     }
                                                    )
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject("getDirectories"),
-                              new BSRuntimeFunction(
+                              new BSObject( "getDirectories" ),
+                              new BSFunction(
                                                     "function getDirectories(path)/getDirectories(path, searchPattern)/getDirectories(path, searchPattern, recurse)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
+                                                        ABSObject o = args[0].ResolveReference();
 
-                                                        while (o is BSRuntimeReference r)
+                                                        if ( !o.TryConvertString( out string path ) )
                                                         {
-                                                            o = r.Get();
-                                                        }
-                                                        if (!o.TryConvertString(out string path))
-                                                        {
-                                                            throw new Exception("Expected String");
+                                                            throw new Exception( "Expected String" );
                                                         }
 
-                                                        if (args.Length >= 1)
+                                                        if ( args.Length >= 1 )
                                                         {
-                                                            if (!args[1].TryConvertString(out string pattern))
+                                                            if ( !args[1].TryConvertString( out string pattern ) )
                                                             {
-                                                                throw new Exception("Expected String");
+                                                                throw new Exception( "Expected String" );
                                                             }
+
                                                             bool recurse = false;
 
-                                                            if (args.Length >= 2)
+                                                            if ( args.Length >= 2 )
                                                             {
-                                                                if (args.Length > 3)
+                                                                if ( args.Length > 3 )
                                                                 {
-                                                                    bool r = args[2].TryConvertBool(out bool rr);
+                                                                    bool r = args[2].TryConvertBool( out bool rr );
                                                                     recurse = r && rr;
                                                                 }
                                                             }
 
-                                                            return new EngineRuntimeArray(
+                                                            return new BSArray(
                                                                  Directory.GetDirectories(
                                                                                 path,
                                                                                 pattern,
@@ -388,25 +186,27 @@ namespace BadScript.Apis.FileSystem
                                                                                     ? SearchOption.AllDirectories
                                                                                     : SearchOption.TopDirectoryOnly
                                                                                ).
-                                                                           Select(x => new EngineRuntimeObject(x))
+                                                                           Select( x => new BSObject( x ) )
                                                                 );
                                                         }
                                                         else
                                                         {
-                                                            return new EngineRuntimeArray(Directory.GetDirectories(path).
-                                                                Select(x => new EngineRuntimeObject(x)));
+                                                            return new BSArray(
+                                                                 Directory.GetDirectories( path ).
+                                                                           Select( x => new BSObject( x ) )
+                                                                );
                                                         }
                                                     }
                                                    )
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "getCurrentDir" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "getCurrentDir" ),
+                              new BSFunction(
                                                     "function getCurrentDir()",
                                                     args =>
                                                     {
-                                                        return new EngineRuntimeObject(
+                                                        return new BSObject(
                                                              Directory.GetCurrentDirectory()
                                                             );
                                                     }
@@ -414,21 +214,16 @@ namespace BadScript.Apis.FileSystem
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "isDir" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "isDir" ),
+                              new BSFunction(
                                                     "function isDir(path)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertString( out string path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) ( Directory.Exists( path ) ? 1 : 0 )
                                                                 );
                                                         }
@@ -439,21 +234,16 @@ namespace BadScript.Apis.FileSystem
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "isFile" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "isFile" ),
+                              new BSFunction(
                                                     "function isFile(path)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertString( out string path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) ( File.Exists( path ) ? 1 : 0 )
                                                                 );
                                                         }
@@ -464,103 +254,90 @@ namespace BadScript.Apis.FileSystem
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject("createDir"),
-                              new BSRuntimeFunction(
+                              new BSObject( "createDir" ),
+                              new BSFunction(
                                                     "function createDir(path)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
+                                                        ABSObject o = args[0].ResolveReference();
 
-                                                        if (o is BSRuntimeReference r)
+                                                        if ( o.TryConvertString( out string path ) )
                                                         {
-                                                            o = r.Get();
+                                                            Directory.CreateDirectory( path );
+
+                                                            return new BSObject( null );
                                                         }
 
-                                                        if (o.TryConvertString(out string path))
-                                                        {
-                                                            Directory.CreateDirectory(path);
-
-                                                            return new EngineRuntimeObject(null);
-                                                        }
-
-                                                        throw new Exception("Expected String");
+                                                        throw new Exception( "Expected String" );
                                                     }
                                                    )
                              );
-            ret.InsertElement(
-                                                  new EngineRuntimeObject("copy"),
-                                                  new BSRuntimeFunction(
-                                                                        "function copy(source, destination)",
-                                                                        args =>
-                                                                        {
-                                                                            BSRuntimeObject o = args[0];
-
-                                                                            if (o is BSRuntimeReference r)
-                                                                            {
-                                                                                o = r.Get();
-                                                                            }
-
-                                                                            if (o.TryConvertString(out string source) &&
-                                                                                    args[1].TryConvertString(out string destination))
-
-                                                                            {
-                                                                                if (Directory.Exists(source))
-                                                                                    CopyDir(source, destination);
-                                                                                else
-                                                                                {
-                                                                                    File.Copy(source, destination, true);
-                                                                                }
-                                                                                return new EngineRuntimeObject(null);
-                                                                            }
-
-                                                                            throw new Exception("Expected String");
-                                                                        }
-                                                                       )
-                                                 );
 
             ret.InsertElement(
-                                                  new EngineRuntimeObject("move"),
-                                                  new BSRuntimeFunction(
-                                                                        "function move(source, destination)",
-                                                                        args =>
-                                                                        {
-                                                                            BSRuntimeObject o = args[0];
+                              new BSObject( "copy" ),
+                              new BSFunction(
+                                                    "function copy(source, destination)",
+                                                    args =>
+                                                    {
+                                                        ABSObject o = args[0].ResolveReference();
 
-                                                                            if (o is BSRuntimeReference r)
-                                                                            {
-                                                                                o = r.Get();
-                                                                            }
+                                                        if ( o.TryConvertString( out string source ) &&
+                                                             args[1].TryConvertString( out string destination ) )
 
-                                                                            if (o.TryConvertString(out string source) &&
-                                                                                    args[1].TryConvertString(out string destination))
+                                                        {
+                                                            if ( Directory.Exists( source ) )
+                                                            {
+                                                                CopyDir( source, destination );
+                                                            }
+                                                            else
+                                                            {
+                                                                File.Copy( source, destination, true );
+                                                            }
 
-                                                                            {
-                                                                                if (Directory.Exists(source))
-                                                                                    Directory.Move(source, destination);
-                                                                                else
-                                                                                {
-                                                                                    File.Move(source, destination);
-                                                                                }
-                                                                                return new EngineRuntimeObject(null);
-                                                                            }
+                                                            return new BSObject( null );
+                                                        }
 
-                                                                            throw new Exception("Expected String");
-                                                                        }
-                                                                       )
-                                                 );
+                                                        throw new Exception( "Expected String" );
+                                                    }
+                                                   )
+                             );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "delete" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "move" ),
+                              new BSFunction(
+                                                    "function move(source, destination)",
+                                                    args =>
+                                                    {
+                                                        ABSObject o = args[0].ResolveReference();
+
+                                                        if ( o.TryConvertString( out string source ) &&
+                                                             args[1].TryConvertString( out string destination ) )
+
+                                                        {
+                                                            if ( Directory.Exists( source ) )
+                                                            {
+                                                                Directory.Move( source, destination );
+                                                            }
+                                                            else
+                                                            {
+                                                                File.Move( source, destination );
+                                                            }
+
+                                                            return new BSObject( null );
+                                                        }
+
+                                                        throw new Exception( "Expected String" );
+                                                    }
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "delete" ),
+                              new BSFunction(
                                                     "function delete(path)|function delete(path, recurse)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertString( out string path ) )
                                                         {
@@ -577,7 +354,7 @@ namespace BadScript.Apis.FileSystem
                                                                 File.Delete( path );
                                                             }
 
-                                                            return new EngineRuntimeObject( null );
+                                                            return new BSObject( null );
                                                         }
 
                                                         throw new Exception( "Expected String" );
@@ -586,17 +363,17 @@ namespace BadScript.Apis.FileSystem
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "open" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "open" ),
+                              new BSFunction(
                                                     "function open(path)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
+                                                        ABSObject o = args[0].ResolveReference();
                                                         FileAccess m = FileAccess.ReadWrite;
 
                                                         if ( args.Length < 1 )
                                                         {
-                                                            BSRuntimeObject
+                                                            ABSObject
                                                                 mode = args[1];
 
                                                             if ( mode.TryConvertString( out string fileOpenMode ) )
@@ -624,11 +401,6 @@ namespace BadScript.Apis.FileSystem
                                                             }
                                                         }
 
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
-
                                                         if ( o.TryConvertString( out string path ) )
                                                         {
                                                             return new BSFileSystemObject(
@@ -642,6 +414,169 @@ namespace BadScript.Apis.FileSystem
                                                         }
 
                                                         throw new Exception( "Expected String" );
+                                                    }
+                                                   )
+                             );
+
+            return ret;
+        }
+
+        private static ABSTable GeneratePathApi()
+        {
+            BSTable ret = new BSTable();
+
+            ret.InsertElement(
+                              new BSObject( "getFullPath" ),
+                              new BSFunction(
+                                                    "function getFullPath(path)",
+                                                    args =>
+                                                    {
+                                                        ABSObject o = args[0].ResolveReference();
+
+                                                        if ( o.TryConvertString( out string path ) )
+                                                        {
+                                                            return new BSObject( Path.GetFullPath( path ) );
+                                                        }
+
+                                                        throw new Exception( "Expected String" );
+                                                    }
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "getDirectoryName" ),
+                              new BSFunction(
+                                                    "function getDirectoryName(path)",
+                                                    args =>
+                                                    {
+                                                        ABSObject o = args[0].ResolveReference();
+
+                                                        if ( o.TryConvertString( out string path ) )
+                                                        {
+                                                            return new BSObject(
+                                                                 Path.GetDirectoryName( path )
+                                                                );
+                                                        }
+
+                                                        throw new Exception( "Expected String" );
+                                                    }
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "getFileName" ),
+                              new BSFunction(
+                                                    "function getFileName(path)",
+                                                    args =>
+                                                    {
+                                                        ABSObject o = args[0].ResolveReference();
+
+                                                        if ( o.TryConvertString( out string path ) )
+                                                        {
+                                                            return new BSObject( Path.GetFileName( path ) );
+                                                        }
+
+                                                        throw new Exception( "Expected String" );
+                                                    }
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "getFileNameWithoutExtension" ),
+                              new BSFunction(
+                                                    "function getFileNameWithoutExtension(path)",
+                                                    args =>
+                                                    {
+                                                        ABSObject o = args[0].ResolveReference();
+
+                                                        if ( o.TryConvertString( out string path ) )
+                                                        {
+                                                            return new BSObject(
+                                                                 Path.GetFileNameWithoutExtension( path )
+                                                                );
+                                                        }
+
+                                                        throw new Exception( "Expected String" );
+                                                    }
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "getExtension" ),
+                              new BSFunction(
+                                                    "function getExtension(path)",
+                                                    args =>
+                                                    {
+                                                        ABSObject o = args[0].ResolveReference();
+
+                                                        if ( o.TryConvertString( out string path ) )
+                                                        {
+                                                            return new BSObject( Path.GetExtension( path ) );
+                                                        }
+
+                                                        throw new Exception( "Expected String" );
+                                                    }
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "getRandomFileName" ),
+                              new BSFunction(
+                                                    "function getRandomFileName()",
+                                                    args => new BSObject( Path.GetRandomFileName() )
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "getTempFileName" ),
+                              new BSFunction(
+                                                    "function getTempFileName()",
+                                                    args => new BSObject( Path.GetTempFileName() )
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "getTempPath" ),
+                              new BSFunction(
+                                                    "function getTempPath()",
+                                                    args => new BSObject( Path.GetTempPath() )
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "getTempPath" ),
+                              new BSFunction(
+                                                    "function getTempPath()",
+                                                    args =>
+                                                    {
+                                                        ABSObject o = args[0].ResolveReference();
+
+                                                        if ( o.TryConvertString( out string path ) )
+                                                        {
+                                                            return new BSObject(
+                                                                 ( decimal ) ( Path.HasExtension( path ) ? 1 : 0 )
+                                                                );
+                                                        }
+
+                                                        throw new Exception( "Expected String" );
+                                                    }
+                                                   )
+                             );
+
+            ret.InsertElement(
+                              new BSObject( "combine" ),
+                              new BSFunction(
+                                                    "function combine(path0, path1, ...)",
+                                                    args =>
+                                                    {
+                                                        ABSObject o = args[0].ResolveReference();
+
+                                                        return new BSObject(
+                                                             Path.Combine(
+                                                                          args.Select( x => x.ConvertString() ).
+                                                                               ToArray()
+                                                                         )
+                                                            );
                                                     }
                                                    )
                              );

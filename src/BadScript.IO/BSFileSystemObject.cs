@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 
-using BadScript.Runtime;
-using BadScript.Runtime.Implementations;
+using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
-namespace BadScript.Apis.FileSystem
+namespace BadScript.IO
 {
 
-    public class BSFileSystemObject : BSRuntimeObject
+    public class BSFileSystemObject : ABSObject
     {
 
-        private EngineRuntimeTable m_InstanceFunctions;
+        private BSTable m_InstanceFunctions;
         private FileStream m_Stream;
         private readonly string m_FilePath;
 
@@ -22,65 +23,65 @@ namespace BadScript.Apis.FileSystem
             m_FilePath = path;
             m_Stream = fs;
 
-            m_InstanceFunctions = new EngineRuntimeTable(
-                                                         new Dictionary < BSRuntimeObject, BSRuntimeObject >
+            m_InstanceFunctions = new BSTable(
+                                                         new Dictionary < ABSObject, ABSObject >
                                                          {
                                                              {
-                                                                 new EngineRuntimeObject( "close" ),
-                                                                 new BSRuntimeFunction(
+                                                                 new BSObject( "close" ),
+                                                                 new BSFunction(
                                                                       "function close()",
                                                                       CloseFileStream
                                                                      )
                                                              },
                                                              {
-                                                                 new EngineRuntimeObject( "write" ),
-                                                                 new BSRuntimeFunction(
+                                                                 new BSObject( "write" ),
+                                                                 new BSFunction(
                                                                       "function write(str)",
                                                                       WriteString
                                                                      )
                                                              },
                                                              {
-                                                                 new EngineRuntimeObject( "writeLine" ),
-                                                                 new BSRuntimeFunction(
+                                                                 new BSObject( "writeLine" ),
+                                                                 new BSFunction(
                                                                       "function writeLine(str)",
                                                                       WriteLine
                                                                      )
                                                              },
                                                              {
-                                                                 new EngineRuntimeObject( "readLine" ),
-                                                                 new BSRuntimeFunction(
+                                                                 new BSObject( "readLine" ),
+                                                                 new BSFunction(
                                                                       "function readLine()",
                                                                       ReadLine
                                                                      )
                                                              },
                                                              {
-                                                                 new EngineRuntimeObject( "readAll" ),
-                                                                 new BSRuntimeFunction( "function readAll()", ReadAll )
+                                                                 new BSObject( "readAll" ),
+                                                                 new BSFunction( "function readAll()", ReadAll )
                                                              },
                                                              {
-                                                                 new EngineRuntimeObject( "getPosition" ),
-                                                                 new BSRuntimeFunction(
+                                                                 new BSObject( "getPosition" ),
+                                                                 new BSFunction(
                                                                       "function getPosition()",
                                                                       GetPosition
                                                                      )
                                                              },
                                                              {
-                                                                 new EngineRuntimeObject( "setPosition" ),
-                                                                 new BSRuntimeFunction(
+                                                                 new BSObject( "setPosition" ),
+                                                                 new BSFunction(
                                                                       "function setPosition(pos)",
                                                                       SetPosition
                                                                      )
                                                              },
                                                              {
-                                                                 new EngineRuntimeObject( "getLength" ),
-                                                                 new BSRuntimeFunction(
+                                                                 new BSObject( "getLength" ),
+                                                                 new BSFunction(
                                                                       "function getLength()",
                                                                       GetLength
                                                                      )
                                                              },
                                                              {
-                                                                 new EngineRuntimeObject( "setLength" ),
-                                                                 new BSRuntimeFunction(
+                                                                 new BSObject( "setLength" ),
+                                                                 new BSFunction(
                                                                       "function setLength(len)",
                                                                       SetLength
                                                                      )
@@ -89,12 +90,12 @@ namespace BadScript.Apis.FileSystem
                                                         );
         }
 
-        public override bool Equals( BSRuntimeObject other )
+        public override bool Equals( ABSObject other )
         {
             return ReferenceEquals( this, other );
         }
 
-        public override BSRuntimeReference GetProperty( string propertyName )
+        public override ABSReference GetProperty( string propertyName )
         {
             return m_InstanceFunctions.GetProperty( propertyName );
         }
@@ -104,17 +105,17 @@ namespace BadScript.Apis.FileSystem
             return m_InstanceFunctions.HasProperty( propertyName );
         }
 
-        public override BSRuntimeObject Invoke( BSRuntimeObject[] args )
+        public override ABSObject Invoke( ABSObject[] args )
         {
             throw new Exception( "File Stream API Objects can not be invoked" );
         }
 
-        public override string SafeToString( Dictionary < BSRuntimeObject, string > doneList )
+        public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return doneList[this] = m_Stream.ToString();
         }
 
-        public override void SetProperty( string propertyName, BSRuntimeObject obj )
+        public override void SetProperty( string propertyName, ABSObject obj )
         {
             throw new Exception( "File Stream API Objects can not be written to" );
         }
@@ -144,7 +145,7 @@ namespace BadScript.Apis.FileSystem
 
         #region Private
 
-        private BSRuntimeObject CloseFileStream( BSRuntimeObject[] arg )
+        private ABSObject CloseFileStream( ABSObject[] arg )
         {
             if ( m_Stream == null )
             {
@@ -154,42 +155,30 @@ namespace BadScript.Apis.FileSystem
             m_Stream.Close();
             m_Stream = null;
 
-            return new EngineRuntimeObject( 0 );
+            return new BSObject( 0 );
         }
 
-        private BSRuntimeObject GetLength( BSRuntimeObject[] arg )
+        private ABSObject GetLength( ABSObject[] arg )
         {
             if ( m_Stream == null )
             {
                 throw new Exception( "File Stream is Disposed" );
             }
 
-            return new EngineRuntimeObject( ( decimal ) m_Stream.Length );
+            return new BSObject( ( decimal ) m_Stream.Length );
         }
 
-        private BSRuntimeObject GetPosition( BSRuntimeObject[] arg )
+        private ABSObject GetPosition( ABSObject[] arg )
         {
             if ( m_Stream == null )
             {
                 throw new Exception( "File Stream is Disposed" );
             }
 
-            return new EngineRuntimeObject( ( decimal ) m_Stream.Position );
+            return new BSObject( ( decimal ) m_Stream.Position );
         }
 
-        private BSRuntimeObject ReadAll( BSRuntimeObject[] arg )
-        {
-            if ( m_Stream == null )
-            {
-                throw new Exception( "File Stream is Disposed" );
-            }
-
-            TextReader reader = new StreamReader( m_Stream );
-
-            return new EngineRuntimeObject( reader.ReadToEnd() );
-        }
-
-        private BSRuntimeObject ReadLine( BSRuntimeObject[] arg )
+        private ABSObject ReadAll( ABSObject[] arg )
         {
             if ( m_Stream == null )
             {
@@ -198,102 +187,94 @@ namespace BadScript.Apis.FileSystem
 
             TextReader reader = new StreamReader( m_Stream );
 
-            return new EngineRuntimeObject( reader.ReadLine() );
+            return new BSObject( reader.ReadToEnd() );
         }
 
-        private BSRuntimeObject SetLength( BSRuntimeObject[] arg )
+        private ABSObject ReadLine( ABSObject[] arg )
         {
             if ( m_Stream == null )
             {
                 throw new Exception( "File Stream is Disposed" );
             }
 
-            BSRuntimeObject o = arg[0];
+            TextReader reader = new StreamReader( m_Stream );
 
-            if ( o is BSRuntimeReference r )
+            return new BSObject( reader.ReadLine() );
+        }
+
+        private ABSObject SetLength( ABSObject[] arg )
+        {
+            if ( m_Stream == null )
             {
-                o = r.Get();
+                throw new Exception( "File Stream is Disposed" );
             }
+
+            ABSObject o = arg[0].ResolveReference();
 
             if ( o.TryConvertDecimal( out decimal path ) )
             {
                 m_Stream.SetLength( ( long ) path );
 
-                return new EngineRuntimeObject( 0 );
+                return new BSObject( 0 );
             }
 
             throw new Exception( "Expected Decimal" );
         }
 
-        private BSRuntimeObject SetPosition( BSRuntimeObject[] arg )
+        private ABSObject SetPosition( ABSObject[] arg )
         {
             if ( m_Stream == null )
             {
                 throw new Exception( "File Stream is Disposed" );
             }
 
-            BSRuntimeObject o = arg[0];
-
-            if ( o is BSRuntimeReference r )
-            {
-                o = r.Get();
-            }
+            ABSObject o = arg[0].ResolveReference();
 
             if ( o.TryConvertDecimal( out decimal path ) )
             {
                 m_Stream.Position = ( long ) path;
 
-                return new EngineRuntimeObject( 0 );
+                return new BSObject( 0 );
             }
 
             throw new Exception( "Expected Decimal" );
         }
 
-        private BSRuntimeObject WriteLine( BSRuntimeObject[] arg )
+        private ABSObject WriteLine( ABSObject[] arg )
         {
             if ( m_Stream == null )
             {
                 throw new Exception( "File Stream is Disposed" );
             }
 
-            BSRuntimeObject o = arg[0];
-
-            if ( o is BSRuntimeReference r )
-            {
-                o = r.Get();
-            }
+            ABSObject o = arg[0].ResolveReference();
 
             if ( o.TryConvertString( out string path ) )
             {
                 TextWriter writer = new StreamWriter( m_Stream );
                 writer.WriteLine( path );
 
-                return new EngineRuntimeObject( 0 );
+                return new BSObject( 0 );
             }
 
             throw new Exception( "Expected String" );
         }
 
-        private BSRuntimeObject WriteString( BSRuntimeObject[] arg )
+        private ABSObject WriteString( ABSObject[] arg )
         {
             if ( m_Stream == null )
             {
                 throw new Exception( "File Stream is Disposed" );
             }
 
-            BSRuntimeObject o = arg[0];
-
-            if ( o is BSRuntimeReference r )
-            {
-                o = r.Get();
-            }
+            ABSObject o = arg[0].ResolveReference();
 
             if ( o.TryConvertString( out string path ) )
             {
                 TextWriter writer = new StreamWriter( m_Stream );
                 writer.Write( path );
 
-                return new EngineRuntimeObject( 0 );
+                return new BSObject( 0 );
             }
 
             throw new Exception( "Expected String" );

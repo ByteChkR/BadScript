@@ -1,92 +1,124 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 
-using BadScript.Runtime;
-using BadScript.Runtime.Implementations;
+using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
 
 namespace BadScript.Http
 {
+
     public static class HttpApi
     {
 
+        #region Public
+
         public static void AddApi()
         {
-            EngineRuntimeTable t = new EngineRuntimeTable();
-            t.InsertElement(new EngineRuntimeObject("get"), new BSRuntimeFunction("function get(url)", Get));
-            t.InsertElement(new EngineRuntimeObject("post"), new BSRuntimeFunction("function post(url, body)", Post));
-            t.InsertElement(new EngineRuntimeObject("downloadFile"), new BSRuntimeFunction("function downloadFile(url, destination)", DownloadFile));
-            t.InsertElement(new EngineRuntimeObject("downloadString"), new BSRuntimeFunction("function downloadString(url)", DownloadString));
+            BSTable t = new BSTable();
+            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get ) );
+
+            t.InsertElement(
+                            new BSObject( "post" ),
+                            new BSFunction( "function post(url, body)", Post )
+                           );
+
+            t.InsertElement(
+                            new BSObject( "downloadFile" ),
+                            new BSFunction( "function downloadFile(url, destination)", DownloadFile )
+                           );
+
+            t.InsertElement(
+                            new BSObject( "downloadString" ),
+                            new BSFunction( "function downloadString(url)", DownloadString )
+                           );
+
             BSEngine.AddStatic( "http", t );
         }
 
+        #endregion
 
-        private static BSRuntimeObject Post(BSRuntimeObject[] args)
+        #region Private
+
+        private static ABSObject DownloadFile( ABSObject[] args )
         {
             string url = args[0].ConvertString();
-            HttpWebRequest request = WebRequest.CreateHttp(url);
+            string file = args[1].ConvertString();
+
+            using ( WebClient wc = new WebClient() )
+            {
+                wc.DownloadFile( url, file );
+            }
+
+            return new BSObject( null );
+        }
+
+        private static ABSObject DownloadString( ABSObject[] args )
+        {
+            string url = args[0].ConvertString();
+
+            using ( WebClient wc = new WebClient() )
+            {
+                wc.DownloadString( url );
+            }
+
+            return new BSObject( null );
+        }
+
+        private static ABSObject Get( ABSObject[] args )
+        {
+            string url = args[0].ConvertString();
+            HttpWebRequest request = WebRequest.CreateHttp( url );
+            request.Credentials = CredentialCache.DefaultCredentials;
+            HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
+            BSTable t = new BSTable();
+
+            t.InsertElement(
+                            new BSObject( "status" ),
+                            new BSObject( ( decimal ) response.StatusCode )
+                           );
+
+            using ( TextReader tr = new StreamReader( response.GetResponseStream() ) )
+            {
+                t.InsertElement( new BSObject( "body" ), new BSObject( tr.ReadToEnd() ) );
+            }
+
+            return t;
+        }
+
+        private static ABSObject Post( ABSObject[] args )
+        {
+            string url = args[0].ConvertString();
+            HttpWebRequest request = WebRequest.CreateHttp( url );
             request.Method = "POST";
             request.Credentials = CredentialCache.DefaultCredentials;
 
             string dataStr = args[1].ConvertString();
             byte[] data = Encoding.UTF8.GetBytes( dataStr );
-            using (Stream stream = request.GetRequestStream())
+
+            using ( Stream stream = request.GetRequestStream() )
             {
-                stream.Write(data, 0, data.Length);
+                stream.Write( data, 0, data.Length );
             }
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            EngineRuntimeTable t = new EngineRuntimeTable();
+
+            HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
+            BSTable t = new BSTable();
 
             t.InsertElement(
-                            new EngineRuntimeObject("status"),
-                            new EngineRuntimeObject((decimal)response.StatusCode)
-                           );
-
-            using (TextReader tr = new StreamReader(response.GetResponseStream()))
-                t.InsertElement(new EngineRuntimeObject("body"), new EngineRuntimeObject(tr.ReadToEnd()));
-
-            return t;
-        }
-
-
-        private static BSRuntimeObject Get(BSRuntimeObject[] args)
-        {
-            string url = args[0].ConvertString();
-            HttpWebRequest request = WebRequest.CreateHttp( url );
-            request.Credentials = CredentialCache.DefaultCredentials;
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            EngineRuntimeTable t = new EngineRuntimeTable();
-
-            t.InsertElement(
-                            new EngineRuntimeObject( "status" ),
-                            new EngineRuntimeObject((decimal)response.StatusCode)
+                            new BSObject( "status" ),
+                            new BSObject( ( decimal ) response.StatusCode )
                            );
 
             using ( TextReader tr = new StreamReader( response.GetResponseStream() ) )
-                t.InsertElement( new EngineRuntimeObject( "body" ), new EngineRuntimeObject( tr.ReadToEnd() ) );
+            {
+                t.InsertElement( new BSObject( "body" ), new BSObject( tr.ReadToEnd() ) );
+            }
 
             return t;
         }
 
-        private static BSRuntimeObject DownloadFile(BSRuntimeObject[] args)
-        {
-            string url = args[0].ConvertString();
-            string file = args[1].ConvertString();
+        #endregion
 
-            using (WebClient wc = new WebClient())
-                wc.DownloadFile(url, file);
-
-            return new EngineRuntimeObject(null);
-        }
-        private static BSRuntimeObject DownloadString(BSRuntimeObject[] args)
-        {
-            string url = args[0].ConvertString();
-            using (WebClient wc = new WebClient())
-                wc.DownloadString(url);
-
-            return new EngineRuntimeObject(null);
-        }
     }
+
 }

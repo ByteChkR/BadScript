@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO.Compression;
 
-using BadScript.Runtime;
-using BadScript.Runtime.Implementations;
+using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
 
 namespace BadScript.Zip
 {
@@ -14,19 +14,19 @@ namespace BadScript.Zip
 
         public static void AddApi()
         {
-            BSRuntimeTable t = new EngineRuntimeTable();
+            ABSTable t = new BSTable();
 
             t.InsertElement(
-                            new EngineRuntimeObject( "createFromDirectory" ),
-                            new BSRuntimeFunction(
+                            new BSObject( "createFromDirectory" ),
+                            new BSFunction(
                                                   "createFromDirectory(sourceDir, destinationFile)",
                                                   CreateFromFolder
                                                  )
                            );
 
             t.InsertElement(
-                            new EngineRuntimeObject( "extractToDirectory" ),
-                            new BSRuntimeFunction(
+                            new BSObject( "extractToDirectory" ),
+                            new BSFunction(
                                                   "extractToDirectory(sourceFile, destinationDir)",
                                                   ExtractToFolder
                                                  )
@@ -39,27 +39,27 @@ namespace BadScript.Zip
 
         #region Private
 
-        private static BSRuntimeObject CreateFromFolder( BSRuntimeObject[] args )
+        private static ABSObject CreateFromFolder( ABSObject[] args )
         {
             if ( args[0].TryConvertString( out string source ) &&
                  args[1].TryConvertString( out string destinationFile ) )
             {
                 ZipFile.CreateFromDirectory( source, destinationFile );
 
-                return new EngineRuntimeObject( null );
+                return new BSObject( null );
             }
 
             throw new Exception( "Expected string" );
         }
 
-        private static BSRuntimeObject ExtractToFolder( BSRuntimeObject[] args )
+        private static ABSObject ExtractToFolder( ABSObject[] args )
         {
             if ( args[0].TryConvertString( out string sourceFile ) &&
                  args[1].TryConvertString( out string destination ) )
             {
                 ZipFile.ExtractToDirectory( sourceFile, destination );
 
-                return new EngineRuntimeObject( null );
+                return new BSObject( null );
             }
 
             throw new Exception( "Expected string" );

@@ -1,7 +1,8 @@
 ﻿using System;
 
-using BadScript.Runtime;
-using BadScript.Runtime.Implementations;
+using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
 using Newtonsoft.Json.Linq;
 
@@ -13,26 +14,21 @@ namespace BadScript.Json
 
         #region Public
 
-        public static BSRuntimeObject Convert( BSRuntimeObject[] args )
+        public static ABSObject Convert( ABSObject[] args )
         {
-            BSRuntimeObject o = args[0];
-
-            while ( o is BSRuntimeReference r )
-            {
-                o = r.Get();
-            }
+            ABSObject o = args[0].ResolveReference();
 
             JToken obj = Convert( o );
             string str = obj.ToString();
 
-            return new EngineRuntimeObject( str );
+            return new BSObject( str );
         }
 
         #endregion
 
         #region Private
 
-        private static JToken Convert( BSRuntimeArray a )
+        private static JToken Convert( ABSArray a )
         {
             JArray ret = new JArray();
 
@@ -44,20 +40,15 @@ namespace BadScript.Json
             return ret;
         }
 
-        private static JToken Convert( BSRuntimeTable t )
+        private static JToken Convert( ABSTable t )
         {
             JObject o = new JObject();
 
-            BSRuntimeArray keys = t.Keys;
+            ABSArray keys = t.Keys;
 
             for ( int i = 0; i < keys.GetLength(); i++ )
             {
-                BSRuntimeObject k = keys.GetElement( i );
-
-                while ( k is BSRuntimeReference r )
-                {
-                    k = r.Get();
-                }
+                ABSObject k = keys.GetElement( i ).ResolveReference();
 
                 o.Add( k.ToString(), Convert( t.GetElement( k ) ) );
             }
@@ -65,19 +56,16 @@ namespace BadScript.Json
             return o;
         }
 
-        private static JToken Convert( BSRuntimeObject o )
+        private static JToken Convert( ABSObject o )
         {
-            while ( o is BSRuntimeReference r )
-            {
-                o = r.Get();
-            }
+            o = o.ResolveReference();
 
-            if ( o is BSRuntimeArray a )
+            if ( o is ABSArray a )
             {
                 return Convert( a );
             }
 
-            if ( o is BSRuntimeTable t )
+            if ( o is ABSTable t )
             {
                 return Convert( t );
             }
@@ -85,14 +73,11 @@ namespace BadScript.Json
             return ConvertValue( o );
         }
 
-        private static JToken ConvertValue( BSRuntimeObject o )
+        private static JToken ConvertValue( ABSObject o )
         {
-            while ( o is BSRuntimeReference r )
-            {
-                o = r.Get();
-            }
+            o = o.ResolveReference();
 
-            if ( o is EngineRuntimeObject obj )
+            if ( o is BSObject obj )
             {
                 JValue ret = new JValue( obj.GetInternalObject() );
 

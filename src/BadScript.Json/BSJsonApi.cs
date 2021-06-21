@@ -1,4 +1,4 @@
-﻿using BadScript.Runtime.Implementations;
+﻿using BadScript.Common.Types;
 
 namespace BadScript.Json
 {
@@ -12,13 +12,13 @@ namespace BadScript.Json
         {
             if ( ( settings & BSJsonApiSettings.BS2Json ) != 0 )
             {
-                BSRuntimeFunction f = new BSRuntimeFunction( "function bs2json(jsonStr)", BS2Json.Convert );
+                BSFunction f = new BSFunction( "function bs2json(jsonStr)", BS2Json.Convert );
                 BSEngine.AddStatic( "bs2json", f );
             }
 
             if ( ( settings & BSJsonApiSettings.Json2BS ) != 0 )
             {
-                BSRuntimeFunction f = new BSRuntimeFunction( "function json2bs(jsonStr)", Json2BS.Convert );
+                BSFunction f = new BSFunction( "function json2bs(jsonStr)", Json2BS.Convert );
                 BSEngine.AddStatic( "json2bs", f );
             }
         }

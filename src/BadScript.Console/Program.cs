@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
-using BadScript.Apis.FileSystem;
-using BadScript.Apis.Math;
 using BadScript.Http;
+using BadScript.IO;
 using BadScript.Json;
+using BadScript.Math;
 using BadScript.Process;
-using BadScript.Runtime;
 using BadScript.Zip;
 
 namespace BadScript.Console
@@ -17,8 +15,6 @@ namespace BadScript.Console
     {
 
         #region Private
-        
-        
 
         private static void Main( string[] args )
         {
@@ -34,15 +30,15 @@ namespace BadScript.Console
 
             foreach ( string s in args )
             {
-                a += " "+s;
+                a += " " + s;
             }
 
             string[] ar = a.Split( ';' );
 
-            foreach ( string s in ar)
+            foreach ( string s in ar )
             {
                 string[] parts = s.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
-                engine.LoadFile( parts[0], parts.Skip(1).ToArray());
+                engine.LoadFile( parts[0], parts.Skip( 1 ).ToArray() );
             }
 
             System.Console.WriteLine( "Execution Finished." );

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using BadScript.Runtime;
-using BadScript.Runtime.Implementations;
+using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,20 +16,15 @@ namespace BadScript.Json
 
         #region Public
 
-        public static BSRuntimeObject Convert( BSRuntimeObject[] args )
+        public static ABSObject Convert( ABSObject[] args )
         {
-            BSRuntimeObject o = args[0];
-
-            if ( o is BSRuntimeReference r )
-            {
-                o = r.Get();
-            }
+            ABSObject o = args[0].ResolveReference();
 
             if ( o.TryConvertString( out string path ) )
             {
                 JToken jsonO = ( JToken ) JsonConvert.DeserializeObject( path );
 
-                BSRuntimeObject ret = Convert( jsonO );
+                ABSObject ret = Convert( jsonO );
 
                 return ret;
             }
@@ -40,7 +36,7 @@ namespace BadScript.Json
 
         #region Private
 
-        private static BSRuntimeObject Convert( JToken jsonT )
+        private static ABSObject Convert( JToken jsonT )
         {
             if ( jsonT is JArray a )
             {
@@ -54,20 +50,20 @@ namespace BadScript.Json
 
             if ( jsonT.Type == JTokenType.Boolean )
             {
-                return new EngineRuntimeObject( jsonT.Value < bool >() ? 1 : 0 );
+                return new BSObject( jsonT.Value < bool >() ? 1 : 0 );
             }
 
             if ( jsonT.Type == JTokenType.Float || jsonT.Type == JTokenType.Integer )
             {
-                return new EngineRuntimeObject( jsonT.Value < decimal >() );
+                return new BSObject( jsonT.Value < decimal >() );
             }
 
             return ConvertValue( jsonT );
         }
 
-        private static BSRuntimeArray Convert( JArray jsonA )
+        private static ABSArray Convert( JArray jsonA )
         {
-            EngineRuntimeArray a = new EngineRuntimeArray();
+            BSArray a = new BSArray();
 
             for ( int i = 0; i < jsonA.Count; i++ )
             {
@@ -78,38 +74,38 @@ namespace BadScript.Json
             return a;
         }
 
-        private static BSRuntimeObject Convert( JObject jsonO )
+        private static ABSObject Convert( JObject jsonO )
         {
-            EngineRuntimeTable t = new EngineRuntimeTable();
+            BSTable t = new BSTable();
 
             foreach ( KeyValuePair < string, JToken > kvp in jsonO )
             {
-                t.InsertElement( new EngineRuntimeObject( kvp.Key ), Convert( kvp.Value ) );
+                t.InsertElement( new BSObject( kvp.Key ), Convert( kvp.Value ) );
             }
 
             return t;
         }
 
-        private static BSRuntimeObject ConvertValue( JToken token )
+        private static ABSObject ConvertValue( JToken token )
         {
             switch ( token.Type )
             {
                 case JTokenType.String:
                 case JTokenType.Guid:
                 case JTokenType.Uri:
-                    return new EngineRuntimeObject( token.Value < string >() );
+                    return new BSObject( token.Value < string >() );
 
                 case JTokenType.Integer:
-                    return new EngineRuntimeObject( ( decimal ) token.Value < int >() );
+                    return new BSObject( ( decimal ) token.Value < int >() );
 
                 case JTokenType.Float:
-                    return new EngineRuntimeObject( ( decimal ) token.Value < float >() );
+                    return new BSObject( ( decimal ) token.Value < float >() );
 
                 case JTokenType.Boolean:
-                    return new EngineRuntimeObject( token.Value < bool >() ? 1 : 0 );
+                    return new BSObject( token.Value < bool >() ? 1 : 0 );
 
                 case JTokenType.Null:
-                    return new EngineRuntimeObject( null );
+                    return new BSObject( null );
 
                 default:
                     throw new NotSupportedException( $"Can not convert type {token.Type}" );

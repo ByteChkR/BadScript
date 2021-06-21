@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-using BadScript.Runtime;
-using BadScript.Runtime.Implementations;
+using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
+using BadScript.Common.Types.References.Implementations;
 
 namespace BadScript
 {
@@ -14,12 +16,12 @@ namespace BadScript
 
         private static BSEngine s_Instance;
 
-        private readonly Dictionary < string, BSRuntimeObject > m_StaticData =
-            new Dictionary < string, BSRuntimeObject >();
+        private readonly Dictionary < string, ABSObject > m_StaticData =
+            new Dictionary < string, ABSObject >();
 
         #region Public
 
-        public static void AddStatic( string k, BSRuntimeObject o )
+        public static void AddStatic( string k, ABSObject o )
         {
             GetInstance().AddStaticData( k, o );
         }
@@ -27,13 +29,13 @@ namespace BadScript
         public static BSEngineInstance CreateEngineInstance()
         {
             return new BSEngineInstance(
-                                        new Dictionary < string, BSRuntimeObject >(
+                                        new Dictionary < string, ABSObject >(
                                              GetInstance().m_StaticData
                                             )
                                        );
         }
 
-        public void AddStaticData( string k, BSRuntimeObject o )
+        public void AddStaticData( string k, ABSObject o )
         {
             m_StaticData[k] = o;
         }
@@ -51,7 +53,7 @@ namespace BadScript
         {
             AddStaticData(
                           "size",
-                          new BSRuntimeFunction(
+                          new BSFunction(
                                                 "function size(table/array)",
                                                 ( args ) =>
                                                 {
@@ -60,28 +62,28 @@ namespace BadScript
                                                         throw new Exception( "Invalid Argument Count" );
                                                     }
 
-                                                    BSRuntimeObject arg = args[0];
+                                                    ABSObject arg = args[0];
 
-                                                    if ( arg is BSRuntimeArrayReference
+                                                    if ( arg is BSArrayReference
                                                              arRef )
                                                     {
                                                         arg = arRef.Get();
                                                     }
 
-                                                    if ( arg is BSRuntimeTableReference
+                                                    if ( arg is BSTableReference
                                                              tRef )
                                                     {
                                                         arg = tRef.Get();
                                                     }
 
-                                                    if ( arg is BSRuntimeArray ar )
+                                                    if ( arg is ABSArray ar )
                                                     {
-                                                        return new EngineRuntimeObject( ( decimal ) ar.GetLength() );
+                                                        return new BSObject( ( decimal ) ar.GetLength() );
                                                     }
 
-                                                    if ( arg is BSRuntimeTable t )
+                                                    if ( arg is ABSTable t )
                                                     {
-                                                        return new EngineRuntimeObject( ( decimal ) t.GetLength() );
+                                                        return new BSObject( ( decimal ) t.GetLength() );
                                                     }
 
                                                     throw new Exception(
@@ -91,77 +93,73 @@ namespace BadScript
                                                )
                          );
 
-            AddStaticData("format",
-                          new BSRuntimeFunction("function format(formatStr, arg0, arg1, ...)",
+            AddStaticData(
+                          "format",
+                          new BSFunction(
+                                                "function format(formatStr, arg0, arg1, ...)",
                                                 args =>
                                                 {
-                                                    if (args.Length < 1)
+                                                    if ( args.Length < 1 )
                                                     {
-                                                        throw new Exception("Invalid Argument Count");
+                                                        throw new Exception( "Invalid Argument Count" );
                                                     }
 
-                                                    BSRuntimeObject format = args[0];
-
-                                                    while (format is BSRuntimeReference
-                                                               arRef)
-                                                    {
-                                                        format = arRef.Get();
-                                                    }
+                                                    ABSObject format = args[0].ResolveReference();
 
                                                     if ( format.TryConvertString( out string formatStr ) )
                                                     {
-                                                        return new EngineRuntimeObject(string.Format(formatStr, args.Skip(1).Cast<object>().ToArray()));
+                                                        return new BSObject(
+                                                             string.Format(
+                                                                           formatStr,
+                                                                           args.Skip( 1 ).Cast < object >().ToArray()
+                                                                          )
+                                                            );
                                                     }
 
                                                     throw new Exception( "Invalid Format string type" );
+                                                }
+                                               )
+                         );
 
-                                                }));
             AddStaticData(
                           "print",
-                          new BSRuntimeFunction(
+                          new BSFunction(
                                                 "function print(obj)",
-                                                (args) =>
+                                                ( args ) =>
                                                 {
-                                                    if (args.Length != 1)
+                                                    if ( args.Length != 1 )
                                                     {
-                                                        throw new Exception("Invalid Argument Count");
+                                                        throw new Exception( "Invalid Argument Count" );
                                                     }
 
-                                                    BSRuntimeObject arg = args[0];
+                                                    ABSObject arg = args[0].ResolveReference();
 
-                                                    if (arg is BSRuntimeReference
-                                                            arRef)
-                                                    {
-                                                        arg = arRef.Get();
-                                                    }
+                                                    Console.WriteLine( arg );
 
-                                                    Console.WriteLine(arg);
-
-                                                    return new EngineRuntimeObject(null);
+                                                    return new BSObject( null );
                                                 }
                                                )
                          );
 
             AddStaticData(
                           "read",
-                          new BSRuntimeFunction(
+                          new BSFunction(
                                                 "function read()",
-                                                (args) =>
+                                                ( args ) =>
                                                 {
-                                                    if (args.Length != 0)
+                                                    if ( args.Length != 0 )
                                                     {
-                                                        throw new Exception("Invalid Argument Count");
+                                                        throw new Exception( "Invalid Argument Count" );
                                                     }
 
-                                                    
-                                                    return new EngineRuntimeObject(Console.ReadLine());
+                                                    return new BSObject( Console.ReadLine() );
                                                 }
                                                )
                          );
 
             AddStaticData(
                           "sleep",
-                          new BSRuntimeFunction(
+                          new BSFunction(
                                                 "function sleep(ms)",
                                                 ( args ) =>
                                                 {
@@ -169,14 +167,13 @@ namespace BadScript
                                                     {
                                                         Thread.Sleep( ( int ) lD );
 
-                                                        return new EngineRuntimeObject( null );
+                                                        return new BSObject( null );
                                                     }
 
                                                     throw new Exception( "Invalid sleep(millis) Usage" );
                                                 }
                                                )
                          );
-
         }
 
         private static BSEngine GetInstance()

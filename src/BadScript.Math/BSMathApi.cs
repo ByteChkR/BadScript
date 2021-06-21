@@ -1,43 +1,43 @@
 ﻿using System;
 
-using BadScript.Runtime;
-using BadScript.Runtime.Implementations;
+using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
-namespace BadScript.Apis.Math
+namespace BadScript.Math
 {
 
     public class BSMathApi
     {
+
+        #region Public
 
         public static void AddApi()
         {
             BSEngine.AddStatic( "math", GenerateMathApi() );
         }
 
-        #region Public
+        #endregion
 
-        private static BSRuntimeTable GenerateMathApi()
+        #region Private
+
+        private static ABSTable GenerateMathApi()
         {
-            EngineRuntimeTable ret = new EngineRuntimeTable();
-            ret.InsertElement( new EngineRuntimeObject( "PI" ), new EngineRuntimeObject( ( decimal ) System.Math.PI ) );
-            ret.InsertElement( new EngineRuntimeObject( "E" ), new EngineRuntimeObject( ( decimal ) System.Math.E ) );
+            BSTable ret = new BSTable();
+            ret.InsertElement( new BSObject( "PI" ), new BSObject( ( decimal ) System.Math.PI ) );
+            ret.InsertElement( new BSObject( "E" ), new BSObject( ( decimal ) System.Math.E ) );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "sin" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "sin" ),
+                              new BSFunction(
                                                     "function sin(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Sin( ( double ) path )
                                                                 );
                                                         }
@@ -48,21 +48,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "cos" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "cos" ),
+                              new BSFunction(
                                                     "function cos(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Cos( ( double ) path )
                                                                 );
                                                         }
@@ -73,21 +68,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "tan" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "tan" ),
+                              new BSFunction(
                                                     "function tan(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Tan( ( double ) path )
                                                                 );
                                                         }
@@ -98,21 +88,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "sinh" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "sinh" ),
+                              new BSFunction(
                                                     "function sinh(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Sinh( ( double ) path )
                                                                 );
                                                         }
@@ -123,21 +108,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "cosh" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "cosh" ),
+                              new BSFunction(
                                                     "function cosh(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Cosh( ( double ) path )
                                                                 );
                                                         }
@@ -148,21 +128,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "tanh" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "tanh" ),
+                              new BSFunction(
                                                     "function tanh(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Tanh( ( double ) path )
                                                                 );
                                                         }
@@ -173,21 +148,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "asin" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "asin" ),
+                              new BSFunction(
                                                     "function asin(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Asin( ( double ) path )
                                                                 );
                                                         }
@@ -198,21 +168,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "acos" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "acos" ),
+                              new BSFunction(
                                                     "function acos(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Acos( ( double ) path )
                                                                 );
                                                         }
@@ -223,21 +188,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "atan" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "atan" ),
+                              new BSFunction(
                                                     "function atan(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r )
-                                                        {
-                                                            o = r.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Atan( ( double ) path )
                                                                 );
                                                         }
@@ -248,22 +208,19 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "atan2" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "atan2" ),
+                              new BSFunction(
                                                     "function atan2(x, y)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r2 )
-                                                        {
-                                                            o = r2.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal x ) &&
-                                                             args[1].TryConvertDecimal( out decimal y ) )
+                                                             args[1].
+                                                                 ResolveReference().
+                                                                 TryConvertDecimal( out decimal y ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Atan2(
                                                                       ( double ) x,
                                                                       ( double ) y
@@ -277,24 +234,19 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "log" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "log" ),
+                              new BSFunction(
                                                     "function log(n, newBase)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( args.Length == 2 )
                                                         {
-                                                            if ( o is BSRuntimeReference r2 )
-                                                            {
-                                                                o = r2.Get();
-                                                            }
-
                                                             if ( o.TryConvertDecimal( out decimal path2 ) &&
                                                                  args[1].TryConvertDecimal( out decimal newB ) )
                                                             {
-                                                                return new EngineRuntimeObject(
+                                                                return new BSObject(
                                                                      ( decimal ) System.Math.Log(
                                                                           ( double ) path2,
                                                                           ( double ) newB
@@ -305,14 +257,9 @@ namespace BadScript.Apis.Math
                                                             throw new Exception( "Expected Decimal" );
                                                         }
 
-                                                        if ( o is BSRuntimeReference r1 )
-                                                        {
-                                                            o = r1.Get();
-                                                        }
-
                                                         if ( o.TryConvertDecimal( out decimal path1 ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Log( ( double ) path1 )
                                                                 );
                                                         }
@@ -323,21 +270,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "abs" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "abs" ),
+                              new BSFunction(
                                                     "function abs(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r1 )
-                                                        {
-                                                            o = r1.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path1 ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Abs( ( double ) path1 )
                                                                 );
                                                         }
@@ -348,21 +290,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "ceiling" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "ceiling" ),
+                              new BSFunction(
                                                     "function ceiling(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r1 )
-                                                        {
-                                                            o = r1.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path1 ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Ceiling( ( double ) path1 )
                                                                 );
                                                         }
@@ -373,21 +310,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "floor" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "floor" ),
+                              new BSFunction(
                                                     "function floor(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r1 )
-                                                        {
-                                                            o = r1.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path1 ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Floor( ( double ) path1 )
                                                                 );
                                                         }
@@ -398,21 +330,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "exp" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "exp" ),
+                              new BSFunction(
                                                     "function exp(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r1 )
-                                                        {
-                                                            o = r1.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path1 ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Exp( ( double ) path1 )
                                                                 );
                                                         }
@@ -423,21 +350,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "log10" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "log10" ),
+                              new BSFunction(
                                                     "function log10(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r1 )
-                                                        {
-                                                            o = r1.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path1 ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Log10( ( double ) path1 )
                                                                 );
                                                         }
@@ -448,21 +370,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "sign" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "sign" ),
+                              new BSFunction(
                                                     "function sign(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r1 )
-                                                        {
-                                                            o = r1.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal path1 ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Sign( ( double ) path1 )
                                                                 );
                                                         }
@@ -473,22 +390,17 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "min" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "min" ),
+                              new BSFunction(
                                                     "function min(x, y)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r2 )
-                                                        {
-                                                            o = r2.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal x ) &&
                                                              args[1].TryConvertDecimal( out decimal y ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Min(
                                                                       ( double ) x,
                                                                       ( double ) y
@@ -502,22 +414,19 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "max" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "max" ),
+                              new BSFunction(
                                                     "function max(x, y)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r2 )
-                                                        {
-                                                            o = r2.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal x ) &&
-                                                             args[1].TryConvertDecimal( out decimal y ) )
+                                                             args[1].
+                                                                 ResolveReference().
+                                                                 TryConvertDecimal( out decimal y ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Max(
                                                                       ( double ) x,
                                                                       ( double ) y
@@ -531,22 +440,19 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "pow" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "pow" ),
+                              new BSFunction(
                                                     "function pow(x, y)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r2 )
-                                                        {
-                                                            o = r2.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal x ) &&
-                                                             args[1].TryConvertDecimal( out decimal y ) )
+                                                             args[1].
+                                                                 ResolveReference().
+                                                                 TryConvertDecimal( out decimal y ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Pow(
                                                                       ( double ) x,
                                                                       ( double ) y
@@ -560,21 +466,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "sqrt" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "sqrt" ),
+                              new BSFunction(
                                                     "function sqrt(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r2 )
-                                                        {
-                                                            o = r2.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal x ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Sqrt( ( double ) x )
                                                                 );
                                                         }
@@ -585,21 +486,16 @@ namespace BadScript.Apis.Math
                              );
 
             ret.InsertElement(
-                              new EngineRuntimeObject( "truncate" ),
-                              new BSRuntimeFunction(
+                              new BSObject( "truncate" ),
+                              new BSFunction(
                                                     "function truncate(n)",
                                                     args =>
                                                     {
-                                                        BSRuntimeObject o = args[0];
-
-                                                        if ( o is BSRuntimeReference r2 )
-                                                        {
-                                                            o = r2.Get();
-                                                        }
+                                                        ABSObject o = args[0].ResolveReference();
 
                                                         if ( o.TryConvertDecimal( out decimal x ) )
                                                         {
-                                                            return new EngineRuntimeObject(
+                                                            return new BSObject(
                                                                  ( decimal ) System.Math.Truncate( ( double ) x )
                                                                 );
                                                         }
