@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Net;
 using System.Text;
-
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -10,28 +9,27 @@ namespace BadScript.Http
 
     public static class HttpApi
     {
-
         #region Public
 
         public static void AddApi()
         {
             BSTable t = new BSTable();
-            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get ) );
+            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1 ) );
 
             t.InsertElement(
-                            new BSObject( "post" ),
-                            new BSFunction( "function post(url, body)", Post )
-                           );
+                new BSObject( "post" ),
+                new BSFunction( "function post(url, body)", Post, 2 )
+            );
 
             t.InsertElement(
-                            new BSObject( "downloadFile" ),
-                            new BSFunction( "function downloadFile(url, destination)", DownloadFile )
-                           );
+                new BSObject( "downloadFile" ),
+                new BSFunction( "function downloadFile(url, destination)", DownloadFile, 2 )
+            );
 
             t.InsertElement(
-                            new BSObject( "downloadString" ),
-                            new BSFunction( "function downloadString(url)", DownloadString )
-                           );
+                new BSObject( "downloadString" ),
+                new BSFunction( "function downloadString(url)", DownloadString, 1 )
+            );
 
             BSEngine.AddStatic( "http", t );
         }
@@ -74,9 +72,9 @@ namespace BadScript.Http
             BSTable t = new BSTable();
 
             t.InsertElement(
-                            new BSObject( "status" ),
-                            new BSObject( ( decimal ) response.StatusCode )
-                           );
+                new BSObject( "status" ),
+                new BSObject( ( decimal ) response.StatusCode )
+            );
 
             using ( TextReader tr = new StreamReader( response.GetResponseStream() ) )
             {
@@ -105,9 +103,9 @@ namespace BadScript.Http
             BSTable t = new BSTable();
 
             t.InsertElement(
-                            new BSObject( "status" ),
-                            new BSObject( ( decimal ) response.StatusCode )
-                           );
+                new BSObject( "status" ),
+                new BSObject( ( decimal ) response.StatusCode )
+            );
 
             using ( TextReader tr = new StreamReader( response.GetResponseStream() ) )
             {
@@ -118,7 +116,6 @@ namespace BadScript.Http
         }
 
         #endregion
-
     }
 
 }

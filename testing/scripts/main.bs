@@ -1,0 +1,67 @@
+
+//Check if the File System API is existent.
+//Otherwise it is not possible to load data from disk
+function checkFS()
+{
+	if(fs != null)
+	{
+		return 1
+	}
+	else
+	{
+		print("No File System API Found")
+		return 0
+	}
+}
+
+//Load a Script file and return its global table after execution
+function loadFile(file)
+{
+	if(checkFS())
+	{
+		if(fs.exists(file) && fs.isFile(file))
+		{
+			f = fs.open(file)
+			src = f.readAll()
+			f.close()
+			return loadString(src)
+		}
+		else
+		{
+			print("Unable to Load File: " + file)
+		}
+	}
+}
+
+//Load all Scripts from the specified folder
+function loadPlugins(dir)
+{
+	pluginList = {}
+	print("Loading Plugins...")
+	if(checkFS())
+	{
+		if(fs.exists(dir) && fs.isDir(dir))
+		{
+			files = fs.getFiles(dir, "*.bs")
+			fileCount = size(files)
+			while(fileCount)
+			{
+				fileCount = fileCount - 1
+				key = path.getFileNameWithoutExtension(files[fileCount])
+
+				print("Loading Plugin: " + key)
+			 	pluginList[key] = loadFile(files[fileCount])
+			}
+		}
+		else
+		{
+			print("Unable to find directory: "+ dir)
+		}
+	}
+
+	return pluginList
+}
+//Load Plugins and put resulting table of plugins into the global scope
+__G.loadedPlugins = loadPlugins("./plugins")
+
+loadFile("for_tests.bs")

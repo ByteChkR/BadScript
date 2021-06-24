@@ -3,7 +3,6 @@
 
     public abstract class BSBinaryExpression : BSExpression
     {
-
         protected readonly BSExpression Left;
         protected readonly BSExpression Right;
 
@@ -16,7 +15,6 @@
         }
 
         #endregion
-
     }
 
 }

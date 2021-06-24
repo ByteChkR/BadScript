@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using BadScript.Common.OperatorImplementations;
 using BadScript.Common.OperatorImplementations.Implementations;
 using BadScript.Common.Types;
@@ -12,7 +11,6 @@ namespace BadScript.Common.Runtime
 
     public static class BSOperatorImplementationResolver
     {
-
         private static List < ABSOperatorImplementation > m_Implementations;
 
         #region Public
@@ -65,7 +63,6 @@ namespace BadScript.Common.Runtime
         }
 
         #endregion
-
     }
 
 }

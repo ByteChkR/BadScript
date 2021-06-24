@@ -3,7 +3,6 @@
 
     public class BSAndOperatorImplementation : ABSLogicOperatorImplementation
     {
-
         #region Public
 
         public BSAndOperatorImplementation() : base( "&&" )
@@ -16,7 +15,6 @@
         }
 
         #endregion
-
     }
 
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -8,7 +7,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
     public abstract class ABSLogicOperatorImplementation : ABSOperatorImplementation
     {
-
         #region Public
 
         public abstract bool Execute( bool l, bool r );
@@ -48,7 +46,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
         }
 
         #endregion
-
     }
 
 }

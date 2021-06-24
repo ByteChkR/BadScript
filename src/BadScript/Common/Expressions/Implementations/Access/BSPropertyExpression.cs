@@ -6,7 +6,6 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
     public class BSPropertyExpression : BSExpression
     {
-
         public readonly string Right;
 
         public BSExpression Left { get; private set; }
@@ -30,7 +29,6 @@ namespace BadScript.Common.Expressions.Implementations.Access
         }
 
         #endregion
-
     }
 
 }

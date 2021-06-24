@@ -1,18 +1,18 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types.References;
 using BadScript.Common.Types.References.Implementations;
 
 namespace BadScript.Common.Types.Implementations
 {
 
-    public class BSArray : ABSArray
+    public class BSArray : ABSArray, IEnumerable < IForEachIteration >
     {
-
         private readonly List < ABSObject > m_InnerArray;
 
         #region Public
@@ -42,6 +42,18 @@ namespace BadScript.Common.Types.Implementations
             return new BSArrayReference( this, i );
 
             ;
+        }
+
+        public IEnumerator < IForEachIteration > GetEnumerator()
+        {
+            ABSObject[] o = new ABSObject[1];
+
+            foreach ( ABSObject absObject in m_InnerArray )
+            {
+                o[0] = absObject;
+
+                yield return new ForEachIteration( o );
+            }
         }
 
         public override int GetLength()
@@ -162,6 +174,14 @@ namespace BadScript.Common.Types.Implementations
 
         #endregion
 
+        #region Private
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
     }
 
 }

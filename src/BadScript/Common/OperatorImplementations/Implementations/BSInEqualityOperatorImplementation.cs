@@ -6,10 +6,9 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
     public class BSInEqualityOperatorImplementation : ABSOperatorImplementation
     {
-
         #region Public
 
-        public BSInEqualityOperatorImplementation() : base( "==" )
+        public BSInEqualityOperatorImplementation() : base( "!=" )
         {
         }
 
@@ -28,7 +27,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
         }
 
         #endregion
-
     }
 
 }

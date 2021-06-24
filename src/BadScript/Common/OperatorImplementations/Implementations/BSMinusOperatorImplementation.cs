@@ -3,7 +3,6 @@
 
     public class BSMinusOperatorImplementation : ABSMathOperatorImplementation
     {
-
         #region Public
 
         public BSMinusOperatorImplementation() : base( "-" )
@@ -20,7 +19,6 @@
         }
 
         #endregion
-
     }
 
 }

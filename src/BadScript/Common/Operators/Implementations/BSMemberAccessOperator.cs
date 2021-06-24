@@ -5,7 +5,6 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSMemberAccessOperator : BSOperator
     {
-
         public override string OperatorKey => ".";
 
         #region Public
@@ -16,7 +15,6 @@ namespace BadScript.Common.Operators.Implementations
         }
 
         #endregion
-
     }
 
 }

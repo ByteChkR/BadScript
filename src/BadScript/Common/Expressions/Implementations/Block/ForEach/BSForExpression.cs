@@ -3,27 +3,33 @@ using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
-namespace BadScript.Common.Expressions.Implementations.Block
+namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 {
 
-    public class BSWhileExpression : BSExpression
+    public class BSForExpression : BSExpression
     {
-        private BSExpression m_Condition;
+        private BSExpression m_CounterDefinition;
+        private BSExpression m_CounterCondition;
+        private BSExpression m_CounterIncrement;
         private BSExpression[] m_Block;
 
         #region Public
 
-        public BSWhileExpression( BSExpression condition, BSExpression[] block )
+        public BSForExpression( BSExpression cDef, BSExpression cCond, BSExpression cInc, BSExpression[] block )
         {
-            m_Condition = condition;
+            m_CounterCondition = cCond;
+            m_CounterDefinition = cDef;
+            m_CounterIncrement = cInc;
             m_Block = block;
         }
 
         public override ABSObject Execute( BSScope scope )
         {
-            ABSObject o = m_Condition.Execute( scope ).ResolveReference();
+            BSScope forScope = new BSScope( scope );
+            m_CounterDefinition.Execute( forScope );
+            ABSObject c = m_CounterCondition.Execute( forScope ).ResolveReference();
 
-            while ( o.TryConvertBool( out bool d ) && d )
+            while ( c.TryConvertBool( out bool d ) && d )
             {
                 BSScope funcScope = new BSScope( scope );
 
@@ -41,7 +47,10 @@ namespace BadScript.Common.Expressions.Implementations.Block
                     break;
                 }
 
-                o = m_Condition.Execute( scope ).ResolveReference();
+                m_CounterIncrement.Execute( scope );
+
+                c = m_CounterCondition.Execute( scope ).ResolveReference();
+
             }
 
             return new BSObject( null );

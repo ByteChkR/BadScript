@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
@@ -9,7 +8,6 @@ namespace BadScript.Common.Types
 
     public abstract class ABSObject : IEquatable < ABSObject >
     {
-
         public static bool operator ==( ABSObject left, ABSObject right )
         {
             return Equals( left, right );
@@ -91,7 +89,6 @@ namespace BadScript.Common.Types
         }
 
         #endregion
-
     }
 
 }

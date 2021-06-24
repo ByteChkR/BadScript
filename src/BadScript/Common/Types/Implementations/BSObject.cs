@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types.Implementations
@@ -8,7 +7,6 @@ namespace BadScript.Common.Types.Implementations
 
     public class BSObject : ABSObject
     {
-
         protected readonly object m_InternalObject;
 
         #region Public
@@ -110,7 +108,6 @@ namespace BadScript.Common.Types.Implementations
         }
 
         #endregion
-
     }
 
 }

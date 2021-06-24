@@ -1,5 +1,4 @@
 ﻿using System.Text;
-
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -9,7 +8,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSFunctionDefinitionExpression : BSExpression
     {
-
         public string Name;
         public bool Global;
         public string[] ArgNames;
@@ -51,7 +49,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         public override ABSObject Execute( BSScope scope )
         {
             BSFunction f =
-                new BSFunction( GetHeader(), x => InvokeBlockFunction( scope, x ) );
+                new BSFunction( GetHeader(), x => InvokeBlockFunction( scope, x ), ArgNames.Length );
 
             if ( Global )
             {
@@ -100,7 +98,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
         }
 
         #endregion
-
     }
 
 }

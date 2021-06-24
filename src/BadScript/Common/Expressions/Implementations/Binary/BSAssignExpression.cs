@@ -1,5 +1,4 @@
 ﻿using System;
-
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.References;
@@ -9,7 +8,6 @@ namespace BadScript.Common.Expressions.Implementations.Binary
 
     public class BSAssignExpression : BSBinaryExpression
     {
-
         #region Public
 
         public BSAssignExpression( BSExpression left, BSExpression right ) : base( left, right )
@@ -34,8 +32,12 @@ namespace BadScript.Common.Expressions.Implementations.Binary
             return right;
         }
 
-        #endregion
+        public BSExpression GetLeft()
+        {
+            return Left;
+        }
 
+        #endregion
     }
 
 }

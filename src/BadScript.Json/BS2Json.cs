@@ -1,9 +1,7 @@
 ﻿using System;
-
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
-
 using Newtonsoft.Json.Linq;
 
 namespace BadScript.Json
@@ -11,7 +9,6 @@ namespace BadScript.Json
 
     internal static class BS2Json
     {
-
         #region Public
 
         public static ABSObject Convert( ABSObject[] args )
@@ -88,7 +85,6 @@ namespace BadScript.Json
         }
 
         #endregion
-
     }
 
 }

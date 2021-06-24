@@ -5,7 +5,6 @@ namespace BadScript.Common.Types.References.Implementations
 
     public class BSTableReference : ABSReference
     {
-
         private readonly ABSTable m_SourceTable;
         private readonly ABSObject m_Key;
 
@@ -75,7 +74,6 @@ namespace BadScript.Common.Types.References.Implementations
         }
 
         #endregion
-
     }
 
 }

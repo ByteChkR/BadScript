@@ -3,7 +3,6 @@
 
     public class BSXOrDefaultOperatorImplementation : ABSLogicOperatorImplementation
     {
-
         #region Public
 
         public BSXOrDefaultOperatorImplementation() : base( "^" )
@@ -16,7 +15,6 @@
         }
 
         #endregion
-
     }
 
 }

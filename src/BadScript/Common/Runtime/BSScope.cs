@@ -7,7 +7,6 @@ namespace BadScript.Common.Runtime
 
     public class BSScope
     {
-
         private readonly BSEngineInstance m_Instance;
         private readonly BSScope m_Parent;
         private readonly BSTable m_LocalVars = new BSTable();
@@ -51,9 +50,9 @@ namespace BadScript.Common.Runtime
         public bool HasGlobal( string name )
         {
             return m_Instance == null
-                       ? m_Parent.HasGlobal( name )
-                       : m_Instance.GlobalTable.HasElement( new BSObject( name ) ) ||
-                         m_Parent != null && m_Parent.HasLocal( name );
+                ? m_Parent.HasGlobal( name )
+                : m_Instance.GlobalTable.HasElement( new BSObject( name ) ) ||
+                  m_Parent != null && m_Parent.HasLocal( name );
         }
 
         public bool HasLocal( string name )
@@ -99,7 +98,6 @@ namespace BadScript.Common.Runtime
         }
 
         #endregion
-
     }
 
 }

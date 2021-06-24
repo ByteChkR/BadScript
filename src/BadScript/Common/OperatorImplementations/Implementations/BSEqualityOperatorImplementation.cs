@@ -6,7 +6,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
     public class BSEqualityOperatorImplementation : ABSOperatorImplementation
     {
-
         #region Public
 
         public BSEqualityOperatorImplementation() : base( "==" )
@@ -28,7 +27,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
         }
 
         #endregion
-
     }
 
 }

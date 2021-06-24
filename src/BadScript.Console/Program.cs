@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-
 using BadScript.Http;
 using BadScript.IO;
 using BadScript.Json;
@@ -13,7 +12,6 @@ namespace BadScript.Console
 
     internal class Program
     {
-
         #region Private
 
         private static void Main( string[] args )
@@ -33,6 +31,9 @@ namespace BadScript.Console
                 a += " " + s;
             }
 
+            bool printGlobal = a.Contains( "--debug" );
+            a = a.Replace( "--debug", "" );
+
             string[] ar = a.Split( ';' );
 
             foreach ( string s in ar )
@@ -42,12 +43,15 @@ namespace BadScript.Console
             }
 
             System.Console.WriteLine( "Execution Finished." );
-            System.Console.WriteLine( "Global Table: " );
-            System.Console.WriteLine( engine.GlobalTable.SafeToString() );
+
+            if ( printGlobal )
+            {
+                System.Console.WriteLine( "Global Table: " );
+                System.Console.WriteLine( engine.GlobalTable.SafeToString() );
+            }
         }
 
         #endregion
-
     }
 
 }

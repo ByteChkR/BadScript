@@ -1,5 +1,4 @@
 ﻿using System;
-
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -8,7 +7,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
     public class BSNotOperatorImplementation : ABSOperatorImplementation
     {
-
         #region Public
 
         public BSNotOperatorImplementation() : base( "!" )
@@ -39,7 +37,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
         }
 
         #endregion
-
     }
 
 }

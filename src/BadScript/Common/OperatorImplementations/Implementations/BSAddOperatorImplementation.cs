@@ -1,5 +1,4 @@
 ﻿using System;
-
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -8,28 +7,13 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
     public class BSAddOperatorImplementation : ABSOperatorImplementation
     {
-
         #region Public
 
         public BSAddOperatorImplementation() : base( "+" )
         {
         }
 
-        public override bool IsCorrectImplementation( ABSObject[] arg )
-        {
-            ABSObject lVal = arg[0];
-            ABSObject rVal = arg[1];
-
-            return lVal.TryConvertDecimal( out decimal _ ) &&
-                   ( rVal.TryConvertDecimal( out decimal _ ) || rVal.TryConvertString( out string _ ) ) ||
-                   lVal.TryConvertString( out string _ ) && rVal.TryConvertString( out string _ );
-        }
-
-        #endregion
-
-        #region Protected
-
-        protected override ABSObject Execute( ABSObject[] arg )
+        public static ABSObject Add( ABSObject[] arg )
         {
             ABSObject lVal = arg[0];
             ABSObject rVal = arg[1];
@@ -58,8 +42,26 @@ namespace BadScript.Common.OperatorImplementations.Implementations
             throw new Exception( "Invalid Operator Usage" );
         }
 
+        public override bool IsCorrectImplementation( ABSObject[] arg )
+        {
+            ABSObject lVal = arg[0];
+            ABSObject rVal = arg[1];
+
+            return lVal.TryConvertDecimal( out decimal _ ) &&
+                   ( rVal.TryConvertDecimal( out decimal _ ) || rVal.TryConvertString( out string _ ) ) ||
+                   lVal.TryConvertString( out string _ ) && rVal.TryConvertString( out string _ );
+        }
+
         #endregion
 
+        #region Protected
+
+        protected override ABSObject Execute( ABSObject[] arg )
+        {
+            return Add( arg );
+        }
+
+        #endregion
     }
 
 }

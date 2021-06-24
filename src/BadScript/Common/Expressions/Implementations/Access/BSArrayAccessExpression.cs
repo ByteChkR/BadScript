@@ -1,5 +1,4 @@
 ﻿using System;
-
 using BadScript.Common.Expressions.Implementations.Unary;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -10,7 +9,6 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
     public class BSArrayAccessExpression : BSUnaryExpression
     {
-
         private BSExpression Parameter;
 
         #region Public
@@ -43,7 +41,6 @@ namespace BadScript.Common.Expressions.Implementations.Access
         }
 
         #endregion
-
     }
 
 }

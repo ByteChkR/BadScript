@@ -6,15 +6,21 @@ namespace BadScript.Process
 
     public static class ProcessApi
     {
-
         #region Public
 
         public static void AddApi()
         {
+            BSTable proc = new BSTable();
+
+            proc.InsertElement(
+                new BSObject( "start" ),
+                new BSFunction( "function start(file, args)", StartProcess, 2 )
+            );
+
             BSEngine.AddStatic(
-                               "start",
-                               new BSFunction( "function start(file, args)", StartProcess )
-                              );
+                "process",
+                proc
+            );
         }
 
         #endregion
@@ -60,42 +66,45 @@ namespace BadScript.Process
             System.Diagnostics.Process p = System.Diagnostics.Process.Start( start, procArgs );
 
             t.InsertElement(
-                            new BSObject( "hasExited" ),
-                            new BSFunction(
-                                                  "function hasExited()",
-                                                  x => ProcHasExited( p )
-                                                 )
-                           );
+                new BSObject( "hasExited" ),
+                new BSFunction(
+                    "function hasExited()",
+                    x => ProcHasExited( p ),
+                    0
+                )
+            );
 
             t.InsertElement(
-                            new BSObject( "exitCode" ),
-                            new BSFunction(
-                                                  "function exitCode()",
-                                                  x => ProcExitCode( p )
-                                                 )
-                           );
+                new BSObject( "exitCode" ),
+                new BSFunction(
+                    "function exitCode()",
+                    x => ProcExitCode( p ),
+                    0
+                )
+            );
 
             t.InsertElement(
-                            new BSObject( "abort" ),
-                            new BSFunction(
-                                                  "function abort()",
-                                                  x => ProcAbort( p )
-                                                 )
-                           );
+                new BSObject( "abort" ),
+                new BSFunction(
+                    "function abort()",
+                    x => ProcAbort( p ),
+                    0
+                )
+            );
 
             t.InsertElement(
-                            new BSObject( "waitForExit" ),
-                            new BSFunction(
-                                                  "function waitForExit()/function waitForExit(timeMS)",
-                                                  x => ProcWaitForExit( p, x.Length != 0 ? x[0] : null )
-                                                 )
-                           );
+                new BSObject( "waitForExit" ),
+                new BSFunction(
+                    "function waitForExit()/function waitForExit(timeMS)",
+                    x => ProcWaitForExit( p, x.Length != 0 ? x[0] : null ),
+                    0,
+                    1 )
+            );
 
             return t;
         }
 
         #endregion
-
     }
 
 }

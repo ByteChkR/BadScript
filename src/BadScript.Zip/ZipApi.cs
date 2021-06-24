@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO.Compression;
-
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -9,7 +8,6 @@ namespace BadScript.Zip
 
     public static class ZipApi
     {
-
         #region Public
 
         public static void AddApi()
@@ -17,20 +15,22 @@ namespace BadScript.Zip
             ABSTable t = new BSTable();
 
             t.InsertElement(
-                            new BSObject( "createFromDirectory" ),
-                            new BSFunction(
-                                                  "createFromDirectory(sourceDir, destinationFile)",
-                                                  CreateFromFolder
-                                                 )
-                           );
+                new BSObject( "createFromDirectory" ),
+                new BSFunction(
+                    "createFromDirectory(sourceDir, destinationFile)",
+                    CreateFromFolder,
+                    2
+                )
+            );
 
             t.InsertElement(
-                            new BSObject( "extractToDirectory" ),
-                            new BSFunction(
-                                                  "extractToDirectory(sourceFile, destinationDir)",
-                                                  ExtractToFolder
-                                                 )
-                           );
+                new BSObject( "extractToDirectory" ),
+                new BSFunction(
+                    "extractToDirectory(sourceFile, destinationDir)",
+                    ExtractToFolder,
+                    2
+                )
+            );
 
             BSEngine.AddStatic( "zipfile", t );
         }
@@ -66,7 +66,6 @@ namespace BadScript.Zip
         }
 
         #endregion
-
     }
 
 }

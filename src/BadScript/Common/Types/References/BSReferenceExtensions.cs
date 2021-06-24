@@ -3,7 +3,6 @@
 
     public static class BSReferenceExtensions
     {
-
         #region Public
 
         public static ABSObject ResolveReference( this ABSObject o )
@@ -17,7 +16,6 @@
         }
 
         #endregion
-
     }
 
 }

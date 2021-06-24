@@ -1,5 +1,4 @@
 ﻿using System;
-
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -8,7 +7,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
     public abstract class BSRelationalOperatorImplementation : ABSOperatorImplementation
     {
-
         #region Public
 
         public override bool IsCorrectImplementation( ABSObject[] arg )
@@ -48,7 +46,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
         }
 
         #endregion
-
     }
 
 }

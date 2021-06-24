@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types
@@ -8,7 +7,7 @@ namespace BadScript.Common.Types
 
     public class BSFunction : ABSObject
     {
-
+        private readonly (int min, int max)? m_ParameterCount;
         private readonly string m_DebugData = null;
 
         private Func < ABSObject[],
@@ -19,10 +18,20 @@ namespace BadScript.Common.Types
         public BSFunction(
             string debugData,
             Func < ABSObject[], ABSObject >
-                func )
+                func,
+            int argCount ) : this( debugData, func )
         {
-            m_DebugData = debugData;
-            m_Func = func;
+            m_ParameterCount = ( argCount, argCount );
+        }
+
+        public BSFunction(
+            string debugData,
+            Func < ABSObject[], ABSObject >
+                func,
+            int minArgs,
+            int maxArgs ) : this( debugData, func )
+        {
+            m_ParameterCount = ( minArgs, maxArgs );
         }
 
         public override bool Equals( ABSObject other )
@@ -42,6 +51,19 @@ namespace BadScript.Common.Types
 
         public override ABSObject Invoke( ABSObject[] args )
         {
+            if ( m_ParameterCount == null )
+            {
+                return m_Func( args );
+            }
+
+            ( int min, int max ) = m_ParameterCount.Value;
+
+            if ( args.Length < min || args.Length > max )
+            {
+                throw new Exception(
+                    $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}" );
+            }
+
             return m_Func( args );
         }
 
@@ -79,6 +101,18 @@ namespace BadScript.Common.Types
 
         #endregion
 
+        #region Private
+
+        private BSFunction(
+            string debugData,
+            Func < ABSObject[], ABSObject >
+                func )
+        {
+            m_DebugData = debugData;
+            m_Func = func;
+        }
+
+        #endregion
     }
 
 }

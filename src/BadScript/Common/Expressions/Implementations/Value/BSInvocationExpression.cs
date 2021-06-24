@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using BadScript.Common.Expressions.Implementations.Unary;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -10,7 +9,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSInvocationExpression : BSUnaryExpression
     {
-
         private BSExpression[] Parameters;
 
         #region Public
@@ -25,14 +23,13 @@ namespace BadScript.Common.Expressions.Implementations.Value
             ABSObject obj = Left.Execute( scope );
 
             return obj.Invoke(
-                              Parameters.Select( x => x.Execute( scope ) ).
-                                         Select( x => x.ResolveReference() ).
-                                         ToArray()
-                             );
+                Parameters.Select( x => x.Execute( scope ) ).
+                           Select( x => x.ResolveReference() ).
+                           ToArray()
+            );
         }
 
         #endregion
-
     }
 
 }

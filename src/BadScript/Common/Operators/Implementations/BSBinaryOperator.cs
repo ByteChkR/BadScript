@@ -1,6 +1,5 @@
 ﻿using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
-using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 
 namespace BadScript.Common.Operators.Implementations
@@ -8,28 +7,6 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSBinaryOperator : BSOperator
     {
-
-        private class BSProxyExpression : BSExpression
-        {
-
-            private ABSObject m_Object;
-
-            #region Public
-
-            public BSProxyExpression( ABSObject obj )
-            {
-                m_Object = obj;
-            }
-
-            public override ABSObject Execute( BSScope scope )
-            {
-                return m_Object;
-            }
-
-            #endregion
-
-        }
-
         private int m_Start;
 
         private BSFunction m_OperatorImplementation;
@@ -48,13 +25,12 @@ namespace BadScript.Common.Operators.Implementations
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
             return new BSInvocationExpression(
-                                              new BSProxyExpression( m_OperatorImplementation ),
-                                              new[] { left, parser.ParseExpression( m_Start ) }
-                                             );
+                new BSProxyExpression( m_OperatorImplementation ),
+                new[] { left, parser.ParseExpression( m_Start ) }
+            );
         }
 
         #endregion
-
     }
 
 }

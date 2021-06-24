@@ -3,7 +3,6 @@
 
     public class BSDivideOperatorImplementation : ABSMathOperatorImplementation
     {
-
         #region Public
 
         public BSDivideOperatorImplementation() : base( "/" )
@@ -20,7 +19,6 @@
         }
 
         #endregion
-
     }
 
 }

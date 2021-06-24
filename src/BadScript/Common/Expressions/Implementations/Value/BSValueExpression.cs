@@ -7,7 +7,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSValueExpression : BSExpression
     {
-
         private readonly object m_Value;
 
         #region Public
@@ -25,7 +24,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
         }
 
         #endregion
-
     }
 
 }

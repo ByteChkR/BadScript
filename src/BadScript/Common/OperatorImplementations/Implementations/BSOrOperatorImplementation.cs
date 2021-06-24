@@ -3,7 +3,6 @@
 
     public class BSOrOperatorImplementation : ABSLogicOperatorImplementation
     {
-
         #region Public
 
         public BSOrOperatorImplementation() : base( "||" )
@@ -16,7 +15,6 @@
         }
 
         #endregion
-
     }
 
 }

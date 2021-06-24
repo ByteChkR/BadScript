@@ -5,7 +5,6 @@ namespace BadScript.Common.Types
 
     public abstract class ABSArray : ABSObject
     {
-
         #region Public
 
         public abstract ABSReference GetElement( int i );
@@ -34,7 +33,6 @@ namespace BadScript.Common.Types
         }
 
         #endregion
-
     }
 
 }

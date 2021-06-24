@@ -5,7 +5,6 @@ namespace BadScript.Common.Types
 
     public abstract class ABSTable : ABSObject
     {
-
         public abstract ABSArray Keys { get; }
 
         public abstract ABSArray Values { get; }
@@ -27,7 +26,6 @@ namespace BadScript.Common.Types
         public abstract void RemoveElement( ABSObject k );
 
         #endregion
-
     }
 
 }

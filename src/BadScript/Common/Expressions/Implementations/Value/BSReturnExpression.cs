@@ -7,7 +7,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSReturnExpression : BSExpression
     {
-
         public BSExpression Left { get; private set; }
 
         #region Public
@@ -27,7 +26,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
         }
 
         #endregion
-
     }
 
 }

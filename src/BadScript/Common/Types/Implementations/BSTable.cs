@@ -1,18 +1,18 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types.References;
 using BadScript.Common.Types.References.Implementations;
 
 namespace BadScript.Common.Types.Implementations
 {
 
-    public class BSTable : ABSTable
+    public class BSTable : ABSTable, IEnumerable < IForEachIteration >
     {
-
         private readonly Dictionary < ABSObject, ABSObject > m_InnerTable =
             new Dictionary < ABSObject, ABSObject >();
 
@@ -44,6 +44,14 @@ namespace BadScript.Common.Types.Implementations
         public override ABSReference GetElement( ABSObject i )
         {
             return new BSTableReference( this, i );
+        }
+
+        public IEnumerator < IForEachIteration > GetEnumerator()
+        {
+            foreach ( KeyValuePair < ABSObject, ABSObject > keyValuePair in m_InnerTable )
+            {
+                yield return new ForEachIteration( new[] { keyValuePair.Key, keyValuePair.Value } );
+            }
         }
 
         public override int GetLength()
@@ -116,18 +124,18 @@ namespace BadScript.Common.Types.Implementations
             {
                 List < string > keyLines = bsRuntimeObject.Key.SafeToString( doneList ).
                                                            Split(
-                                                                 new[] { '\n' },
-                                                                 StringSplitOptions.RemoveEmptyEntries
-                                                                ).
+                                                               new[] { '\n' },
+                                                               StringSplitOptions.RemoveEmptyEntries
+                                                           ).
                                                            Select( x => x.Trim() ).
                                                            Where( x => !string.IsNullOrEmpty( x ) ).
                                                            ToList();
 
                 List < string > valueLines = bsRuntimeObject.Value.SafeToString( doneList ).
                                                              Split(
-                                                                   new[] { '\n' },
-                                                                   StringSplitOptions.RemoveEmptyEntries
-                                                                  ).
+                                                                 new[] { '\n' },
+                                                                 StringSplitOptions.RemoveEmptyEntries
+                                                             ).
                                                              Select( x => x.Trim() ).
                                                              Where( x => !string.IsNullOrEmpty( x ) ).
                                                              ToList();
@@ -193,6 +201,14 @@ namespace BadScript.Common.Types.Implementations
 
         #endregion
 
+        #region Private
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
     }
 
 }

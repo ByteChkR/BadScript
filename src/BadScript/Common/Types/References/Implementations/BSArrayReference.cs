@@ -5,7 +5,6 @@ namespace BadScript.Common.Types.References.Implementations
 
     public class BSArrayReference : ABSReference
     {
-
         private readonly ABSArray m_SourceTable;
         private readonly int m_Key;
 
@@ -73,7 +72,6 @@ namespace BadScript.Common.Types.References.Implementations
         }
 
         #endregion
-
     }
 
 }

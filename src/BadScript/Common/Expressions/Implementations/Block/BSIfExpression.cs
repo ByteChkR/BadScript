@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -11,7 +10,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSIfExpression : BSExpression
     {
-
         private Dictionary < BSExpression, BSExpression[] > m_ConditionMap;
         private BSExpression[] m_ElseBlock;
 
@@ -36,11 +34,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
                         BSScope funcScope = new BSScope( scope );
 
                         ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                             funcScope,
-                             keyValuePair.Value,
-                             new string[0],
-                             new ABSObject[0]
-                            );
+                            funcScope,
+                            keyValuePair.Value,
+                            new string[0],
+                            new ABSObject[0]
+                        );
 
                         if ( ret != null )
                         {
@@ -61,11 +59,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 BSScope elseScope = new BSScope( scope );
 
                 ABSObject elseR = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                     elseScope,
-                     m_ElseBlock,
-                     new string[0],
-                     new ABSObject[0]
-                    );
+                    elseScope,
+                    m_ElseBlock,
+                    new string[0],
+                    new ABSObject[0]
+                );
 
                 if ( elseR != null )
                 {
@@ -77,7 +75,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
         }
 
         #endregion
-
     }
 
 }

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Access;
+using BadScript.Common.Expressions.Implementations.Binary;
 using BadScript.Common.Expressions.Implementations.Block;
+using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.Operators;
 using BadScript.Common.Operators.Implementations;
@@ -17,150 +18,163 @@ namespace BadScript
 
     public class BSParser
     {
-
         private static readonly List < BSOperator > s_Operators =
             new List < BSOperator >
             {
                 new BSBinaryOperator(
-                                            0,
-                                            "+",
-                                            new BSFunction(
-                                                                  "function +(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "+", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    "+",
+                    new BSFunction(
+                        "function +(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "+", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            "-",
-                                            new BSFunction(
-                                                                  "function -(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "-", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    "-",
+                    new BSFunction(
+                        "function -(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "-", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            2,
-                                            "*",
-                                            new BSFunction(
-                                                                  "function *(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "*", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    2,
+                    "*",
+                    new BSFunction(
+                        "function *(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "*", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            2,
-                                            "/",
-                                            new BSFunction(
-                                                                  "function /(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "/", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    2,
+                    "/",
+                    new BSFunction(
+                        "function /(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "/", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            4,
-                                            "%",
-                                            new BSFunction(
-                                                                  "function %(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "%", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    4,
+                    "%",
+                    new BSFunction(
+                        "function %(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "%", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            "==",
-                                            new BSFunction(
-                                                                  "function ==(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "==", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    "==",
+                    new BSFunction(
+                        "function ==(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "==", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            "!=",
-                                            new BSFunction(
-                                                                  "function !=(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "==", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    "!=",
+                    new BSFunction(
+                        "function !=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "!=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            "&&",
-                                            new BSFunction(
-                                                                  "function &&(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "&&", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    "&&",
+                    new BSFunction(
+                        "function &&(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "&&", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            "||",
-                                            new BSFunction(
-                                                                  "function ||(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "||", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    "||",
+                    new BSFunction(
+                        "function ||(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "||", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            "^",
-                                            new BSFunction(
-                                                                  "function ^(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "^", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    "^",
+                    new BSFunction(
+                        "function ^(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "^", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            "<",
-                                            new BSFunction(
-                                                                  "function <(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "<", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    "<",
+                    new BSFunction(
+                        "function <(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "<", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            ">",
-                                            new BSFunction(
-                                                                  "function >(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( ">", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    ">",
+                    new BSFunction(
+                        "function >(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( ">", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            "<=",
-                                            new BSFunction(
-                                                                  "function <=(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( "<=", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    "<=",
+                    new BSFunction(
+                        "function <=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "<=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSBinaryOperator(
-                                            0,
-                                            ">=",
-                                            new BSFunction(
-                                                                  "function >=(a, b)",
-                                                                  objects => BSOperatorImplementationResolver.
-                                                                             ResolveImplementation( ">=", objects ).
-                                                                             ExecuteOperator( objects )
-                                                                 )
-                                           ),
+                    0,
+                    ">=",
+                    new BSFunction(
+                        "function >=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( ">=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
                 new BSAssignmentOperator(),
                 new BSMemberAccessOperator(),
             };
@@ -170,15 +184,16 @@ namespace BadScript
             {
                 {
                     "!", new BSUnaryOperator(
-                                                    "!",
-                                                    new BSFunction(
-                                                                          "function !(a)",
-                                                                          objects =>
-                                                                              BSOperatorImplementationResolver.
-                                                                                  ResolveImplementation( "!", objects ).
-                                                                                  ExecuteOperator( objects )
-                                                                         )
-                                                   )
+                        "!",
+                        new BSFunction(
+                            "function !(a)",
+                            objects =>
+                                BSOperatorImplementationResolver.
+                                    ResolveImplementation( "!", objects ).
+                                    ExecuteOperator( objects ),
+                            1
+                        )
+                    )
                 }
             };
 
@@ -467,6 +482,22 @@ namespace BadScript
             throw new Exception();
         }
 
+        public string ParseKey()
+        {
+            ReadWhitespace();
+            StringBuilder sb = new StringBuilder();
+
+            while ( m_OriginalSource.Length > m_CurrentPosition &&
+                    !char.IsWhiteSpace( m_OriginalSource, m_CurrentPosition ) &&
+                    m_OriginalSource[m_CurrentPosition] != '_' )
+            {
+                sb.Append( m_OriginalSource[m_CurrentPosition] );
+                m_CurrentPosition++;
+            }
+
+            return sb.ToString();
+        }
+
         public string ParseKeyword()
         {
             ReadWhitespace();
@@ -721,6 +752,41 @@ namespace BadScript
                 return new BSIfExpression( cMap, elseBlock );
             }
 
+            if ( wordName == "foreach" )
+            {
+                ReadWhitespace();
+
+                string[] vars;
+
+                if ( Is( '(' ) )
+                {
+                    vars = ParseArgumentList();
+                }
+                else
+                {
+                    vars = new[] { GetNextWord() };
+                }
+
+                ReadWhitespace();
+                string inStr = GetNextWord();
+
+                if ( inStr != "in" )
+                {
+                    throw new Exception( $"Expected 'in' got '{inStr}'" );
+                }
+
+                ReadWhitespace();
+                BSExpression cDecl = ParseExpression( 0 );
+                ReadWhitespaceAndNewLine();
+                string block = ParseBlock();
+
+                BSParser p = new BSParser( block );
+
+                BSExpression[] b = p.ParseToEnd();
+
+                return new BSForeachExpression( vars, cDecl, b );
+            }
+
             if ( wordName == "while" )
             {
                 (BSExpression, BSExpression[]) a = ParseConditionalBlock();
@@ -730,7 +796,108 @@ namespace BadScript
 
             if ( wordName == "for" )
             {
-                throw new Exception( "For loops are not supported yet" );
+                BSAssignExpression cDecl = ( BSAssignExpression ) ParseExpression( 0 );
+                BSPropertyExpression cProp = ( BSPropertyExpression ) cDecl.GetLeft();
+
+                string untilWord = ParseKey();
+
+                if ( !untilWord.StartsWith( "while" ) )
+                {
+                    throw new Exception( "Expected while" );
+                }
+
+                ReadWhitespace();
+
+                BSExpression cCond;
+
+                string op = untilWord.Substring( "while".Length, untilWord.Length - "while".Length );
+
+                if ( string.IsNullOrEmpty( op ) )
+                {
+                    //Check condition to be true
+                    cCond = ParseExpression( 0 );
+                }
+                else
+                {
+                    //Use OP to wrap the condition into an expression that checks for true/false
+                    switch ( op )
+                    {
+                        case "=":
+                            cCond = s_Operators.First( x => x.OperatorKey == "==" ).
+                                                Parse( cProp, this );
+
+                            break;
+
+                        case "!":
+                            cCond = s_Operators.First( x => x.OperatorKey == "!=" ).
+                                                Parse( cProp, this );
+
+                            break;
+
+                        case "<":
+                            cCond = s_Operators.First( x => x.OperatorKey == "<" ).
+                                                Parse( cProp, this );
+
+                            break;
+
+                        case ">":
+                            cCond = s_Operators.First( x => x.OperatorKey == ">" ).
+                                                Parse( cProp, this );
+
+                            break;
+
+                        case "<=":
+                            cCond = s_Operators.First( x => x.OperatorKey == "<=" ).
+                                                Parse( cProp, this );
+
+                            break;
+
+                        case ">=":
+                            cCond = s_Operators.First( x => x.OperatorKey == ">=" ).
+                                                Parse( cProp, this );
+
+                            break;
+
+                        default:
+                            throw new Exception( "Invalid Operator: " + op );
+                    }
+                }
+
+                string step = ParseKey();
+
+                BSExpression cInc;
+
+                if ( step != "step" )
+                {
+                    cInc = new BSAssignExpression(
+                        cProp,
+                        new BSInvocationExpression(
+                            new BSProxyExpression(
+                                new BSFunction(
+                                    "function +(a, b)",
+                                    objects => BSOperatorImplementationResolver.
+                                               ResolveImplementation( "+", objects ).
+                                               ExecuteOperator( objects ),
+                                    2 ) ),
+                            new BSExpression[] { cProp, new BSValueExpression( ( decimal ) 1 ) } ) );
+                }
+                else
+                {
+                    cInc = new BSAssignExpression(
+                        cProp,
+                        s_Operators.First( x => x.OperatorKey == "+" ).
+                                    Parse( cProp, this ) );
+                }
+
+                ReadWhitespaceAndNewLine();
+                string block = ParseBlock();
+
+                BSParser p = new BSParser( block );
+
+                BSExpression[] b = p.ParseToEnd();
+
+                return new BSForExpression( cDecl, cCond, cInc, b );
+
             }
 
             if ( wordName == "null" && left == null )
@@ -925,7 +1092,6 @@ namespace BadScript
         }
 
         #endregion
-
     }
 
 }

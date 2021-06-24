@@ -7,7 +7,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSArrayExpression : BSExpression
     {
-
         #region Public
 
         public override ABSObject Execute( BSScope scope )
@@ -16,7 +15,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
         }
 
         #endregion
-
     }
 
 }

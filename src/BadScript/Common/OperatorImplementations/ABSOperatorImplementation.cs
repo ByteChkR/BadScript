@@ -5,7 +5,6 @@ namespace BadScript.Common.OperatorImplementations
 
     public abstract class ABSOperatorImplementation
     {
-
         public readonly string OperatorKey;
 
         #region Public
@@ -29,7 +28,6 @@ namespace BadScript.Common.OperatorImplementations
         protected abstract ABSObject Execute( ABSObject[] args );
 
         #endregion
-
     }
 
 }

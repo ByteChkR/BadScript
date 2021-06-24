@@ -6,7 +6,6 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSAssignmentOperator : BSOperator
     {
-
         public override string OperatorKey => "=";
 
         #region Public
@@ -17,7 +16,6 @@ namespace BadScript.Common.Operators.Implementations
         }
 
         #endregion
-
     }
 
 }

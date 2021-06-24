@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using BadScript.Common.Expressions;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -14,7 +13,6 @@ namespace BadScript
 
     public class BSEngineInstance
     {
-
         public readonly ABSTable GlobalTable;
 
         #region Public
@@ -35,9 +33,9 @@ namespace BadScript
             GlobalTable.InsertElement( new BSObject( "__G" ), GlobalTable );
 
             GlobalTable.InsertElement(
-                                      new BSObject( "loadString" ),
-                                      new BSFunction( "function loadString(str)", LoadStringApi )
-                                     );
+                new BSObject( "loadString" ),
+                new BSFunction( "function loadString(str)", LoadStringApi, 1 )
+            );
         }
 
         public ABSObject LoadFile( string file, string[] args = null )
@@ -53,9 +51,9 @@ namespace BadScript
         public ABSObject LoadString( string script, string[] args = null )
         {
             return LoadString(
-                              script,
-                              args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray()
-                             );
+                script,
+                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray()
+            );
         }
 
         public ABSObject LoadString( string script, ABSObject[] args = null )
@@ -66,11 +64,11 @@ namespace BadScript
             BSScope scope = new BSScope( this );
 
             scope.AddLocalVar(
-                              "args",
-                              args == null
-                                  ? ( ABSObject ) new BSObject( null )
-                                  : new BSArray( args )
-                             );
+                "args",
+                args == null
+                    ? ( ABSObject ) new BSObject( null )
+                    : new BSArray( args )
+            );
 
             foreach ( BSExpression buildScriptExpression in exprs )
             {
@@ -99,7 +97,6 @@ namespace BadScript
         }
 
         #endregion
-
     }
 
 }

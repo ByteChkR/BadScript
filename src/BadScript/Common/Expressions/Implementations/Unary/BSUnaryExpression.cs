@@ -3,7 +3,6 @@
 
     public abstract class BSUnaryExpression : BSExpression
     {
-
         protected readonly BSExpression Left;
 
         #region Protected
@@ -14,7 +13,6 @@
         }
 
         #endregion
-
     }
 
 }
