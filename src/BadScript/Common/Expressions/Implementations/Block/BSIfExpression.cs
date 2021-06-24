@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -26,32 +25,27 @@ namespace BadScript.Common.Expressions.Implementations.Block
             foreach ( KeyValuePair < BSExpression, BSExpression[] > keyValuePair in m_ConditionMap )
             {
                 ABSObject o = keyValuePair.Key.Execute( scope ).ResolveReference();
+                bool d = o.ConvertBool();
 
-                if ( o.TryConvertBool( out bool d ) )
+                if ( d )
                 {
-                    if ( d )
+                    BSScope funcScope = new BSScope( scope );
+
+                    ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
+                        funcScope,
+                        keyValuePair.Value,
+                        new string[0],
+                        new ABSObject[0]
+                    );
+
+                    if ( ret != null )
                     {
-                        BSScope funcScope = new BSScope( scope );
-
-                        ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                            funcScope,
-                            keyValuePair.Value,
-                            new string[0],
-                            new ABSObject[0]
-                        );
-
-                        if ( ret != null )
-                        {
-                            scope.SetReturnValue( ret );
-                        }
-
-                        return new BSObject( null );
+                        scope.SetReturnValue( ret );
                     }
+
+                    return new BSObject( null );
                 }
-                else
-                {
-                    throw new Exception( "invalid if expression" );
-                }
+
             }
 
             if ( m_ElseBlock != null )

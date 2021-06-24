@@ -30,7 +30,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
                     return new BSObject( lD + rS );
                 }
 
-                throw new Exception( "Invalid Operator Usage" );
+                throw new Exception( $"'{rVal}' can not be added to '{lVal}'" );
             }
 
             if ( lVal.TryConvertString( out string lS ) &&
@@ -39,7 +39,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
                 return new BSObject( lS + rStr );
             }
 
-            throw new Exception( "Invalid Operator Usage" );
+            throw new Exception( $"'{rVal}' can not be added" );
         }
 
         public override bool IsCorrectImplementation( ABSObject[] arg )
@@ -59,6 +59,39 @@ namespace BadScript.Common.OperatorImplementations.Implementations
         protected override ABSObject Execute( ABSObject[] arg )
         {
             return Add( arg );
+        }
+
+        #endregion
+    }
+
+    public class BSNullTestOperatorImplementation : ABSOperatorImplementation
+    {
+        #region Public
+
+        public BSNullTestOperatorImplementation() : base( "??" )
+        {
+        }
+
+        public static ABSObject NullTest( ABSObject[] arg )
+        {
+            ABSObject lVal = arg[0];
+            ABSObject rVal = arg[1];
+
+            return lVal.IsNull ? rVal : lVal;
+        }
+
+        public override bool IsCorrectImplementation( ABSObject[] arg )
+        {
+            return true;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override ABSObject Execute( ABSObject[] arg )
+        {
+            return NullTest( arg );
         }
 
         #endregion

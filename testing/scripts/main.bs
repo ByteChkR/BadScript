@@ -15,7 +15,7 @@ function checkFS()
 }
 
 //Load a Script file and return its global table after execution
-function loadFile(file)
+function loadFile(!file)
 {
 	if(checkFS())
 	{
@@ -34,7 +34,7 @@ function loadFile(file)
 }
 
 //Load all Scripts from the specified folder
-function loadPlugins(dir)
+function loadPlugins(!dir)
 {
 	pluginList = {}
 	print("Loading Plugins...")
@@ -64,4 +64,6 @@ function loadPlugins(dir)
 //Load Plugins and put resulting table of plugins into the global scope
 __G.loadedPlugins = loadPlugins("./plugins")
 
-loadFile("for_tests.bs")
+a = null
+v = a ?? 10
+print(v)

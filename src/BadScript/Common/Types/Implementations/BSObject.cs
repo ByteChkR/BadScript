@@ -9,6 +9,8 @@ namespace BadScript.Common.Types.Implementations
     {
         protected readonly object m_InternalObject;
 
+        public override bool IsNull => m_InternalObject == null;
+
         #region Public
 
         public BSObject( object instance )

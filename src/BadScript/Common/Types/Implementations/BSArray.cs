@@ -15,6 +15,8 @@ namespace BadScript.Common.Types.Implementations
     {
         private readonly List < ABSObject > m_InnerArray;
 
+        public override bool IsNull => false;
+
         #region Public
 
         public BSArray()

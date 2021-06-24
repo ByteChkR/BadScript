@@ -33,14 +33,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Sin( ( double ) path )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Sin( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -54,14 +50,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Cos( ( double ) path )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Cos( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -75,14 +67,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Tan( ( double ) path )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Tan( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -96,14 +84,9 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Sinh( ( double ) path )
-                            );
-                        }
-
-                        throw new Exception( "Expected Decimal" );
+                        return new BSObject(
+                            ( decimal ) System.Math.Sinh( ( double ) o.ConvertDecimal() )
+                        );
                     },
                     1
                 )
@@ -117,14 +100,9 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Cosh( ( double ) path )
-                            );
-                        }
-
-                        throw new Exception( "Expected Decimal" );
+                        return new BSObject(
+                            ( decimal ) System.Math.Cosh( ( double ) o.ConvertDecimal() )
+                        );
                     },
                     1
                 )
@@ -138,14 +116,9 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Tanh( ( double ) path )
-                            );
-                        }
-
-                        throw new Exception( "Expected Decimal" );
+                        return new BSObject(
+                            ( decimal ) System.Math.Tanh( ( double ) o.ConvertDecimal() )
+                        );
                     },
                     1
                 )
@@ -159,14 +132,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Asin( ( double ) path )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Asin( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -180,14 +149,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Acos( ( double ) path )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Acos( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -201,14 +166,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Atan( ( double ) path )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Atan( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -222,20 +183,12 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal x ) &&
-                             args[1].
-                                 ResolveReference().
-                                 TryConvertDecimal( out decimal y ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Atan2(
-                                    ( double ) x,
-                                    ( double ) y
-                                )
-                            );
-                        }
-
-                        throw new Exception( "Expected Decimal" );
+                        return new BSObject(
+                            ( decimal ) System.Math.Atan2(
+                                ( double ) o.ConvertDecimal(),
+                                ( double ) args[1].ResolveReference().ConvertDecimal()
+                            )
+                        );
                     },
                     2
                 )
@@ -251,28 +204,19 @@ namespace BadScript.Math
 
                         if ( args.Length == 2 )
                         {
-                            if ( o.TryConvertDecimal( out decimal path2 ) &&
-                                 args[1].TryConvertDecimal( out decimal newB ) )
-                            {
-                                return new BSObject(
-                                    ( decimal ) System.Math.Log(
-                                        ( double ) path2,
-                                        ( double ) newB
-                                    )
-                                );
-                            }
-
-                            throw new Exception( "Expected Decimal" );
-                        }
-
-                        if ( o.TryConvertDecimal( out decimal path1 ) )
-                        {
                             return new BSObject(
-                                ( decimal ) System.Math.Log( ( double ) path1 )
+                                ( decimal ) System.Math.Log(
+                                    ( double ) o.ConvertDecimal(),
+                                    ( double ) args[1].ResolveReference().ConvertDecimal()
+                                )
                             );
+
                         }
 
-                        throw new Exception( "Expected Decimal" );
+                        return new BSObject(
+                            ( decimal ) System.Math.Log( ( double ) o.ConvertDecimal() )
+                        );
+
                     },
                     2
                 )
@@ -286,14 +230,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path1 ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Abs( ( double ) path1 )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Abs( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -307,14 +247,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path1 ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Ceiling( ( double ) path1 )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Ceiling( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -328,14 +264,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path1 ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Floor( ( double ) path1 )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Floor( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -349,14 +281,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path1 ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Exp( ( double ) path1 )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Exp( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -370,14 +298,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path1 ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Log10( ( double ) path1 )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Log10( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -391,12 +315,9 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal path1 ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Sign( ( double ) path1 )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Sign( ( double ) o.ConvertDecimal() )
+                        );
 
                         throw new Exception( "Expected Decimal" );
                     },
@@ -412,18 +333,16 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal x ) &&
-                             args[1].TryConvertDecimal( out decimal y ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Min(
-                                    ( double ) x,
-                                    ( double ) y
-                                )
-                            );
-                        }
-
-                        throw new Exception( "Expected Decimal" );
+                        return new BSObject(
+                            ( decimal ) System.Math.Min(
+                                ( double ) args[0].
+                                           ResolveReference().
+                                           ConvertDecimal(),
+                                ( double ) args[1].
+                                           ResolveReference().
+                                           ConvertDecimal()
+                            )
+                        );
                     },
                     2
                 )
@@ -435,22 +354,16 @@ namespace BadScript.Math
                     "function max(x, y)",
                     args =>
                     {
-                        ABSObject o = args[0].ResolveReference();
-
-                        if ( o.TryConvertDecimal( out decimal x ) &&
-                             args[1].
-                                 ResolveReference().
-                                 TryConvertDecimal( out decimal y ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Max(
-                                    ( double ) x,
-                                    ( double ) y
-                                )
-                            );
-                        }
-
-                        throw new Exception( "Expected Decimal" );
+                        return new BSObject(
+                            ( decimal ) System.Math.Max(
+                                ( double ) args[0].
+                                           ResolveReference().
+                                           ConvertDecimal(),
+                                ( double ) args[1].
+                                           ResolveReference().
+                                           ConvertDecimal()
+                            )
+                        );
                     },
                     1
                 )
@@ -464,20 +377,16 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal x ) &&
-                             args[1].
-                                 ResolveReference().
-                                 TryConvertDecimal( out decimal y ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Pow(
-                                    ( double ) x,
-                                    ( double ) y
-                                )
-                            );
-                        }
-
-                        throw new Exception( "Expected Decimal" );
+                        return new BSObject(
+                            ( decimal ) System.Math.Pow(
+                                ( double ) args[0].
+                                           ResolveReference().
+                                           ConvertDecimal(),
+                                ( double ) args[1].
+                                           ResolveReference().
+                                           ConvertDecimal()
+                            )
+                        );
                     },
                     1
                 )
@@ -491,14 +400,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal x ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Sqrt( ( double ) x )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Sqrt( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -512,14 +417,10 @@ namespace BadScript.Math
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertDecimal( out decimal x ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) System.Math.Truncate( ( double ) x )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) System.Math.Truncate( ( double ) o.ConvertDecimal() )
+                        );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )

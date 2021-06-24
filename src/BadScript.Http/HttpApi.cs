@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
 namespace BadScript.Http
 {
@@ -40,8 +41,8 @@ namespace BadScript.Http
 
         private static ABSObject DownloadFile( ABSObject[] args )
         {
-            string url = args[0].ConvertString();
-            string file = args[1].ConvertString();
+            string url = args[0].ResolveReference().ConvertString();
+            string file = args[1].ResolveReference().ConvertString();
 
             using ( WebClient wc = new WebClient() )
             {
@@ -53,7 +54,7 @@ namespace BadScript.Http
 
         private static ABSObject DownloadString( ABSObject[] args )
         {
-            string url = args[0].ConvertString();
+            string url = args[0].ResolveReference().ConvertString();
 
             using ( WebClient wc = new WebClient() )
             {
@@ -65,7 +66,7 @@ namespace BadScript.Http
 
         private static ABSObject Get( ABSObject[] args )
         {
-            string url = args[0].ConvertString();
+            string url = args[0].ResolveReference().ConvertString();
             HttpWebRequest request = WebRequest.CreateHttp( url );
             request.Credentials = CredentialCache.DefaultCredentials;
             HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
@@ -86,7 +87,7 @@ namespace BadScript.Http
 
         private static ABSObject Post( ABSObject[] args )
         {
-            string url = args[0].ConvertString();
+            string url = args[0].ResolveReference().ConvertString();
             HttpWebRequest request = WebRequest.CreateHttp( url );
             request.Method = "POST";
             request.Credentials = CredentialCache.DefaultCredentials;

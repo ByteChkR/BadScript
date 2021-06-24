@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
 namespace BadScript.Zip
 {
@@ -41,28 +41,20 @@ namespace BadScript.Zip
 
         private static ABSObject CreateFromFolder( ABSObject[] args )
         {
-            if ( args[0].TryConvertString( out string source ) &&
-                 args[1].TryConvertString( out string destinationFile ) )
-            {
-                ZipFile.CreateFromDirectory( source, destinationFile );
+            ZipFile.CreateFromDirectory(
+                args[0].ResolveReference().ConvertString(),
+                args[1].ResolveReference().ConvertString() );
 
-                return new BSObject( null );
-            }
-
-            throw new Exception( "Expected string" );
+            return new BSObject( null );
         }
 
         private static ABSObject ExtractToFolder( ABSObject[] args )
         {
-            if ( args[0].TryConvertString( out string sourceFile ) &&
-                 args[1].TryConvertString( out string destination ) )
-            {
-                ZipFile.ExtractToDirectory( sourceFile, destination );
+            ZipFile.ExtractToDirectory(
+                args[0].ResolveReference().ConvertString(),
+                args[1].ResolveReference().ConvertString() );
 
-                return new BSObject( null );
-            }
-
-            throw new Exception( "Expected string" );
+            return new BSObject( null );
         }
 
         #endregion

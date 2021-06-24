@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Access;
 using BadScript.Common.Expressions.Implementations.Binary;
@@ -72,6 +72,17 @@ namespace BadScript
                         "function %(a, b)",
                         objects => BSOperatorImplementationResolver.
                                    ResolveImplementation( "%", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
+                new BSBinaryOperator(
+                    0,
+                    "??",
+                    new BSFunction(
+                        "function ??(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "??", objects ).
                                    ExecuteOperator( objects ),
                         2
                     )
@@ -199,7 +210,6 @@ namespace BadScript
 
         private readonly string m_OriginalSource;
         private int m_CurrentPosition;
-
         private char Current =>
             m_CurrentPosition < m_OriginalSource.Length ? m_OriginalSource[m_CurrentPosition] : '\0';
 
@@ -220,6 +230,11 @@ namespace BadScript
 
             while ( true )
             {
+                if ( Is( '\0' ) )
+                {
+                    throw new BSParserException( $"Expected '{close}'", this );
+                }
+
                 if ( Is( open ) )
                 {
                     level++;
@@ -241,6 +256,38 @@ namespace BadScript
             m_CurrentPosition++;
 
             return r;
+        }
+
+        public (string line, int lineCount, int col) GetCurrentLineInfo()
+        {
+            char[] text = m_OriginalSource.ToCharArray();
+
+            if ( m_CurrentPosition < m_OriginalSource.Length )
+            {
+                text = text.Take( m_CurrentPosition ).ToArray();
+            }
+
+            int lineCount = 0;
+            int lastNewLine = 0;
+
+            for ( int i = 0; i < text.Length; i++ )
+            {
+                if ( text[i] == '\n' )
+                {
+                    lastNewLine = i;
+                    lineCount++;
+                }
+            }
+
+            int textStart = lastNewLine + 1;
+            int nextNewLine = m_OriginalSource.IndexOf( '\n', textStart );
+
+            if ( nextNewLine == -1 )
+            {
+                nextNewLine = m_OriginalSource.Length - textStart;
+            }
+
+            return ( m_OriginalSource.Substring( textStart, (nextNewLine - 1)-textStart).Trim(), lineCount, m_CurrentPosition - lastNewLine );
         }
 
         public BSExpression Parse( int start )
@@ -301,7 +348,7 @@ namespace BadScript
 
             if ( !IsWordStart() )
             {
-                throw new Exception( "Can not Parse Word" );
+                throw new BSParserException( "Can not Parse Word", this );
             }
 
             StringBuilder sb = new StringBuilder();
@@ -329,7 +376,7 @@ namespace BadScript
 
                 if ( !Is( ']' ) )
                 {
-                    throw new Exception();
+                    throw new BSParserException( "Expected '['", this );
                 }
 
                 m_CurrentPosition++;
@@ -337,7 +384,7 @@ namespace BadScript
                 return new BSArrayAccessExpression( expr, i );
             }
 
-            throw new Exception();
+            throw new BSParserException( "Expected ']'", this );
         }
 
         public (BSExpression, BSExpression[]) ParseConditionalBlock()
@@ -351,7 +398,7 @@ namespace BadScript
 
                 if ( !Is( ')' ) )
                 {
-                    throw new Exception();
+                    throw new BSParserException( "Expected ')'", this );
                 }
 
                 m_CurrentPosition++;
@@ -365,7 +412,7 @@ namespace BadScript
                 return ( condition, b );
             }
 
-            throw new Exception();
+            throw new BSParserException( "Expected '('", this );
         }
 
         public BSExpression ParseExpression( int start )
@@ -405,29 +452,39 @@ namespace BadScript
             return expr;
         }
 
-        public BSExpression ParseFunction()
+        public BSExpression ParseFunction( bool isGlobal )
         {
             StringBuilder sb = new StringBuilder();
             ReadWhitespace();
 
-            if ( !IsWordStart() )
-            {
-                throw new Exception( "Can not Parse Word" );
-            }
+            string funcName;
 
-            sb.Append( m_OriginalSource[m_CurrentPosition] );
-            m_CurrentPosition++;
-
-            while ( IsWordMiddle() )
+            if ( IsWordStart() )
             {
+
                 sb.Append( m_OriginalSource[m_CurrentPosition] );
                 m_CurrentPosition++;
+
+                while ( IsWordMiddle() )
+                {
+                    sb.Append( m_OriginalSource[m_CurrentPosition] );
+                    m_CurrentPosition++;
+                }
+
+                funcName = sb.ToString();
+            }
+            else
+            {
+                funcName = "";
+
+                if ( isGlobal )
+                {
+                    throw new BSParserException( "A global anonymous function is not allowed.", this );
+                }
             }
 
-            string funcName = sb.ToString();
-
             ReadWhitespace();
-            string[] args = ParseArgumentList();
+            (bool, string)[] args = ParseArgumentList();
 
             ReadWhitespaceAndNewLine();
 
@@ -437,7 +494,7 @@ namespace BadScript
 
             BSExpression[] b = p.ParseToEnd();
 
-            return new BSFunctionDefinitionExpression( funcName, args, b, false );
+            return new BSFunctionDefinitionExpression( funcName, args, b, isGlobal );
         }
 
         public BSExpression ParseInvocation( BSExpression expr )
@@ -464,7 +521,7 @@ namespace BadScript
 
                     if ( !Is( ')' ) )
                     {
-                        throw new Exception();
+                        throw new BSParserException( "Expected ')'", this );
                     }
 
                     m_CurrentPosition++;
@@ -479,7 +536,7 @@ namespace BadScript
                 }
             }
 
-            throw new Exception();
+            throw new BSParserException( "Expected '('", this );
         }
 
         public string ParseKey()
@@ -541,7 +598,7 @@ namespace BadScript
 
             if ( sb.Length == 0 )
             {
-                throw new Exception( "Can not parse Number" );
+                throw new BSParserException( "Can not parse Number", this );
             }
 
             return new BSValueExpression( negative * decimal.Parse( sb.ToString() ) );
@@ -553,7 +610,7 @@ namespace BadScript
 
             if ( !IsStringQuotes() )
             {
-                throw new Exception( "Can not Parse String" );
+                throw new BSParserException( "Expected '\"'", this );
             }
 
             m_CurrentPosition++;
@@ -591,7 +648,7 @@ namespace BadScript
 
             if ( !IsStringQuotes() )
             {
-                throw new Exception( "Can not Parse String" );
+                throw new BSParserException( "Expected '\"'", this );
             }
 
             m_CurrentPosition++; //Skip over string quotes
@@ -607,11 +664,7 @@ namespace BadScript
 
             while ( m_CurrentPosition < m_OriginalSource.Length )
             {
-                while ( m_CurrentPosition < m_OriginalSource.Length &&
-                        char.IsWhiteSpace( m_OriginalSource, m_CurrentPosition ) )
-                {
-                    m_CurrentPosition++;
-                }
+                ReadWhitespaceAndNewLine();
 
                 if ( m_CurrentPosition < m_OriginalSource.Length )
                 {
@@ -671,7 +724,7 @@ namespace BadScript
                 return m_PrefixOperators["!"].Parse( ParseExpression( 0 ), this );
             }
 
-            throw new Exception();
+            throw new BSParserException( "Can not Parse Value", this );
         }
 
         public BSExpression ParseWord()
@@ -682,12 +735,24 @@ namespace BadScript
         public BSExpression ParseWord( BSExpression left )
         {
             ReadWhitespace();
-
             string wordName = GetNextWord();
 
-            if ( wordName == "function" )
+            bool isGlobal = false;
+
+            if ( wordName == "function" || ( isGlobal = wordName == "global" ) )
             {
-                return ParseFunction();
+                if ( isGlobal )
+                {
+                    ReadWhitespace();
+                    wordName = GetNextWord();
+
+                    if ( wordName != "function" )
+                    {
+                        throw new BSParserException( "Expected 'function' after 'global'", this );
+                    }
+                }
+
+                return ParseFunction( isGlobal );
             }
 
             if ( wordName == "return" )
@@ -760,7 +825,7 @@ namespace BadScript
 
                 if ( Is( '(' ) )
                 {
-                    vars = ParseArgumentList();
+                    vars = ParseArgumentList().Select( x => x.Item2 ).ToArray();
                 }
                 else
                 {
@@ -772,7 +837,7 @@ namespace BadScript
 
                 if ( inStr != "in" )
                 {
-                    throw new Exception( $"Expected 'in' got '{inStr}'" );
+                    throw new BSParserException( $"Expected 'in' got '{inStr}'", this );
                 }
 
                 ReadWhitespace();
@@ -803,7 +868,7 @@ namespace BadScript
 
                 if ( !untilWord.StartsWith( "while" ) )
                 {
-                    throw new Exception( "Expected while" );
+                    throw new BSParserException( "Expected while", this );
                 }
 
                 ReadWhitespace();
@@ -859,7 +924,7 @@ namespace BadScript
                             break;
 
                         default:
-                            throw new Exception( "Invalid Operator: " + op );
+                            throw new BSParserException( "Invalid Operator: " + op, this );
                     }
                 }
 
@@ -921,7 +986,7 @@ namespace BadScript
 
             if ( ReadComment() )
             {
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
             }
 
             return r;
@@ -953,7 +1018,7 @@ namespace BadScript
         {
             if ( !IsWordStart() )
             {
-                throw new Exception( "Can not Parse Word" );
+                throw new BSParserException( "Can not Parse Word", this );
             }
 
             StringBuilder sb = new StringBuilder();
@@ -1010,26 +1075,43 @@ namespace BadScript
                      m_OriginalSource[m_CurrentPosition] == '_' );
         }
 
-        private string[] ParseArgumentList()
+        private (bool, string)[] ParseArgumentList()
         {
             if ( !Is( '(' ) )
             {
-                throw new Exception();
+                throw new BSParserException( "Expected '('", this );
             }
 
             m_CurrentPosition++;
 
-            List < string > args = new List < string >();
+            List < (bool, string) > args = new List < (bool, string) >();
 
             if ( !Is( ')' ) )
             {
-                args.Add( ParseArgumentName() );
+                bool allowNull = true;
+
+                if ( Is( '!' ) )
+                {
+                    m_CurrentPosition++;
+                    allowNull = false;
+                }
+
+                args.Add( ( allowNull, ParseArgumentName() ) );
                 ReadWhitespace();
 
                 while ( Is( ',' ) )
                 {
                     m_CurrentPosition++;
-                    args.Add( ParseArgumentName() );
+                    allowNull = true;
+                    ReadWhitespace();
+
+                    if ( Is( '!' ) )
+                    {
+                        m_CurrentPosition++;
+                        allowNull = false;
+                    }
+
+                    args.Add( ( allowNull, ParseArgumentName() ) );
                     ReadWhitespace();
                 }
 
@@ -1037,7 +1119,7 @@ namespace BadScript
 
                 if ( !Is( ')' ) )
                 {
-                    throw new Exception();
+                    throw new BSParserException( "Expected ')'", this );
                 }
 
                 m_CurrentPosition++;
@@ -1056,7 +1138,7 @@ namespace BadScript
         {
             if ( !Is( '{' ) )
             {
-                throw new Exception();
+                throw new BSParserException( "Expected '{'", this );
             }
 
             m_CurrentPosition++;

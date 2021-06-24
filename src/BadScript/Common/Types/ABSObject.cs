@@ -18,6 +18,8 @@ namespace BadScript.Common.Types
             return !Equals( left, right );
         }
 
+        public abstract bool IsNull { get; }
+
         #region Public
 
         public abstract bool Equals( ABSObject other );

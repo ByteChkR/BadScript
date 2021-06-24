@@ -1,6 +1,6 @@
-﻿using System;
-using BadScript.Common.Types;
+﻿using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
 namespace BadScript.Common.OperatorImplementations.Implementations
 {
@@ -29,20 +29,12 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
         protected override ABSObject Execute( ABSObject[] arg )
         {
-            ABSObject lVal = arg[0];
-            ABSObject rVal = arg[1];
+            ABSObject lVal = arg[0].ResolveReference();
+            ABSObject rVal = arg[1].ResolveReference();
+            bool lD = lVal.ConvertBool();
+            bool rD = rVal.ConvertBool();
 
-            if ( lVal.TryConvertBool( out bool lD ) )
-            {
-                if ( rVal.TryConvertBool( out bool rD ) )
-                {
-                    return new BSObject( ( decimal ) ( Execute( lD, rD ) ? 1 : 0 ) );
-                }
-
-                throw new Exception( "Invalid Operator Usage" );
-            }
-
-            throw new Exception( "Invalid Operator Usage" );
+            return new BSObject( ( decimal ) ( Execute( lD, rD ) ? 1 : 0 ) );
         }
 
         #endregion

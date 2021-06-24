@@ -14,6 +14,8 @@ namespace BadScript.IO
         private FileStream m_Stream;
         private readonly string m_FilePath;
 
+        public override bool IsNull => false;
+
         #region Public
 
         public BSFileSystemObject( string path, FileStream fs )
@@ -209,15 +211,10 @@ namespace BadScript.IO
             }
 
             ABSObject o = arg[0].ResolveReference();
+            m_Stream.SetLength( ( long ) o.ConvertDecimal() );
 
-            if ( o.TryConvertDecimal( out decimal path ) )
-            {
-                m_Stream.SetLength( ( long ) path );
+            return new BSObject( 0 );
 
-                return new BSObject( 0 );
-            }
-
-            throw new Exception( "Expected Decimal" );
         }
 
         private ABSObject SetPosition( ABSObject[] arg )
@@ -229,14 +226,9 @@ namespace BadScript.IO
 
             ABSObject o = arg[0].ResolveReference();
 
-            if ( o.TryConvertDecimal( out decimal path ) )
-            {
-                m_Stream.Position = ( long ) path;
+            m_Stream.Position = ( long ) o.ConvertDecimal();
 
-                return new BSObject( 0 );
-            }
-
-            throw new Exception( "Expected Decimal" );
+            return new BSObject( 0 );
         }
 
         private ABSObject WriteLine( ABSObject[] arg )
@@ -248,17 +240,12 @@ namespace BadScript.IO
 
             ABSObject o = arg[0].ResolveReference();
 
-            if ( o.TryConvertString( out string path ) )
+            using ( TextWriter writer = new StreamWriter( m_Stream ) )
             {
-                using ( TextWriter writer = new StreamWriter( m_Stream ) )
-                {
-                    writer.WriteLine( path );
-                }
-
-                return new BSObject( 0 );
+                writer.WriteLine( o.ConvertString() );
             }
 
-            throw new Exception( "Expected String" );
+            return new BSObject( 0 );
         }
 
         private ABSObject WriteString( ABSObject[] arg )
@@ -270,17 +257,12 @@ namespace BadScript.IO
 
             ABSObject o = arg[0].ResolveReference();
 
-            if ( o.TryConvertString( out string path ) )
+            using ( TextWriter writer = new StreamWriter( m_Stream ) )
             {
-                using ( TextWriter writer = new StreamWriter( m_Stream ) )
-                {
-                    writer.Write( path );
-                }
-
-                return new BSObject( 0 );
+                writer.Write( o.ConvertString() );
             }
 
-            throw new Exception( "Expected String" );
+            return new BSObject( 0 );
         }
 
         #endregion

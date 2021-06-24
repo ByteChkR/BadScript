@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
+using System.Text;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -10,16 +12,29 @@ namespace BadScript.Common.Expressions.Implementations.Block
     {
         public string Name;
         public bool Global;
-        public string[] ArgNames;
+        public (bool, string)[] ArgNames;
         public BSExpression[] Block;
 
         #region Public
 
-        public BSFunctionDefinitionExpression( string name, string[] args, BSExpression[] block, bool addGlobal )
+        public BSFunctionDefinitionExpression(
+            string name,
+            (bool, string)[] args,
+            BSExpression[] block,
+            bool addGlobal )
         {
             Name = name;
             ArgNames = args;
             Block = block;
+            Global = addGlobal;
+        }
+
+        public BSFunctionDefinitionExpression( string name, string[] args, BSExpression[] block, bool addGlobal )
+        {
+            Name = name;
+            ArgNames = args.Select( x => ( true, x ) ).ToArray();
+            Block = block;
+            Global = addGlobal;
         }
 
         public static ABSObject InvokeBlockFunction(
@@ -28,9 +43,25 @@ namespace BadScript.Common.Expressions.Implementations.Block
             string[] argNames,
             ABSObject[] arg )
         {
+            return InvokeBlockFunction( scope, block, argNames.Select( x => ( true, x ) ).ToArray(), arg );
+        }
+
+        public static ABSObject InvokeBlockFunction(
+            BSScope scope,
+            BSExpression[] block,
+            (bool, string)[] argNames,
+            ABSObject[] arg )
+        {
             for ( int i = 0; i < arg.Length; i++ )
             {
-                scope.AddLocalVar( argNames[i], arg[i] );
+                ( bool allowNull, string name ) = argNames[i];
+
+                if ( !allowNull && arg[i].IsNull )
+                {
+                    throw new Exception( $"Parameter '{name}' can not be null" );
+                }
+
+                scope.AddLocalVar( name, arg[i] );
             }
 
             foreach ( BSExpression buildScriptExpression in block )
@@ -50,6 +81,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
         {
             BSFunction f =
                 new BSFunction( GetHeader(), x => InvokeBlockFunction( scope, x ), ArgNames.Length );
+
+            if ( string.IsNullOrEmpty( Name ) )
+            {
+                return f;
+            }
 
             if ( Global )
             {
@@ -73,7 +109,12 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
             for ( int i = 0; i < ArgNames.Length; i++ )
             {
-                string argName = ArgNames[i];
+                string argName = ArgNames[i].Item2;
+
+                if ( !ArgNames[i].Item1 )
+                {
+                    argName = "!" + argName;
+                }
 
                 if ( i == 0 )
                 {

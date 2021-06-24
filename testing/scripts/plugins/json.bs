@@ -4,7 +4,7 @@ if(fs == null && json2bs == null && bs2json == null)
 	return {}
 }
 
-function load(path)
+function load(!path)
 {
 	if(fs.exists(path) && fs.isFile(path))
 	{
@@ -19,7 +19,7 @@ function load(path)
 	}
 }
 
-function save(path, obj)
+function save(!path, !obj)
 {
 	if(fs.exists(path))
 	{

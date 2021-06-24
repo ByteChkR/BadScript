@@ -8,6 +8,8 @@ namespace BadScript.Common.Types.References.Implementations
         private readonly ABSTable m_SourceTable;
         private readonly ABSObject m_Key;
 
+        public override bool IsNull => Get().IsNull;
+
         #region Public
 
         public BSTableReference( ABSTable table, ABSObject key )

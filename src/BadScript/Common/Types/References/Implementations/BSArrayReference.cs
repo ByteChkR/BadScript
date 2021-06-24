@@ -8,6 +8,8 @@ namespace BadScript.Common.Types.References.Implementations
         private readonly ABSArray m_SourceTable;
         private readonly int m_Key;
 
+        public override bool IsNull => Get().IsNull;
+
         #region Public
 
         public BSArrayReference( ABSArray table, int key )

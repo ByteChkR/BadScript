@@ -1,5 +1,6 @@
 ﻿using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
 namespace BadScript.Process
 {
@@ -52,7 +53,7 @@ namespace BadScript.Process
             }
             else
             {
-                p.WaitForExit( ( int ) time.ConvertDecimal() );
+                p.WaitForExit( ( int ) time.ResolveReference().ConvertDecimal() );
             }
 
             return new BSObject( null );
@@ -61,8 +62,8 @@ namespace BadScript.Process
         private static ABSObject StartProcess( ABSObject[] args )
         {
             BSTable t = new BSTable();
-            string start = args[0].ConvertString();
-            string procArgs = args[1].ConvertString();
+            string start = args[0].ResolveReference().ConvertString();
+            string procArgs = args[1].ResolveReference().ConvertString();
             System.Diagnostics.Process p = System.Diagnostics.Process.Start( start, procArgs );
 
             t.InsertElement(

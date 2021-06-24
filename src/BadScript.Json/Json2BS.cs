@@ -17,16 +17,12 @@ namespace BadScript.Json
         {
             ABSObject o = args[0].ResolveReference();
 
-            if ( o.TryConvertString( out string path ) )
-            {
-                JToken jsonO = ( JToken ) JsonConvert.DeserializeObject( path );
+            JToken jsonO = ( JToken ) JsonConvert.DeserializeObject( o.ConvertString() );
 
-                ABSObject ret = Convert( jsonO );
+            ABSObject ret = Convert( jsonO );
 
-                return ret;
-            }
+            return ret;
 
-            throw new Exception( "Expected String" );
         }
 
         #endregion

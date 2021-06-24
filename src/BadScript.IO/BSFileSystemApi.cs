@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -55,17 +54,14 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) ( File.Exists( path ) ||
-                                              Directory.Exists( path )
-                                    ? 1
-                                    : 0 )
-                            );
-                        }
+                        string path = o.ConvertString();
 
-                        throw new Exception( "Expected String" );
+                        return new BSObject(
+                            ( decimal ) ( File.Exists( path ) ||
+                                          Directory.Exists( path )
+                                ? 1
+                                : 0 )
+                        );
                     },
                     1
                 )
@@ -78,15 +74,12 @@ namespace BadScript.IO
                     args =>
                     {
                         ABSObject o = args[0].ResolveReference();
+                        string path = o.ConvertString();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            Directory.SetCurrentDirectory( path );
+                        Directory.SetCurrentDirectory( path );
 
-                            return new BSObject( null );
-                        }
+                        return new BSObject( null );
 
-                        throw new Exception( "Expected String" );
                     },
                     1
                 )
@@ -100,27 +93,19 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( !o.TryConvertString( out string path ) )
-                        {
-                            throw new Exception( "Expected String" );
-                        }
+                        string path = o.ConvertString();
 
                         if ( args.Length >= 1 )
                         {
-                            if ( !args[1].TryConvertString( out string pattern ) )
-                            {
-                                throw new Exception( "Expected String" );
-                            }
+                            string pattern = args[1].ResolveReference().ConvertString();
 
                             bool recurse = false;
 
-                            if ( args.Length >= 2 )
+                            if ( args.Length > 2 )
                             {
-                                if ( args.Length > 3 )
-                                {
-                                    bool r = args[2].TryConvertBool( out bool rr );
-                                    recurse = r && rr;
-                                }
+
+                                recurse = args[2].ResolveReference().ConvertBool();
+
                             }
 
                             return new BSArray(
@@ -141,8 +126,6 @@ namespace BadScript.IO
                                           Select( x => new BSObject( x ) )
                             );
                         }
-
-                        throw new Exception( "Expected String" );
                     },
                     1,
                     3
@@ -157,27 +140,17 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( !o.TryConvertString( out string path ) )
-                        {
-                            throw new Exception( "Expected String" );
-                        }
+                        string path = o.ConvertString();
 
                         if ( args.Length >= 1 )
                         {
-                            if ( !args[1].TryConvertString( out string pattern ) )
-                            {
-                                throw new Exception( "Expected String" );
-                            }
+                            string pattern = args[1].ResolveReference().ConvertString();
 
                             bool recurse = false;
 
-                            if ( args.Length >= 2 )
+                            if ( args.Length > 2 )
                             {
-                                if ( args.Length > 3 )
-                                {
-                                    bool r = args[2].TryConvertBool( out bool rr );
-                                    recurse = r && rr;
-                                }
+                                recurse = args[2].ResolveReference().ConvertBool();
                             }
 
                             return new BSArray(
@@ -226,14 +199,10 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) ( Directory.Exists( path ) ? 1 : 0 )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) ( Directory.Exists( o.ConvertString() ) ? 1 : 0 )
+                        );
 
-                        throw new Exception( "Expected String" );
                     },
                     1
                 )
@@ -247,14 +216,9 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) ( File.Exists( path ) ? 1 : 0 )
-                            );
-                        }
-
-                        throw new Exception( "Expected String" );
+                        return new BSObject(
+                            ( decimal ) ( File.Exists( o.ConvertString() ) ? 1 : 0 )
+                        );
                     },
                     1
                 )
@@ -267,15 +231,11 @@ namespace BadScript.IO
                     args =>
                     {
                         ABSObject o = args[0].ResolveReference();
+                        string source = o.ConvertString();
+                        Directory.CreateDirectory( source );
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            Directory.CreateDirectory( path );
+                        return new BSObject( null );
 
-                            return new BSObject( null );
-                        }
-
-                        throw new Exception( "Expected String" );
                     },
                     1
                 )
@@ -289,23 +249,20 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string source ) &&
-                             args[1].TryConvertString( out string destination ) )
+                        string source = o.ConvertString();
+                        string destination = args[1].ResolveReference().ConvertString();
 
+                        if ( Directory.Exists( source ) )
                         {
-                            if ( Directory.Exists( source ) )
-                            {
-                                CopyDir( source, destination );
-                            }
-                            else
-                            {
-                                File.Copy( source, destination, true );
-                            }
-
-                            return new BSObject( null );
+                            CopyDir( source, destination );
+                        }
+                        else
+                        {
+                            File.Copy( source, destination, true );
                         }
 
-                        throw new Exception( "Expected String" );
+                        return new BSObject( null );
+
                     },
                     2
                 )
@@ -318,24 +275,19 @@ namespace BadScript.IO
                     args =>
                     {
                         ABSObject o = args[0].ResolveReference();
+                        string source = o.ConvertString();
+                        string destination = args[1].ResolveReference().ConvertString();
 
-                        if ( o.TryConvertString( out string source ) &&
-                             args[1].TryConvertString( out string destination ) )
-
+                        if ( Directory.Exists( source ) )
                         {
-                            if ( Directory.Exists( source ) )
-                            {
-                                Directory.Move( source, destination );
-                            }
-                            else
-                            {
-                                File.Move( source, destination );
-                            }
-
-                            return new BSObject( null );
+                            Directory.Move( source, destination );
+                        }
+                        else
+                        {
+                            File.Move( source, destination );
                         }
 
-                        throw new Exception( "Expected String" );
+                        return new BSObject( null );
                     },
                     2
                 )
@@ -349,25 +301,22 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
+                        string path = o.ConvertString();
+
+                        if ( Directory.Exists( path ) )
                         {
-                            if ( Directory.Exists( path ) )
-                            {
-                                bool recurse =
-                                    args.Length > 1 &&
-                                    args[1].TryConvertBool( out recurse );
+                            bool recurse =
+                                args.Length > 1 &&
+                                args[1].ResolveReference().ConvertBool();
 
-                                Directory.Delete( path, recurse );
-                            }
-                            else if ( File.Exists( path ) )
-                            {
-                                File.Delete( path );
-                            }
-
-                            return new BSObject( null );
+                            Directory.Delete( path, recurse );
+                        }
+                        else if ( File.Exists( path ) )
+                        {
+                            File.Delete( path );
                         }
 
-                        throw new Exception( "Expected String" );
+                        return new BSObject( null );
                     },
                     1
                 )
@@ -382,19 +331,14 @@ namespace BadScript.IO
                         ABSObject o = args[0].ResolveReference();
                         FileAccess m = FileAccess.ReadWrite;
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSFileSystemObject(
-                                path,
-                                File.Open(
-                                    path,
-                                    FileMode.OpenOrCreate,
-                                    m
-                                )
-                            );
-                        }
-
-                        throw new Exception( "Expected String" );
+                        return new BSFileSystemObject(
+                            o.ConvertString(),
+                            File.Open(
+                                o.ConvertString(),
+                                FileMode.OpenOrCreate,
+                                m
+                            )
+                        );
                     },
                     1
                 )
@@ -415,12 +359,8 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSObject( Path.GetFullPath( path ) );
-                        }
+                        return new BSObject( Path.GetFullPath( o.ConvertString() ) );
 
-                        throw new Exception( "Expected String" );
                     },
                     1
                 )
@@ -434,14 +374,9 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSObject(
-                                Path.GetDirectoryName( path )
-                            );
-                        }
-
-                        throw new Exception( "Expected String" );
+                        return new BSObject(
+                            Path.GetDirectoryName( o.ConvertString() )
+                        );
                     },
                     1
                 )
@@ -455,12 +390,7 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSObject( Path.GetFileName( path ) );
-                        }
-
-                        throw new Exception( "Expected String" );
+                        return new BSObject( Path.GetFileName( o.ConvertString() ) );
                     },
                     1
                 )
@@ -474,14 +404,9 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSObject(
-                                Path.GetFileNameWithoutExtension( path )
-                            );
-                        }
-
-                        throw new Exception( "Expected String" );
+                        return new BSObject(
+                            Path.GetFileNameWithoutExtension( o.ConvertString() )
+                        );
                     },
                     1
                 )
@@ -495,12 +420,8 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSObject( Path.GetExtension( path ) );
-                        }
+                        return new BSObject( Path.GetExtension( o.ConvertString() ) );
 
-                        throw new Exception( "Expected String" );
                     },
                     1
                 )
@@ -538,14 +459,10 @@ namespace BadScript.IO
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        if ( o.TryConvertString( out string path ) )
-                        {
-                            return new BSObject(
-                                ( decimal ) ( Path.HasExtension( path ) ? 1 : 0 )
-                            );
-                        }
+                        return new BSObject(
+                            ( decimal ) ( Path.HasExtension( o.ConvertString() ) ? 1 : 0 )
+                        );
 
-                        throw new Exception( "Expected String" );
                     },
                     1
                 )
@@ -561,7 +478,7 @@ namespace BadScript.IO
 
                         return new BSObject(
                             Path.Combine(
-                                args.Select( x => x.ConvertString() ).
+                                args.Select( x => x.ResolveReference().ConvertString() ).
                                      ToArray()
                             )
                         );

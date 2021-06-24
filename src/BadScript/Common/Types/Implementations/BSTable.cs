@@ -16,6 +16,8 @@ namespace BadScript.Common.Types.Implementations
         private readonly Dictionary < ABSObject, ABSObject > m_InnerTable =
             new Dictionary < ABSObject, ABSObject >();
 
+        public override bool IsNull => false;
+
         public override ABSArray Keys => new BSArray( m_InnerTable.Keys );
 
         public override ABSArray Values => new BSArray( m_InnerTable.Values );

@@ -55,11 +55,6 @@ namespace BadScript
                     "function size(table/array)",
                     ( args ) =>
                     {
-                        if ( args.Length != 1 )
-                        {
-                            throw new Exception( "Invalid Argument Count" );
-                        }
-
                         ABSObject arg = args[0];
 
                         if ( arg is BSArrayReference
@@ -128,11 +123,6 @@ namespace BadScript
                     "function format(formatStr, arg0, arg1, ...)",
                     args =>
                     {
-                        if ( args.Length < 1 )
-                        {
-                            throw new Exception( "Invalid Argument Count" );
-                        }
-
                         ABSObject format = args[0].ResolveReference();
 
                         if ( format.TryConvertString( out string formatStr ) )
@@ -158,10 +148,6 @@ namespace BadScript
                     "function print(obj)",
                     ( args ) =>
                     {
-                        if ( args.Length != 1 )
-                        {
-                            throw new Exception( "Invalid Argument Count" );
-                        }
 
                         ABSObject arg = args[0].ResolveReference();
 
@@ -177,15 +163,7 @@ namespace BadScript
                 "read",
                 new BSFunction(
                     "function read()",
-                    ( args ) =>
-                    {
-                        if ( args.Length != 0 )
-                        {
-                            throw new Exception( "Invalid Argument Count" );
-                        }
-
-                        return new BSObject( Console.ReadLine() );
-                    },
+                    ( args ) => { return new BSObject( Console.ReadLine() ); },
                     0
                 )
             );
@@ -203,7 +181,7 @@ namespace BadScript
                             return new BSObject( null );
                         }
 
-                        throw new Exception( "Invalid sleep(millis) Usage" );
+                        throw new Exception( "Invalid sleep(millis) Usage, Expected Number" );
                     },
                     1
                 )

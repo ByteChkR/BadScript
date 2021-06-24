@@ -13,6 +13,8 @@ namespace BadScript.Common.Types
         private Func < ABSObject[],
             ABSObject > m_Func;
 
+        public override bool IsNull => false;
+
         #region Public
 
         public BSFunction(

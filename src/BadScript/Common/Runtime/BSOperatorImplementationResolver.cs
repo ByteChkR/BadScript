@@ -60,6 +60,7 @@ namespace BadScript.Common.Runtime
             m_Implementations.Add( new BSNotOperatorImplementation() );
             m_Implementations.Add( new BSOrOperatorImplementation() );
             m_Implementations.Add( new BSXOrDefaultOperatorImplementation() );
+            m_Implementations.Add( new BSNullTestOperatorImplementation() );
         }
 
         #endregion

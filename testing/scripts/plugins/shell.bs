@@ -4,7 +4,7 @@ if(process == null)
 	return {}
 }
 
-function run(cmd)
+function run(!cmd)
 {
 	p = process.start("cmd.exe", "/c " + cmd)
 	p.waitForExit()
