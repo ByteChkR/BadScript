@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -58,7 +59,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
                 if ( !allowNull && arg[i].IsNull )
                 {
-                    throw new Exception( $"Parameter '{name}' can not be null" );
+                    throw new BSRuntimeException( $"Parameter '{name}' can not be null" );
                 }
 
                 scope.AddLocalVar( name, arg[i] );
@@ -68,13 +69,14 @@ namespace BadScript.Common.Expressions.Implementations.Block
             {
                 buildScriptExpression.Execute( scope );
 
-                if ( scope.ReturnValue != null )
+                if ( scope.BreakExecution || scope.Flags == BSScopeFlags.Continue)
                 {
                     break;
                 }
             }
+            
 
-            return scope.ReturnValue;
+            return scope.Return;
         }
 
         public override ABSObject Execute( BSScope scope )
@@ -133,7 +135,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         private ABSObject InvokeBlockFunction( BSScope rootScope, ABSObject[] arg )
         {
-            BSScope funcScope = new BSScope( rootScope );
+            BSScope funcScope = new BSScope( BSScopeFlags.Function, rootScope );
 
             return InvokeBlockFunction( funcScope, Block, ArgNames, arg ) ?? new BSObject( null );
         }

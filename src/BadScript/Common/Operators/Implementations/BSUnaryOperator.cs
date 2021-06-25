@@ -11,6 +11,8 @@ namespace BadScript.Common.Operators.Implementations
 
         public override string OperatorKey { get; }
 
+        public override int Preceedence => 0;
+
         #region Public
 
         public BSUnaryOperator( string key, BSFunction func )

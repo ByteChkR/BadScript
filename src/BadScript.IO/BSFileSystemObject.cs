@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -104,7 +105,7 @@ namespace BadScript.IO
 
         public override ABSObject Invoke( ABSObject[] args )
         {
-            throw new Exception( "File Stream API Objects can not be invoked" );
+            throw new BSRuntimeException( "File Stream API Objects can not be invoked" );
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -114,7 +115,7 @@ namespace BadScript.IO
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new Exception( "File Stream API Objects can not be written to" );
+            throw new BSRuntimeException( "File Stream API Objects can not be written to" );
         }
 
         public override bool TryConvertBool( out bool v )
@@ -146,7 +147,7 @@ namespace BadScript.IO
         {
             if ( m_Stream == null )
             {
-                throw new Exception( "File Stream is Disposed" );
+                throw new BSRuntimeException( "File Stream is Disposed" );
             }
 
             m_Stream.Close();
@@ -159,7 +160,7 @@ namespace BadScript.IO
         {
             if ( m_Stream == null )
             {
-                throw new Exception( "File Stream is Disposed" );
+                throw new BSRuntimeException( "File Stream is Disposed" );
             }
 
             return new BSObject( ( decimal ) m_Stream.Length );
@@ -169,7 +170,7 @@ namespace BadScript.IO
         {
             if ( m_Stream == null )
             {
-                throw new Exception( "File Stream is Disposed" );
+                throw new BSRuntimeException( "File Stream is Disposed" );
             }
 
             return new BSObject( ( decimal ) m_Stream.Position );
@@ -179,7 +180,7 @@ namespace BadScript.IO
         {
             if ( m_Stream == null )
             {
-                throw new Exception( "File Stream is Disposed" );
+                throw new BSRuntimeException( "File Stream is Disposed" );
             }
 
             using ( TextReader reader = new StreamReader( m_Stream ) )
@@ -193,7 +194,7 @@ namespace BadScript.IO
         {
             if ( m_Stream == null )
             {
-                throw new Exception( "File Stream is Disposed" );
+                throw new BSRuntimeException( "File Stream is Disposed" );
             }
 
             using ( TextReader reader = new StreamReader( m_Stream ) )
@@ -207,7 +208,7 @@ namespace BadScript.IO
         {
             if ( m_Stream == null )
             {
-                throw new Exception( "File Stream is Disposed" );
+                throw new BSRuntimeException( "File Stream is Disposed" );
             }
 
             ABSObject o = arg[0].ResolveReference();
@@ -221,7 +222,7 @@ namespace BadScript.IO
         {
             if ( m_Stream == null )
             {
-                throw new Exception( "File Stream is Disposed" );
+                throw new BSRuntimeException( "File Stream is Disposed" );
             }
 
             ABSObject o = arg[0].ResolveReference();
@@ -235,7 +236,7 @@ namespace BadScript.IO
         {
             if ( m_Stream == null )
             {
-                throw new Exception( "File Stream is Disposed" );
+                throw new BSRuntimeException( "File Stream is Disposed" );
             }
 
             ABSObject o = arg[0].ResolveReference();
@@ -252,7 +253,7 @@ namespace BadScript.IO
         {
             if ( m_Stream == null )
             {
-                throw new Exception( "File Stream is Disposed" );
+                throw new BSRuntimeException( "File Stream is Disposed" );
             }
 
             ABSObject o = arg[0].ResolveReference();

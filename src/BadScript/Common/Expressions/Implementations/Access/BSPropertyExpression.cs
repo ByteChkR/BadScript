@@ -22,7 +22,7 @@ namespace BadScript.Common.Expressions.Implementations.Access
         {
             if ( Left != null )
             {
-                return Left.Execute( scope ).GetOrAddProperty( Right );
+                return Left.Execute( scope ).GetProperty( Right );
             }
 
             return scope.ResolveName( Right );

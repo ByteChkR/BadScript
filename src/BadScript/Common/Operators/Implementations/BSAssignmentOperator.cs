@@ -8,11 +8,13 @@ namespace BadScript.Common.Operators.Implementations
     {
         public override string OperatorKey => "=";
 
+        public override int Preceedence => 15;
+
         #region Public
 
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
-            return new BSAssignExpression( left, parser.ParseExpression( 0 ) );
+            return new BSAssignExpression( left, parser.ParseExpression(Preceedence) );
         }
 
         #endregion

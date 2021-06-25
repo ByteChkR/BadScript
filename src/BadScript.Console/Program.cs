@@ -31,23 +31,12 @@ namespace BadScript.Console
                 a += " " + s;
             }
 
-            bool printGlobal = a.Contains( "--debug" );
-            a = a.Replace( "--debug", "" );
-
             string[] ar = a.Split( ';' );
 
             foreach ( string s in ar )
             {
                 string[] parts = s.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
                 engine.LoadFile( parts[0], parts.Skip( 1 ).ToArray() );
-            }
-
-            System.Console.WriteLine( "Execution Finished." );
-
-            if ( printGlobal )
-            {
-                System.Console.WriteLine( "Global Table: " );
-                System.Console.WriteLine( engine.GlobalTable.SafeToString() );
             }
         }
 

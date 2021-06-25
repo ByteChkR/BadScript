@@ -1,4 +1,5 @@
 ﻿using System;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -319,7 +320,6 @@ namespace BadScript.Math
                             ( decimal ) System.Math.Sign( ( double ) o.ConvertDecimal() )
                         );
 
-                        throw new Exception( "Expected Decimal" );
                     },
                     1
                 )
@@ -331,8 +331,6 @@ namespace BadScript.Math
                     "function min(x, y)",
                     args =>
                     {
-                        ABSObject o = args[0].ResolveReference();
-
                         return new BSObject(
                             ( decimal ) System.Math.Min(
                                 ( double ) args[0].
@@ -375,7 +373,6 @@ namespace BadScript.Math
                     "function pow(x, y)",
                     args =>
                     {
-                        ABSObject o = args[0].ResolveReference();
 
                         return new BSObject(
                             ( decimal ) System.Math.Pow(

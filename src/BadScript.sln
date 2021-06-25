@@ -5,21 +5,23 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript", "BadScript\BadScript.csproj", "{5A9EBEF0-0AE1-48F9-866E-581869BBD835}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Console", "BadScript.Console\BadScript.Console.csproj", "{3CE82978-0B2B-4096-88D0-5A42C129200C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Console", "BadScript.Console\BadScript.Console.csproj", "{3CE82978-0B2B-4096-88D0-5A42C129200C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Json", "BadScript.Json\BadScript.Json.csproj", "{BB8735C1-D944-4A64-821F-A43111B69DAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Json", "BadScript.Json\BadScript.Json.csproj", "{BB8735C1-D944-4A64-821F-A43111B69DAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Zip", "BadScript.Zip\BadScript.Zip.csproj", "{91E71C27-542E-4C41-9D8D-A834F794F613}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Zip", "BadScript.Zip\BadScript.Zip.csproj", "{91E71C27-542E-4C41-9D8D-A834F794F613}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.IO", "BadScript.IO\BadScript.IO.csproj", "{0C8CBDFD-D3F4-462C-80DF-85DB0A1588F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.IO", "BadScript.IO\BadScript.IO.csproj", "{0C8CBDFD-D3F4-462C-80DF-85DB0A1588F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Math", "BadScript.Math\BadScript.Math.csproj", "{AC4042C0-D4A5-4CF6-B80A-88F2629E81DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Math", "BadScript.Math\BadScript.Math.csproj", "{AC4042C0-D4A5-4CF6-B80A-88F2629E81DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Process", "BadScript.Process\BadScript.Process.csproj", "{16E2AE47-D4F0-49F7-B7F9-F9D57A7A9B80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Process", "BadScript.Process\BadScript.Process.csproj", "{16E2AE47-D4F0-49F7-B7F9-F9D57A7A9B80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Http", "BadScript.Http\BadScript.Http.csproj", "{95924758-285D-4D56-8DB5-3FF565AF8BC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Http", "BadScript.Http\BadScript.Http.csproj", "{95924758-285D-4D56-8DB5-3FF565AF8BC8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{CA37FB78-B2B0-4552-A7FC-A68ACB93BDE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.ExpGen", "BadScript.ExpGen\BadScript.ExpGen.csproj", "{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{95924758-285D-4D56-8DB5-3FF565AF8BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95924758-285D-4D56-8DB5-3FF565AF8BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95924758-285D-4D56-8DB5-3FF565AF8BC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
 ﻿using System;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions.Implementations.Unary;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -36,8 +37,10 @@ namespace BadScript.Common.Expressions.Implementations.Access
                     return a.GetElement( ( int ) d );
                 }
             }
-
-            throw new Exception( $"Can not access {obj} as array" );
+            throw new BSInvalidTypeException(
+                "Expected Array", obj, "Table"
+            );
+            
         }
 
         #endregion

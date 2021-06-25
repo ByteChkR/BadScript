@@ -8,8 +8,4 @@
 		<None Remove="BSParser.cs~RF136c763.TMP" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Common\Exceptions\" />
-	</ItemGroup>
-
 </Project>

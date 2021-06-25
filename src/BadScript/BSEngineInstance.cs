@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -73,9 +74,12 @@ namespace BadScript
             foreach ( BSExpression buildScriptExpression in exprs )
             {
                 buildScriptExpression.Execute( scope );
+
+                if ( scope.BreakExecution )
+                    break;
             }
 
-            return scope.ReturnValue ?? scope.GetLocals();
+            return scope.Return ?? scope.GetLocals();
         }
 
         #endregion
@@ -93,7 +97,9 @@ namespace BadScript
                 return ret;
             }
 
-            throw new Exception( "Expected String" );
+            throw new BSInvalidTypeException(
+                "Expected String", o, "string"
+            );
         }
 
         #endregion

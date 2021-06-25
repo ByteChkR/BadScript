@@ -1,4 +1,5 @@
 ﻿using System;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -81,7 +82,7 @@ namespace BadScript.Json
                 return ret;
             }
 
-            throw new NotSupportedException( $"Can not convert type {o.GetType()}" );
+            throw new BSInvalidTypeException( "Expected BSObject Wrapper Type", o, "BSObject" );
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types
@@ -43,7 +44,7 @@ namespace BadScript.Common.Types
 
         public override ABSReference GetProperty( string propertyName )
         {
-            throw new Exception( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
         }
 
         public override bool HasProperty( string propertyName )
@@ -62,7 +63,7 @@ namespace BadScript.Common.Types
 
             if ( args.Length < min || args.Length > max )
             {
-                throw new Exception(
+                throw new BSRuntimeException(
                     $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}" );
             }
 
@@ -76,7 +77,7 @@ namespace BadScript.Common.Types
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new Exception( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
         }
 
         public override bool TryConvertBool( out bool v )

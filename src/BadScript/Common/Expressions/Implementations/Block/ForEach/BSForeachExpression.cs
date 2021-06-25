@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -25,7 +26,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
         public override ABSObject Execute( BSScope scope )
         {
-            BSScope foreachScope = new BSScope( scope );
+            BSScope foreachScope = new BSScope(BSScopeFlags.Loop, scope );
             ABSObject eObj = m_Enumerator.Execute( foreachScope ).ResolveReference();
 
             if ( eObj is IEnumerable < IForEachIteration > forEach )
@@ -44,19 +45,28 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
                         m_Block,
                         new string[0],
                         new ABSObject[0]
-                    );
+                    ); 
+                    if (foreachScope.Flags == BSScopeFlags.Continue)
+                    {
+                        scope.SetFlag(BSScopeFlags.None);
+                    }
 
                     if ( ret != null )
                     {
-                        scope.SetReturnValue( ret );
+                        scope.SetFlag(BSScopeFlags.Return, ret );
 
+                        break;
+                    }else if ( foreachScope.BreakExecution )
+                    {
                         break;
                     }
                 }
             }
             else
             {
-                throw new Exception( $"Object '{eObj}' can not be Enumerated" );
+                throw new BSInvalidTypeException(
+                    "Expected Enumerable Object", eObj, "Table","Array"
+                );
             }
 
             return new BSObject( null );

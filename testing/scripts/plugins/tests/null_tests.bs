@@ -1,0 +1,10 @@
+a = null
+v = a ?? 10
+if(v == 10)
+{
+	print("\t[PASSED]Null Tests!")
+}
+else
+{
+	print("\t[FAILED]Null Tests!")
+}

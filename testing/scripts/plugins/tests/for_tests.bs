@@ -4,12 +4,10 @@ A = {}
 for i = 0 while< 10 step 1
 {
 	A["for i = 0 while< 10 step 1 ++++ " + i] = i
-	print(i)
 }
 for i = 0 while<= 10 step 1
 {
 	A["for i = 0 while<= 10 step 1 ++++ " + i] = i
-	print(i)
 }
 
 function f(x)
@@ -22,7 +20,6 @@ B = []
 for i = 0 while f(i)
 {
 	B[i] = i
-	print(i)
 }
 
 
@@ -30,16 +27,37 @@ for i = 0 while f(i)
 foreach x in B
 {
 	A["foreach x in B ++++ " + x] = x
-	print("FOREACH " + x)
 }
 
+
+
+resultCount = 31
+
+kCount = 0
 foreach key in A
 {
-	print(key + " = " + A[key])
+	kCount = kCount + 1
 }
 
-
+kvCount = 0
 foreach (key, value) in A
 {
-	print(key + " = " + value)
+	kvCount = kvCount + 1
+}
+
+if(kCount != resultCount)
+{
+	print("\t[FAILED]For Each(Key)")
+}
+else if(kvCount != resultCount)
+{
+	print("\t[FAILED]For Each(Key,Value)!")
+}
+else if(resultCount != size(A))
+{
+	print("\t[FAILED]For Test!")
+}
+else
+{
+	print("\t[PASSED]For Tests!")
 }

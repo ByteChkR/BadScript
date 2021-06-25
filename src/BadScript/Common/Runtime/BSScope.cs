@@ -1,45 +1,67 @@
-﻿using BadScript.Common.Types;
+﻿using System;
+using BadScript.Common.Exceptions;
+using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References.Implementations;
 
 namespace BadScript.Common.Runtime
 {
+    [Flags]
+    public enum BSScopeFlags
+    {
+        None = 0,
+        Break = 1,
+        Continue = 2,
+        Return = 4,
+        Function = Return,
+        IfBlock = Function,
+        Loop = Return | Break | Continue
+    }
+
 
     public class BSScope
     {
+        private readonly BSScopeFlags m_AllowedFlags;
+        private BSScopeFlags m_CurrentFlag;
+
+        public BSScopeFlags Flags => m_CurrentFlag;
         private readonly BSEngineInstance m_Instance;
         private readonly BSScope m_Parent;
         private readonly BSTable m_LocalVars = new BSTable();
 
-        public ABSObject ReturnValue { get; private set; }
+        public ABSObject Return { get; private set; }
+
+        public bool BreakExecution => ( m_CurrentFlag & ( BSScopeFlags.Return | BSScopeFlags.Break | BSScopeFlags.Continue ) ) != 0;
 
         #region Public
 
-        public BSScope( BSEngineInstance instance ) : this()
+        public BSScope(BSEngineInstance instance) : this()
         {
+            m_AllowedFlags = BSScopeFlags.Return;
             m_Instance = instance;
         }
 
-        public BSScope( BSScope parent ) : this()
+        public BSScope(BSScopeFlags allowedFlags, BSScope parent) : this()
         {
+            m_AllowedFlags = allowedFlags | parent.m_AllowedFlags;
             m_Parent = parent;
         }
 
-        public void AddGlobalVar( string name, ABSObject o )
+        public void AddGlobalVar(string name, ABSObject o)
         {
-            if ( m_Parent != null )
+            if (m_Parent != null)
             {
-                m_Parent.AddGlobalVar( name, o );
+                m_Parent.AddGlobalVar(name, o);
             }
             else
             {
-                m_Instance.GlobalTable.InsertElement( new BSObject( name ), o );
+                m_Instance.GlobalTable.InsertElement(new BSObject(name), o);
             }
         }
 
-        public void AddLocalVar( string name, ABSObject o )
+        public void AddLocalVar(string name, ABSObject o)
         {
-            m_LocalVars.InsertElement( new BSObject( name ), o );
+            m_LocalVars.InsertElement(new BSObject(name), o);
         }
 
         public ABSTable GetLocals()
@@ -47,46 +69,62 @@ namespace BadScript.Common.Runtime
             return m_LocalVars;
         }
 
-        public bool HasGlobal( string name )
+        public bool HasGlobal(string name)
         {
             return m_Instance == null
-                ? m_Parent.HasGlobal( name )
-                : m_Instance.GlobalTable.HasElement( new BSObject( name ) ) ||
-                  m_Parent != null && m_Parent.HasLocal( name );
+                ? m_Parent.HasGlobal(name)
+                : m_Instance.GlobalTable.HasElement(new BSObject(name)) ||
+                  m_Parent != null && m_Parent.HasLocal(name);
         }
 
-        public bool HasLocal( string name )
+        public bool HasLocal(string name)
         {
-            return m_LocalVars.HasElement( new BSObject( name ) ) ||
-                   m_Parent != null && m_Parent.HasLocal( name );
+            return m_LocalVars.HasElement(new BSObject(name)) ||
+                   m_Parent != null && m_Parent.HasLocal(name);
         }
 
-        public ABSObject ResolveName( string name )
+        public ABSObject ResolveName(string name)
         {
-            ABSObject i = new BSObject( name );
+            ABSObject i = new BSObject(name);
 
-            if ( m_LocalVars.HasElement( i ) )
+            if (m_LocalVars.HasElement(i))
             {
-                return m_LocalVars.GetElement( i );
+                return m_LocalVars.GetElement(i);
             }
 
-            if ( m_Parent != null && ( m_Parent.HasLocal( name ) || m_Parent.HasGlobal( name ) ) )
+            if (m_Parent != null && (m_Parent.HasLocal(name) || m_Parent.HasGlobal(name)))
             {
-                return m_Parent.ResolveName( name );
+                return m_Parent.ResolveName(name);
             }
 
-            if ( m_Instance != null && m_Instance.GlobalTable.HasElement( i ) )
+            if (m_Instance != null && m_Instance.GlobalTable.HasElement(i))
             {
-                return m_Instance.GlobalTable.GetElement( i );
+                return m_Instance.GlobalTable.GetElement(i);
             }
 
-            return new BSTableReference( m_LocalVars, i );
+            return new BSTableReference(m_LocalVars, i);
         }
 
-        public void SetReturnValue( ABSObject o )
+        public void SetFlag(BSScopeFlags flag, ABSObject val = null)
         {
-            ReturnValue = o;
+            if (val != null)
+            {
+                if (flag != BSScopeFlags.Return)
+                    throw new BSRuntimeException("Invalid Use of Return in a scope that does not allow return values");
+
+                Return = val;
+
+            }
+            else
+            {
+
+                if (flag != BSScopeFlags.None && (m_AllowedFlags & flag) == 0)
+                    throw new BSRuntimeException("Invalid Scope Flag: " + flag);
+            }
+            
+            m_CurrentFlag = flag;
         }
+
 
         #endregion
 
@@ -94,7 +132,7 @@ namespace BadScript.Common.Runtime
 
         private BSScope()
         {
-            m_LocalVars.InsertElement( new BSObject( "__L" ), m_LocalVars );
+            m_LocalVars.InsertElement(new BSObject("__L"), m_LocalVars);
         }
 
         #endregion

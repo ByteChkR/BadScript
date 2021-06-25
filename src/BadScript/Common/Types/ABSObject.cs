@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
@@ -47,7 +48,7 @@ namespace BadScript.Common.Types
                 return r;
             }
 
-            throw new Exception( $"Can not Convert object '{this}' to type '{typeof( bool )}'" );
+            throw new BSInvalidTypeException( $"Can not Convert object.", this, "boolean" );
         }
 
         public decimal ConvertDecimal()
@@ -57,7 +58,7 @@ namespace BadScript.Common.Types
                 return r;
             }
 
-            throw new Exception( $"Can not Convert object '{this}' to type '{typeof( decimal )}'" );
+            throw new BSInvalidTypeException($"Can not Convert object.", this, "number");
         }
 
         public string ConvertString()
@@ -67,7 +68,7 @@ namespace BadScript.Common.Types
                 return r;
             }
 
-            throw new Exception( $"Can not Convert object '{this}' to type '{typeof( string )}'" );
+            throw new BSInvalidTypeException($"Can not Convert object.", this, "string");
         }
 
         public override bool Equals( object obj )
@@ -75,15 +76,16 @@ namespace BadScript.Common.Types
             return obj is ABSObject o && Equals( o );
         }
 
-        public ABSReference GetOrAddProperty( string propertyName )
-        {
-            if ( !HasProperty( propertyName ) )
-            {
-                SetProperty( propertyName, new BSObject( null ) );
-            }
+        //public ABSReference GetOrAddProperty( string propertyName )
+        //{
+        //    if ( !HasProperty( propertyName ) )
+        //    {
+        //        return new 
+        //        SetProperty( propertyName, new BSObject( null ) );
+        //    }
 
-            return GetProperty( propertyName );
-        }
+        //    return GetProperty( propertyName );
+        //}
 
         public string SafeToString()
         {

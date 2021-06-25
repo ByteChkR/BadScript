@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types.Implementations
@@ -35,7 +36,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
-            throw new Exception( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
         }
 
         public override bool HasProperty( string propertyName )
@@ -45,7 +46,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSObject Invoke( ABSObject[] args )
         {
-            throw new Exception( $"Can not invoke '{this}'" );
+            throw new BSRuntimeException( $"Can not invoke '{this}'" );
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -62,7 +63,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new Exception( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
         }
 
         public override string ToString()

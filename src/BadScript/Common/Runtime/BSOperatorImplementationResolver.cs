@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BadScript.Common.Exceptions;
 using BadScript.Common.OperatorImplementations;
 using BadScript.Common.OperatorImplementations.Implementations;
 using BadScript.Common.Types;
@@ -35,7 +36,7 @@ namespace BadScript.Common.Runtime
                 return imp;
             }
 
-            throw new Exception( $"Could not find operator({key}) implementation" );
+            throw new BSRuntimeException( $"Could not find operator({key}) implementation" );
         }
 
         #endregion

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -49,6 +50,8 @@ namespace BadScript
 
         private BSEngine()
         {
+
+
             AddStaticData(
                 "size",
                 new BSFunction(
@@ -79,8 +82,8 @@ namespace BadScript
                             return new BSObject( ( decimal ) t.GetLength() );
                         }
 
-                        throw new Exception(
-                            "Can not get Size of object: " + arg
+                        throw new BSInvalidTypeException(
+                            "Can not get Size of object", arg, "Table", "Array"
                         );
                     },
                     1
@@ -97,8 +100,9 @@ namespace BadScript
                         {
                             return t.Keys;
                         }
-
-                        throw new Exception( $"Object '{objects[0]}' is not a table" );
+                        throw new BSInvalidTypeException(
+                            "Object is not a table", objects[0], "Table"
+                        );
                     },
                     1 ) );
 
@@ -113,7 +117,9 @@ namespace BadScript
                             return t.Keys;
                         }
 
-                        throw new Exception( $"Object '{objects[0]}' is not a table" );
+                        throw new BSInvalidTypeException(
+                            "Object is not a table", objects[0], "Table"
+                        );
                     },
                     1 ) );
 
@@ -135,25 +141,45 @@ namespace BadScript
                             );
                         }
 
-                        throw new Exception( "Invalid Format string type" );
+                        throw new BSInvalidTypeException(
+                            "Invalid Format string type", format, "string"
+                        );
                     },
                     1,
                     int.MaxValue
                 )
             );
 
+
+
             AddStaticData(
                 "print",
                 new BSFunction(
                     "function print(obj)",
-                    ( args ) =>
+                    (args) =>
                     {
 
                         ABSObject arg = args[0].ResolveReference();
 
-                        Console.WriteLine( arg );
+                        Console.WriteLine(arg);
 
-                        return new BSObject( null );
+                        return new BSObject(null);
+                    },
+                    1
+                )
+            );
+
+
+            AddStaticData(
+                "debug",
+                new BSFunction(
+                    "function debug(obj)",
+                    (args) =>
+                    {
+
+                        ABSObject arg = args[0].ResolveReference();
+
+                        return new BSObject( arg.SafeToString( new Dictionary < ABSObject, string >() ) );
                     },
                     1
                 )
@@ -181,7 +207,9 @@ namespace BadScript
                             return new BSObject( null );
                         }
 
-                        throw new Exception( "Invalid sleep(millis) Usage, Expected Number" );
+                        throw new BSInvalidTypeException(
+                            "Invalid Sleep Time", args[0], "number"
+                        );
                     },
                     1
                 )

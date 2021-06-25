@@ -6,6 +6,7 @@ namespace BadScript.Common.Operators
     public abstract class BSOperator
     {
         public abstract string OperatorKey { get; }
+        public abstract int Preceedence { get; }
 
         #region Public
 

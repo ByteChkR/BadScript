@@ -25,31 +25,37 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
         public override ABSObject Execute( BSScope scope )
         {
-            BSScope forScope = new BSScope( scope );
+            BSScope forScope = new BSScope(BSScopeFlags.Loop, scope );
             m_CounterDefinition.Execute( forScope );
             ABSObject c = m_CounterCondition.Execute( forScope ).ResolveReference();
 
             while ( c.TryConvertBool( out bool d ) && d )
             {
-                BSScope funcScope = new BSScope( scope );
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                    funcScope,
+                    forScope,
                     m_Block,
                     new string[0],
                     new ABSObject[0]
-                );
+                ); 
+                if (forScope.Flags == BSScopeFlags.Continue)
+                {
+                    scope.SetFlag(BSScopeFlags.None);
+                }
 
                 if ( ret != null )
                 {
-                    scope.SetReturnValue( ret );
+                    scope.SetFlag(BSScopeFlags.Return, ret );
 
                     break;
                 }
+                else if (forScope.Flags == BSScopeFlags.Break)
+                {
+                    break;
+                }
+                m_CounterIncrement.Execute(forScope);
 
-                m_CounterIncrement.Execute( scope );
-
-                c = m_CounterCondition.Execute( scope ).ResolveReference();
+                c = m_CounterCondition.Execute(forScope).ResolveReference();
 
             }
 

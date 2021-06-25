@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types.References;
 using BadScript.Common.Types.References.Implementations;
@@ -65,7 +66,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
-            throw new Exception( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
         }
 
         public override ABSObject GetRawElement( int i )
@@ -90,7 +91,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSObject Invoke( ABSObject[] args )
         {
-            throw new Exception( $"Can not invoke '{this}'" );
+            throw new BSRuntimeException( $"Can not invoke '{this}'" );
         }
 
         public override void RemoveElement( int i )
@@ -150,7 +151,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new Exception( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
         }
 
         public override bool TryConvertBool( out bool v )

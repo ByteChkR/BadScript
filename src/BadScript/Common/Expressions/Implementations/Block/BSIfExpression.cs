@@ -29,7 +29,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
                 if ( d )
                 {
-                    BSScope funcScope = new BSScope( scope );
+                    BSScope funcScope = new BSScope(BSScopeFlags.IfBlock, scope );
 
                     ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                         funcScope,
@@ -40,8 +40,9 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
                     if ( ret != null )
                     {
-                        scope.SetReturnValue( ret );
-                    }
+                        scope.SetFlag(BSScopeFlags.Return, ret );
+                    }else if ( funcScope.BreakExecution )
+                        scope.SetFlag( funcScope.Flags );
 
                     return new BSObject( null );
                 }
@@ -50,7 +51,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
             if ( m_ElseBlock != null )
             {
-                BSScope elseScope = new BSScope( scope );
+                BSScope elseScope = new BSScope(BSScopeFlags.IfBlock, scope );
 
                 ABSObject elseR = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     elseScope,
@@ -61,7 +62,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
                 if ( elseR != null )
                 {
-                    scope.SetReturnValue( elseR );
+                    scope.SetFlag( BSScopeFlags.Return, elseR );
+                }
+                else
+                {
+                    scope.SetFlag( elseScope.Flags );
                 }
             }
 

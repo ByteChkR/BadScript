@@ -1,4 +1,5 @@
 ﻿using System;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.References;
@@ -26,7 +27,9 @@ namespace BadScript.Common.Expressions.Implementations.Binary
             }
             else
             {
-                throw new Exception( $"{left} can not be assigned to." );
+                throw new BSInvalidTypeException(
+                    "Expected Assignable Reference", left, "Reference"
+                );
             }
 
             return right;

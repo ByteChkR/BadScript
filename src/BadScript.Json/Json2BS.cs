@@ -101,7 +101,7 @@ namespace BadScript.Json
                     return new BSObject( null );
 
                 default:
-                    throw new NotSupportedException( $"Can not convert type {token.Type}" );
+                    throw new JsonConverterException($"Expected Compatible Json Type. Got {token.Type}");
             }
         }
 

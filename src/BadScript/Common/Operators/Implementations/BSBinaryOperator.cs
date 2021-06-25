@@ -7,11 +7,12 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSBinaryOperator : BSOperator
     {
-        private int m_Start;
 
         private BSFunction m_OperatorImplementation;
 
         public override string OperatorKey { get; }
+
+        public override int Preceedence { get; }
 
         #region Public
 
@@ -19,14 +20,14 @@ namespace BadScript.Common.Operators.Implementations
         {
             OperatorKey = key;
             m_OperatorImplementation = func;
-            m_Start = start;
+            Preceedence = start;
         }
 
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
             return new BSInvocationExpression(
                 new BSProxyExpression( m_OperatorImplementation ),
-                new[] { left, parser.ParseExpression( m_Start ) }
+                new[] { left, parser.ParseExpression( Preceedence-1 ) }
             );
         }
 

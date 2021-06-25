@@ -21,11 +21,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         public override ABSObject Execute( BSScope scope )
         {
-            ABSObject o = m_Condition.Execute( scope ).ResolveReference();
+            BSScope funcScope = new BSScope(BSScopeFlags.Loop, scope);
+            ABSObject o = m_Condition.Execute(funcScope).ResolveReference();
 
             while ( o.TryConvertBool( out bool d ) && d )
             {
-                BSScope funcScope = new BSScope( scope );
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     funcScope,
@@ -33,15 +33,22 @@ namespace BadScript.Common.Expressions.Implementations.Block
                     new string[0],
                     new ABSObject[0]
                 );
+                if (funcScope.Flags == BSScopeFlags.Continue)
+                {
+                    funcScope.SetFlag( BSScopeFlags.None );
+                }
 
                 if ( ret != null )
                 {
-                    scope.SetReturnValue( ret );
-
+                    scope.SetFlag(BSScopeFlags.Return, ret );
+                    break;
+                }
+                else if(funcScope.Flags == BSScopeFlags.Break)
+                {
                     break;
                 }
 
-                o = m_Condition.Execute( scope ).ResolveReference();
+                o = m_Condition.Execute(funcScope).ResolveReference();
             }
 
             return new BSObject( null );
