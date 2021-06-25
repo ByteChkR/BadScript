@@ -98,7 +98,7 @@ namespace BadScript
                 nextNewLine = m_OriginalSource.Length - textStart;
             }
 
-            string r = m_OriginalSource.Substring( textStart, nextNewLine + textStart );
+            string r = m_OriginalSource.Substring( textStart, nextNewLine - textStart );
 
             return ( r.Trim(), lineCount,
                      m_CurrentPosition - lastNewLine );
