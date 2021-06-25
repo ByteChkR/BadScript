@@ -7,7 +7,9 @@ namespace BadScript.Common.Exceptions
     {
         #region Public
 
-        public BSParserException(string msg) : base(msg) { }
+        public BSParserException( string msg ) : base( msg )
+        {
+        }
 
         public BSParserException( string msg, BSParser parser ) : base( GenerateErrorMessage( msg, parser ) )
         {

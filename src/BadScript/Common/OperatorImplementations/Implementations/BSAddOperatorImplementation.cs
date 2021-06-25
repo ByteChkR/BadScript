@@ -1,5 +1,4 @@
-﻿using System;
-using BadScript.Common.Exceptions;
+﻿using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -40,7 +39,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
                 return new BSObject( lS + rStr );
             }
 
-            throw new BSInvalidOperationException("+(Add)", lVal, rVal);
+            throw new BSInvalidOperationException( "+(Add)", lVal, rVal );
         }
 
         public override bool IsCorrectImplementation( ABSObject[] arg )

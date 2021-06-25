@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BadScript.Common.Exceptions;
@@ -76,7 +75,9 @@ namespace BadScript
                 buildScriptExpression.Execute( scope );
 
                 if ( scope.BreakExecution )
+                {
                     break;
+                }
             }
 
             return scope.Return ?? scope.GetLocals();
@@ -98,7 +99,9 @@ namespace BadScript
             }
 
             throw new BSInvalidTypeException(
-                "Expected String", o, "string"
+                "Expected String",
+                o,
+                "string"
             );
         }
 

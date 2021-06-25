@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BadScript.Common.Exceptions;
-using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types
@@ -58,7 +57,7 @@ namespace BadScript.Common.Types
                 return r;
             }
 
-            throw new BSInvalidTypeException($"Can not Convert object.", this, "number");
+            throw new BSInvalidTypeException( $"Can not Convert object.", this, "number" );
         }
 
         public string ConvertString()
@@ -68,7 +67,7 @@ namespace BadScript.Common.Types
                 return r;
             }
 
-            throw new BSInvalidTypeException($"Can not Convert object.", this, "string");
+            throw new BSInvalidTypeException( $"Can not Convert object.", this, "string" );
         }
 
         public override bool Equals( object obj )

@@ -14,7 +14,7 @@ namespace BadScript.Common.Operators.Implementations
 
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
-            return new BSAssignExpression( left, parser.ParseExpression(Preceedence) );
+            return new BSAssignExpression( left, parser.ParseExpression( Preceedence ) );
         }
 
         #endregion

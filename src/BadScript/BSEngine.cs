@@ -51,7 +51,6 @@ namespace BadScript
         private BSEngine()
         {
 
-
             AddStaticData(
                 "size",
                 new BSFunction(
@@ -83,7 +82,10 @@ namespace BadScript
                         }
 
                         throw new BSInvalidTypeException(
-                            "Can not get Size of object", arg, "Table", "Array"
+                            "Can not get Size of object",
+                            arg,
+                            "Table",
+                            "Array"
                         );
                     },
                     1
@@ -100,8 +102,11 @@ namespace BadScript
                         {
                             return t.Keys;
                         }
+
                         throw new BSInvalidTypeException(
-                            "Object is not a table", objects[0], "Table"
+                            "Object is not a table",
+                            objects[0],
+                            "Table"
                         );
                     },
                     1 ) );
@@ -118,7 +123,9 @@ namespace BadScript
                         }
 
                         throw new BSInvalidTypeException(
-                            "Object is not a table", objects[0], "Table"
+                            "Object is not a table",
+                            objects[0],
+                            "Table"
                         );
                     },
                     1 ) );
@@ -142,7 +149,9 @@ namespace BadScript
                         }
 
                         throw new BSInvalidTypeException(
-                            "Invalid Format string type", format, "string"
+                            "Invalid Format string type",
+                            format,
+                            "string"
                         );
                     },
                     1,
@@ -150,31 +159,28 @@ namespace BadScript
                 )
             );
 
-
-
             AddStaticData(
                 "print",
                 new BSFunction(
                     "function print(obj)",
-                    (args) =>
+                    ( args ) =>
                     {
 
                         ABSObject arg = args[0].ResolveReference();
 
-                        Console.WriteLine(arg);
+                        Console.WriteLine( arg );
 
-                        return new BSObject(null);
+                        return new BSObject( null );
                     },
                     1
                 )
             );
 
-
             AddStaticData(
                 "debug",
                 new BSFunction(
                     "function debug(obj)",
-                    (args) =>
+                    ( args ) =>
                     {
 
                         ABSObject arg = args[0].ResolveReference();
@@ -208,7 +214,9 @@ namespace BadScript
                         }
 
                         throw new BSInvalidTypeException(
-                            "Invalid Sleep Time", args[0], "number"
+                            "Invalid Sleep Time",
+                            args[0],
+                            "number"
                         );
                     },
                     1

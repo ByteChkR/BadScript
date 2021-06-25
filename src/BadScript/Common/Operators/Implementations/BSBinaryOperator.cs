@@ -7,7 +7,6 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSBinaryOperator : BSOperator
     {
-
         private BSFunction m_OperatorImplementation;
 
         public override string OperatorKey { get; }
@@ -27,7 +26,7 @@ namespace BadScript.Common.Operators.Implementations
         {
             return new BSInvocationExpression(
                 new BSProxyExpression( m_OperatorImplementation ),
-                new[] { left, parser.ParseExpression( Preceedence-1 ) }
+                new[] { left, parser.ParseExpression( Preceedence - 1 ) }
             );
         }
 

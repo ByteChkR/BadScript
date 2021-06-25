@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Runtime;
@@ -69,12 +68,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
             {
                 buildScriptExpression.Execute( scope );
 
-                if ( scope.BreakExecution || scope.Flags == BSScopeFlags.Continue)
+                if ( scope.BreakExecution || scope.Flags == BSScopeFlags.Continue )
                 {
                     break;
                 }
             }
-            
 
             return scope.Return;
         }

@@ -25,7 +25,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
         public override ABSObject Execute( BSScope scope )
         {
-            BSScope forScope = new BSScope(BSScopeFlags.Loop, scope );
+            BSScope forScope = new BSScope( BSScopeFlags.Loop, scope );
             m_CounterDefinition.Execute( forScope );
             ABSObject c = m_CounterCondition.Execute( forScope ).ResolveReference();
 
@@ -37,25 +37,27 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
                     m_Block,
                     new string[0],
                     new ABSObject[0]
-                ); 
-                if (forScope.Flags == BSScopeFlags.Continue)
+                );
+
+                if ( forScope.Flags == BSScopeFlags.Continue )
                 {
-                    scope.SetFlag(BSScopeFlags.None);
+                    scope.SetFlag( BSScopeFlags.None );
                 }
 
                 if ( ret != null )
                 {
-                    scope.SetFlag(BSScopeFlags.Return, ret );
+                    scope.SetFlag( BSScopeFlags.Return, ret );
 
                     break;
                 }
-                else if (forScope.Flags == BSScopeFlags.Break)
+                else if ( forScope.Flags == BSScopeFlags.Break )
                 {
                     break;
                 }
-                m_CounterIncrement.Execute(forScope);
 
-                c = m_CounterCondition.Execute(forScope).ResolveReference();
+                m_CounterIncrement.Execute( forScope );
+
+                c = m_CounterCondition.Execute( forScope ).ResolveReference();
 
             }
 

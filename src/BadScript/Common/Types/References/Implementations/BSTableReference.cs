@@ -32,8 +32,11 @@ namespace BadScript.Common.Types.References.Implementations
         public override ABSObject Get()
         {
             ABSObject k = m_Key.ResolveReference();
-            if(m_SourceTable.HasElement(k))
+
+            if ( m_SourceTable.HasElement( k ) )
+            {
                 return m_SourceTable.GetRawElement( k );
+            }
 
             return new BSObject( null );
         }

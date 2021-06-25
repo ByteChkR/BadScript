@@ -1,6 +1,4 @@
-﻿using System;
-using BadScript.Common.Exceptions;
-using BadScript.Common.Types;
+﻿using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
@@ -373,7 +371,6 @@ namespace BadScript.Math
                     "function pow(x, y)",
                     args =>
                     {
-
                         return new BSObject(
                             ( decimal ) System.Math.Pow(
                                 ( double ) args[0].

@@ -72,6 +72,7 @@ namespace BadScript.Common.Types.Implementations
             }
 
             return new BSTableReference( this, k );
+
             //throw new BSRuntimeException( $"Property {propertyName} does not exist" );
         }
 

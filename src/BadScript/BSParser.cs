@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,224 +17,8 @@ using BadScript.Common.Types;
 namespace BadScript
 {
 
-    public static class BSOperatorPreceedenceTable
-    {
-        private static readonly List<BSOperator> s_Operators =
-            new List<BSOperator>
-            {
-                new BSBinaryOperator(
-                    6,
-                    "+",
-                    new BSFunction(
-                        "function +(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "+", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    6,
-                    "-",
-                    new BSFunction(
-                        "function -(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "-", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    5,
-                    "*",
-                    new BSFunction(
-                        "function *(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "*", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    5,
-                    "/",
-                    new BSFunction(
-                        "function /(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "/", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    5,
-                    "%",
-                    new BSFunction(
-                        "function %(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "%", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    15,
-                    "??",
-                    new BSFunction(
-                        "function ??(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "??", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    9,
-                    "==",
-                    new BSFunction(
-                        "function ==(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "==", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    9,
-                    "!=",
-                    new BSFunction(
-                        "function !=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "!=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    13,
-                    "&&",
-                    new BSFunction(
-                        "function &&(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "&&", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    14,
-                    "||",
-                    new BSFunction(
-                        "function ||(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "||", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    11,
-                    "^",
-                    new BSFunction(
-                        "function ^(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "^", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    8,
-                    "<",
-                    new BSFunction(
-                        "function <(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "<", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    8,
-                    ">",
-                    new BSFunction(
-                        "function >(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( ">", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    8,
-                    "<=",
-                    new BSFunction(
-                        "function <=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "<=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSBinaryOperator(
-                    8,
-                    ">=",
-                    new BSFunction(
-                        "function >=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( ">=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
-                ),
-                new BSAssignmentOperator(),
-                new BSMemberAccessOperator(),
-            };
-
-        private static readonly List < BSOperator > s_PrefixOperators =
-            new List < BSOperator >
-            {
-                new BSUnaryOperator(
-                    "!",
-                    new BSFunction(
-                        "function !(a)",
-                        objects =>
-                            BSOperatorImplementationResolver.
-                                ResolveImplementation( "!", objects ).
-                                ExecuteOperator( objects ),
-                        1
-                    )
-                )
-            };
-
-        public static bool Has( int p, string k ) =>
-            s_Operators.Any( x => x.Preceedence <= p && x.OperatorKey == k );
-
-        private static BSOperator Get( List < BSOperator > ops, int p, string key )
-        {
-            foreach (BSOperator bsOperator in ops)
-            {
-                if (bsOperator.Preceedence <= p && bsOperator.OperatorKey == key)
-                    return bsOperator;
-            }
-
-            throw new BSParserException( $"Can not Resolve Operator: {key} with precedence <= {p}" );
-        }
-
-        public static BSOperator Get( int p, string key ) => Get( s_Operators, p, key );
-
-        public static BSOperator GetPrefix( int p, string key ) => Get( s_PrefixOperators, p, key );
-
-
-    }
     public class BSParser
     {
-
-        
-        
-
-        
-
         private readonly string m_OriginalSource;
         private int m_CurrentPosition;
         private char Current =>
@@ -315,7 +98,8 @@ namespace BadScript
                 nextNewLine = m_OriginalSource.Length - textStart;
             }
 
-            return ( m_OriginalSource.Substring( textStart, (nextNewLine - 1)-textStart).Trim(), lineCount, m_CurrentPosition - lastNewLine );
+            return ( m_OriginalSource.Substring( textStart, nextNewLine - 1 - textStart ).Trim(), lineCount,
+                     m_CurrentPosition - lastNewLine );
         }
 
         public BSExpression Parse( int start )
@@ -345,16 +129,17 @@ namespace BadScript
 
                 if ( key.StartsWith( ")" ) ||
                      key.StartsWith( "]" ) ||
-                     key == "," || !BSOperatorPreceedenceTable.Has(start, key))
+                     key == "," ||
+                     !BSOperatorPreceedenceTable.Has( start, key ) )
                 {
                     m_CurrentPosition -= key.Length;
 
                     break;
                 }
 
-                if ( key != "")
+                if ( key != "" )
                 {
-                    BSOperator o = BSOperatorPreceedenceTable.Get(start, key);
+                    BSOperator o = BSOperatorPreceedenceTable.Get( start, key );
 
                     expr = Parse( o.Parse( expr, this ), o.Preceedence );
                 }
@@ -419,7 +204,7 @@ namespace BadScript
             {
                 m_CurrentPosition++;
 
-                BSExpression condition = ParseExpression(int.MaxValue);
+                BSExpression condition = ParseExpression( int.MaxValue );
                 ReadWhitespace();
 
                 if ( !Is( ')' ) )
@@ -461,15 +246,16 @@ namespace BadScript
 
             if ( key.StartsWith( ")" ) ||
                  key.StartsWith( "]" ) ||
-                 key == "," || !BSOperatorPreceedenceTable.Has(start, key))
+                 key == "," ||
+                 !BSOperatorPreceedenceTable.Has( start, key ) )
             {
                 m_CurrentPosition -= key.Length;
             }
             else if ( key != "" )
             {
-                BSOperator o = BSOperatorPreceedenceTable.Get(start, key);
+                BSOperator o = BSOperatorPreceedenceTable.Get( start, key );
 
-                BSExpression r = Parse(o.Parse(expr, this), start);
+                BSExpression r = Parse( o.Parse( expr, this ), start );
 
                 return r;
             }
@@ -532,13 +318,13 @@ namespace BadScript
 
                 if ( !Is( ')' ) )
                 {
-                    exprs.Add( ParseExpression(int.MaxValue) );
+                    exprs.Add( ParseExpression( int.MaxValue ) );
                     ReadWhitespace();
 
                     while ( Is( ',' ) )
                     {
                         m_CurrentPosition++;
-                        exprs.Add( ParseExpression(int.MaxValue) );
+                        exprs.Add( ParseExpression( int.MaxValue ) );
                         ReadWhitespace();
                     }
 
@@ -657,8 +443,8 @@ namespace BadScript
 
                 if ( isEscaped )
                 {
-                    string s = Regex.Unescape("\\" + m_OriginalSource[m_CurrentPosition]);
-                    sb.Append(s);
+                    string s = Regex.Unescape( "\\" + m_OriginalSource[m_CurrentPosition] );
+                    sb.Append( s );
 
                     m_CurrentPosition++;
                     isEscaped = false;
@@ -730,7 +516,7 @@ namespace BadScript
             if ( Is( '(' ) )
             {
                 m_CurrentPosition++;
-                BSExpression expr = ParseExpression(int.MaxValue);
+                BSExpression expr = ParseExpression( int.MaxValue );
                 m_CurrentPosition++;
 
                 return expr;
@@ -740,7 +526,8 @@ namespace BadScript
             {
                 m_CurrentPosition++;
 
-                return BSOperatorPreceedenceTable.GetPrefix(int.MaxValue, "!").Parse( ParseExpression(int.MaxValue), this );
+                return BSOperatorPreceedenceTable.GetPrefix( int.MaxValue, "!" ).
+                                                  Parse( ParseExpression( int.MaxValue ), this );
             }
 
             throw new BSParserException( "Can not Parse Value", this );
@@ -774,15 +561,17 @@ namespace BadScript
                 return ParseFunction( isGlobal );
             }
 
-            if (wordName == "return")
+            if ( wordName == "return" )
             {
-                return new BSReturnExpression(ParseExpression(int.MaxValue));
+                return new BSReturnExpression( ParseExpression( int.MaxValue ) );
             }
-            if (wordName == "continue")
+
+            if ( wordName == "continue" )
             {
                 return new BSContinueExpression();
             }
-            if (wordName == "break")
+
+            if ( wordName == "break" )
             {
                 return new BSBreakExpression();
             }
@@ -868,7 +657,7 @@ namespace BadScript
                 }
 
                 ReadWhitespace();
-                BSExpression cDecl = ParseExpression(int.MaxValue);
+                BSExpression cDecl = ParseExpression( int.MaxValue );
                 ReadWhitespaceAndNewLine();
                 string block = ParseBlock();
 
@@ -888,7 +677,7 @@ namespace BadScript
 
             if ( wordName == "for" )
             {
-                BSAssignExpression cDecl = ( BSAssignExpression ) ParseExpression(int.MaxValue);
+                BSAssignExpression cDecl = ( BSAssignExpression ) ParseExpression( int.MaxValue );
                 BSPropertyExpression cProp = ( BSPropertyExpression ) cDecl.GetLeft();
 
                 string untilWord = ParseKey();
@@ -907,7 +696,7 @@ namespace BadScript
                 if ( string.IsNullOrEmpty( op ) )
                 {
                     //Check condition to be true
-                    cCond = ParseExpression(int.MaxValue);
+                    cCond = ParseExpression( int.MaxValue );
                 }
                 else
                 {
@@ -915,37 +704,37 @@ namespace BadScript
                     switch ( op )
                     {
                         case "=":
-                            cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, "==").
-                                                Parse( cProp, this );
+                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "==" ).
+                                                               Parse( cProp, this );
 
                             break;
 
                         case "!":
-                            cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, "!=").
+                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "!=" ).
                                                                Parse( cProp, this );
 
                             break;
 
                         case "<":
-                            cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, "<").
+                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "<" ).
                                                                Parse( cProp, this );
 
                             break;
 
                         case ">":
-                            cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, ">").
+                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, ">" ).
                                                                Parse( cProp, this );
 
                             break;
 
                         case "<=":
-                            cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, "<=").
+                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "<=" ).
                                                                Parse( cProp, this );
 
                             break;
 
                         case ">=":
-                            cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, ">=").
+                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, ">=" ).
                                                                Parse( cProp, this );
 
                             break;
@@ -977,7 +766,7 @@ namespace BadScript
                 {
                     cInc = new BSAssignExpression(
                         cProp,
-                        BSOperatorPreceedenceTable.Get(int.MaxValue, "+").
+                        BSOperatorPreceedenceTable.Get( int.MaxValue, "+" ).
                                                    Parse( cProp, this ) );
                 }
 

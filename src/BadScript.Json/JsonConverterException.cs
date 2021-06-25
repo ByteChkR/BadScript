@@ -5,9 +5,13 @@ namespace BadScript.Json
 
     internal class JsonConverterException : BSRuntimeException
     {
-        public JsonConverterException(string msg ) : base( msg )
+        #region Public
+
+        public JsonConverterException( string msg ) : base( msg )
         {
         }
+
+        #endregion
     }
 
 }

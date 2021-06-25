@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Types;

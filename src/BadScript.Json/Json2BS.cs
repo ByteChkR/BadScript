@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -101,7 +100,7 @@ namespace BadScript.Json
                     return new BSObject( null );
 
                 default:
-                    throw new JsonConverterException($"Expected Compatible Json Type. Got {token.Type}");
+                    throw new JsonConverterException( $"Expected Compatible Json Type. Got {token.Type}" );
             }
         }
 
