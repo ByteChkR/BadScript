@@ -5,33 +5,107 @@ using System.IO;
 using System.Linq;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
+using BadScript.Common.Operators.Implementations;
 using BadScript.Common.Types.References;
 using BadScript.Common.Types.References.Implementations;
 
 namespace BadScript.Common.Types.Implementations
 {
 
+    public class BSFunctionReference : ABSReference
+    {
+        private readonly BSFunction m_Func;
+        public BSFunctionReference(BSFunction f)
+        {
+            m_Func = f;
+        }
+        public override void Assign( ABSObject obj )
+        {
+            throw new BSRuntimeException( "Can not Assign Function in Array" );
+        }
+
+        public override ABSObject Get()
+        {
+            return m_Func;
+        }
+    }
     public class BSArray : ABSArray, IEnumerable < IForEachIteration >
     {
+        private readonly Dictionary < string, BSFunction > m_Functions;
+
         private readonly List < ABSObject > m_InnerArray;
 
         public override bool IsNull => false;
 
         #region Public
 
-        public BSArray()
+        private BSArray(List <ABSObject> o)
         {
-            m_InnerArray = new List < ABSObject >();
+            m_InnerArray = o;
+
+            m_Functions = new Dictionary < string, BSFunction >();
+            m_Functions["clear"] = new BSFunction(
+                "function clear()",
+                objects =>
+                {
+                    m_InnerArray.Clear();
+
+                    return new BSObject( null );
+                } ,0);
+
+            m_Functions["size"] = new BSFunction(
+                "function size()",
+                objects => new BSObject( ( decimal ) m_InnerArray.Count ),
+                0 );
+
+            m_Functions["add"] = new BSFunction(
+                "function add(obj0, obj1, obj2, ...)",
+                objects =>
+                {
+                    m_InnerArray.AddRange( objects );
+
+                    return new BSObject( null );
+                }, 1, int.MaxValue );
+
+            m_Functions["remove"] = new BSFunction(
+                "function remove(obj0, obj1, obj2, ...)",
+                objects =>
+                {
+                    foreach (ABSObject absObject in objects)
+                    {
+                        m_InnerArray.Remove(absObject);
+                    }
+
+                    return new BSObject(null);
+                },
+                1,
+                int.MaxValue);
+
+
+            m_Functions["removeAt"] = new BSFunction(
+                "function removeAt(index0, index1, index2, ...)",
+                objects =>
+                {
+                    foreach (ABSObject absObject in objects)
+                    {
+                        m_InnerArray.RemoveAt((int)absObject.ConvertDecimal());
+                    }
+
+                    return new BSObject(null);
+                },
+                1,
+                int.MaxValue);
+        }
+        public BSArray():this(new List < ABSObject >())
+        {
         }
 
-        public BSArray( int capacity )
+        public BSArray( int capacity ):this(new List<ABSObject>(capacity))
         {
-            m_InnerArray = new List < ABSObject >( capacity );
         }
 
-        public BSArray( IEnumerable < ABSObject > collection )
+        public BSArray( IEnumerable < ABSObject > collection ):this(new List<ABSObject>(collection))
         {
-            m_InnerArray = new List < ABSObject >( collection );
         }
 
         public override bool Equals( ABSObject other )
@@ -65,7 +139,10 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
+            if(!m_Functions.ContainsKey(propertyName))
             throw new BSRuntimeException( $"Property {propertyName} does not exist" );
+
+            return new BSFunctionReference( m_Functions[propertyName] );
         }
 
         public override ABSObject GetRawElement( int i )

@@ -61,8 +61,7 @@ namespace BadScript.Common.Runtime
         {
             return m_Instance == null
                 ? m_Parent.HasGlobal( name )
-                : m_Instance.GlobalTable.HasElement( new BSObject( name ) ) ||
-                  m_Parent != null && m_Parent.HasLocal( name );
+                : m_Instance.GlobalTable.HasElement( new BSObject( name ) );
         }
 
         public bool HasLocal( string name )

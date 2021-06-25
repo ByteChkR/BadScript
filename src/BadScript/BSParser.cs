@@ -98,7 +98,9 @@ namespace BadScript
                 nextNewLine = m_OriginalSource.Length - textStart;
             }
 
-            return ( m_OriginalSource.Substring( textStart, nextNewLine - 1 - textStart ).Trim(), lineCount,
+            string r = m_OriginalSource.Substring( textStart, nextNewLine + textStart );
+
+            return ( r.Trim(), lineCount,
                      m_CurrentPosition - lastNewLine );
         }
 
@@ -615,7 +617,11 @@ namespace BadScript
                             (BSExpression, BSExpression[]) sA = ParseConditionalBlock();
                             cMap.Add( sA.Item1, sA.Item2 );
                             resetIndex = ReadWhitespaceAndNewLine();
-                            wordName = GetNextWord();
+
+                            if ( !TryReadNextWord( out wordName ) )
+                            {
+                                m_CurrentPosition = resetIndex;
+                            }else
                             ReadWhitespaceAndNewLine();
                         }
                         else
@@ -830,26 +836,37 @@ namespace BadScript
 
         #region Private
 
+        private bool TryReadNextWord(out string word)
+        {
+            if (!IsWordStart())
+            {
+                word = null;
+                return false;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(m_OriginalSource[m_CurrentPosition]);
+            m_CurrentPosition++;
+
+            while (IsWordMiddle())
+            {
+                sb.Append(m_OriginalSource[m_CurrentPosition]);
+                m_CurrentPosition++;
+            }
+
+            word = sb.ToString();
+
+            return true;
+        }
+
         private string GetNextWord()
         {
-            if ( !IsWordStart() )
+            if ( !TryReadNextWord(out string word) )
             {
                 throw new BSParserException( "Can not Parse Word", this );
             }
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append( m_OriginalSource[m_CurrentPosition] );
-            m_CurrentPosition++;
-
-            while ( IsWordMiddle() )
-            {
-                sb.Append( m_OriginalSource[m_CurrentPosition] );
-                m_CurrentPosition++;
-            }
-
-            string wordName = sb.ToString();
-
-            return wordName;
+            return word;
         }
 
         private bool Is( char c )
