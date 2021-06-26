@@ -116,8 +116,6 @@ namespace BadScript.Common.Types.Implementations
         public override ABSReference GetElement( int i )
         {
             return new BSArrayReference( this, i );
-
-            ;
         }
 
         public IEnumerator < IForEachIteration > GetEnumerator()
