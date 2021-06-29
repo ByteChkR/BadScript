@@ -488,6 +488,8 @@ namespace BadScript.IO
                 )
             );
 
+            ret.Lock();
+
             return ret;
         }
 

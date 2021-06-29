@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -8,6 +9,23 @@ namespace BadScript.ExpGen
 
     internal class Program
     {
+        public static readonly List < ( string, string) > m_PsTranslation = new List < (string, string) >
+        {
+            ( "&&", "-and" ),
+            ( "||", "-or" ),
+            ( "^", "-xor" ),
+            ( "==", "-eq" ),
+            ( ">=", "-ge" ),
+            ( "<=", "-le" ),
+            ( "<", "-lt" ),
+            ( ">", "-gt" ),
+
+        };
+
+        public static readonly string[] m_Operators = new[]
+        {
+            " + ", " * ", " - ", " && ", " || ", " ^ ", " == ", " <= ", " >= ", " < ", " > ",
+        };
         private static Process m_Evaluator;
 
         private static readonly Random s_Rnd = new Random();
@@ -31,19 +49,9 @@ namespace BadScript.ExpGen
 
         public static string GenerateOperator()
         {
-            int i = s_Rnd.Next( 0, 3 );
+            int i = s_Rnd.Next( 0, m_Operators.Length );
 
-            if ( i == 0 )
-            {
-                return " * ";
-            }
-
-            if ( i == 1 )
-            {
-                return " - ";
-            }
-
-            return " + ";
+            return m_Operators[i];
         }
 
         public static string GenerateTerminal()
@@ -59,7 +67,14 @@ namespace BadScript.ExpGen
 
         private static string Evaluate( string expr )
         {
-            m_Evaluator.StandardInput.WriteLine( expr );
+            string psCmd = expr;
+
+            foreach ( (string, string) keyValuePair in m_PsTranslation )
+            {
+                psCmd = psCmd.Replace( keyValuePair.Item1, keyValuePair.Item2 );
+            }
+
+            m_Evaluator.StandardInput.WriteLine( psCmd );
             string l = m_Evaluator.StandardOutput.ReadLine();
 
             while ( l.StartsWith( "PS" ) )
@@ -73,6 +88,17 @@ namespace BadScript.ExpGen
         private static string GenerateCode( int exprNum, string expr )
         {
             string val = Evaluate( expr );
+
+            if ( val == "True" )
+            {
+                val = "1";
+            }
+
+            if ( val == "False" )
+            {
+                val = "0";
+            }
+
             Console.WriteLine( expr + " = " + val );
             string exprResult = $"exprResult_{exprNum}";
             StringBuilder sb = new StringBuilder( $"{exprResult} = " );

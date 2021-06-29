@@ -23,6 +23,8 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSArray Values => new BSArray( m_InnerTable.Values );
 
+        private bool m_Locked;
+
         #region Public
 
         public BSTable()
@@ -32,6 +34,11 @@ namespace BadScript.Common.Types.Implementations
         public BSTable( Dictionary < ABSObject, ABSObject > startObjects )
         {
             m_InnerTable = startObjects;
+        }
+
+        public void Lock()
+        {
+            m_Locked = true;
         }
 
         public override void Clear()
@@ -46,7 +53,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSReference GetElement( ABSObject i )
         {
-            return new BSTableReference( this, i );
+            return new BSTableReference( this, i, m_Locked );
         }
 
         public IEnumerator < IForEachIteration > GetEnumerator()
@@ -71,7 +78,7 @@ namespace BadScript.Common.Types.Implementations
                 return GetElement( k );
             }
 
-            return new BSTableReference( this, k );
+            return new BSTableReference( this, k, m_Locked );
 
             //throw new BSRuntimeException( $"Property {propertyName} does not exist" );
         }

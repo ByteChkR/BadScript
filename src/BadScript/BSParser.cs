@@ -301,6 +301,14 @@ namespace BadScript
 
             ReadWhitespaceAndNewLine();
 
+            if ( Is( '=' ) && Is( 1, '>' ) )
+            {
+                m_CurrentPosition += 2;
+                ReadWhitespaceAndNewLine();
+
+                return new BSFunctionDefinitionExpression( funcName, args, new[] { Parse( int.MaxValue ) }, isGlobal );
+            }
+
             string block = ParseBlock();
 
             BSParser p = new BSParser( block );
@@ -621,8 +629,11 @@ namespace BadScript
                             if ( !TryReadNextWord( out wordName ) )
                             {
                                 m_CurrentPosition = resetIndex;
-                            }else
-                            ReadWhitespaceAndNewLine();
+                            }
+                            else
+                            {
+                                ReadWhitespaceAndNewLine();
+                            }
                         }
                         else
                         {
@@ -637,6 +648,51 @@ namespace BadScript
                 }
 
                 return new BSIfExpression( cMap, elseBlock );
+            }
+
+            if ( wordName == "try" )
+            {
+                ReadWhitespaceAndNewLine();
+                string block = ParseBlock();
+
+                BSParser p = new BSParser( block );
+
+                BSExpression[] tryBlock = p.ParseToEnd();
+                ReadWhitespaceAndNewLine();
+                string catchStr = GetNextWord();
+
+                if ( catchStr != "catch" )
+                {
+                    throw new BSParserException( "Expected 'catch' after 'try' block", this );
+                }
+
+                ReadWhitespace();
+
+                string exVar = null;
+
+                if ( Is( '(' ) )
+                {
+                    m_CurrentPosition++;
+                    exVar = ParseArgumentName();
+
+                    if ( !Is( ')' ) )
+                    {
+                        throw new BSParserException( "Expected ')' after catch clause", this );
+                    }
+
+                    m_CurrentPosition++;
+                }
+
+                ReadWhitespaceAndNewLine();
+                string cBlock = ParseBlock();
+
+                BSParser cP = new BSParser( cBlock );
+
+                BSExpression[] catchBlock = cP.ParseToEnd();
+                ReadWhitespaceAndNewLine();
+
+                return new BSTryExpression( tryBlock, catchBlock, exVar );
+
             }
 
             if ( wordName == "foreach" )
@@ -836,32 +892,9 @@ namespace BadScript
 
         #region Private
 
-        private bool TryReadNextWord(out string word)
+        public string GetNextWord()
         {
-            if (!IsWordStart())
-            {
-                word = null;
-                return false;
-            }
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append(m_OriginalSource[m_CurrentPosition]);
-            m_CurrentPosition++;
-
-            while (IsWordMiddle())
-            {
-                sb.Append(m_OriginalSource[m_CurrentPosition]);
-                m_CurrentPosition++;
-            }
-
-            word = sb.ToString();
-
-            return true;
-        }
-
-        private string GetNextWord()
-        {
-            if ( !TryReadNextWord(out string word) )
+            if ( !TryReadNextWord( out string word ) )
             {
                 throw new BSParserException( "Can not Parse Word", this );
             }
@@ -1004,6 +1037,30 @@ namespace BadScript
             }
 
             return false;
+        }
+
+        private bool TryReadNextWord( out string word )
+        {
+            if ( !IsWordStart() )
+            {
+                word = null;
+
+                return false;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append( m_OriginalSource[m_CurrentPosition] );
+            m_CurrentPosition++;
+
+            while ( IsWordMiddle() )
+            {
+                sb.Append( m_OriginalSource[m_CurrentPosition] );
+                m_CurrentPosition++;
+            }
+
+            word = sb.ToString();
+
+            return true;
         }
 
         #endregion

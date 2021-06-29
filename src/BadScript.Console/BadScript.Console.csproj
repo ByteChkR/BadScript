@@ -8,11 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj" />
+    <ProjectReference Include="..\BadScript.Core\BadScript.Core.csproj" />
     <ProjectReference Include="..\BadScript.Http\BadScript.Http.csproj" />
     <ProjectReference Include="..\BadScript.IO\BadScript.IO.csproj" />
     <ProjectReference Include="..\BadScript.Json\BadScript.Json.csproj" />
     <ProjectReference Include="..\BadScript.Math\BadScript.Math.csproj" />
     <ProjectReference Include="..\BadScript.Process\BadScript.Process.csproj" />
+    <ProjectReference Include="..\BadScript.StringUtils\BadScript.StringUtils.csproj" />
     <ProjectReference Include="..\BadScript.Zip\BadScript.Zip.csproj" />
     <ProjectReference Include="..\BadScript\BadScript.csproj" />
   </ItemGroup>

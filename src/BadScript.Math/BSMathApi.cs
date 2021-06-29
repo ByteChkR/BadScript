@@ -420,6 +420,7 @@ namespace BadScript.Math
                 )
             );
 
+            ret.Lock();
             return ret;
         }
 

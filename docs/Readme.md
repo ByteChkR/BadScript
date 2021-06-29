@@ -112,6 +112,12 @@ a = null
 notNull = a ?? 1
 ```
 
+### nullchecked property(?.)
+```js
+a = {}
+value = a?.propertyName //Null if a does not have property "propertyName". Otherwise its the value of "a.propertyName"
+```
+
 ## Loops
 
 ### Keywords
@@ -312,7 +318,7 @@ function uneven_or_null(x)
 }
 ```
 
-#### Capturing Arguments in Lambda Functions
+#### Capturing Arguments in Functions
 ```js
 function addValues(obj)
 {
@@ -335,3 +341,25 @@ v1 = addValues(o) //Direct Use
 v2 = o.addValues() //Use Lambda
 
 ```
+
+
+
+#### Single Expression Functions
+Functions can also be declared in a similar syntax to C# lambdas
+```js
+function addValues(obj) => return obj.x + obj.y
+
+function makeObject()
+{
+	o = {}
+	o.x = 10
+	o.y = 10
+	o.addValues = function() => return addValues(o)
+}
+
+o = makeObject()
+v1 = addValues(o) //Direct Use
+v2 = o.addValues() //Use Lambda
+
+```
+

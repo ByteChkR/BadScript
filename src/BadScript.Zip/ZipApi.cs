@@ -12,7 +12,7 @@ namespace BadScript.Zip
 
         public static void AddApi()
         {
-            ABSTable t = new BSTable();
+            BSTable t = new BSTable();
 
             t.InsertElement(
                 new BSObject( "createFromDirectory" ),
@@ -32,6 +32,7 @@ namespace BadScript.Zip
                 )
             );
 
+            t.Lock();
             BSEngine.AddStatic( "zipfile", t );
         }
 

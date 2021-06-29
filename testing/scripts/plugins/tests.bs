@@ -1,6 +1,0 @@
-print("Running Tests:")
-
-loadFile("./plugins/tests/precedence_tests.bs")
-loadFile("./plugins/tests/for_tests.bs")
-loadFile("./plugins/tests/null_tests.bs")
-loadFile("./plugins/tests/flag_tests.bs")

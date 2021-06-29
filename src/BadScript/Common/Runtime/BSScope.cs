@@ -43,7 +43,7 @@ namespace BadScript.Common.Runtime
             }
             else
             {
-                m_Instance.GlobalTable.InsertElement( new BSObject( name ), o );
+                m_Instance.InsertElement( new BSObject( name ), o );
             }
         }
 
@@ -61,7 +61,7 @@ namespace BadScript.Common.Runtime
         {
             return m_Instance == null
                 ? m_Parent.HasGlobal( name )
-                : m_Instance.GlobalTable.HasElement( new BSObject( name ) );
+                : m_Instance.HasElement( new BSObject( name ) );
         }
 
         public bool HasLocal( string name )
@@ -70,28 +70,28 @@ namespace BadScript.Common.Runtime
                    m_Parent != null && m_Parent.HasLocal( name );
         }
 
-        public ABSObject ResolveName( string name )
+        public ABSObject ResolveName(string name)
         {
-            ABSObject i = new BSObject( name );
+            ABSObject i = new BSObject(name);
 
-            if ( m_LocalVars.HasElement( i ) )
+            if (m_LocalVars.HasElement(i))
             {
-                return m_LocalVars.GetElement( i );
+                return m_LocalVars.GetElement(i);
             }
 
-            if ( m_Parent != null && ( m_Parent.HasLocal( name ) || m_Parent.HasGlobal( name ) ) )
+            if (m_Parent != null && (m_Parent.HasLocal(name) || m_Parent.HasGlobal(name)))
             {
-                return m_Parent.ResolveName( name );
+                return m_Parent.ResolveName(name);
             }
 
-            if ( m_Instance != null && m_Instance.GlobalTable.HasElement( i ) )
+            if (m_Instance != null && m_Instance.HasElement(i))
             {
-                return m_Instance.GlobalTable.GetElement( i );
+                return m_Instance.GetElement(i);
             }
 
-            return new BSTableReference( m_LocalVars, i );
+            return new BSTableReference(m_LocalVars, i, false);
         }
-
+        
         public void SetFlag( BSScopeFlags flag, ABSObject val = null )
         {
             if ( val != null )

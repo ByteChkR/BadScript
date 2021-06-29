@@ -181,6 +181,7 @@ namespace BadScript
                 ),
                 new BSAssignmentOperator(),
                 new BSMemberAccessOperator(),
+                new BSNullCheckedMemberAccessOperator()
             };
 
         private static readonly List < BSOperator > s_PrefixOperators =

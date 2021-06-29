@@ -13,29 +13,67 @@ namespace BadScript
 
     public class BSEngineInstance
     {
-        public readonly ABSTable GlobalTable;
+        private readonly ABSTable m_StaticData;
+        private readonly ABSTable m_GlobalTable;
 
         #region Public
 
-        public BSEngineInstance( Dictionary < string, ABSObject > startObjects )
+        public BSEngineInstance( Dictionary < string, ABSObject > startObjects, Dictionary <string, ABSObject> gTable = null)
         {
-            Dictionary < ABSObject, ABSObject > globalTable =
+            Dictionary < ABSObject, ABSObject > staticData =
                 new Dictionary < ABSObject, ABSObject >();
 
             foreach ( KeyValuePair < string, ABSObject > buildScriptEngineRuntimeObject in startObjects )
             {
-                globalTable[new BSObject( buildScriptEngineRuntimeObject.Key )] =
+                staticData[new BSObject( buildScriptEngineRuntimeObject.Key )] =
                     buildScriptEngineRuntimeObject.Value;
             }
 
-            GlobalTable = new BSTable( globalTable );
+           BSTable sd = new BSTable( staticData );
 
-            GlobalTable.InsertElement( new BSObject( "__G" ), GlobalTable );
+           sd.InsertElement( new BSObject( "__G" ), sd);
 
-            GlobalTable.InsertElement(
+           sd.InsertElement(
                 new BSObject( "loadString" ),
-                new BSFunction( "function loadString(str)", LoadStringApi, 1 )
+                new BSFunction( "function loadString(str)", LoadStringApi, 1, int.MaxValue )
             );
+
+           sd.Lock();
+            m_StaticData = sd;
+
+            if ( gTable == null )
+            {
+                m_GlobalTable = new BSTable();
+            }
+            else
+            {
+                Dictionary<ABSObject, ABSObject> globalTable =
+                    new Dictionary<ABSObject, ABSObject>();
+                foreach (KeyValuePair<string, ABSObject> buildScriptEngineRuntimeObject in gTable)
+                {
+                    globalTable[new BSObject(buildScriptEngineRuntimeObject.Key)] =
+                        buildScriptEngineRuntimeObject.Value;
+                }
+
+                m_GlobalTable = new BSTable( globalTable );
+            }
+        }
+
+        internal bool HasElement(ABSObject name)
+        {
+            return m_GlobalTable.HasElement(name) || m_StaticData.HasElement(name);
+        }
+
+        internal void InsertElement( ABSObject k, ABSObject v ) => m_GlobalTable.InsertElement( k, v );
+
+        internal ABSObject GetElement(ABSObject name)
+        {
+            if (m_GlobalTable.HasElement(name))
+                return m_GlobalTable.GetElement(name);
+            if (m_StaticData.HasElement(name))
+                return m_StaticData.GetElement(name);
+
+            throw new BSRuntimeException( $"Can not Resolve name: '{name.SafeToString()}'" );
         }
 
         public ABSObject LoadFile( string file, string[] args = null )

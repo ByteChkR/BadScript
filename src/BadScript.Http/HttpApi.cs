@@ -32,6 +32,8 @@ namespace BadScript.Http
                 new BSFunction( "function downloadString(url)", DownloadString, 1 )
             );
 
+            t.Lock();
+
             BSEngine.AddStatic( "http", t );
         }
 

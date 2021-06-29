@@ -18,6 +18,8 @@ namespace BadScript.Process
                 new BSFunction( "function start(file, args)", StartProcess, 2 )
             );
 
+            proc.Lock();
+
             BSEngine.AddStatic(
                 "process",
                 proc
