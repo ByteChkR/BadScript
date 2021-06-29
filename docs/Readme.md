@@ -194,7 +194,7 @@ foreach <value> in <collection>
 #### Example
 `foreach` loop on an array
 ```js
-A = [] //Create new Table
+A = [] //Create new Array
 A[0] = "Value1"
 A[1] = "Value2"
 foreach v in A
