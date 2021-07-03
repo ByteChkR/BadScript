@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
 
 namespace BadScript
 {
@@ -18,13 +21,36 @@ namespace BadScript
             GetInstance().AddStaticData( k, o );
         }
 
-        public static BSEngineInstance CreateEngineInstance()
+        private static void LoadDirectory(  BSEngineInstance instance, string dir )
         {
-            return new BSEngineInstance(
-                new Dictionary < string, ABSObject >(
-                    GetInstance().m_StaticData
-                )
+            foreach ( string file in Directory.GetFiles(dir, "*.bs", SearchOption.TopDirectoryOnly) )
+            {
+                Console.WriteLine( "Loading File: " + file );
+                instance.LoadFile( file, new string[0] );
+            }
+        }
+
+        public static BSEngineInstance CreateEngineInstance(params string[] includeDirs)
+        {
+            Dictionary < string, ABSObject > data = new Dictionary < string, ABSObject >(
+                GetInstance().m_StaticData
             );
+
+            Dictionary < ABSObject, ABSObject > sData = new Dictionary < ABSObject, ABSObject >();
+
+            foreach ( KeyValuePair < string, ABSObject > keyValuePair in data )
+            {
+                sData[new BSObject(keyValuePair.Key)] = keyValuePair.Value;
+            }
+            BSEngineInstance instance = new BSEngineInstance(data);
+            
+
+            foreach (string includeDir in includeDirs)
+            {
+                LoadDirectory(instance, includeDir);
+            }
+
+            return instance;
         }
 
         public void AddStaticData( string k, ABSObject o )

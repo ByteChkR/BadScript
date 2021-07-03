@@ -1,0 +1,24 @@
+loader = {}
+
+loader.getLocalDir = function(!repoDir, !name) => return path.combine(repoDir, name, name + ".bs") 
+
+loader.has = function(!repoDir, !name)
+{
+	p = loader.getLocalDir(repoDir, name)
+	if(fs.exists(p))
+	{
+		return fs.isFile(p)
+	}
+	return 0
+}
+
+loader.get = function(!repoDir, !name)
+{
+	localPath = loader.getLocalDir(repoDir, name)
+	f = fs.open(localPath)
+	src = f.readAll()
+	f.close()
+	return src
+}
+
+return loader

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
@@ -15,6 +16,14 @@ namespace BadScript.Console
 
     internal class Program
     {
+        private static string GetConsoleIncludeDir()
+        {
+            string p = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "include" );
+            Directory.CreateDirectory( p );
+
+            return p;
+        }
+
         #region Private
 
         private static string LoadConfig(BSEngineInstance i, string src)
@@ -33,7 +42,7 @@ namespace BadScript.Console
             ProcessApi.AddApi();
             HttpApi.AddApi();
             StringUtilsApi.AddApi();
-            BSEngineInstance engine = BSEngine.CreateEngineInstance();
+            BSEngineInstance engine = BSEngine.CreateEngineInstance(GetConsoleIncludeDir());
 
             string a = "";
 

@@ -328,13 +328,14 @@ namespace BadScript
 
                 if ( !Is( ')' ) )
                 {
+                    ReadWhitespace();
                     exprs.Add( ParseExpression( int.MaxValue ) );
                     ReadWhitespace();
 
                     while ( Is( ',' ) )
                     {
                         m_CurrentPosition++;
-                        exprs.Add( ParseExpression( int.MaxValue ) );
+                        exprs.Add(ParseExpression( int.MaxValue ) );
                         ReadWhitespace();
                     }
 
@@ -384,7 +385,8 @@ namespace BadScript
             while ( m_OriginalSource.Length > m_CurrentPosition &&
                     !char.IsWhiteSpace( m_OriginalSource, m_CurrentPosition ) &&
                     !char.IsLetterOrDigit( m_OriginalSource, m_CurrentPosition ) &&
-                    m_OriginalSource[m_CurrentPosition] != '_' )
+                    m_OriginalSource[m_CurrentPosition] != '_' &&
+                    m_OriginalSource[m_CurrentPosition] != '\"')
             {
                 sb.Append( m_OriginalSource[m_CurrentPosition] );
                 m_CurrentPosition++;

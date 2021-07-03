@@ -18,30 +18,29 @@ namespace BadScript
 
         #region Public
 
-        public BSEngineInstance( Dictionary < string, ABSObject > startObjects, Dictionary <string, ABSObject> gTable = null)
+        public BSEngineInstance(Dictionary<string, ABSObject> startObjects, Dictionary<string, ABSObject> gTable = null)
         {
-            Dictionary < ABSObject, ABSObject > staticData =
-                new Dictionary < ABSObject, ABSObject >();
+            Dictionary<ABSObject, ABSObject> staticData =
+                new Dictionary<ABSObject, ABSObject>();
 
-            foreach ( KeyValuePair < string, ABSObject > buildScriptEngineRuntimeObject in startObjects )
+            foreach (KeyValuePair<string, ABSObject> buildScriptEngineRuntimeObject in startObjects)
             {
-                staticData[new BSObject( buildScriptEngineRuntimeObject.Key )] =
+                staticData[new BSObject(buildScriptEngineRuntimeObject.Key)] =
                     buildScriptEngineRuntimeObject.Value;
             }
 
-           BSTable sd = new BSTable( staticData );
+            BSTable sd = new BSTable(staticData);
 
-           sd.InsertElement( new BSObject( "__G" ), sd);
 
-           sd.InsertElement(
-                new BSObject( "loadString" ),
-                new BSFunction( "function loadString(str)", LoadStringApi, 1, int.MaxValue )
+            sd.InsertElement(
+                new BSObject("loadString"),
+                new BSFunction("function loadString(str)", LoadStringApi, 1, int.MaxValue)
             );
 
-           sd.Lock();
+            sd.Lock();
             m_StaticData = sd;
 
-            if ( gTable == null )
+            if (gTable == null)
             {
                 m_GlobalTable = new BSTable();
             }
@@ -55,7 +54,34 @@ namespace BadScript
                         buildScriptEngineRuntimeObject.Value;
                 }
 
-                m_GlobalTable = new BSTable( globalTable );
+                m_GlobalTable = new BSTable(globalTable);
+            }
+            m_GlobalTable.InsertElement(new BSObject("__G"), m_GlobalTable);
+        }
+
+        public BSEngineInstance(Dictionary<ABSObject, ABSObject> startObjects, Dictionary<ABSObject, ABSObject> gTable = null)
+        {
+            
+
+            BSTable sd = new BSTable(startObjects);
+
+            sd.InsertElement(new BSObject("__G"), sd);
+
+            sd.InsertElement(
+                new BSObject("loadString"),
+                new BSFunction("function loadString(str)", LoadStringApi, 1, int.MaxValue)
+            );
+
+            sd.Lock();
+            m_StaticData = sd;
+
+            if (gTable == null)
+            {
+                m_GlobalTable = new BSTable();
+            }
+            else
+            {
+                m_GlobalTable = new BSTable(gTable);
             }
         }
 

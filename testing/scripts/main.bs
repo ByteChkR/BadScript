@@ -1,0 +1,12 @@
+function f(x, y)
+{
+	print(x)
+	print(y)
+}
+
+function p(!repoDir, !name) => return path.combine(repoDir, name, name + ".bs") 
+
+
+wo = "Wo"
+f("Hello", wo+"rld" )
+print(p("TestDir", "TestName"))

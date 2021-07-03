@@ -1,0 +1,57 @@
+__G.modules = {}
+
+__G.modules.logger = log.create("Modules")
+
+__G.modules.getDataPath = function()
+{
+	p = path.combine(path.getAppPath(), "data", "modules")
+	fs.createDir(p)
+	return p
+}
+
+function loadFile(!path)
+{
+	f = fs.open(path)
+	src = f.readAll()
+	f.close()
+	return loadString(src)
+}
+
+
+function loadModuleLoaders()
+{
+	__G.modules.loaders = {}
+	loaderPath = path.combine(include.getDir(), "modules", "module_loader")
+	fs.createDir(loaderPath)
+	files = fs.getFiles(loaderPath, "*.bs")
+	foreach	file in files
+	{
+		key = path.getFileNameWithoutExtension(file)
+		modules.logger.print("Adding Module Loader: " + key)
+		__G.modules.loaders[key] = loadFile(file)
+	}
+}
+
+loadFile(path.combine(include.getDir(), "modules", "module_settings.bs"))
+loadModuleLoaders()
+
+function findModule(!name)
+{
+	foreach repo in modules.settings.ModuleRepos
+	{
+		loader = modules.loaders[repo.loader]
+		if(loader.has(repo.url, name))
+		{
+			return loader.get(repo.url, name)
+		}
+	}
+
+	modules.logger.error("Can not find module: " + name)
+}
+
+modules.require = function(!name)
+{
+	moduleSource = findModule(name)
+	module = loadString(moduleSource)
+	return module
+}

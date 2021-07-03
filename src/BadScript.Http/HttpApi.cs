@@ -60,10 +60,9 @@ namespace BadScript.Http
 
             using ( WebClient wc = new WebClient() )
             {
-                wc.DownloadString( url );
+                return new BSObject(wc.DownloadString(url));
             }
-
-            return new BSObject( null );
+            
         }
 
         private static ABSObject Get( ABSObject[] args )

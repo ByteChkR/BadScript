@@ -1,0 +1,26 @@
+
+__G.log = {}
+
+__G.log.createSub = function(!parentLogger, !projName)
+{
+	logger = {}
+	logger.projectTag = projName
+	logger.parent = parentLogger
+
+	logger.print = function(obj) => logger.parent.print(string.format("[{0}]" + obj, logger.projectTag))
+	logger.error = function(obj) => logger.parent.error(string.format("[{0}]" + obj, logger.projectTag))
+	logger.makeSub = function(!pName) => return __G.log.createSub(logger, pName)
+
+	return logger
+}
+
+__G.log.create = function(!projName)
+{
+	logger = {}
+	logger.projectTag = projName
+	logger.print = function(obj) => print(string.format("[{0}]" + obj, logger.projectTag))
+	logger.error = function(obj) => error(string.format("[{0}]" + obj, logger.projectTag))
+	logger.makeSub = function(!pName) => return __G.log.createSub(logger, pName)
+
+	return logger
+}

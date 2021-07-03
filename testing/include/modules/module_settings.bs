@@ -1,0 +1,51 @@
+
+function getModulesSettingsPath() => return path.combine(modules.getDataPath(), "settings.json")
+
+function createDefaultSettings()
+{
+	settings = {}
+	settings.ModuleRepos = []
+	localPath = path.combine(modules.getDataPath(), "repos", "local")
+	fs.createDir(localPath)
+	settings.ModuleRepos[0] = {}
+	settings.ModuleRepos[0].url = localPath
+	settings.ModuleRepos[0].loader = "local"
+
+	return settings
+}
+
+function saveSettings(!path, !settings)
+{
+	if(fs.exists(path))
+	{
+		fs.delete(path)
+	}
+	f = fs.open(path)
+	f.write(bs2json(settings))
+	f.close()
+}
+
+function loadSettings(!path)
+{
+	f = fs.open(path)
+	settings = json2bs(f.readAll())
+	f.close()
+	return settings
+}
+
+function loadModuleSettings()
+{
+	settingsPath = getModulesSettingsPath()
+	if(fs.exists(settingsPath))
+	{
+		__G.modules.settings = loadSettings(settingsPath)
+	}
+	else
+	{
+		modules.logger.print("Could not find Settings. Creating Default..")
+		__G.modules.settings = createDefaultSettings()
+		saveSettings(settingsPath, __G.modules.settings)
+	}
+}
+
+loadModuleSettings()

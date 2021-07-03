@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -352,14 +353,28 @@ namespace BadScript.IO
             BSTable ret = new BSTable();
 
             ret.InsertElement(
-                new BSObject( "getFullPath" ),
+                new BSObject("getAppPath"),
+                new BSFunction(
+                    "function getAppPath()",
+                    args =>
+                    {
+                        return new BSObject( Path.GetFullPath( AppDomain.CurrentDomain.BaseDirectory ) );
+
+                    },
+                    0
+                )
+            );
+
+
+            ret.InsertElement(
+                new BSObject("getFullPath"),
                 new BSFunction(
                     "function getFullPath(path)",
                     args =>
                     {
                         ABSObject o = args[0].ResolveReference();
 
-                        return new BSObject( Path.GetFullPath( o.ConvertString() ) );
+                        return new BSObject(Path.GetFullPath(o.ConvertString()));
 
                     },
                     1
