@@ -118,24 +118,24 @@ namespace BadScript.StringUtils
                 MakeFunction(
                     "function trim(str)/",
                     x => new BSObject(x[0].ConvertString().Trim()),
-                    0,
-                    0));
+                    1,
+                    1));
 
             apiRoot.InsertElement(
                 "trimEnd",
                 MakeFunction(
                     "function trimEnd(str)/",
                     x => new BSObject(x[0].ConvertString().TrimEnd()),
-                    0,
-                    0));
+                    1,
+                    1));
 
             apiRoot.InsertElement(
                 "trimStart",
                 MakeFunction(
                     "function trimStart(str)/",
                     x => new BSObject(x[0].ConvertString().TrimEnd()),
-                    0,
-                    0));
+                    1,
+                    1));
 
             apiRoot.InsertElement(
                 "split",

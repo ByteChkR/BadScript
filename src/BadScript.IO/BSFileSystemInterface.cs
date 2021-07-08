@@ -313,7 +313,7 @@ namespace BadScript.IO
 
                         return new BSObject(null);
                     },
-                    1
+                    1,2
                 )
             );
 

@@ -1,18 +1,28 @@
 //Load Interface for IO
 fs = environment.loadInterface("fs", {})
 
-//Install Module System
-moduleInstallerSource = fs.readAll("modules_install.bs")
-moduleInstaller = environment.loadString(moduleInstallerSource)
-moduleInstaller.load()
+function loadProgram()
+{
+	//Install Module System
+	moduleInstallerSource = fs.readAll("modules_install.bs")
+	moduleInstaller = environment.loadString(moduleInstallerSource)
+	moduleInstaller.load()
 
-//Load Modules System
-modulesSource = fs.readAll("modules.bs")
-__G.modules = environment.loadString(modulesSource)
+	//Load Modules System
+	modulesSource = fs.readAll("modules.bs")
+	__G.modules = environment.loadString(modulesSource)
+}
 
-//Require the interactive shell module
-shell = modules.require("interactive-shell")
+function runProgram()
+{
+	//Require the interactive shell module
+	shell = modules.require("interactive-shell")
+	test = modules.require("test")
 
 
-//Use Interactive Shell Module
-shell.runShell()
+	//Use Interactive Shell Module
+	shell.runShell()
+}
+
+loadProgram()
+runProgram()
