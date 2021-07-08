@@ -1,17 +1,24 @@
 //Load Interface for IO
 environment.loadInterface("fs")
 
-//Small helper Function
-function loadFile(!path)
-{
-	return environment.loadString(fs.readAll(path))
-}
-
 //Load Modules System
-modules = loadFile("modules.bs")
+moduleSource = fs.readAll("modules.bs")
+modules = environment.loadString(moduleSource)
 
-//Require a specific Module
+//Test Module Loader
+//	Loads Module "myApp" that is stored in the "Local Repository"
+//	Default Order (Descending Order):
+//		Local Repository
+//			Overwrite Modules that are currently developed on
+//		Development Repository
+//			Overwrite Modules that have working experimental versions
+//		Release Repository
+//			Provides Base Modules
+
+app = modules.require("myApp")
+
+//Require the interactive shell module
 shell = modules.require("interactive-shell")
 
-//Use Required Module
+//Use Interactive Shell Module
 shell.runShell()

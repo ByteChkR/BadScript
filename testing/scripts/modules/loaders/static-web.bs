@@ -42,11 +42,8 @@ loader.has = function(!repoDir, !name)
 //Returns the source of the specified module
 loader.get = function(!repoDir, !name)
 {
-	repoUri = http.createUri(repoDir)
-	remotePath = path.combine(repoDir, name, name + ".bs")
-	write(string.format("Downloading Module '{0}' from '{1}'... ", name, repoUri.getHost()))
+	remotePath = path.combine(repoDir, name, name + ".bs")	
 	src = http.downloadString(remotePath)
-	print("DONE")
 	return src
 }
 

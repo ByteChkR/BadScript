@@ -37,12 +37,25 @@ function createDefaultSettings()
 {
 	localPath = path.combine(modulesApi.repositoryPath, "local")
 	fs.createDir(localPath)
+
+	//Local Repository
 	modulesApi.repositories[0] = {}
-	modulesApi.repositories[0].url = "https://bytechkr.github.io/BadScript/repo"
-	modulesApi.repositories[0].loader = "static-web"
+	modulesApi.repositories[0].name = "Local Repository"
+	modulesApi.repositories[0].url = localPath
+	modulesApi.repositories[0].loader = "local"
+
+	//Official Github Development Module Repository
 	modulesApi.repositories[1] = {}
-	modulesApi.repositories[1].url = localPath
-	modulesApi.repositories[1].loader = "local"
+	modulesApi.repositories[1].name = "BadScript Development Repository"
+	modulesApi.repositories[1].url = "https://bytechkr.github.io/BadScript/repo"
+	modulesApi.repositories[1].loader = "static-web"
+
+	//Official Release Module Repository
+	modulesApi.repositories[2] = {}
+	modulesApi.repositories[2].name = "BadScript Release Repository"
+	modulesApi.repositories[2].url = "http://static.byt3.dev/apps/BadScript/modules/"
+	modulesApi.repositories[2].loader = "static-web"
+
 }
 
 
@@ -103,6 +116,7 @@ function findModule(!name)
 		loader = modulesApi.loaders[repo.loader]
 		if(loader.has(repo.url, name))
 		{
+			print(string.format("Loading Module '{0}' from '{1}'... ", name, repo.name))
 			return loader.get(repo.url, name)
 		}
 	}
