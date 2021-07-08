@@ -50,7 +50,7 @@ function readExpression()
 		{
 			return 1
 		}
-		else if(string.startsWith(line) == "\\LOAD")
+		else if(string.startsWith(string.toUpper(line), "\\LOAD"))
 		{
 			src = fs.readAll(string.trim(string.remove(line, 0, 5)))
 			runScript(src)
@@ -73,6 +73,7 @@ function loadInteractiveSession()
 	log("\tExecute Script with \\EXEC or \\RUN")
 	log("\tDelete Written Script with \\RESET or \\CLEAR")
 	log("\tReload Shell Session with \\RELOAD or \\RESTART")
+	log("\tLoad External File with \LOAD <path-to-file>")
 	return readExpression()
 }
 
