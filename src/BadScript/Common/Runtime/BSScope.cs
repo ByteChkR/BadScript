@@ -1,4 +1,5 @@
-﻿using BadScript.Common.Exceptions;
+﻿using System.Collections.Generic;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References.Implementations;
@@ -123,7 +124,9 @@ namespace BadScript.Common.Runtime
 
         private BSScope()
         {
-            m_LocalVars.InsertElement( new BSObject( "__L" ), m_LocalVars );
+
+            m_LocalVars.InsertElement(new BSObject("__SELF"), new BSObject(this));
+            m_LocalVars.InsertElement(new BSObject("__L"), m_LocalVars);
         }
 
         #endregion

@@ -5,4 +5,6 @@ loggingApi.create = function(tag)
 	return function(obj) => print(string.format("[{0}] {1}", tag, obj))
 }
 
+print("[LOGGING] Initialized")
+
 return loggingApi

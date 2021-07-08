@@ -8,11 +8,11 @@ moduleInstaller.load()
 
 //Load Modules System
 modulesSource = fs.readAll("modules.bs")
-modules = environment.loadString(modulesSource)
-
+__G.modules = environment.loadString(modulesSource)
 
 //Require the interactive shell module
 shell = modules.require("interactive-shell")
+
 
 //Use Interactive Shell Module
 shell.runShell()

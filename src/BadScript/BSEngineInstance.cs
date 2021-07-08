@@ -58,11 +58,11 @@ namespace BadScript
 
             env.InsertElement(
                 new BSObject( "createScope" ),
-                new BSFunction( "function createScope()", objects => CreateScope(), 0, 0 ) );
+                new BSFunction("function createScope()/createScope(parentScope)", CreateScope, 0, 1 ) );
             env.InsertElement(
                 new BSObject( "loadScopedString" ),
                 new BSFunction(
-                    "function loadScopedString(scope, str, args..)",
+                    "function loadScopedString(scope, str, args..)/loadScopedString(rootTable, str, args..)",
                     LoadStringScopedApi,
                     2,
                     int.MaxValue ) );
@@ -160,7 +160,6 @@ namespace BadScript
             BSParser parser = new BSParser(script);
             BSExpression[] exprs = parser.ParseToEnd();
 
-
             scope.AddLocalVar(
                 "args",
                 args == null
@@ -192,12 +191,20 @@ namespace BadScript
 
         #region Private
 
-        private ABSObject CreateScope()
+        private ABSObject CreateScope(ABSObject[] args)
         {
-            return new BSObject( new BSScope( this ) );
+            BSScope scope;
+            if ( args.Length == 1 )
+            {
+                scope = new BSScope(BSScopeFlags.None, (BSScope)( args[0] as BSObject ).GetInternalObject() );
+            }
+            else
+            {
+                scope = new BSScope(this);
+            }
+            return new BSObject( scope );
         }
         
-
 
         private ABSObject LoadStringScopedApi(ABSObject[] arg)
         {
@@ -214,7 +221,7 @@ namespace BadScript
 
                     return ret;
                 }
-
+                
                 throw new BSRuntimeException( "'function loadScopedString(scope, script, args..)' requires a valid scope to be passed as first argument" );
 
             }
