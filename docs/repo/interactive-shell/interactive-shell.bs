@@ -73,7 +73,7 @@ function loadInteractiveSession()
 	log("\tExecute Script with \\EXEC or \\RUN")
 	log("\tDelete Written Script with \\RESET or \\CLEAR")
 	log("\tReload Shell Session with \\RELOAD or \\RESTART")
-	log("\tLoad External File with \LOAD <path-to-file>")
+	log("\tLoad External File with \\LOAD <path-to-file>")
 	return readExpression()
 }
 
