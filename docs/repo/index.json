@@ -1,3 +1,4 @@
 [
-	"interactive-shell"
+	"interactive-shell",
+	"logging"
 ]

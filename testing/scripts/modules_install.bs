@@ -1,0 +1,30 @@
+environment.loadInterface("fs")
+moduleCoreRootUrl = "http://static.byt3.dev/apps/BadScript/modules-core/"
+moduleCoreInstallUrl = moduleCoreRootUrl + "install.bs"
+
+
+function install()
+{
+	http = environment.loadInterface("http")
+
+	response = http.get(moduleCoreInstallUrl)
+	if(response.status != 200)
+	{
+		error("Module Core Installer was not found. Status: " + response.status)
+	}
+	else
+	{
+		installSource = response.body
+		installer = environment.loadString(installSource)
+		installer.run()
+	}
+}
+
+
+function load()
+{
+	if(fs.exists("./modules.bs") == 0)
+	{
+		install()
+	}
+}

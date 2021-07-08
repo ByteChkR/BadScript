@@ -1,3 +1,6 @@
+log = modules.require("logging").create("INTERACTIVE")
+
+
 interactiveScope = null
 interactiveScript = null
 function readExpression()
@@ -15,20 +18,20 @@ function readExpression()
 			}
 			catch (e)
 			{
-				print(string.format("ERROR: '{0}' with message: '{1}'", e.type, e.message))
+				log(string.format("ERROR: '{0}' with message: '{1}'", e.type, e.message))
 			}
 			interactiveScript = ""
 		}
 		else if(string.toUpper(line) == "\\QUIT" ||
 				string.toUpper(line) == "\\EXIT")
 		{
-			print("Exit..")
+			log("Exit..")
 			break
 		}
 		else if(string.toUpper(line) == "\\RESET" ||
 				string.toUpper(line) == "\\CLEAR")
 		{
-			print("Clearing Script Content..")
+			log("Clearing Script Content..")
 			interactiveScript = ""
 		}
 		else if(string.toUpper(line) == "\\RESTART" ||
@@ -45,29 +48,27 @@ function readExpression()
 
 function loadInteractiveSession()
 {
-	write("Loading Interfaces.. ")
+	log("Loading Interfaces.. ")
 	environment.loadInterface("string")
-	print("DONE")
 
-	write("Creating Sandbox Scope.. ")
+	log("Creating Sandbox Scope.. ")
 	interactiveScope = environment.createScope()
 	interactiveScript = ""
-	print("DONE")
 	
-	print("Starting Session..")
-	print("\tQuit with \\QUIT or \\EXIT")
-	print("\tExecute Script with \\EXEC or \\RUN")
-	print("\tDelete Written Script with \\RESET or \\CLEAR")
-	print("\tReload Shell Session with \\RELOAD or \\RESTART")
+	log("Starting Session..")
+	log("\tQuit with \\QUIT or \\EXIT")
+	log("\tExecute Script with \\EXEC or \\RUN")
+	log("\tDelete Written Script with \\RESET or \\CLEAR")
+	log("\tReload Shell Session with \\RELOAD or \\RESTART")
 	return readExpression()
 }
 
 function runShell()
 {
-	print("Initializing BS Interactive Shell..")
+	log("Initializing BS Interactive Shell..")
 
 	while(loadInteractiveSession())
 	{
-		print("Restarting Session..")
+		log("Restarting Session..")
 	}
 }

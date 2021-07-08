@@ -1,21 +1,15 @@
 //Load Interface for IO
 environment.loadInterface("fs")
 
+//Install Module System
+moduleInstallerSource = fs.readAll("modules_install.bs")
+moduleInstaller = environment.loadString(moduleInstallerSource)
+moduleInstaller.load()
+
 //Load Modules System
-moduleSource = fs.readAll("modules.bs")
-modules = environment.loadString(moduleSource)
+modulesSource = fs.readAll("modules.bs")
+modules = environment.loadString(modulesSource)
 
-//Test Module Loader
-//	Loads Module "myApp" that is stored in the "Local Repository"
-//	Default Order (Descending Order):
-//		Local Repository
-//			Overwrite Modules that are currently developed on
-//		Development Repository
-//			Overwrite Modules that have working experimental versions
-//		Release Repository
-//			Provides Base Modules
-
-app = modules.require("myApp")
 
 //Require the interactive shell module
 shell = modules.require("interactive-shell")
