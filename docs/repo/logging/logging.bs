@@ -1,5 +1,5 @@
 loggingApi = {}
-string = environment.loadInterface("string")
+string = environment.loadInterface("string", {})
 loggingApi.create = function(tag)
 {
 	return function(obj) => print(string.format("[{0}] {1}", tag, obj))

@@ -1,12 +1,10 @@
-environment.loadInterface("fs")
-moduleCoreRootUrl = "http://static.byt3.dev/apps/BadScript/modules-core/"
-moduleCoreInstallUrl = moduleCoreRootUrl + "install.bs"
+fs = environment.loadInterface("fs", {})
+http = environment.loadInterface("http", {})
+moduleCoreInstallUrl = "http://static.byt3.dev/apps/BadScript/modules-core/install.bs"
 
 
 function install()
 {
-	http = environment.loadInterface("http")
-
 	response = http.get(moduleCoreInstallUrl)
 	if(response.status != 200)
 	{

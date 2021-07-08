@@ -1,5 +1,5 @@
 //Load Interface for IO
-environment.loadInterface("fs")
+fs = environment.loadInterface("fs", {})
 
 //Install Module System
 moduleInstallerSource = fs.readAll("modules_install.bs")
