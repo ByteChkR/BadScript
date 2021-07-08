@@ -1,0 +1,124 @@
+//Load Required Interfaces
+environment.loadInterface("fs")
+environment.loadInterface("path")
+environment.loadInterface("json")
+
+//Start Settings(can be changed by supplying a settings object in the start arguments)
+startsettings = {}
+startsettings.loaderPath = "./modules/loaders"
+startsettings.repositoryPath = "./modules/repos"
+startsettings.settingsPath = "./modules/module-settings.json"
+
+if(args != null)
+{
+	if(args.size() == 1)
+	{
+		s = args[0]
+		if(isTable(s))
+		{
+			startsettings = s
+		}
+	}
+}
+
+//Create Module Root Table
+modulesApi = {}
+//Create Loader Table and Repository List
+modulesApi.loaders = {}
+modulesApi.repositories = []
+//Copy Full Paths of the supplied settings
+modulesApi.loaderPath = path.getFullPath(startsettings.loaderPath)
+modulesApi.settingsPath = path.getFullPath(startsettings.settingsPath)
+modulesApi.repositoryPath = path.getFullPath(startsettings.repositoryPath)
+modulesApi.tempPath = path.combine(modulesApi.repositoryPath, "temp")
+
+//Creates the Default settings for a local repository
+function createDefaultSettings()
+{
+	localPath = path.combine(modulesApi.repositoryPath, "local")
+	fs.createDir(localPath)
+	modulesApi.repositories[0] = {}
+	modulesApi.repositories[0].url = "https://bytechkr.github.io/BadScript/repo"
+	modulesApi.repositories[0].loader = "static-web"
+	modulesApi.repositories[1] = {}
+	modulesApi.repositories[1].url = localPath
+	modulesApi.repositories[1].loader = "local"
+}
+
+
+//Loads the text of a file
+function loadSettings(!path)
+{
+	return fs.readAll(path)
+}
+
+//Loads the BS Object parsed from the source
+function loadFile(!path)
+{
+	return environment.loadString(loadSettings(path))
+}
+
+//Load all module loaders and add them to the loader database
+function loadModuleLoaders()
+{
+	print("Loading Module Loaders... ")
+	fs.createDir(modulesApi.loaderPath)
+	files = fs.getFiles(modulesApi.loaderPath, "*.bs")
+	foreach	file in files
+	{
+		key = path.getFileNameWithoutExtension(file)
+		print("\tAdding Module Loader: " + key)
+		modulesApi.loaders[key] = loadFile(file)
+	}
+}
+
+function loadRepositoryList()
+{
+	//Load repository list if it exists
+	if(fs.exists(modulesApi.settingsPath))
+	{
+		modulesApi.repositories = json.fromJson(loadSettings(modulesApi.settingsPath))
+	}
+	else //Create the file and write default data
+	{
+		fs.createDir(path.getDirectoryName(modulesApi.settingsPath))
+		createDefaultSettings()
+		fs.writeAll(modulesApi.settingsPath, json.toJson(modulesApi.repositories))
+	}	
+}
+
+function initializeModuleSystem()
+{
+	write("Initializing Module System... ")
+	loadRepositoryList()
+	print("DONE")
+	loadModuleLoaders()	
+}
+
+//Returns the Source of the Module with the specified name
+function findModule(!name)
+{
+	foreach repo in modulesApi.repositories
+	{
+		loader = modulesApi.loaders[repo.loader]
+		if(loader.has(repo.url, name))
+		{
+			return loader.get(repo.url, name)
+		}
+	}
+
+	error("Can not find module: " + name)
+}
+
+//Returns the BSObject that was parsed from the module source
+modulesApi.require = function(!name)
+{
+	moduleSource = findModule(name)
+	module = environment.loadString(moduleSource)
+	return module
+}
+
+initializeModuleSystem()
+
+//Return Module Root instead of __L or __G
+return modulesApi

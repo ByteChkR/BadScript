@@ -5,22 +5,17 @@ using BadScript.Common.Types.References;
 namespace BadScript.Math
 {
 
-    public class BSMathApi
+    public class BSMathApi : ABSScriptInterface
     {
         #region Public
-
-        public static void AddApi()
-        {
-            BSEngine.AddStatic( "math", GenerateMathApi() );
-        }
+        
 
         #endregion
 
         #region Private
 
-        private static ABSTable GenerateMathApi()
+        private static void GenerateMathApi(ABSTable ret)
         {
-            BSTable ret = new BSTable();
             ret.InsertElement( new BSObject( "PI" ), new BSObject( ( decimal ) System.Math.PI ) );
             ret.InsertElement( new BSObject( "E" ), new BSObject( ( decimal ) System.Math.E ) );
 
@@ -419,12 +414,18 @@ namespace BadScript.Math
                     1
                 )
             );
-
-            ret.Lock();
-            return ret;
         }
 
         #endregion
+
+        public BSMathApi(  ) : base( "math" )
+        {
+        }
+
+        public override void AddApi( ABSTable root )
+        {
+            GenerateMathApi( root );
+        }
     }
 
 }

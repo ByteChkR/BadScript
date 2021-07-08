@@ -3,8 +3,9 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <StartupObject>BadScript.Console.Program</StartupObject>
+    <StartupObject>BadScript.Console.BadScriptConsole</StartupObject>
     <AssemblyName>bs</AssemblyName>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +19,10 @@
     <ProjectReference Include="..\BadScript.StringUtils\BadScript.StringUtils.csproj" />
     <ProjectReference Include="..\BadScript.Zip\BadScript.Zip.csproj" />
     <ProjectReference Include="..\BadScript\BadScript.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
 </Project>

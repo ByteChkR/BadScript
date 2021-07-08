@@ -1,12 +1,17 @@
-function f(x, y)
+//Load Interface for IO
+environment.loadInterface("fs")
+
+//Small helper Function
+function loadFile(!path)
 {
-	print(x)
-	print(y)
+	return environment.loadString(fs.readAll(path))
 }
 
-function p(!repoDir, !name) => return path.combine(repoDir, name, name + ".bs") 
+//Load Modules System
+modules = loadFile("modules.bs")
 
+//Require a specific Module
+shell = modules.require("interactive-shell")
 
-wo = "Wo"
-f("Hello", wo+"rld" )
-print(p("TestDir", "TestName"))
+//Use Required Module
+shell.runShell()

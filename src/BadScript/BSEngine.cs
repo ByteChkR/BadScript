@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
+using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -11,15 +14,11 @@ namespace BadScript
     {
         private static BSEngine s_Instance;
 
-        private readonly Dictionary < string, ABSObject > m_StaticData =
-            new Dictionary < string, ABSObject >();
+        private readonly List < ABSScriptInterface > m_Interfaces=new List < ABSScriptInterface >();
 
         #region Public
 
-        public static void AddStatic( string k, ABSObject o )
-        {
-            GetInstance().AddStaticData( k, o );
-        }
+        public static void AddStatic( ABSScriptInterface i ) => GetInstance().AddStaticInterface( i );
 
         private static void LoadDirectory(  BSEngineInstance instance, string dir )
         {
@@ -30,20 +29,74 @@ namespace BadScript
             }
         }
 
-        public static BSEngineInstance CreateEngineInstance(params string[] includeDirs)
+        public List < ABSScriptInterface > GetInterfaceList() => new List < ABSScriptInterface >( m_Interfaces );
+        
+        private static List <ABSScriptInterface> FindInterfaces(bool global, List<ABSScriptInterface> interfaces, (bool useGlobal, string interfaceName) key) => interfaces.Where( x => x.Name==  key.interfaceName && global==key.useGlobal  ).ToList();
+        private static List<ABSScriptInterface> FindInterfaces(bool global, List <ABSScriptInterface> interfaces, (bool useGlobal, string interfaceName)[] keys) => interfaces.Where(x => keys.Any(y => y.interfaceName==x.Name && global == y.useGlobal)).ToList();
+
+        public static Dictionary < string, ABSTable > GetInterfaceData(List <ABSScriptInterface> interfaces)
         {
-            Dictionary < string, ABSObject > data = new Dictionary < string, ABSObject >(
-                GetInstance().m_StaticData
-            );
+            Dictionary < string, ABSTable> o = new Dictionary < string, ABSTable>();
 
-            Dictionary < ABSObject, ABSObject > sData = new Dictionary < ABSObject, ABSObject >();
-
-            foreach ( KeyValuePair < string, ABSObject > keyValuePair in data )
+            foreach ( ABSScriptInterface bsScriptInterface in interfaces)
             {
-                sData[new BSObject(keyValuePair.Key)] = keyValuePair.Value;
+
+                ABSTable t;
+
+                if ( !o.TryGetValue( bsScriptInterface.Name, out t ) )
+                {
+                    t = new BSTable();
+                    o[bsScriptInterface.Name] = t;
+                }
+                bsScriptInterface.AddApi(t);
             }
-            BSEngineInstance instance = new BSEngineInstance(data);
-            
+
+            return o;
+        }
+
+        public static string[] GetDefaultInterfaces()
+        {
+            return new[] { "#core" };
+        }
+
+        private static (bool useGlobalTable, string interfaceName)[] ParseInterfaceNames( string[] names )
+        {
+            List < (bool, string) > data = new List < (bool, string) >();
+
+            foreach ( string name in names )
+            {
+                (bool useGlobal, string intName) d = ( false, name );
+                if ( name.StartsWith( "#" ) )
+                {
+                    d.useGlobal = true;
+                    d.intName = name.Remove( 0, 1 );
+                }
+
+                data.Add( d );
+            }
+
+            return data.ToArray();
+        }
+
+        private static void AddGlobalInterfaces( BSEngineInstance instance, List < ABSScriptInterface > interfaces )
+        {
+            ABSTable root = instance.GetGlobalTable();
+
+            foreach ( ABSScriptInterface absScriptInterface in interfaces )
+            {
+                absScriptInterface.AddApi( root );
+            }
+        }
+
+        public static BSEngineInstance CreateEngineInstance(string[] staticInterfaces, params string[] includeDirs)
+        {
+            List <ABSScriptInterface> interfaces = GetInstance().GetInterfaceList();
+            (bool useGlobal, string interfaceName)[] data = ParseInterfaceNames( staticInterfaces );
+            Dictionary < string, ABSTable > interfaceData = GetInterfaceData( FindInterfaces(false, interfaces, data) );
+            Dictionary < string, ABSObject > interfaceObjects = interfaceData.ToDictionary( x => x.Key, x => ( ABSObject ) x.Value );
+            BSEngineInstance instance = new BSEngineInstance(interfaceObjects, interfaces);
+
+            AddGlobalInterfaces(instance, FindInterfaces(true, interfaces, data));
 
             foreach (string includeDir in includeDirs)
             {
@@ -53,15 +106,8 @@ namespace BadScript
             return instance;
         }
 
-        public void AddStaticData( string k, ABSObject o )
-        {
-            m_StaticData[k] = o;
-        }
-
-        public object GetPluginInstance()
-        {
-            return this;
-        }
+        public void AddStaticInterface( ABSScriptInterface i ) => m_Interfaces.Add( i );
+        
 
         #endregion
 

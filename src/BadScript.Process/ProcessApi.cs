@@ -5,26 +5,10 @@ using BadScript.Common.Types.References;
 namespace BadScript.Process
 {
 
-    public static class ProcessApi
+    public class ProcessApi : ABSScriptInterface
     {
         #region Public
-
-        public static void AddApi()
-        {
-            BSTable proc = new BSTable();
-
-            proc.InsertElement(
-                new BSObject( "start" ),
-                new BSFunction( "function start(file, args)", StartProcess, 2 )
-            );
-
-            proc.Lock();
-
-            BSEngine.AddStatic(
-                "process",
-                proc
-            );
-        }
+        
 
         #endregion
 
@@ -108,6 +92,19 @@ namespace BadScript.Process
         }
 
         #endregion
+
+        public ProcessApi( ) : base( "process" )
+        {
+        }
+
+        public override void AddApi( ABSTable proc )
+        {
+            proc.InsertElement(
+                new BSObject("start"),
+                new BSFunction("function start(file, args)", StartProcess, 2)
+            );
+
+        }
     }
 
 }

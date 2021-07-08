@@ -1,10 +1,11 @@
 ﻿using BadScript.Common.Runtime;
 using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
 
 namespace BadScript.Common.Expressions.Implementations.Access
 {
 
-    public class BSPropertyExpression : BSExpression
+    public class BSNullCheckPropertyExpression : BSExpression
     {
         public readonly string Right;
 
@@ -12,7 +13,7 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
         #region Public
 
-        public BSPropertyExpression(BSExpression left, string varname)
+        public BSNullCheckPropertyExpression(BSExpression left, string varname)
         {
             Left = left;
             Right = varname;
@@ -22,6 +23,10 @@ namespace BadScript.Common.Expressions.Implementations.Access
         {
             if (Left != null)
             {
+                ABSObject l = Left.Execute( scope );
+
+                if (!l.HasProperty(Right))
+                    return new BSObject( null );
                 return Left.Execute(scope).GetProperty(Right);
             }
 

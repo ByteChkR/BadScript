@@ -1,3 +1,0 @@
-__G.include = {}
-__G.include.getDir = function() => return path.combine(path.getAppPath(), "include")
-

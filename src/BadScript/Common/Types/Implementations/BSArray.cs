@@ -88,7 +88,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override bool HasProperty( string propertyName )
         {
-            return false;
+            return m_Functions.ContainsKey(propertyName);
         }
 
         public override void InsertElement( int i, ABSObject o )

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Text;
 using BadScript.Common.Types;
@@ -8,13 +9,12 @@ using BadScript.Common.Types.References;
 namespace BadScript.Http
 {
 
-    public static class HttpApi
+    public class HttpApi:ABSScriptInterface
     {
         #region Public
 
-        public static void AddApi()
+        public override void AddApi(ABSTable t)
         {
-            BSTable t = new BSTable();
             t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1 ) );
 
             t.InsertElement(
@@ -28,15 +28,38 @@ namespace BadScript.Http
             );
 
             t.InsertElement(
-                new BSObject( "downloadString" ),
-                new BSFunction( "function downloadString(url)", DownloadString, 1 )
+                new BSObject("downloadString"),
+                new BSFunction("function downloadString(url)", DownloadString, 1)
             );
 
-            t.Lock();
 
-            BSEngine.AddStatic( "http", t );
+            t.InsertElement(
+                new BSObject("createUri"),
+                new BSFunction("function createUri(url)", CreateUri, 1)
+            );
+
         }
 
+        private ABSObject CreateUri( ABSObject[] arg )
+        {
+            Uri uri = new Uri( arg[0].ConvertString() );
+            BSTable table = new BSTable();
+
+            table.InsertElement(
+                new BSObject("getHost"),
+                new BSFunction("function getHost()", objects => new BSObject(uri.Host), 0));
+
+            table.InsertElement(
+                new BSObject("getAuthority"),
+                new BSFunction("function getAuthority()", objects => new BSObject(uri.Authority), 0));
+            table.InsertElement(
+                new BSObject("getScheme"),
+                new BSFunction("function getScheme()", objects => new BSObject(uri.Scheme), 0));
+
+            return table;
+        }
+
+        
         #endregion
 
         #region Private
@@ -118,6 +141,11 @@ namespace BadScript.Http
         }
 
         #endregion
+
+        public HttpApi(  ) : base( "http" )
+        {
+        }
+        
     }
 
 }

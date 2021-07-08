@@ -494,7 +494,7 @@ namespace BadScript
 
         public BSExpression ParseValue()
         {
-            ReadWhitespace();
+            ReadWhitespaceAndNewLine();
 
             if ( IsStringQuotes() )
             {

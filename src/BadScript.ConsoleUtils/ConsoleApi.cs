@@ -6,42 +6,70 @@ using BadScript.Common.Types.References;
 namespace BadScript.ConsoleUtils
 {
 
-    public class ConsoleApi
+    public class ConsoleApi :ABSScriptInterface
     {
         #region Public
 
-        public static void AddApi()
+        public override void AddApi(ABSTable root)
         {
 
-            BSEngine.AddStatic(
-                "print",
-                new BSFunction(
-                    "function print(obj)",
-                    ( args ) =>
-                    {
+            root.InsertElement(new BSObject("print"),
+                               new BSFunction(
+                                   "function print(obj)",
+                                   (args) =>
+                                   {
 
-                        ABSObject arg = args[0].ResolveReference();
+                                       ABSObject arg = args[0].ResolveReference();
 
-                        Console.WriteLine( arg );
+                                       Console.WriteLine(arg);
 
-                        return new BSObject( null );
-                    },
-                    1
-                )
+                                       return new BSObject(null);
+                                   },
+                                   1
+                               )
+            );
+            root.InsertElement(new BSObject("write"),
+                               new BSFunction(
+                                   "function write(obj)",
+                                   (args) =>
+                                   {
+
+                                       ABSObject arg = args[0].ResolveReference();
+
+                                       Console.Write(arg);
+
+                                       return new BSObject(null);
+                                   },
+                                   1
+                               )
             );
 
-            BSEngine.AddStatic(
-                "read",
-                new BSFunction(
-                    "function read()",
-                    ( args ) => new BSObject( Console.ReadLine() ),
-                    0
-                )
+            root.InsertElement(new BSObject("read"),
+                               new BSFunction(
+                                   "function read()",
+                                   (args) => new BSObject(Console.ReadLine()),
+                                   0
+                               )
+            );
+            root.InsertElement(new BSObject("clear"),
+                               new BSFunction(
+                                   "function clear()",
+                                   ( args ) =>
+                                   {
+                                       Console.Clear();
+                                       return new BSObject( null );
+                                   },
+                                   0
+                               )
             );
 
         }
 
         #endregion
+
+        public ConsoleApi(  ) : base( "console" )
+        {
+        }
     }
 
 }

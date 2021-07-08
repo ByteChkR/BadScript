@@ -109,7 +109,7 @@ namespace BadScript.IO
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
-            return doneList[this] = m_Stream.ToString();
+            return doneList[this] = m_Stream?.ToString()??"NULL(FileStream)";
         }
 
         public override void SetProperty( string propertyName, ABSObject obj )
