@@ -16,7 +16,11 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
         #region Public
 
-        public BSForeachExpression( string[] vars, BSExpression enumExpr, BSExpression[] block )
+        public BSForeachExpression(
+            SourcePosition srcPos,
+            string[] vars,
+            BSExpression enumExpr,
+            BSExpression[] block ) : base( srcPos )
         {
             m_Vars = vars;
             m_Enumerator = enumExpr;
@@ -66,6 +70,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             else
             {
                 throw new BSInvalidTypeException(
+                    m_Position,
                     "Expected Enumerable Object",
                     eObj,
                     "Table",

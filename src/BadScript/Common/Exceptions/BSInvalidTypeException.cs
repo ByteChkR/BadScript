@@ -1,4 +1,5 @@
-﻿using BadScript.Common.Types;
+﻿using BadScript.Common.Expressions;
+using BadScript.Common.Types;
 
 namespace BadScript.Common.Exceptions
 {
@@ -7,7 +8,12 @@ namespace BadScript.Common.Exceptions
     {
         #region Public
 
-        public BSInvalidTypeException( string msg, ABSObject o, params string[] acceptedTypes ) : base(
+        public BSInvalidTypeException(
+            SourcePosition pos,
+            string msg,
+            ABSObject o,
+            params string[] acceptedTypes ) : base(
+            pos,
             GenerateRuntimeMessage( msg, o, acceptedTypes ) )
         {
 

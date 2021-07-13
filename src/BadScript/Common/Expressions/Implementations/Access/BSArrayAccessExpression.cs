@@ -13,7 +13,9 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
         #region Public
 
-        public BSArrayAccessExpression( BSExpression left, BSExpression arg ) : base( left )
+        public BSArrayAccessExpression( SourcePosition srcPos, BSExpression left, BSExpression arg ) : base(
+            srcPos,
+            left )
         {
             Parameter = arg;
         }
@@ -38,6 +40,7 @@ namespace BadScript.Common.Expressions.Implementations.Access
             }
 
             throw new BSInvalidTypeException(
+                m_Position,
                 "Expected Array",
                 obj,
                 "Table"

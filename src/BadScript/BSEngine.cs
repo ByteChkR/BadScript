@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using BadScript.Common.Expressions.Implementations.Value;
+using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -14,44 +13,36 @@ namespace BadScript
     {
         private static BSEngine s_Instance;
 
-        private readonly List < ABSScriptInterface > m_Interfaces=new List < ABSScriptInterface >();
+        private readonly List < ABSScriptInterface > m_Interfaces = new List < ABSScriptInterface >();
 
         #region Public
 
-        public static void AddStatic( ABSScriptInterface i ) => GetInstance().AddStaticInterface( i );
-
-        private static void LoadDirectory(  BSEngineInstance instance, string dir )
+        public static void AddStatic( ABSScriptInterface i )
         {
-            foreach ( string file in Directory.GetFiles(dir, "*.bs", SearchOption.TopDirectoryOnly) )
-            {
-                Console.WriteLine( "Loading File: " + file );
-                instance.LoadFile( file, new string[0] );
-            }
+            GetInstance().AddStaticInterface( i );
         }
 
-        public List < ABSScriptInterface > GetInterfaceList() => new List < ABSScriptInterface >( m_Interfaces );
-        
-        private static List <ABSScriptInterface> FindInterfaces(bool global, List<ABSScriptInterface> interfaces, (bool useGlobal, string interfaceName) key) => interfaces.Where( x => x.Name==  key.interfaceName && global==key.useGlobal  ).ToList();
-        private static List<ABSScriptInterface> FindInterfaces(bool global, List <ABSScriptInterface> interfaces, (bool useGlobal, string interfaceName)[] keys) => interfaces.Where(x => keys.Any(y => y.interfaceName==x.Name && global == y.useGlobal)).ToList();
-
-        public static Dictionary < string, ABSTable > GetInterfaceData(List <ABSScriptInterface> interfaces)
+        public static BSEngineInstance CreateEngineInstance( string[] staticInterfaces, params string[] includeDirs )
         {
-            Dictionary < string, ABSTable> o = new Dictionary < string, ABSTable>();
+            List < ABSScriptInterface > interfaces = GetInstance().GetInterfaceList();
+            (bool useGlobal, string interfaceName)[] data = ParseInterfaceNames( staticInterfaces );
 
-            foreach ( ABSScriptInterface bsScriptInterface in interfaces)
+            Dictionary < string, ABSTable > interfaceData =
+                GetInterfaceData( FindInterfaces( false, interfaces, data ) );
+
+            Dictionary < string, ABSObject > interfaceObjects =
+                interfaceData.ToDictionary( x => x.Key, x => ( ABSObject ) x.Value );
+
+            BSEngineInstance instance = new BSEngineInstance( interfaceObjects, interfaces );
+
+            AddGlobalInterfaces( instance, FindInterfaces( true, interfaces, data ) );
+
+            foreach ( string includeDir in includeDirs )
             {
-
-                ABSTable t;
-
-                if ( !o.TryGetValue( bsScriptInterface.Name, out t ) )
-                {
-                    t = new BSTable();
-                    o[bsScriptInterface.Name] = t;
-                }
-                bsScriptInterface.AddApi(t);
+                LoadDirectory( instance, includeDir );
             }
 
-            return o;
+            return instance;
         }
 
         public static string[] GetDefaultInterfaces()
@@ -59,24 +50,40 @@ namespace BadScript
             return new[] { "#core" };
         }
 
-        private static (bool useGlobalTable, string interfaceName)[] ParseInterfaceNames( string[] names )
+        public static Dictionary < string, ABSTable > GetInterfaceData( List < ABSScriptInterface > interfaces )
         {
-            List < (bool, string) > data = new List < (bool, string) >();
+            Dictionary < string, ABSTable > o = new Dictionary < string, ABSTable >();
 
-            foreach ( string name in names )
+            foreach ( ABSScriptInterface bsScriptInterface in interfaces )
             {
-                (bool useGlobal, string intName) d = ( false, name );
-                if ( name.StartsWith( "#" ) )
+
+                ABSTable t;
+
+                if ( !o.TryGetValue( bsScriptInterface.Name, out t ) )
                 {
-                    d.useGlobal = true;
-                    d.intName = name.Remove( 0, 1 );
+                    t = new BSTable( SourcePosition.Unknown );
+                    o[bsScriptInterface.Name] = t;
                 }
 
-                data.Add( d );
+                bsScriptInterface.AddApi( t );
             }
 
-            return data.ToArray();
+            return o;
         }
+
+        public void AddStaticInterface( ABSScriptInterface i )
+        {
+            m_Interfaces.Add( i );
+        }
+
+        public List < ABSScriptInterface > GetInterfaceList()
+        {
+            return new List < ABSScriptInterface >( m_Interfaces );
+        }
+
+        #endregion
+
+        #region Private
 
         private static void AddGlobalInterfaces( BSEngineInstance instance, List < ABSScriptInterface > interfaces )
         {
@@ -88,34 +95,55 @@ namespace BadScript
             }
         }
 
-        public static BSEngineInstance CreateEngineInstance(string[] staticInterfaces, params string[] includeDirs)
+        private static List < ABSScriptInterface > FindInterfaces(
+            bool global,
+            List < ABSScriptInterface > interfaces,
+            (bool useGlobal, string interfaceName) key )
         {
-            List <ABSScriptInterface> interfaces = GetInstance().GetInterfaceList();
-            (bool useGlobal, string interfaceName)[] data = ParseInterfaceNames( staticInterfaces );
-            Dictionary < string, ABSTable > interfaceData = GetInterfaceData( FindInterfaces(false, interfaces, data) );
-            Dictionary < string, ABSObject > interfaceObjects = interfaceData.ToDictionary( x => x.Key, x => ( ABSObject ) x.Value );
-            BSEngineInstance instance = new BSEngineInstance(interfaceObjects, interfaces);
-
-            AddGlobalInterfaces(instance, FindInterfaces(true, interfaces, data));
-
-            foreach (string includeDir in includeDirs)
-            {
-                LoadDirectory(instance, includeDir);
-            }
-
-            return instance;
+            return interfaces.Where( x => x.Name == key.interfaceName && global == key.useGlobal ).ToList();
         }
 
-        public void AddStaticInterface( ABSScriptInterface i ) => m_Interfaces.Add( i );
-        
-
-        #endregion
-
-        #region Private
+        private static List < ABSScriptInterface > FindInterfaces(
+            bool global,
+            List < ABSScriptInterface > interfaces,
+            (bool useGlobal, string interfaceName)[] keys )
+        {
+            return interfaces.Where( x => keys.Any( y => y.interfaceName == x.Name && global == y.useGlobal ) ).
+                              ToList();
+        }
 
         private static BSEngine GetInstance()
         {
             return s_Instance ?? ( s_Instance = new BSEngine() );
+        }
+
+        private static void LoadDirectory( BSEngineInstance instance, string dir )
+        {
+            foreach ( string file in Directory.GetFiles( dir, "*.bs", SearchOption.TopDirectoryOnly ) )
+            {
+                Console.WriteLine( "Loading File: " + file );
+                instance.LoadFile( file, new string[0] );
+            }
+        }
+
+        private static (bool useGlobalTable, string interfaceName)[] ParseInterfaceNames( string[] names )
+        {
+            List < (bool, string) > data = new List < (bool, string) >();
+
+            foreach ( string name in names )
+            {
+                (bool useGlobal, string intName) d = ( false, name );
+
+                if ( name.StartsWith( "#" ) )
+                {
+                    d.useGlobal = true;
+                    d.intName = name.Remove( 0, 1 );
+                }
+
+                data.Add( d );
+            }
+
+            return data.ToArray();
         }
 
         #endregion

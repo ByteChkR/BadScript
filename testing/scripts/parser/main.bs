@@ -1,0 +1,55 @@
+fs = environment.loadInterface("fs", {})
+string = environment.loadInterface("string", {})
+
+print("Loading Data..")
+src = fs.readAll("classes.bs")
+
+print("Loading Parser..")
+parser = environment.loadString(fs.readAll("parser.bs"))
+
+print("Loading Source Generator..")
+generator = environment.loadString(fs.readAll("generator.bs"))
+
+print("Parsing...")
+print(src)
+index = parser.eatEmpty(src, 0)
+
+classDefinitionStart = index
+index = parser.eatString(src, index, "class")
+
+index = parser.eatEmpty(src, index)
+
+classNameStart = index
+index = parser.readString(src, index)
+classNameEnd = index
+
+index = parser.eatEmpty(src, index)
+
+blockStart = index + 1
+
+index = parser.eatBlock(src, index)
+
+blockEnd = index
+
+block = string.substr(src, blockStart, blockEnd - blockStart)
+
+classDefinitionEnd = blockEnd
+
+className = string.substr(src, classNameStart, classNameEnd-classNameStart)
+
+expressions = parser.parseBlock(block)
+
+print(debug(expressions))
+
+print("Generating...")
+
+ctor = generator.generate(className, block)
+
+ret = string.remove(src, classDefinitionStart, classDefinitionEnd - classDefinitionStart + 1)
+ret = string.insert(ret, classDefinitionStart, ctor)
+
+print("Result:")
+print(ret)
+
+
+

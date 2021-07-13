@@ -13,24 +13,28 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
         #region Public
 
-        public BSNullCheckPropertyExpression(BSExpression left, string varname)
+        public BSNullCheckPropertyExpression( SourcePosition srcPos, BSExpression left, string varname ) : base(
+            srcPos )
         {
             Left = left;
             Right = varname;
         }
 
-        public override ABSObject Execute(BSScope scope)
+        public override ABSObject Execute( BSScope scope )
         {
-            if (Left != null)
+            if ( Left != null )
             {
                 ABSObject l = Left.Execute( scope );
 
-                if (!l.HasProperty(Right))
+                if ( !l.HasProperty( Right ) )
+                {
                     return new BSObject( null );
-                return Left.Execute(scope).GetProperty(Right);
+                }
+
+                return Left.Execute( scope ).GetProperty( Right );
             }
 
-            return scope.ResolveName(Right);
+            return scope.ResolveName( Right );
         }
 
         #endregion

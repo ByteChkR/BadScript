@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using BadScript.Common.Exceptions;
+﻿using BadScript.Common.Exceptions;
+using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References.Implementations;
@@ -13,7 +13,7 @@ namespace BadScript.Common.Runtime
         private BSScopeFlags m_CurrentFlag;
         private readonly BSEngineInstance m_Instance;
         private readonly BSScope m_Parent;
-        private readonly BSTable m_LocalVars = new BSTable();
+        private readonly BSTable m_LocalVars = new BSTable( SourcePosition.Unknown );
 
         public BSScopeFlags Flags => m_CurrentFlag;
 
@@ -71,28 +71,28 @@ namespace BadScript.Common.Runtime
                    m_Parent != null && m_Parent.HasLocal( name );
         }
 
-        public ABSObject ResolveName(string name)
+        public ABSObject ResolveName( string name )
         {
-            ABSObject i = new BSObject(name);
+            ABSObject i = new BSObject( name );
 
-            if (m_LocalVars.HasElement(i))
+            if ( m_LocalVars.HasElement( i ) )
             {
-                return m_LocalVars.GetElement(i);
+                return m_LocalVars.GetElement( i );
             }
 
-            if (m_Parent != null && (m_Parent.HasLocal(name) || m_Parent.HasGlobal(name)))
+            if ( m_Parent != null && ( m_Parent.HasLocal( name ) || m_Parent.HasGlobal( name ) ) )
             {
-                return m_Parent.ResolveName(name);
+                return m_Parent.ResolveName( name );
             }
 
-            if (m_Instance != null && m_Instance.HasElement(i))
+            if ( m_Instance != null && m_Instance.HasElement( i ) )
             {
-                return m_Instance.GetElement(i);
+                return m_Instance.GetElement( i );
             }
 
-            return new BSTableReference(m_LocalVars, i, false);
+            return new BSTableReference( m_LocalVars, i, false );
         }
-        
+
         public void SetFlag( BSScopeFlags flag, ABSObject val = null )
         {
             if ( val != null )
@@ -125,8 +125,8 @@ namespace BadScript.Common.Runtime
         private BSScope()
         {
 
-            m_LocalVars.InsertElement(new BSObject("__SELF"), new BSObject(this));
-            m_LocalVars.InsertElement(new BSObject("__L"), m_LocalVars);
+            m_LocalVars.InsertElement( new BSObject( "__SELF" ), new BSObject( this ) );
+            m_LocalVars.InsertElement( new BSObject( "__L" ), m_LocalVars );
         }
 
         #endregion

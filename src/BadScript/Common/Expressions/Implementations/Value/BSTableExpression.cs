@@ -9,9 +9,13 @@ namespace BadScript.Common.Expressions.Implementations.Value
     {
         #region Public
 
+        public BSTableExpression( SourcePosition pos ) : base( pos )
+        {
+        }
+
         public override ABSObject Execute( BSScope scope )
         {
-            return new BSTable();
+            return new BSTable( SourcePosition.Unknown );
         }
 
         #endregion

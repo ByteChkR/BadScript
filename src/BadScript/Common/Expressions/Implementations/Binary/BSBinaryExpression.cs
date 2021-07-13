@@ -8,7 +8,7 @@
 
         #region Protected
 
-        protected BSBinaryExpression( BSExpression left, BSExpression right )
+        protected BSBinaryExpression( SourcePosition srcPos, BSExpression left, BSExpression right ) : base( srcPos )
         {
             Left = left;
             Right = right;

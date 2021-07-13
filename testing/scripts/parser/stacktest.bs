@@ -1,0 +1,39 @@
+function a()
+{
+	error("HELLO")
+}
+
+function b()
+{
+	a()
+}
+
+function c()
+{
+	b()
+}
+
+function d()
+{
+	c()
+}
+
+function e()
+{
+	d()
+}
+
+try
+{
+	e()
+}
+catch(e)
+{
+	print("ERROR: " + e.message)
+	print("______________________________________________________________")
+	print("Type: " + e.type)
+	print("______________________________________________________________")
+	print("Trace:\n" + e.trace)
+	print("______________________________________________________________")
+	print("C# Interpreter Trace:\n" + e.cs_trace)
+}

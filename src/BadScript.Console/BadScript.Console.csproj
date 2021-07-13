@@ -12,6 +12,7 @@
     <ProjectReference Include="..\BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj" />
     <ProjectReference Include="..\BadScript.Core\BadScript.Core.csproj" />
     <ProjectReference Include="..\BadScript.Http\BadScript.Http.csproj" />
+    <ProjectReference Include="..\BadScript.Imaging\BadScript.Imaging.csproj" />
     <ProjectReference Include="..\BadScript.IO\BadScript.IO.csproj" />
     <ProjectReference Include="..\BadScript.Json\BadScript.Json.csproj" />
     <ProjectReference Include="..\BadScript.Math\BadScript.Math.csproj" />

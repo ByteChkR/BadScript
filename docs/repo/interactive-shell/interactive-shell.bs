@@ -1,26 +1,8 @@
-
-string = environment.loadInterface("string", {})
-fs = environment.loadInterface("fs", {})
-
-
 log = modules.require("logging").create("INTERACTIVE")
 
 
 interactiveScope = null
 interactiveScript = null
-
-function runScript(!script)
-{
-	try
-	{
-		environment.loadScopedString(interactiveScope, script)
-	}
-	catch (e)
-	{
-		log(string.format("ERROR: '{0}' with message: '{1}'", e.type, e.message))
-	}
-}
-
 function readExpression()
 {
 	while(1)
@@ -30,7 +12,14 @@ function readExpression()
 		if(	string.toUpper(line) == "\\EXEC" ||
 			string.toUpper(line) == "\\RUN")
 		{
-			runScript(interactiveScript)
+			try
+			{
+				environment.loadScopedString(interactiveScope, interactiveScript)
+			}
+			catch (e)
+			{
+				log(string.format("ERROR: '{0}' with message: '{1}'", e.type, e.message))
+			}
 			interactiveScript = ""
 		}
 		else if(string.toUpper(line) == "\\QUIT" ||
@@ -50,11 +39,6 @@ function readExpression()
 		{
 			return 1
 		}
-		else if(string.startsWith(string.toUpper(line), "\\LOAD"))
-		{
-			src = fs.readAll(string.trim(string.remove(line, 0, 5)))
-			runScript(src)
-		}
 		else
 		{
 			interactiveScript = interactiveScript + "\n" + line
@@ -64,6 +48,9 @@ function readExpression()
 
 function loadInteractiveSession()
 {
+	log("Loading Interfaces.. ")
+	environment.loadInterface("string")
+
 	log("Creating Sandbox Scope.. ")
 	interactiveScope = environment.createScope()
 	interactiveScript = ""
@@ -73,7 +60,6 @@ function loadInteractiveSession()
 	log("\tExecute Script with \\EXEC or \\RUN")
 	log("\tDelete Written Script with \\RESET or \\CLEAR")
 	log("\tReload Shell Session with \\RELOAD or \\RESTART")
-	log("\tLoad External File with \\LOAD <path-to-file>")
 	return readExpression()
 }
 

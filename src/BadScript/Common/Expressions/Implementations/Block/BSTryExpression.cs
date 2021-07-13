@@ -14,7 +14,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         #region Public
 
-        public BSTryExpression( BSExpression[] tryBlock, BSExpression[] catchBlock, string capturedVar )
+        public BSTryExpression(
+            SourcePosition srcPos,
+            BSExpression[] tryBlock,
+            BSExpression[] catchBlock,
+            string capturedVar ) : base( srcPos )
         {
             m_TryBlock = tryBlock;
             m_CatchBlock = catchBlock;
@@ -23,6 +27,8 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         public override ABSObject Execute( BSScope scope )
         {
+            BSFunction stackTop = BSFunction.GetTopStack();
+
             try
             {
                 BSScope tryScope = new BSScope( BSScopeFlags.None, scope );
@@ -46,11 +52,13 @@ namespace BadScript.Common.Expressions.Implementations.Block
             }
             catch ( Exception e )
             {
+                string trace = BSFunction.FlatTrace;
+                BSFunction.RestoreStack( stackTop );
                 BSScope catchScope = new BSScope( BSScopeFlags.None, scope );
 
                 if ( !string.IsNullOrEmpty( m_CapturedVar ) )
                 {
-                    catchScope.AddLocalVar( m_CapturedVar, MakeExceptionTable( e ) );
+                    catchScope.AddLocalVar( m_CapturedVar, MakeExceptionTable( trace, SourcePosition.Unknown, e ) );
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
@@ -77,21 +85,27 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         #region Private
 
-        private static ABSObject MakeExceptionTable( Exception e )
+        private static ABSObject MakeExceptionTable( string stack, SourcePosition p, Exception e )
         {
             if ( e == null )
             {
                 return new BSObject( null );
             }
 
-            ABSTable t = new BSTable();
+            ABSTable t = new BSTable( p );
             t.InsertElement( new BSObject( "type" ), new BSObject( e.GetType().Name ) );
-            t.InsertElement( new BSObject( "trace" ), new BSObject( e.StackTrace ) );
+            t.InsertElement( new BSObject( "cs_trace" ), new BSObject( e.StackTrace ) );
+
+            t.InsertElement( new BSObject( "trace" ), new BSObject( stack ) );
             t.InsertElement( new BSObject( "message" ), new BSObject( e.Message ) );
 
             t.InsertElement(
                 new BSObject( "getInner" ),
-                new BSFunction( "function getInner()", objects => MakeExceptionTable( e.InnerException ), 0, 0 ) );
+                new BSFunction(
+                    "function getInner()",
+                    objects => MakeExceptionTable( stack, SourcePosition.Unknown, e.InnerException ),
+                    0,
+                    0 ) );
 
             return t;
         }

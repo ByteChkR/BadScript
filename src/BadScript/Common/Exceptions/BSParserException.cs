@@ -1,4 +1,5 @@
 ﻿using System;
+using BadScript.Common.Expressions;
 
 namespace BadScript.Common.Exceptions
 {
@@ -21,9 +22,9 @@ namespace BadScript.Common.Exceptions
 
         private static string GenerateErrorMessage( string msg, BSParser parser )
         {
-            ( string line, int lineCount, int col ) = parser.GetCurrentLineInfo();
+            SourcePosition p = parser.CreateSourcePosition();
 
-            return $"Parser Exception: '{msg}' at {lineCount}:{col}\nLine: '{line}'";
+            return $"Parser Exception: '{msg}' at {p.Line}:{p.Collumn}\nLine: '{p.LineStr}'";
         }
 
         #endregion

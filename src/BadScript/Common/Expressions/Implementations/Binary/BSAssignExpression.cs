@@ -10,7 +10,10 @@ namespace BadScript.Common.Expressions.Implementations.Binary
     {
         #region Public
 
-        public BSAssignExpression( BSExpression left, BSExpression right ) : base( left, right )
+        public BSAssignExpression( SourcePosition srcPos, BSExpression left, BSExpression right ) : base(
+            srcPos,
+            left,
+            right )
         {
         }
 
@@ -27,6 +30,7 @@ namespace BadScript.Common.Expressions.Implementations.Binary
             else
             {
                 throw new BSInvalidTypeException(
+                    m_Position,
                     "Expected Assignable Reference",
                     left,
                     "Reference"

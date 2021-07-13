@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -9,11 +10,15 @@ using BadScript.Common.Types.References;
 namespace BadScript.Http
 {
 
-    public class HttpApi:ABSScriptInterface
+    public class HttpApi : ABSScriptInterface
     {
         #region Public
 
-        public override void AddApi(ABSTable t)
+        public HttpApi() : base( "http" )
+        {
+        }
+
+        public override void AddApi( ABSTable t )
         {
             t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1 ) );
 
@@ -28,38 +33,17 @@ namespace BadScript.Http
             );
 
             t.InsertElement(
-                new BSObject("downloadString"),
-                new BSFunction("function downloadString(url)", DownloadString, 1)
+                new BSObject( "downloadString" ),
+                new BSFunction( "function downloadString(url)", DownloadString, 1 )
             );
-
 
             t.InsertElement(
-                new BSObject("createUri"),
-                new BSFunction("function createUri(url)", CreateUri, 1)
+                new BSObject( "createUri" ),
+                new BSFunction( "function createUri(url)", CreateUri, 1 )
             );
 
         }
 
-        private ABSObject CreateUri( ABSObject[] arg )
-        {
-            Uri uri = new Uri( arg[0].ConvertString() );
-            BSTable table = new BSTable();
-
-            table.InsertElement(
-                new BSObject("getHost"),
-                new BSFunction("function getHost()", objects => new BSObject(uri.Host), 0));
-
-            table.InsertElement(
-                new BSObject("getAuthority"),
-                new BSFunction("function getAuthority()", objects => new BSObject(uri.Authority), 0));
-            table.InsertElement(
-                new BSObject("getScheme"),
-                new BSFunction("function getScheme()", objects => new BSObject(uri.Scheme), 0));
-
-            return table;
-        }
-
-        
         #endregion
 
         #region Private
@@ -83,9 +67,9 @@ namespace BadScript.Http
 
             using ( WebClient wc = new WebClient() )
             {
-                return new BSObject(wc.DownloadString(url));
+                return new BSObject( wc.DownloadString( url ) );
             }
-            
+
         }
 
         private static ABSObject Get( ABSObject[] args )
@@ -94,7 +78,7 @@ namespace BadScript.Http
             HttpWebRequest request = WebRequest.CreateHttp( url );
             request.Credentials = CredentialCache.DefaultCredentials;
             HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
-            BSTable t = new BSTable();
+            BSTable t = new BSTable( SourcePosition.Unknown );
 
             t.InsertElement(
                 new BSObject( "status" ),
@@ -125,7 +109,7 @@ namespace BadScript.Http
             }
 
             HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
-            BSTable t = new BSTable();
+            BSTable t = new BSTable( SourcePosition.Unknown );
 
             t.InsertElement(
                 new BSObject( "status" ),
@@ -140,12 +124,27 @@ namespace BadScript.Http
             return t;
         }
 
-        #endregion
-
-        public HttpApi(  ) : base( "http" )
+        private ABSObject CreateUri( ABSObject[] arg )
         {
+            Uri uri = new Uri( arg[0].ConvertString() );
+            BSTable table = new BSTable( SourcePosition.Unknown );
+
+            table.InsertElement(
+                new BSObject( "getHost" ),
+                new BSFunction( "function getHost()", objects => new BSObject( uri.Host ), 0 ) );
+
+            table.InsertElement(
+                new BSObject( "getAuthority" ),
+                new BSFunction( "function getAuthority()", objects => new BSObject( uri.Authority ), 0 ) );
+
+            table.InsertElement(
+                new BSObject( "getScheme" ),
+                new BSFunction( "function getScheme()", objects => new BSObject( uri.Scheme ), 0 ) );
+
+            return table;
         }
-        
+
+        #endregion
     }
 
 }

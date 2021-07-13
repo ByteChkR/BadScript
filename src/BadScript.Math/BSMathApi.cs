@@ -8,13 +8,21 @@ namespace BadScript.Math
     public class BSMathApi : ABSScriptInterface
     {
         #region Public
-        
+
+        public BSMathApi() : base( "math" )
+        {
+        }
+
+        public override void AddApi( ABSTable root )
+        {
+            GenerateMathApi( root );
+        }
 
         #endregion
 
         #region Private
 
-        private static void GenerateMathApi(ABSTable ret)
+        private static void GenerateMathApi( ABSTable ret )
         {
             ret.InsertElement( new BSObject( "PI" ), new BSObject( ( decimal ) System.Math.PI ) );
             ret.InsertElement( new BSObject( "E" ), new BSObject( ( decimal ) System.Math.E ) );
@@ -417,15 +425,6 @@ namespace BadScript.Math
         }
 
         #endregion
-
-        public BSMathApi(  ) : base( "math" )
-        {
-        }
-
-        public override void AddApi( ABSTable root )
-        {
-            GenerateMathApi( root );
-        }
     }
 
 }

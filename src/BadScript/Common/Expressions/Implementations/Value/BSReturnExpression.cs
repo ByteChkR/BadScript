@@ -11,7 +11,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
         #region Public
 
-        public BSReturnExpression( BSExpression left )
+        public BSReturnExpression( SourcePosition srcPos, BSExpression left ) : base( srcPos )
         {
             Left = left;
         }

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using BadScript.Common.Exceptions;
+using BadScript.Common.Expressions;
 using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types
@@ -8,11 +11,30 @@ namespace BadScript.Common.Types
 
     public class BSFunction : ABSObject
     {
+        private static readonly Stack < BSFunction > s_StackTrace = new Stack < BSFunction >();
+
         private readonly (int min, int max)? m_ParameterCount;
         private readonly string m_DebugData = null;
 
         private Func < ABSObject[],
             ABSObject > m_Func;
+
+        public static string[] StackTrace => s_StackTrace.Select( x => x.m_DebugData ).ToArray();
+
+        public static string FlatTrace
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+
+                foreach ( string s in StackTrace )
+                {
+                    sb.AppendLine( s );
+                }
+
+                return sb.ToString();
+            }
+        }
 
         public override bool IsNull => false;
 
@@ -22,9 +44,29 @@ namespace BadScript.Common.Types
             string debugData,
             Func < ABSObject[], ABSObject >
                 func,
-            int argCount ) : this( debugData, func )
+            int argCount ) : this( SourcePosition.Unknown, debugData, func, argCount )
+        {
+        }
+
+        public BSFunction(
+            SourcePosition pos,
+            string debugData,
+            Func < ABSObject[], ABSObject >
+                func,
+            int argCount ) : this( pos, debugData, func )
         {
             m_ParameterCount = ( argCount, argCount );
+        }
+
+        public BSFunction(
+            SourcePosition pos,
+            string debugData,
+            Func < ABSObject[], ABSObject >
+                func,
+            int minArgs,
+            int maxArgs ) : this( pos, debugData, func )
+        {
+            m_ParameterCount = ( minArgs, maxArgs );
         }
 
         public BSFunction(
@@ -32,9 +74,27 @@ namespace BadScript.Common.Types
             Func < ABSObject[], ABSObject >
                 func,
             int minArgs,
-            int maxArgs ) : this( debugData, func )
+            int maxArgs ) : this( SourcePosition.Unknown, debugData, func, minArgs, maxArgs )
         {
             m_ParameterCount = ( minArgs, maxArgs );
+        }
+
+        public static BSFunction GetTopStack()
+        {
+            return s_StackTrace.Count == 0 ? null : s_StackTrace.Peek();
+        }
+
+        public static void RestoreStack( BSFunction top )
+        {
+            if ( top == null )
+            {
+                return;
+            }
+
+            while ( s_StackTrace.Peek() != top )
+            {
+                s_StackTrace.Pop();
+            }
         }
 
         public override bool Equals( ABSObject other )
@@ -44,7 +104,7 @@ namespace BadScript.Common.Types
 
         public override ABSReference GetProperty( string propertyName )
         {
-            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override bool HasProperty( string propertyName )
@@ -54,9 +114,14 @@ namespace BadScript.Common.Types
 
         public override ABSObject Invoke( ABSObject[] args )
         {
+            s_StackTrace.Push( this );
+
             if ( m_ParameterCount == null )
             {
-                return m_Func( args );
+                ABSObject o = m_Func( args );
+                s_StackTrace.Pop();
+
+                return o;
             }
 
             ( int min, int max ) = m_ParameterCount.Value;
@@ -64,10 +129,14 @@ namespace BadScript.Common.Types
             if ( args.Length < min || args.Length > max )
             {
                 throw new BSRuntimeException(
+                    Position,
                     $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}" );
             }
 
-            return m_Func( args );
+            ABSObject or = m_Func( args );
+            s_StackTrace.Pop();
+
+            return or;
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -77,7 +146,7 @@ namespace BadScript.Common.Types
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override bool TryConvertBool( out bool v )
@@ -107,9 +176,10 @@ namespace BadScript.Common.Types
         #region Private
 
         private BSFunction(
+            SourcePosition pos,
             string debugData,
             Func < ABSObject[], ABSObject >
-                func )
+                func ) : base( pos )
         {
             m_DebugData = debugData;
             m_Func = func;

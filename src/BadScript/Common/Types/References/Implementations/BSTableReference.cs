@@ -12,7 +12,7 @@ namespace BadScript.Common.Types.References.Implementations
 
         #region Public
 
-        public BSTableReference( ABSTable table, ABSObject key, bool readOnly )
+        public BSTableReference( ABSTable table, ABSObject key, bool readOnly ) : base( table.Position )
         {
             m_SourceTable = table;
             m_Key = key;
@@ -21,9 +21,12 @@ namespace BadScript.Common.Types.References.Implementations
 
         public override void Assign( ABSObject obj )
         {
-            if (m_ReadOnly)
+            if ( m_ReadOnly )
+            {
                 throw new BSRuntimeException(
-                    $"Table '{m_SourceTable.SafeToString()}.{m_Key.SafeToString()}' is locked and can not be edited");
+                    Position,
+                    $"Table '{m_SourceTable.SafeToString()}.{m_Key.SafeToString()}' is locked and can not be edited" );
+            }
 
             m_SourceTable.InsertElement( m_Key, obj );
         }
@@ -38,7 +41,7 @@ namespace BadScript.Common.Types.References.Implementations
             }
 
             throw new Exception( $"Property '{k.SafeToString()}' is null in table '{m_SourceTable.SafeToString()}'" );
-            
+
         }
 
         #endregion

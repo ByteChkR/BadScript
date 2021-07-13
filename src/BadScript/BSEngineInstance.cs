@@ -17,48 +17,55 @@ namespace BadScript
         private readonly ABSTable m_GlobalTable;
         private readonly List < ABSScriptInterface > m_Interfaces;
 
+        public string[] InterfaceNames => m_Interfaces.Select( x => x.Name ).ToArray();
+
         #region Public
 
-        public BSEngineInstance(Dictionary<string, ABSObject> startObjects, List <ABSScriptInterface> interfaces, Dictionary<string, ABSObject> gTable = null)
+        public BSEngineInstance(
+            Dictionary < string, ABSObject > startObjects,
+            List < ABSScriptInterface > interfaces,
+            Dictionary < string, ABSObject > gTable = null )
         {
             m_Interfaces = interfaces;
-            Dictionary<ABSObject, ABSObject> staticData =
-                new Dictionary<ABSObject, ABSObject>();
 
-            foreach (KeyValuePair<string, ABSObject> buildScriptEngineRuntimeObject in startObjects)
+            Dictionary < ABSObject, ABSObject > staticData =
+                new Dictionary < ABSObject, ABSObject >();
+
+            foreach ( KeyValuePair < string, ABSObject > buildScriptEngineRuntimeObject in startObjects )
             {
-                staticData[new BSObject(buildScriptEngineRuntimeObject.Key)] =
+                staticData[new BSObject( SourcePosition.Unknown, buildScriptEngineRuntimeObject.Key )] =
                     buildScriptEngineRuntimeObject.Value;
             }
 
-            BSTable sd = new BSTable(staticData);
+            BSTable sd = new BSTable( SourcePosition.Unknown, staticData );
 
-            
             sd.Lock();
             m_StaticData = sd;
 
-            if (gTable == null)
+            if ( gTable == null )
             {
-                m_GlobalTable = new BSTable();
+                m_GlobalTable = new BSTable( SourcePosition.Unknown );
             }
             else
             {
-                Dictionary<ABSObject, ABSObject> globalTable =
-                    new Dictionary<ABSObject, ABSObject>();
-                foreach (KeyValuePair<string, ABSObject> buildScriptEngineRuntimeObject in gTable)
+                Dictionary < ABSObject, ABSObject > globalTable =
+                    new Dictionary < ABSObject, ABSObject >();
+
+                foreach ( KeyValuePair < string, ABSObject > buildScriptEngineRuntimeObject in gTable )
                 {
-                    globalTable[new BSObject(buildScriptEngineRuntimeObject.Key)] =
+                    globalTable[new BSObject( SourcePosition.Unknown, buildScriptEngineRuntimeObject.Key )] =
                         buildScriptEngineRuntimeObject.Value;
                 }
 
-                m_GlobalTable = new BSTable(globalTable);
+                m_GlobalTable = new BSTable( SourcePosition.Unknown, globalTable );
             }
 
-            BSTable env = new BSTable();
+            BSTable env = new BSTable( SourcePosition.Unknown );
 
             env.InsertElement(
                 new BSObject( "createScope" ),
-                new BSFunction("function createScope()/createScope(parentScope)", CreateScope, 0, 1 ) );
+                new BSFunction( "function createScope()/createScope(parentScope)", CreateScope, 0, 1 ) );
+
             env.InsertElement(
                 new BSObject( "loadScopedString" ),
                 new BSFunction(
@@ -66,67 +73,46 @@ namespace BadScript
                     LoadStringScopedApi,
                     2,
                     int.MaxValue ) );
+
             env.InsertElement(
-                new BSObject("loadString"),
-                new BSFunction("function loadString(str)", LoadStringApi, 1, int.MaxValue)
+                new BSObject( "loadString" ),
+                new BSFunction( "function loadString(str)", LoadStringApi, 1, int.MaxValue )
             );
+
             env.InsertElement(
-                new BSObject("loadInterface"),
-                new BSFunction("function loadInterface(key)/loadInterface(key, root)", LoadInterfaceApi, 1, 2)
+                new BSObject( "loadInterface" ),
+                new BSFunction( "function loadInterface(key)/loadInterface(key, root)", LoadInterfaceApi, 1, 2 )
             );
 
             env.InsertElement(
                 new BSObject( "getScriptBaseDir" ),
                 new BSFunction( "function getScriptBaseDir()", GetScriptBaseDirApi, 0, 0 ) );
+
             env.InsertElement(
-                new BSObject("getInterfaceNames"),
-                new BSFunction("function getInterfaceNames()", GetInterfaceNamesApi, 0, 0)
+                new BSObject( "getInterfaceNames" ),
+                new BSFunction( "function getInterfaceNames()", GetInterfaceNamesApi, 0, 0 )
             );
 
             env.Lock();
-            
-            m_GlobalTable.InsertElement(new BSObject("environment"), env);
 
+            m_GlobalTable.InsertElement( new BSObject( "environment" ), env );
 
-
-            m_GlobalTable.InsertElement(new BSObject("__G"), m_GlobalTable);
+            m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
         }
 
-        private ABSObject GetScriptBaseDirApi( ABSObject[] arg )
+        public void AddInterface( ABSScriptInterface i )
         {
-            return null;
+            m_Interfaces.Add( i );
         }
 
-        private ABSObject GetInterfaceNamesApi( ABSObject[] arg )=> new BSArray( InterfaceNames.Select( x => new BSObject( x ) ) );
-        
-        public ABSTable GetGlobalTable() => m_GlobalTable;
-
-        private ABSObject LoadInterfaceApi( ABSObject[] arg )
+        public ABSTable GetGlobalTable()
         {
-            string key = arg[0].ConvertString();
-            if(arg.Length == 2)
-            {
-                return LoadInterface( key, ( ABSTable ) arg[1] );
-            }
-
-           return LoadInterface(key);
+            return m_GlobalTable;
         }
 
-        internal bool HasElement(ABSObject name)
+        public bool HasInterface( string key )
         {
-            return m_GlobalTable.HasElement(name) || m_StaticData.HasElement(name);
-        }
-
-        internal void InsertElement( ABSObject k, ABSObject v ) => m_GlobalTable.InsertElement( k, v );
-
-        internal ABSObject GetElement(ABSObject name)
-        {
-            if (m_GlobalTable.HasElement(name))
-                return m_GlobalTable.GetElement(name);
-            if (m_StaticData.HasElement(name))
-                return m_StaticData.GetElement(name);
-
-            throw new BSRuntimeException( $"Can not Resolve name: '{name.SafeToString()}'" );
+            return m_Interfaces.Any( x => x.Name == key );
         }
 
         public ABSObject LoadFile( string file, string[] args = null )
@@ -137,6 +123,30 @@ namespace BadScript
         public ABSObject LoadFile( string file, ABSObject[] args = null )
         {
             return LoadString( File.ReadAllText( file ), args );
+        }
+
+        public ABSTable LoadInterface( string key, ABSTable t = null )
+        {
+            if ( !HasInterface( key ) )
+            {
+                throw new BSRuntimeException( $"Can not find interface: '{key}'" );
+            }
+
+            ABSTable MakeInterfaceTable()
+            {
+                ABSTable it = new BSTable( SourcePosition.Unknown );
+
+                m_GlobalTable.InsertElement( new BSObject( key ), it );
+
+                return it;
+            }
+
+            ABSTable table = t ?? MakeInterfaceTable();
+
+            List < ABSScriptInterface > i = m_Interfaces.Where( x => x.Name == key ).ToList();
+            i.ForEach( x => x.AddApi( table ) );
+
+            return table;
         }
 
         public ABSObject LoadString( string script, string[] args = null )
@@ -152,26 +162,27 @@ namespace BadScript
             return LoadString(
                 scope,
                 script,
-                args?.Select(x => (ABSObject)new BSObject(x)).ToArray()
+                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray()
             );
         }
-        public ABSObject LoadString(BSScope scope, string script, ABSObject[] args)
+
+        public ABSObject LoadString( BSScope scope, string script, ABSObject[] args )
         {
-            BSParser parser = new BSParser(script);
+            BSParser parser = new BSParser( script );
             BSExpression[] exprs = parser.ParseToEnd();
 
             scope.AddLocalVar(
                 "args",
                 args == null
-                    ? (ABSObject)new BSObject(null)
-                    : new BSArray(args)
+                    ? ( ABSObject ) new BSObject( null )
+                    : new BSArray( args )
             );
 
-            foreach (BSExpression buildScriptExpression in exprs)
+            foreach ( BSExpression buildScriptExpression in exprs )
             {
-                buildScriptExpression.Execute(scope);
+                buildScriptExpression.Execute( scope );
 
-                if (scope.BreakExecution)
+                if ( scope.BreakExecution )
                 {
                     break;
                 }
@@ -185,52 +196,71 @@ namespace BadScript
             return LoadString( new BSScope( this ), script, args );
         }
 
+        internal ABSObject GetElement( ABSObject name )
+        {
+            if ( m_GlobalTable.HasElement( name ) )
+            {
+                return m_GlobalTable.GetElement( name );
+            }
 
+            if ( m_StaticData.HasElement( name ) )
+            {
+                return m_StaticData.GetElement( name );
+            }
+
+            throw new BSRuntimeException( name.Position, $"Can not Resolve name: '{name.SafeToString()}'" );
+        }
+
+        internal bool HasElement( ABSObject name )
+        {
+            return m_GlobalTable.HasElement( name ) || m_StaticData.HasElement( name );
+        }
+
+        internal void InsertElement( ABSObject k, ABSObject v )
+        {
+            m_GlobalTable.InsertElement( k, v );
+        }
 
         #endregion
 
         #region Private
 
-        private ABSObject CreateScope(ABSObject[] args)
+        private ABSObject CreateScope( ABSObject[] args )
         {
             BSScope scope;
+
             if ( args.Length == 1 )
             {
-                scope = new BSScope(BSScopeFlags.None, (BSScope)( args[0] as BSObject ).GetInternalObject() );
+                scope = new BSScope( BSScopeFlags.None, ( BSScope ) ( args[0] as BSObject ).GetInternalObject() );
             }
             else
             {
-                scope = new BSScope(this);
+                scope = new BSScope( this );
             }
+
             return new BSObject( scope );
         }
-        
 
-        private ABSObject LoadStringScopedApi(ABSObject[] arg)
+        private ABSObject GetInterfaceNamesApi( ABSObject[] arg )
         {
+            return new BSArray( InterfaceNames.Select( x => new BSObject( x ) ) );
+        }
 
-            ABSObject scope = arg[0].ResolveReference();
-            ABSObject o = arg[1].ResolveReference();
+        private ABSObject GetScriptBaseDirApi( ABSObject[] arg )
+        {
+            return null;
+        }
 
-            if (o.TryConvertString(out string path))
+        private ABSObject LoadInterfaceApi( ABSObject[] arg )
+        {
+            string key = arg[0].ConvertString();
+
+            if ( arg.Length == 2 )
             {
-                if(scope is BSObject obj)
-                {
-                    BSScope sc = (BSScope)obj.GetInternalObject();
-                    ABSObject ret = LoadString(sc, path, arg.Skip(2).ToArray());
-
-                    return ret;
-                }
-                
-                throw new BSRuntimeException( "'function loadScopedString(scope, script, args..)' requires a valid scope to be passed as first argument" );
-
+                return LoadInterface( key, ( ABSTable ) arg[1] );
             }
 
-            throw new BSInvalidTypeException(
-                "Expected String",
-                o,
-                "string"
-            );
+            return LoadInterface( key );
         }
 
         private ABSObject LoadStringApi( ABSObject[] arg )
@@ -245,37 +275,41 @@ namespace BadScript
             }
 
             throw new BSInvalidTypeException(
+                o.Position,
                 "Expected String",
                 o,
                 "string"
             );
         }
 
-        public void AddInterface( ABSScriptInterface i ) => m_Interfaces.Add( i );
-
-        public string[] InterfaceNames => m_Interfaces.Select( x => x.Name ).ToArray();
-        public bool HasInterface( string key ) => m_Interfaces.Any( x => x.Name == key );
-        public ABSTable LoadInterface( string key, ABSTable t = null )
+        private ABSObject LoadStringScopedApi( ABSObject[] arg )
         {
-            if ( !HasInterface( key ) )
+
+            ABSObject scope = arg[0].ResolveReference();
+            ABSObject o = arg[1].ResolveReference();
+
+            if ( o.TryConvertString( out string path ) )
             {
-                throw new BSRuntimeException( $"Can not find interface: '{key}'" );
+                if ( scope is BSObject obj )
+                {
+                    BSScope sc = ( BSScope ) obj.GetInternalObject();
+                    ABSObject ret = LoadString( sc, path, arg.Skip( 2 ).ToArray() );
+
+                    return ret;
+                }
+
+                throw new BSRuntimeException(
+                    o.Position,
+                    "'function loadScopedString(scope, script, args..)' requires a valid scope to be passed as first argument" );
+
             }
 
-            ABSTable MakeInterfaceTable()
-            {
-                ABSTable it = new BSTable();
-
-                m_GlobalTable.InsertElement( new BSObject( key ), it );
-
-                return it;
-            }
-            ABSTable table = t ?? MakeInterfaceTable();
-
-            List < ABSScriptInterface> i = m_Interfaces.Where( x => x.Name == key ).ToList();
-            i.ForEach(x=>x.AddApi( table ));
-
-            return table;
+            throw new BSInvalidTypeException(
+                o.Position,
+                "Expected String",
+                o,
+                "string"
+            );
         }
 
         #endregion

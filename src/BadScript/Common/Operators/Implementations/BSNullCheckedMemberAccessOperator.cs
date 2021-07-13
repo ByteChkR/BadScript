@@ -12,11 +12,12 @@ namespace BadScript.Common.Operators.Implementations
 
         #region Public
 
-        public override BSExpression Parse(BSExpression left, BSParser parser)
+        public override BSExpression Parse( BSExpression left, BSParser parser )
         {
-            parser.ReadWhitespace();
+            parser.ReadWhitespaceAndNewLine();
             string wordName = parser.GetNextWord();
-            return new BSNullCheckPropertyExpression(left, wordName);
+
+            return new BSNullCheckPropertyExpression( parser.CreateSourcePosition(), left, wordName );
         }
 
         #endregion

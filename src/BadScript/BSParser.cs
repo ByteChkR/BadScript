@@ -35,7 +35,12 @@ namespace BadScript
             m_CurrentPosition = 0;
         }
 
-        public int FindClosing( char open, char close )
+        public SourcePosition CreateSourcePosition()
+        {
+            return CreateSourcePosition( m_CurrentPosition );
+        }
+
+        public int FindClosing( string open, string close, params (string open, string close)[] skipTokens )
         {
             int level = 1;
 
@@ -44,6 +49,16 @@ namespace BadScript
                 if ( Is( '\0' ) )
                 {
                     throw new BSParserException( $"Expected '{close}'", this );
+                }
+
+                ReadWhitespaceAndNewLine();
+
+                foreach ( (string open, string close) valueTuple in skipTokens )
+                {
+                    if ( Is( valueTuple.open ) )
+                    {
+                        FindClosing( valueTuple.open, valueTuple.close );
+                    }
                 }
 
                 if ( Is( open ) )
@@ -69,39 +84,14 @@ namespace BadScript
             return r;
         }
 
-        public (string line, int lineCount, int col) GetCurrentLineInfo()
+        public string GetNextWord()
         {
-            char[] text = m_OriginalSource.ToCharArray();
-
-            if ( m_CurrentPosition < m_OriginalSource.Length )
+            if ( !TryReadNextWord( out string word ) )
             {
-                text = text.Take( m_CurrentPosition ).ToArray();
+                throw new BSParserException( "Can not Parse Word", this );
             }
 
-            int lineCount = 0;
-            int lastNewLine = 0;
-
-            for ( int i = 0; i < text.Length; i++ )
-            {
-                if ( text[i] == '\n' )
-                {
-                    lastNewLine = i;
-                    lineCount++;
-                }
-            }
-
-            int textStart = lastNewLine + 1;
-            int nextNewLine = m_OriginalSource.IndexOf( '\n', textStart );
-
-            if ( nextNewLine == -1 )
-            {
-                nextNewLine = m_OriginalSource.Length - textStart;
-            }
-
-            string r = m_OriginalSource.Substring( textStart, nextNewLine - textStart );
-
-            return ( r.Trim(), lineCount,
-                     m_CurrentPosition - lastNewLine );
+            return word;
         }
 
         public BSExpression Parse( int start )
@@ -157,7 +147,7 @@ namespace BadScript
 
         public string ParseArgumentName()
         {
-            ReadWhitespace();
+            ReadWhitespaceAndNewLine();
 
             if ( !IsWordStart() )
             {
@@ -181,11 +171,13 @@ namespace BadScript
 
         public BSExpression ParseArrayAccess( BSExpression expr )
         {
+            int pos = m_CurrentPosition;
+
             if ( Is( '[' ) )
             {
                 m_CurrentPosition++;
                 BSExpression i = ParseExpression( int.MaxValue );
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
 
                 if ( !Is( ']' ) )
                 {
@@ -194,7 +186,7 @@ namespace BadScript
 
                 m_CurrentPosition++;
 
-                return new BSArrayAccessExpression( expr, i );
+                return new BSArrayAccessExpression( CreateSourcePosition( pos ), expr, i );
             }
 
             throw new BSParserException( "Expected ']'", this );
@@ -207,7 +199,7 @@ namespace BadScript
                 m_CurrentPosition++;
 
                 BSExpression condition = ParseExpression( int.MaxValue );
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
 
                 if ( !Is( ')' ) )
                 {
@@ -268,9 +260,10 @@ namespace BadScript
         public BSExpression ParseFunction( bool isGlobal )
         {
             StringBuilder sb = new StringBuilder();
-            ReadWhitespace();
+            ReadWhitespaceAndNewLine();
 
             string funcName;
+            int pos = m_CurrentPosition;
 
             if ( IsWordStart() )
             {
@@ -296,7 +289,7 @@ namespace BadScript
                 }
             }
 
-            ReadWhitespace();
+            ReadWhitespaceAndNewLine();
             (bool, string)[] args = ParseArgumentList();
 
             ReadWhitespaceAndNewLine();
@@ -306,7 +299,12 @@ namespace BadScript
                 m_CurrentPosition += 2;
                 ReadWhitespaceAndNewLine();
 
-                return new BSFunctionDefinitionExpression( funcName, args, new[] { Parse( int.MaxValue ) }, isGlobal );
+                return new BSFunctionDefinitionExpression(
+                    CreateSourcePosition( pos ),
+                    funcName,
+                    args,
+                    new[] { Parse( int.MaxValue ) },
+                    isGlobal );
             }
 
             string block = ParseBlock();
@@ -315,11 +313,13 @@ namespace BadScript
 
             BSExpression[] b = p.ParseToEnd();
 
-            return new BSFunctionDefinitionExpression( funcName, args, b, isGlobal );
+            return new BSFunctionDefinitionExpression( CreateSourcePosition( pos ), funcName, args, b, isGlobal );
         }
 
         public BSExpression ParseInvocation( BSExpression expr )
         {
+            int pos = m_CurrentPosition;
+
             if ( Is( '(' ) )
             {
                 m_CurrentPosition++;
@@ -328,18 +328,18 @@ namespace BadScript
 
                 if ( !Is( ')' ) )
                 {
-                    ReadWhitespace();
+                    ReadWhitespaceAndNewLine();
                     exprs.Add( ParseExpression( int.MaxValue ) );
-                    ReadWhitespace();
+                    ReadWhitespaceAndNewLine();
 
                     while ( Is( ',' ) )
                     {
                         m_CurrentPosition++;
-                        exprs.Add(ParseExpression( int.MaxValue ) );
-                        ReadWhitespace();
+                        exprs.Add( ParseExpression( int.MaxValue ) );
+                        ReadWhitespaceAndNewLine();
                     }
 
-                    ReadWhitespace();
+                    ReadWhitespaceAndNewLine();
 
                     if ( !Is( ')' ) )
                     {
@@ -348,13 +348,13 @@ namespace BadScript
 
                     m_CurrentPosition++;
 
-                    return new BSInvocationExpression( expr, exprs.ToArray() );
+                    return new BSInvocationExpression( CreateSourcePosition( pos ), expr, exprs.ToArray() );
                 }
                 else
                 {
                     m_CurrentPosition++;
 
-                    return new BSInvocationExpression( expr, exprs.ToArray() );
+                    return new BSInvocationExpression( CreateSourcePosition( pos ), expr, exprs.ToArray() );
                 }
             }
 
@@ -363,7 +363,7 @@ namespace BadScript
 
         public string ParseKey()
         {
-            ReadWhitespace();
+            ReadWhitespaceAndNewLine();
             StringBuilder sb = new StringBuilder();
 
             while ( m_OriginalSource.Length > m_CurrentPosition &&
@@ -379,14 +379,14 @@ namespace BadScript
 
         public string ParseKeyword()
         {
-            ReadWhitespace();
+            ReadWhitespaceAndNewLine();
             StringBuilder sb = new StringBuilder();
 
             while ( m_OriginalSource.Length > m_CurrentPosition &&
                     !char.IsWhiteSpace( m_OriginalSource, m_CurrentPosition ) &&
                     !char.IsLetterOrDigit( m_OriginalSource, m_CurrentPosition ) &&
                     m_OriginalSource[m_CurrentPosition] != '_' &&
-                    m_OriginalSource[m_CurrentPosition] != '\"')
+                    m_OriginalSource[m_CurrentPosition] != '\"' )
             {
                 sb.Append( m_OriginalSource[m_CurrentPosition] );
                 m_CurrentPosition++;
@@ -398,6 +398,7 @@ namespace BadScript
         public BSExpression ParseNumber()
         {
             int negative = 1;
+            int pos = m_CurrentPosition;
 
             if ( Is( '-' ) )
             {
@@ -424,18 +425,19 @@ namespace BadScript
                 throw new BSParserException( "Can not parse Number", this );
             }
 
-            return new BSValueExpression( negative * decimal.Parse( sb.ToString() ) );
+            return new BSValueExpression( CreateSourcePosition( pos ), negative * decimal.Parse( sb.ToString() ) );
         }
 
         public BSExpression ParseString()
         {
-            ReadWhitespace();
+            ReadWhitespaceAndNewLine();
 
             if ( !IsStringQuotes() )
             {
                 throw new BSParserException( "Expected '\"'", this );
             }
 
+            int pos = m_CurrentPosition;
             m_CurrentPosition++;
             StringBuilder sb = new StringBuilder();
             bool isEscaped = false;
@@ -471,7 +473,7 @@ namespace BadScript
             m_CurrentPosition++; //Skip over string quotes
             string str = sb.ToString();
 
-            return new BSValueExpression( str );
+            return new BSValueExpression( CreateSourcePosition( pos ), str );
         }
 
         public BSExpression[] ParseToEnd()
@@ -494,6 +496,7 @@ namespace BadScript
 
         public BSExpression ParseValue()
         {
+            int pos = m_CurrentPosition;
             ReadWhitespaceAndNewLine();
 
             if ( IsStringQuotes() )
@@ -515,14 +518,14 @@ namespace BadScript
             {
                 m_CurrentPosition += 2;
 
-                return new BSArrayExpression();
+                return new BSArrayExpression( CreateSourcePosition( pos ) );
             }
 
             if ( Is( '{' ) && Is( 1, '}' ) )
             {
                 m_CurrentPosition += 2;
 
-                return new BSTableExpression();
+                return new BSTableExpression( CreateSourcePosition( pos ) );
             }
 
             if ( Is( '(' ) )
@@ -552,7 +555,8 @@ namespace BadScript
 
         public BSExpression ParseWord( BSExpression left )
         {
-            ReadWhitespace();
+            ReadWhitespaceAndNewLine();
+            int pos = m_CurrentPosition;
             string wordName = GetNextWord();
 
             bool isGlobal = false;
@@ -561,7 +565,7 @@ namespace BadScript
             {
                 if ( isGlobal )
                 {
-                    ReadWhitespace();
+                    ReadWhitespaceAndNewLine();
                     wordName = GetNextWord();
 
                     if ( wordName != "function" )
@@ -575,17 +579,17 @@ namespace BadScript
 
             if ( wordName == "return" )
             {
-                return new BSReturnExpression( ParseExpression( int.MaxValue ) );
+                return new BSReturnExpression( CreateSourcePosition( pos ), ParseExpression( int.MaxValue ) );
             }
 
             if ( wordName == "continue" )
             {
-                return new BSContinueExpression();
+                return new BSContinueExpression( CreateSourcePosition( pos ) );
             }
 
             if ( wordName == "break" )
             {
-                return new BSBreakExpression();
+                return new BSBreakExpression( CreateSourcePosition( pos ) );
             }
 
             if ( wordName == "if" )
@@ -649,7 +653,7 @@ namespace BadScript
                     }
                 }
 
-                return new BSIfExpression( cMap, elseBlock );
+                return new BSIfExpression( CreateSourcePosition( pos ), cMap, elseBlock );
             }
 
             if ( wordName == "try" )
@@ -668,7 +672,7 @@ namespace BadScript
                     throw new BSParserException( "Expected 'catch' after 'try' block", this );
                 }
 
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
 
                 string exVar = null;
 
@@ -693,13 +697,13 @@ namespace BadScript
                 BSExpression[] catchBlock = cP.ParseToEnd();
                 ReadWhitespaceAndNewLine();
 
-                return new BSTryExpression( tryBlock, catchBlock, exVar );
+                return new BSTryExpression( CreateSourcePosition( pos ), tryBlock, catchBlock, exVar );
 
             }
 
             if ( wordName == "foreach" )
             {
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
 
                 string[] vars;
 
@@ -712,7 +716,7 @@ namespace BadScript
                     vars = new[] { GetNextWord() };
                 }
 
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
                 string inStr = GetNextWord();
 
                 if ( inStr != "in" )
@@ -720,7 +724,7 @@ namespace BadScript
                     throw new BSParserException( $"Expected 'in' got '{inStr}'", this );
                 }
 
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
                 BSExpression cDecl = ParseExpression( int.MaxValue );
                 ReadWhitespaceAndNewLine();
                 string block = ParseBlock();
@@ -729,14 +733,14 @@ namespace BadScript
 
                 BSExpression[] b = p.ParseToEnd();
 
-                return new BSForeachExpression( vars, cDecl, b );
+                return new BSForeachExpression( CreateSourcePosition( pos ), vars, cDecl, b );
             }
 
             if ( wordName == "while" )
             {
                 (BSExpression, BSExpression[]) a = ParseConditionalBlock();
 
-                return new BSWhileExpression( a.Item1, a.Item2 );
+                return new BSWhileExpression( CreateSourcePosition( pos ), a.Item1, a.Item2 );
             }
 
             if ( wordName == "for" )
@@ -751,7 +755,7 @@ namespace BadScript
                     throw new BSParserException( "Expected while", this );
                 }
 
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
 
                 BSExpression cCond;
 
@@ -814,21 +818,30 @@ namespace BadScript
 
                 if ( step != "step" )
                 {
+                    m_CurrentPosition -= step.Length;
                     cInc = new BSAssignExpression(
+                        CreateSourcePosition( pos ),
                         cProp,
                         new BSInvocationExpression(
+                            CreateSourcePosition( pos ),
                             new BSProxyExpression(
+                                CreateSourcePosition( pos ),
                                 new BSFunction(
+                                    CreateSourcePosition( pos ),
                                     "function +(a, b)",
                                     objects => BSOperatorImplementationResolver.
                                                ResolveImplementation( "+", objects ).
                                                ExecuteOperator( objects ),
                                     2 ) ),
-                            new BSExpression[] { cProp, new BSValueExpression( ( decimal ) 1 ) } ) );
+                            new BSExpression[]
+                            {
+                                cProp, new BSValueExpression( CreateSourcePosition( pos ), ( decimal ) 1 )
+                            } ) );
                 }
                 else
                 {
                     cInc = new BSAssignExpression(
+                        CreateSourcePosition( pos ),
                         cProp,
                         BSOperatorPreceedenceTable.Get( int.MaxValue, "+" ).
                                                    Parse( cProp, this ) );
@@ -841,36 +854,36 @@ namespace BadScript
 
                 BSExpression[] b = p.ParseToEnd();
 
-                return new BSForExpression( cDecl, cCond, cInc, b );
+                return new BSForExpression( CreateSourcePosition( pos ), cDecl, cCond, cInc, b );
 
             }
 
             if ( wordName == "null" && left == null )
             {
-                return new BSValueExpression( null );
+                return new BSValueExpression( CreateSourcePosition( pos ), null );
             }
 
-            return new BSPropertyExpression( left, wordName );
+            return new BSPropertyExpression( CreateSourcePosition( pos ), left, wordName );
         }
 
-        public int ReadWhitespace()
-        {
-            int r = m_CurrentPosition;
+        //public int ReadWhitespace()
+        //{
+        //    int r = m_CurrentPosition;
 
-            while ( m_OriginalSource.Length > m_CurrentPosition &&
-                    m_OriginalSource[m_CurrentPosition] != '\n' &&
-                    char.IsWhiteSpace( m_OriginalSource, m_CurrentPosition ) )
-            {
-                m_CurrentPosition++;
-            }
+        //    while ( m_OriginalSource.Length > m_CurrentPosition &&
+        //            m_OriginalSource[m_CurrentPosition] != '\n' &&
+        //            char.IsWhiteSpace( m_OriginalSource, m_CurrentPosition ) )
+        //    {
+        //        m_CurrentPosition++;
+        //    }
 
-            if ( ReadComment() )
-            {
-                ReadWhitespaceAndNewLine();
-            }
+        //    if ( ReadComment() )
+        //    {
+        //        ReadWhitespaceAndNewLine();
+        //    }
 
-            return r;
-        }
+        //    return r;
+        //}
 
         public int ReadWhitespaceAndNewLine()
         {
@@ -894,14 +907,21 @@ namespace BadScript
 
         #region Private
 
-        public string GetNextWord()
+        private SourcePosition CreateSourcePosition( int pos )
         {
-            if ( !TryReadNextWord( out string word ) )
+            return SourcePosition.GetCurrentLineInfo( m_OriginalSource, pos );
+        }
+
+        private bool Is( string s )
+        {
+            bool isOpen = true;
+
+            for ( int i = 0; i < s.Length; i++ )
             {
-                throw new BSParserException( "Can not Parse Word", this );
+                isOpen &= Is( i, s[i] );
             }
 
-            return word;
+            return isOpen;
         }
 
         private bool Is( char c )
@@ -965,13 +985,13 @@ namespace BadScript
                 }
 
                 args.Add( ( allowNull, ParseArgumentName() ) );
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
 
                 while ( Is( ',' ) )
                 {
                     m_CurrentPosition++;
                     allowNull = true;
-                    ReadWhitespace();
+                    ReadWhitespaceAndNewLine();
 
                     if ( Is( '!' ) )
                     {
@@ -980,10 +1000,10 @@ namespace BadScript
                     }
 
                     args.Add( ( allowNull, ParseArgumentName() ) );
-                    ReadWhitespace();
+                    ReadWhitespaceAndNewLine();
                 }
 
-                ReadWhitespace();
+                ReadWhitespaceAndNewLine();
 
                 if ( !Is( ')' ) )
                 {
@@ -1013,7 +1033,7 @@ namespace BadScript
 
             //Find Closing
             int start = m_CurrentPosition;
-            int end = FindClosing( '{', '}' );
+            int end = FindClosing( "{", "}", ( "@\"", "\"" ) );
 
             string s = m_OriginalSource.Substring( start, end - start );
 

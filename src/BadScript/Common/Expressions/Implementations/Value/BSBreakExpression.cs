@@ -9,7 +9,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
     {
         #region Public
 
-        public BSBreakExpression()
+        public BSBreakExpression( SourcePosition srcPos ) : base( srcPos )
         {
         }
 

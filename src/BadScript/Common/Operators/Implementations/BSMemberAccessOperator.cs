@@ -11,9 +11,9 @@ namespace BadScript.Common.Operators.Implementations
 
         #region Public
 
-        public override BSExpression Parse(BSExpression left, BSParser parser)
+        public override BSExpression Parse( BSExpression left, BSParser parser )
         {
-            return parser.ParseWord(left);
+            return parser.ParseWord( left );
         }
 
         #endregion

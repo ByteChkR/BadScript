@@ -15,7 +15,12 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
         #region Public
 
-        public BSForExpression( BSExpression cDef, BSExpression cCond, BSExpression cInc, BSExpression[] block )
+        public BSForExpression(
+            SourcePosition srcPos,
+            BSExpression cDef,
+            BSExpression cCond,
+            BSExpression cInc,
+            BSExpression[] block ) : base( srcPos )
         {
             m_CounterCondition = cCond;
             m_CounterDefinition = cDef;

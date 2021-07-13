@@ -9,7 +9,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
     {
         #region Public
 
-        public BSContinueExpression()
+        public BSContinueExpression( SourcePosition srcPos ) : base( srcPos )
         {
         }
 

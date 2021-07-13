@@ -11,7 +11,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
         #region Public
 
-        public BSValueExpression( object o )
+        public BSValueExpression( SourcePosition srcPos, object o ) : base( srcPos )
         {
             m_Value = o;
         }

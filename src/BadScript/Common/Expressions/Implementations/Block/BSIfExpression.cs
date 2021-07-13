@@ -14,7 +14,10 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         #region Public
 
-        public BSIfExpression( Dictionary < BSExpression, BSExpression[] > conditions, BSExpression[] elseBlock = null )
+        public BSIfExpression(
+            SourcePosition srcPos,
+            Dictionary < BSExpression, BSExpression[] > conditions,
+            BSExpression[] elseBlock = null ) : base( srcPos )
         {
             m_ConditionMap = conditions;
             m_ElseBlock = elseBlock;

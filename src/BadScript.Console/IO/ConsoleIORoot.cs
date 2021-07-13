@@ -13,6 +13,7 @@ namespace BadScript.Console.IO
             RootPath = rootPath;
             Directory.CreateDirectory( RootPath );
         }
+
         public string GetRootPath()
         {
             return RootPath;
@@ -21,18 +22,20 @@ namespace BadScript.Console.IO
         public int GetChildCount()
         {
             string[] fsEntries = Directory.GetFileSystemEntries( RootPath, "*", SearchOption.TopDirectoryOnly );
+
             return fsEntries.Length;
         }
 
         public IConsoleIOEntry GetChildAt( int index )
         {
-            string[] fsEntries = Directory.GetFileSystemEntries(RootPath, "*", SearchOption.TopDirectoryOnly);
+            string[] fsEntries = Directory.GetFileSystemEntries( RootPath, "*", SearchOption.TopDirectoryOnly );
 
             if ( File.Exists( fsEntries[index] ) )
             {
                 return new ConsoleIOFile( fsEntries[index], this, null );
             }
-            return new ConsoleIODirectory(fsEntries[index], this, null);
+
+            return new ConsoleIODirectory( fsEntries[index], this, null );
         }
     }
 

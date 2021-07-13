@@ -30,7 +30,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
                     return new BSObject( lD + rS );
                 }
 
-                throw new BSInvalidOperationException( "+(Add)", lVal, rVal );
+                throw new BSInvalidOperationException( lVal.Position, "+(Add)", lVal, rVal );
             }
 
             if ( lVal.TryConvertString( out string lS ) &&
@@ -39,7 +39,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
                 return new BSObject( lS + rStr );
             }
 
-            throw new BSInvalidOperationException( "+(Add)", lVal, rVal );
+            throw new BSInvalidOperationException( lVal.Position, "+(Add)", lVal, rVal );
         }
 
         public override bool IsCorrectImplementation( ABSObject[] arg )

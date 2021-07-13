@@ -25,9 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.ExpGen", "BadScri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.StringUtils", "BadScript.StringUtils\BadScript.StringUtils.csproj", "{8366A94D-2E79-4858-B57A-AE1903BE39D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Core", "BadScript.Core\BadScript.Core.csproj", "{A3DED68A-2692-4604-AC41-C96B2DCFC7DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Core", "BadScript.Core\BadScript.Core.csproj", "{A3DED68A-2692-4604-AC41-C96B2DCFC7DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.ConsoleUtils", "BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj", "{3D2988C2-DE1B-4EFC-87BF-AA836674C20E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.ConsoleUtils", "BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj", "{3D2988C2-DE1B-4EFC-87BF-AA836674C20E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Imaging", "BadScript.Imaging\BadScript.Imaging.csproj", "{39F965E2-CD17-4E35-B207-FB3263AD8B75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{3D2988C2-DE1B-4EFC-87BF-AA836674C20E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D2988C2-DE1B-4EFC-87BF-AA836674C20E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D2988C2-DE1B-4EFC-87BF-AA836674C20E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39F965E2-CD17-4E35-B207-FB3263AD8B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39F965E2-CD17-4E35-B207-FB3263AD8B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39F965E2-CD17-4E35-B207-FB3263AD8B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39F965E2-CD17-4E35-B207-FB3263AD8B75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{8366A94D-2E79-4858-B57A-AE1903BE39D7} = {CA37FB78-B2B0-4552-A7FC-A68ACB93BDE8}
 		{A3DED68A-2692-4604-AC41-C96B2DCFC7DE} = {CA37FB78-B2B0-4552-A7FC-A68ACB93BDE8}
 		{3D2988C2-DE1B-4EFC-87BF-AA836674C20E} = {CA37FB78-B2B0-4552-A7FC-A68ACB93BDE8}
+		{39F965E2-CD17-4E35-B207-FB3263AD8B75} = {CA37FB78-B2B0-4552-A7FC-A68ACB93BDE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15D6036D-F581-44C4-921D-D0F2E8DC8457}

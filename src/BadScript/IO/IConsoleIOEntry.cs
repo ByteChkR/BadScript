@@ -4,11 +4,12 @@
     public interface IConsoleIOEntry
     {
         bool Exists { get; }
+
         string GetName();
 
-        IConsoleIORoot GetRoot();
         IConsoleIODirectory GetParent();
 
+        IConsoleIORoot GetRoot();
     }
 
 }

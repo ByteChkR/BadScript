@@ -11,7 +11,6 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
         public abstract bool Execute( bool l, bool r );
 
-
         public override bool IsCorrectImplementation( ABSObject[] arg )
         {
             ABSObject lVal = arg[0];

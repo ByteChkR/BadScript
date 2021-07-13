@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BadScript.Common.Exceptions;
+using BadScript.Common.Expressions;
 using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types.Implementations
@@ -13,7 +14,11 @@ namespace BadScript.Common.Types.Implementations
 
         #region Public
 
-        public BSObject( object instance )
+        public BSObject( object instance ) : this( SourcePosition.Unknown, instance )
+        {
+        }
+
+        public BSObject( SourcePosition pos, object instance ) : base( pos )
         {
             m_InternalObject = instance;
         }
@@ -35,7 +40,8 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
-            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
+
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override bool HasProperty( string propertyName )
@@ -45,7 +51,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSObject Invoke( ABSObject[] args )
         {
-            throw new BSRuntimeException( $"Can not invoke '{this}'" );
+            throw new BSRuntimeException( Position, $"Can not invoke '{this}'" );
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -62,7 +68,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override string ToString()

@@ -7,7 +7,7 @@
 
         #region Protected
 
-        protected BSUnaryExpression( BSExpression left )
+        protected BSUnaryExpression( SourcePosition srcPos, BSExpression left ) : base( srcPos )
         {
             Left = left;
         }

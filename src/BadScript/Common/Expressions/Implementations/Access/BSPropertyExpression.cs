@@ -12,20 +12,22 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
         #region Public
 
-        public BSPropertyExpression(BSExpression left, string varname)
+        public BSPropertyExpression( SourcePosition srcPos, BSExpression left, string varname ) : base( srcPos )
         {
             Left = left;
             Right = varname;
         }
 
-        public override ABSObject Execute(BSScope scope)
+        public override ABSObject Execute( BSScope scope )
         {
-            if (Left != null)
+            if ( Left != null )
             {
-                return Left.Execute(scope).GetProperty(Right);
+                ABSObject l = Left.Execute( scope );
+
+                return l.GetProperty( Right );
             }
 
-            return scope.ResolveName(Right);
+            return scope.ResolveName( Right );
         }
 
         #endregion

@@ -13,7 +13,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         #region Public
 
-        public BSWhileExpression( BSExpression condition, BSExpression[] block )
+        public BSWhileExpression( SourcePosition srcPos, BSExpression condition, BSExpression[] block ) : base( srcPos )
         {
             m_Condition = condition;
             m_Block = block;

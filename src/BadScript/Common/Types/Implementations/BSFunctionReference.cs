@@ -10,14 +10,14 @@ namespace BadScript.Common.Types.Implementations
 
         #region Public
 
-        public BSFunctionReference( BSFunction f )
+        public BSFunctionReference( BSFunction f ) : base( f.Position )
         {
             m_Func = f;
         }
 
         public override void Assign( ABSObject obj )
         {
-            throw new BSRuntimeException( "Can not Assign Function in Array" );
+            throw new BSRuntimeException( Position, "Can not Assign Function in Array" );
         }
 
         public override ABSObject Get()

@@ -3,10 +3,11 @@
 
     public interface IConsoleIORoot
     {
-        string GetRootPath();
+        IConsoleIOEntry GetChildAt( int index );
+
         int GetChildCount();
 
-        IConsoleIOEntry GetChildAt(int index);
+        string GetRootPath();
     }
 
 }

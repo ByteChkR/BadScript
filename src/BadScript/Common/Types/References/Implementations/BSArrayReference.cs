@@ -8,11 +8,12 @@ namespace BadScript.Common.Types.References.Implementations
         private readonly ABSArray m_SourceTable;
         private readonly int m_Key;
         private readonly bool m_ReadOnly;
+
         public override bool IsNull => Get().IsNull;
 
         #region Public
 
-        public BSArrayReference( ABSArray table, int key, bool readOnly )
+        public BSArrayReference( ABSArray table, int key, bool readOnly ) : base( table.Position )
         {
             m_SourceTable = table;
             m_Key = key;
@@ -22,8 +23,12 @@ namespace BadScript.Common.Types.References.Implementations
         public override void Assign( ABSObject obj )
         {
             if ( m_ReadOnly )
+            {
                 throw new BSRuntimeException(
+                    Position,
                     $"Array '{m_SourceTable.SafeToString()}' is locked and can not be edited" );
+            }
+
             m_SourceTable.InsertElement( m_Key, obj );
         }
 
@@ -34,7 +39,7 @@ namespace BadScript.Common.Types.References.Implementations
                 return m_SourceTable.GetRawElement( m_Key );
             }
 
-            throw new BSRuntimeException( $"Index is out of bounds: {m_Key}" );
+            throw new BSRuntimeException( Position, $"Index is out of bounds: {m_Key}" );
         }
 
         #endregion

@@ -81,7 +81,7 @@ namespace BadScript.Json
                 return ret;
             }
 
-            throw new BSInvalidTypeException( "Expected BSObject Wrapper Type", o, "BSObject" );
+            throw new BSInvalidTypeException( o.Position, "Expected BSObject Wrapper Type", o, "BSObject" );
         }
 
         #endregion

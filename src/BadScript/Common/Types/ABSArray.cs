@@ -1,4 +1,7 @@
-﻿using BadScript.Common.Types.References;
+﻿using System;
+using System.Collections.Generic;
+using BadScript.Common.Expressions;
+using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types
 {
@@ -33,6 +36,16 @@ namespace BadScript.Common.Types
         }
 
         #endregion
+
+        #region Protected
+
+        protected ABSArray( SourcePosition pos ) : base( pos )
+        {
+        }
+
+        #endregion
+
+        public abstract IEnumerable < T > ForEach < T >( Func <  ABSObject,T > o );
     }
 
 }

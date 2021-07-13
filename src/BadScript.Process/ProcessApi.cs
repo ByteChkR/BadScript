@@ -1,4 +1,5 @@
-﻿using BadScript.Common.Types;
+﻿using BadScript.Common.Expressions;
+using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
@@ -8,7 +9,19 @@ namespace BadScript.Process
     public class ProcessApi : ABSScriptInterface
     {
         #region Public
-        
+
+        public ProcessApi() : base( "process" )
+        {
+        }
+
+        public override void AddApi( ABSTable proc )
+        {
+            proc.InsertElement(
+                new BSObject( "start" ),
+                new BSFunction( "function start(file, args)", StartProcess, 2 )
+            );
+
+        }
 
         #endregion
 
@@ -47,7 +60,7 @@ namespace BadScript.Process
 
         private static ABSObject StartProcess( ABSObject[] args )
         {
-            BSTable t = new BSTable();
+            BSTable t = new BSTable( SourcePosition.Unknown );
             string start = args[0].ResolveReference().ConvertString();
             string procArgs = args[1].ResolveReference().ConvertString();
             System.Diagnostics.Process p = System.Diagnostics.Process.Start( start, procArgs );
@@ -92,19 +105,6 @@ namespace BadScript.Process
         }
 
         #endregion
-
-        public ProcessApi( ) : base( "process" )
-        {
-        }
-
-        public override void AddApi( ABSTable proc )
-        {
-            proc.InsertElement(
-                new BSObject("start"),
-                new BSFunction("function start(file, args)", StartProcess, 2)
-            );
-
-        }
     }
 
 }

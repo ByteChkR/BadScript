@@ -25,7 +25,8 @@ namespace BadScript.Common.Operators.Implementations
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
             return new BSInvocationExpression(
-                new BSProxyExpression( m_OperatorImplementation ),
+                parser.CreateSourcePosition(),
+                new BSProxyExpression( parser.CreateSourcePosition(), m_OperatorImplementation ),
                 new[] { left, parser.ParseExpression( Preceedence - 1 ) }
             );
         }

@@ -1,4 +1,5 @@
-﻿using BadScript.Common.Types.References;
+﻿using BadScript.Common.Expressions;
+using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types
 {
@@ -24,6 +25,14 @@ namespace BadScript.Common.Types
         public abstract void InsertElement( ABSObject k, ABSObject o );
 
         public abstract void RemoveElement( ABSObject k );
+
+        #endregion
+
+        #region Protected
+
+        protected ABSTable( SourcePosition pos ) : base( pos )
+        {
+        }
 
         #endregion
     }

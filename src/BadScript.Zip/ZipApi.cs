@@ -6,8 +6,36 @@ using BadScript.Common.Types.References;
 namespace BadScript.Zip
 {
 
-    public class ZipApi: ABSScriptInterface
+    public class ZipApi : ABSScriptInterface
     {
+        #region Public
+
+        public ZipApi() : base( "zip" )
+        {
+        }
+
+        public override void AddApi( ABSTable t )
+        {
+            t.InsertElement(
+                new BSObject( "createFromDirectory" ),
+                new BSFunction(
+                    "createFromDirectory(sourceDir, destinationFile)",
+                    CreateFromFolder,
+                    2
+                )
+            );
+
+            t.InsertElement(
+                new BSObject( "extractToDirectory" ),
+                new BSFunction(
+                    "extractToDirectory(sourceFile, destinationDir)",
+                    ExtractToFolder,
+                    2
+                )
+            );
+        }
+
+        #endregion
 
         #region Private
 
@@ -30,31 +58,6 @@ namespace BadScript.Zip
         }
 
         #endregion
-
-        public ZipApi( ) : base( "zip" )
-        {
-        }
-
-        public override void AddApi( ABSTable t )
-        {
-            t.InsertElement(
-                new BSObject("createFromDirectory"),
-                new BSFunction(
-                    "createFromDirectory(sourceDir, destinationFile)",
-                    CreateFromFolder,
-                    2
-                )
-            );
-
-            t.InsertElement(
-                new BSObject("extractToDirectory"),
-                new BSFunction(
-                    "extractToDirectory(sourceFile, destinationDir)",
-                    ExtractToFolder,
-                    2
-                )
-            );
-        }
     }
 
 }

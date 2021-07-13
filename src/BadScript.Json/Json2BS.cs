@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -68,7 +69,7 @@ namespace BadScript.Json
 
         private static ABSObject Convert( JObject jsonO )
         {
-            BSTable t = new BSTable();
+            BSTable t = new BSTable( SourcePosition.Unknown );
 
             foreach ( KeyValuePair < string, JToken > kvp in jsonO )
             {

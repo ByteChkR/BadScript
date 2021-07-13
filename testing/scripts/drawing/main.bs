@@ -1,0 +1,38 @@
+//Install(or Load) Module System
+environment.loadString(environment.loadInterface("http", {}).downloadString("http://static.byt3.dev/apps/BadScript/modules-core/modules_install.bs")).load()
+
+//Load Logging Package
+logging = modules.require("logging")
+
+//Create Logger
+log = logging.create("DRAWING")
+
+
+drawing = environment.loadInterface("drawing", {})
+fs = environment.loadInterface("fs", {})
+
+//Color Red
+red = drawing.color(255, 0, 0)
+
+log("Drawing...")
+
+//Create New Empty Image
+image = drawing.createImage(512,512)
+
+//Set each Pixel to full Red
+for x = 0 while< 512
+{
+	for y = 0 while< 512
+	{
+		image.setPixel(x, y, red)
+	}
+}
+
+log("Writing to File...")
+//Serialize Image Data(PNG Format)
+data = image.serialize()
+
+//Save Data As binary with f.writeb(data)
+f = fs.open("red.png")
+f.writeb(data)
+f.close()

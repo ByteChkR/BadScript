@@ -4,12 +4,13 @@ using BadScript.IO;
 namespace BadScript.Console.IO
 {
 
-    public readonly struct ConsoleIOFile:IConsoleIOFile
+    public readonly struct ConsoleIOFile : IConsoleIOFile
     {
         private readonly string m_Name;
         private readonly IConsoleIORoot m_Root;
         private readonly IConsoleIODirectory m_Parent;
         private readonly string m_Path;
+
         public ConsoleIOFile( string name, IConsoleIORoot root, IConsoleIODirectory parent )
         {
 
@@ -19,6 +20,7 @@ namespace BadScript.Console.IO
             m_Path = "";
             m_Path = this.GetFullName();
         }
+
         public string GetName()
         {
             return m_Name;
@@ -38,7 +40,7 @@ namespace BadScript.Console.IO
 
         public Stream Open()
         {
-            return File.Open(m_Path, FileMode.OpenOrCreate);
+            return File.Open( m_Path, FileMode.OpenOrCreate );
         }
     }
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BadScript.Common.Exceptions;
+using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types.References;
 using BadScript.Common.Types.References.Implementations;
@@ -14,8 +15,24 @@ namespace BadScript.Common.Types.Implementations
 
     public class BSTable : ABSTable, IEnumerable < IForEachIteration >
     {
+        public static BSTable FromEnum<T>()where T: Enum
+        {
+            BSTable t = new BSTable(SourcePosition.Unknown);
+           string[] keys = Enum.GetNames( typeof( T ) );
+
+           foreach ( string key in keys )
+           {
+               int v = (int)Enum.Parse(typeof(T), key );
+               t.InsertElement( new BSObject( key ), new BSObject( ( decimal ) v ) );
+           }
+
+           return t;
+        }
+
         private readonly Dictionary < ABSObject, ABSObject > m_InnerTable =
             new Dictionary < ABSObject, ABSObject >();
+
+        private bool m_Locked;
 
         public override bool IsNull => false;
 
@@ -23,22 +40,15 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSArray Values => new BSArray( m_InnerTable.Values );
 
-        private bool m_Locked;
-
         #region Public
 
-        public BSTable()
+        public BSTable( SourcePosition pos ) : base( pos )
         {
         }
 
-        public BSTable( Dictionary < ABSObject, ABSObject > startObjects )
+        public BSTable( SourcePosition pos, Dictionary < ABSObject, ABSObject > startObjects ) : base( pos )
         {
             m_InnerTable = startObjects;
-        }
-
-        public void Lock()
-        {
-            m_Locked = true;
         }
 
         public override void Clear()
@@ -110,7 +120,12 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSObject Invoke( ABSObject[] args )
         {
-            throw new BSRuntimeException( $"Can not invoke '{this}'" );
+            throw new BSRuntimeException( Position, $"Can not invoke '{this}'" );
+        }
+
+        public void Lock()
+        {
+            m_Locked = true;
         }
 
         public override void RemoveElement( ABSObject k )

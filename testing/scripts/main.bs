@@ -1,28 +1,25 @@
+//Install(or Load) Module System
+environment.loadString(environment.loadInterface("http", {}).downloadString("http://static.byt3.dev/apps/BadScript/modules-core/modules_install.bs")).load()
+
 //Load Interface for IO
 fs = environment.loadInterface("fs", {})
-
-function loadProgram()
-{
-	//Install Module System
-	moduleInstallerSource = fs.readAll("modules_install.bs")
-	moduleInstaller = environment.loadString(moduleInstallerSource)
-	moduleInstaller.load()
-
-	//Load Modules System
-	modulesSource = fs.readAll("modules.bs")
-	__G.modules = environment.loadString(modulesSource)
-}
 
 function runProgram()
 {
 	//Require the interactive shell module
 	shell = modules.require("interactive-shell")
-	test = modules.require("test")
+	logging = modules.require("logging")
 
+	log = logging.create("MAIN")
 
+	log("Running Shell..")
 	//Use Interactive Shell Module
 	shell.runShell()
+
+	log("Uninstalling Module System..")
+	//Uninstall Module System to keep Git Repository Clean
+	fs.delete("modules.bs")
+	fs.delete("modules", 1)
 }
 
-loadProgram()
 runProgram()

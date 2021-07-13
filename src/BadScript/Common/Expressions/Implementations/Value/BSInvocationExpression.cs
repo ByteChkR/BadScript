@@ -13,7 +13,9 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
         #region Public
 
-        public BSInvocationExpression( BSExpression left, BSExpression[] args ) : base( left )
+        public BSInvocationExpression( SourcePosition srcPos, BSExpression left, BSExpression[] args ) : base(
+            srcPos,
+            left )
         {
             Parameters = args;
         }

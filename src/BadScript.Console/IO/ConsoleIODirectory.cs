@@ -4,13 +4,15 @@ using BadScript.IO;
 namespace BadScript.Console.IO
 {
 
-    public readonly struct ConsoleIODirectory: IConsoleIODirectory
+    public readonly struct ConsoleIODirectory : IConsoleIODirectory
     {
-        public bool Exists => File.Exists(m_Path);
+        public bool Exists => File.Exists( m_Path );
+
         private readonly string m_Name;
         private readonly IConsoleIORoot m_Root;
         private readonly IConsoleIODirectory m_Parent;
         private readonly string m_Path;
+
         public ConsoleIODirectory( string name, IConsoleIORoot root, IConsoleIODirectory parent )
         {
             m_Name = name;
@@ -19,6 +21,7 @@ namespace BadScript.Console.IO
             m_Path = "";
             m_Path = this.GetFullName();
         }
+
         public string GetName()
         {
             return m_Name;
@@ -43,7 +46,7 @@ namespace BadScript.Console.IO
 
         public IConsoleIOEntry GetChildAt( int index )
         {
-            string[] files = Directory.GetFileSystemEntries(m_Path, "*", SearchOption.TopDirectoryOnly);
+            string[] files = Directory.GetFileSystemEntries( m_Path, "*", SearchOption.TopDirectoryOnly );
 
             if ( File.Exists( files[index] ) )
             {

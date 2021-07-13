@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BadScript.Common.Expressions;
 
 namespace BadScript.Common.Types.References
 {
@@ -56,6 +57,14 @@ namespace BadScript.Common.Types.References
         public override bool TryConvertString( out string v )
         {
             return Get().TryConvertString( out v );
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected ABSReference( SourcePosition pos ) : base( pos )
+        {
         }
 
         #endregion

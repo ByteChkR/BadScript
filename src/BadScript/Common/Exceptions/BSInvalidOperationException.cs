@@ -1,4 +1,5 @@
-﻿using BadScript.Common.Types;
+﻿using BadScript.Common.Expressions;
+using BadScript.Common.Types;
 
 namespace BadScript.Common.Exceptions
 {
@@ -7,7 +8,8 @@ namespace BadScript.Common.Exceptions
     {
         #region Public
 
-        public BSInvalidOperationException( string op, params ABSObject[] o ) : base(
+        public BSInvalidOperationException( SourcePosition pos, string op, params ABSObject[] o ) : base(
+            pos,
             GenerateOperationErrorText( op, o ) )
         {
         }

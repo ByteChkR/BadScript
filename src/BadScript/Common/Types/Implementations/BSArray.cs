@@ -1,9 +1,11 @@
-﻿using System.CodeDom.Compiler;
+﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BadScript.Common.Exceptions;
+using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types.References;
 using BadScript.Common.Types.References.Implementations;
@@ -22,21 +24,28 @@ namespace BadScript.Common.Types.Implementations
 
         #region Public
 
-        public BSArray() : this( new List < ABSObject >() )
+        public BSArray( SourcePosition pos ) : this( pos, new List < ABSObject >() )
         {
         }
 
-        public BSArray( int capacity ) : this( new List < ABSObject >( capacity ) )
+        public BSArray( SourcePosition pos, int capacity ) : this( new List < ABSObject >( capacity ) )
         {
         }
 
-        public BSArray( IEnumerable < ABSObject > collection ) : this( new List < ABSObject >( collection ) )
+        public BSArray( SourcePosition pos, IEnumerable < ABSObject > collection ) : this( pos, collection.ToList() )
         {
         }
 
-        public void Lock()
+        public BSArray() : this( SourcePosition.Unknown, new List < ABSObject >() )
         {
-            m_Locked = true;
+        }
+
+        public BSArray( int capacity ) : this( SourcePosition.Unknown, new List < ABSObject >( capacity ) )
+        {
+        }
+
+        public BSArray( IEnumerable < ABSObject > collection ) : this( SourcePosition.Unknown, collection )
+        {
         }
 
         public override bool Equals( ABSObject other )
@@ -46,7 +55,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSReference GetElement( int i )
         {
-            return new BSArrayReference( this, i, m_Locked);
+            return new BSArrayReference( this, i, m_Locked );
         }
 
         public IEnumerator < IForEachIteration > GetEnumerator()
@@ -70,7 +79,7 @@ namespace BadScript.Common.Types.Implementations
         {
             if ( !m_Functions.ContainsKey( propertyName ) )
             {
-                throw new BSRuntimeException( $"Property {propertyName} does not exist" );
+                throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
             }
 
             return new BSFunctionReference( m_Functions[propertyName] );
@@ -88,7 +97,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override bool HasProperty( string propertyName )
         {
-            return m_Functions.ContainsKey(propertyName);
+            return m_Functions.ContainsKey( propertyName );
         }
 
         public override void InsertElement( int i, ABSObject o )
@@ -98,7 +107,12 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSObject Invoke( ABSObject[] args )
         {
-            throw new BSRuntimeException( $"Can not invoke '{this}'" );
+            throw new BSRuntimeException( Position, $"Can not invoke '{this}'" );
+        }
+
+        public void Lock()
+        {
+            m_Locked = true;
         }
 
         public override void RemoveElement( int i )
@@ -156,9 +170,17 @@ namespace BadScript.Common.Types.Implementations
             m_InnerArray[k] = o;
         }
 
+        public override IEnumerable < T > ForEach < T >( Func < ABSObject, T > o )
+        {
+            foreach ( ABSObject absObject in m_InnerArray )
+            {
+                yield return o( absObject );
+            }
+        }
+
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new BSRuntimeException( $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override bool TryConvertBool( out bool v )
@@ -186,7 +208,7 @@ namespace BadScript.Common.Types.Implementations
 
         #region Private
 
-        private BSArray( List < ABSObject > o )
+        private BSArray( SourcePosition pos, List < ABSObject > o ) : base( pos )
         {
             m_InnerArray = o;
 

@@ -18,10 +18,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
         #region Public
 
         public BSFunctionDefinitionExpression(
+            SourcePosition srcPos,
             string name,
             (bool, string)[] args,
             BSExpression[] block,
-            bool addGlobal )
+            bool addGlobal ) : base( srcPos )
         {
             Name = name;
             ArgNames = args;
@@ -29,7 +30,12 @@ namespace BadScript.Common.Expressions.Implementations.Block
             Global = addGlobal;
         }
 
-        public BSFunctionDefinitionExpression( string name, string[] args, BSExpression[] block, bool addGlobal )
+        public BSFunctionDefinitionExpression(
+            SourcePosition srcPos,
+            string name,
+            string[] args,
+            BSExpression[] block,
+            bool addGlobal ) : base( srcPos )
         {
             Name = name;
             ArgNames = args.Select( x => ( true, x ) ).ToArray();
@@ -58,7 +64,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
                 if ( !allowNull && arg[i].IsNull )
                 {
-                    throw new BSRuntimeException( $"Parameter '{name}' can not be null" );
+                    throw new BSRuntimeException( arg[i].Position, $"Parameter '{name}' can not be null" );
                 }
 
                 scope.AddLocalVar( name, arg[i] );
