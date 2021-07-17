@@ -1,0 +1,105 @@
+math = environment.loadInterface("math")
+
+vector = {}
+
+vector.multiply = function(c1, c2)
+{
+	r = {}
+	foreach k in c1
+	{
+		if(hasKey(c2, k))
+		{
+			r[k] = c1[k] * c2[k]
+		}
+		else
+		{
+			r[k] = c1[k]
+		}
+	}
+	return r
+}
+
+vector.divide = function(c1, c2)
+{
+	r = {}
+	foreach k in c1
+	{
+		if(hasKey(c2, k))
+		{
+			r[k] = c1[k] / c2[k]
+		}
+		else
+		{
+			r[k] = c1[k]
+		}
+	}
+	return r
+}
+
+
+vector.add = function(c1, c2)
+{
+	r = {}
+	foreach k in c1
+	{
+		if(hasKey(c2, k))
+		{
+			r[k] = c1[k] + c2[k]
+		}
+		else
+		{
+			r[k] = c1[k]
+		}
+	}
+	return r
+}
+
+
+vector.minus = function(c1, c2)
+{
+	r = {}
+	foreach k in c1
+	{
+		if(hasKey(c2, k))
+		{
+			r[k] = c1[k] - c2[k]
+		}
+		else
+		{
+			r[k] = c1[k]
+		}
+	}
+	return r
+}
+
+vector.scale = function(c1, scale)
+{
+	r = {}
+	foreach k in c1
+	{
+		r[k] = c1[k] * scale
+	}
+	return r
+}
+
+
+vector.mod = function(c1, mod)
+{
+	r = {}
+	foreach k in c1
+	{
+		r[k] = c1[k] % mod
+	}
+	return r
+}
+
+vector.pow = function(c1, exp)
+{
+	r = {}
+	foreach k in c1
+	{
+		r[k] = math.pow(c1[k], exp)
+	}
+	return r
+}
+return vector

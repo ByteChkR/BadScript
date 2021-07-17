@@ -1,4 +1,6 @@
 [
 	"interactive-shell",
-	"logging"
+	"logging",
+	"vector",
+	"structs"
 ]

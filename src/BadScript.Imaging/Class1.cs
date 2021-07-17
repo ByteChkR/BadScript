@@ -34,7 +34,6 @@ namespace BadScript.Imaging
                 new BSFunction("function color(a, r, g, b)/color(r, g, b)", CreateColorApi, 3, 4));
 
 
-
             root.InsertElement( new BSObject( "rotateFlipType" ), BSTable.FromEnum < RotateFlipType >() );
         }
 
@@ -88,8 +87,11 @@ namespace BadScript.Imaging
                 new BSObject("dispose"),
                 new BSFunction("function dispose()", x => BitmapDisposeApi(bmp), 0, 0));
 
+
+            
             return table;
         }
+        
 
         private ABSObject BitmapDisposeApi( Bitmap bmp )
         {

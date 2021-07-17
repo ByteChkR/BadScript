@@ -10,6 +10,7 @@ function runProgram()
 	shell = modules.require("interactive-shell")
 	logging = modules.require("logging")
 
+
 	log = logging.create("MAIN")
 
 	log("Running Shell..")
