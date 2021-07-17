@@ -85,7 +85,7 @@ fsync.indexFolder = function(dir)
 	{
 		fs.delete(outFile)
 	}
-	l = indexer.generate(dir)
+	l = generateIndexList(dir)
 	fs.writeAll(outFile, json.toJson(l))
 }
 return fsync
