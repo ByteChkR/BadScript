@@ -19,8 +19,8 @@ function runProgram()
 
 	log("Uninstalling Module System..")
 	//Uninstall Module System to keep Git Repository Clean
-	fs.delete("modules.bs")
-	fs.delete("modules", 1)
+	//fs.delete("modules.bs")
+	//fs.delete("modules", 1)
 }
 
 runProgram()

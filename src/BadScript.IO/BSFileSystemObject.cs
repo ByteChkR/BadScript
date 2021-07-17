@@ -10,6 +10,88 @@ using BadScript.Common.Types.References;
 namespace BadScript.IO
 {
 
+    public class Crc
+    {
+        private static readonly Crc s_Instance = new Crc();
+
+        private long[] m_PTable = new long[256];
+        
+        private long m_Poly = 0xEDB88320;
+
+        #region Public
+
+        public Crc()
+        {
+            int i;
+
+            for ( i = 0; i < 256; i++ )
+            {
+                long crc = i;
+
+                int j;
+
+                for ( j = 0; j < 8; j++ )
+                {
+                    if ( ( crc & 0x1 ) == 1 )
+                    {
+                        crc = ( crc >> 1 ) ^ m_Poly;
+                    }
+                    else
+                    {
+                        crc >>= 1;
+                    }
+                }
+
+                m_PTable[i] = crc;
+            }
+
+        }
+
+        public static uint GetCrc( string fileName )
+        {
+            return s_Instance.GetCrc32( fileName );
+        }
+
+        public uint GetCrc32( string fileName )
+        {
+
+            //4KB Buffer
+            int bufferSize = 0x1000;
+
+            FileStream fs = new FileStream( fileName, FileMode.Open, FileAccess.Read );
+            long streamLength = fs.Length;
+
+            long crc = 0xFFFFFFFF;
+
+            while ( streamLength > 0 )
+            {
+                if ( streamLength < bufferSize )
+                {
+                    bufferSize = ( int ) streamLength;
+                }
+
+                byte[] buffer = new byte[bufferSize];
+
+                fs.Read( buffer, 0, bufferSize );
+
+                for ( int i = 0; i < bufferSize; i++ )
+                {
+                    crc = ( ( ( crc & 0xFFFFFF00 ) / 0x100 ) & 0xFFFFFF ) ^ m_PTable[buffer[i] ^ ( crc & 0xFF )];
+                }
+
+                streamLength -= bufferSize;
+
+            }
+
+            fs.Close();
+            crc = -crc - 1; // !(CRC)
+
+            return ( uint ) crc;
+        }
+
+        #endregion
+    }
+
     public class BSFileSystemObject : ABSObject
     {
         private BSTable m_InstanceFunctions;
@@ -45,7 +127,8 @@ namespace BadScript.IO
                     },
                     {
                         new BSObject( "writeb" ), new BSFunction(
-                            "function writeb(str)", WriteBinary, 
+                            "function writeb(str)",
+                            WriteBinary,
                             1
                         )
                     },
@@ -65,7 +148,8 @@ namespace BadScript.IO
                     },
                     {
                         new BSObject( "readbAll" ), new BSFunction(
-                            "function readbAll()", ReadAllBinary, 
+                            "function readbAll()",
+                            ReadAllBinary,
                             0
                         )
                     },
@@ -100,40 +184,6 @@ namespace BadScript.IO
                     }
                 }
             );
-        }
-
-        private ABSObject ReadAllBinary( ABSObject[] arg )
-        {
-            if (m_Stream == null)
-            {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
-            }
-
-            byte[] buf = new byte[m_Stream.Length];
-            m_Stream.Read(buf, 0, buf.Length);
-            BSArray a = new BSArray( buf.Select( x => new BSObject( ( decimal ) x ) ) );
-
-            return a;
-        }
-
-        private ABSObject WriteBinary( ABSObject[] arg )
-        {
-            if (m_Stream == null)
-            {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
-            }
-
-            ABSObject o = arg[0].ResolveReference();
-
-            if ( o is ABSArray arr )
-            {
-                for ( int i = 0; i < arr.GetLength(); i++ )
-                {
-                    m_Stream.WriteByte((byte)arr.GetRawElement( i ).ConvertDecimal() );
-                }
-            }
-
-            return new BSObject(0);
         }
 
         public override bool Equals( ABSObject other )
@@ -204,6 +254,7 @@ namespace BadScript.IO
             return new BSObject( 0 );
         }
 
+    
         private ABSObject GetLength( ABSObject[] arg )
         {
             if ( m_Stream == null )
@@ -236,6 +287,20 @@ namespace BadScript.IO
             {
                 return new BSObject( reader.ReadToEnd() );
             }
+        }
+
+        private ABSObject ReadAllBinary( ABSObject[] arg )
+        {
+            if ( m_Stream == null )
+            {
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
+            }
+
+            byte[] buf = new byte[m_Stream.Length];
+            m_Stream.Read( buf, 0, buf.Length );
+            BSArray a = new BSArray( buf.Select( x => new BSObject( ( decimal ) x ) ) );
+
+            return a;
         }
 
         private ABSObject ReadLine( ABSObject[] arg )
@@ -276,6 +341,26 @@ namespace BadScript.IO
             ABSObject o = arg[0].ResolveReference();
 
             m_Stream.Position = ( long ) o.ConvertDecimal();
+
+            return new BSObject( 0 );
+        }
+
+        private ABSObject WriteBinary( ABSObject[] arg )
+        {
+            if ( m_Stream == null )
+            {
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
+            }
+
+            ABSObject o = arg[0].ResolveReference();
+
+            if ( o is ABSArray arr )
+            {
+                for ( int i = 0; i < arr.GetLength(); i++ )
+                {
+                    m_Stream.WriteByte( ( byte ) arr.GetRawElement( i ).ConvertDecimal() );
+                }
+            }
 
             return new BSObject( 0 );
         }

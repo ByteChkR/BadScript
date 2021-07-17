@@ -3,5 +3,6 @@
 	"logging",
 	"vector",
 	"structs",
-	"fl-client"
+	"fl-client",
+	"fsync"
 ]

@@ -326,6 +326,13 @@ namespace BadScript.IO
             );
 
             ret.InsertElement(
+                new BSObject( "crc" ),
+                new BSFunction(
+                    "function crc(path)",
+                    GetCheckSum,
+                    1
+                ) );
+            ret.InsertElement(
                 new BSObject( "open" ),
                 new BSFunction(
                     "function open(path)",
@@ -384,6 +391,11 @@ namespace BadScript.IO
             );
 
         }
+        private static ABSObject GetCheckSum(ABSObject[] arg)
+        {
+            return new BSObject((decimal)Crc.GetCrc(arg[0].ConvertString()));
+        }
+
 
         #endregion
     }

@@ -1,0 +1,91 @@
+string = environment.loadInterface("string")
+http = environment.loadInterface("http")
+fs = environment.loadInterface("fs")
+path = environment.loadInterface("path")
+json = environment.loadInterface("json")
+
+log = modules.require("logging").create("FSYNC")
+
+function generateIndexList(dir)
+{
+	log("Generating Index List...")
+	d = path.getFullPath(dir)
+	files = fs.getFiles(d, "*", 1)
+	list = []
+	foreach file in files
+	{
+		log(path.getFileName(file))
+		e = {}
+		e.name = string.replace(file, d, ".")
+		e.crc = fs.crc(file)
+		list.add(e)
+	}
+	return list
+}
+
+function hasUpdate(localDir, file, crc)
+{
+	p = path.combine(localDir, file)
+	if(fs.exists(p))
+	{
+		return fs.crc(p) != crc
+	}
+	return 1
+}
+
+function loadIndex(url)
+{
+	log("Loading Index List...")
+	indexUrl = path.combine(url, "index.json")
+	response = http.get(indexUrl)
+	if(response.status != 200)
+	{
+		error("Invalid Response")
+	}
+	return json.fromJson(response.body)
+}
+
+function updateFile(url, file, localDir)
+{
+	log("Updating File: "+ file)
+	u = path.combine(url, file)
+	p = path.combine(localDir, file)
+	if(fs.exists(p))
+	{
+		fs.delete(p)
+	}
+	else
+	{
+		root = path.getDirectoryName(p)
+		fs.createDir(root)
+	}
+	http.downloadFile(u, p)
+}
+
+fsync = {}
+fsync.synchronize = function(url, localDir)
+{
+	fs.createDir(localDir)
+	indexList = loadIndex(url)
+	log("Checking Files...")
+	foreach file in indexList
+	{
+		if(hasUpdate(localDir, file.name, file.crc))
+		{
+			updateFile(url, file.name, localDir)
+		}
+	}
+}
+
+fsync.indexFolder = function(dir)
+{
+	log("Generating Index List...")
+	outFile = path.combine(dir, "index.json")
+	if(fs.exists(outFile))
+	{
+		fs.delete(outFile)
+	}
+	l = indexer.generate(dir)
+	fs.writeAll(outFile, json.toJson(l))
+}
+return fsync
