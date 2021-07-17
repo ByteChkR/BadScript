@@ -2,5 +2,6 @@
 	"interactive-shell",
 	"logging",
 	"vector",
-	"structs"
+	"structs",
+	"fl-client"
 ]

@@ -18,6 +18,7 @@ namespace BadScript.StringUtils
 
         public override void AddApi( ABSTable apiRoot )
         {
+
             apiRoot.InsertElement(
                 "trim",
                 MakeFunction(

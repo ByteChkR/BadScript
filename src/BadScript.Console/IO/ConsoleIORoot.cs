@@ -4,7 +4,7 @@ using BadScript.IO;
 namespace BadScript.Console.IO
 {
 
-    public readonly struct ConsoleIORoot : IConsoleIORoot
+    public readonly struct ConsoleIORoot : IConsoleIORoot, IConsoleIODirectory
     {
         public readonly string RootPath;
 
@@ -36,6 +36,23 @@ namespace BadScript.Console.IO
             }
 
             return new ConsoleIODirectory( fsEntries[index], this, null );
+        }
+
+        public bool Exists => true;
+
+        public string GetName()
+        {
+            return ".";
+        }
+
+        public IConsoleIODirectory GetParent()
+        {
+            return null;
+        }
+
+        public IConsoleIORoot GetRoot()
+        {
+            return this;
         }
     }
 

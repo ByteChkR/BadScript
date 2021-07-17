@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -20,7 +21,7 @@ namespace BadScript.Http
 
         public override void AddApi( ABSTable t )
         {
-            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1 ) );
+            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1 ));
 
             t.InsertElement(
                 new BSObject( "post" ),
@@ -75,6 +76,9 @@ namespace BadScript.Http
         private static ABSObject Get( ABSObject[] args )
         {
             string url = args[0].ResolveReference().ConvertString();
+
+           
+
             HttpWebRequest request = WebRequest.CreateHttp( url );
             request.Credentials = CredentialCache.DefaultCredentials;
             HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
@@ -84,11 +88,12 @@ namespace BadScript.Http
                 new BSObject( "status" ),
                 new BSObject( ( decimal ) response.StatusCode )
             );
-
-            using ( TextReader tr = new StreamReader( response.GetResponseStream() ) )
-            {
-                t.InsertElement( new BSObject( "body" ), new BSObject( tr.ReadToEnd() ) );
-            }
+            
+                using ( TextReader tr = new StreamReader( response.GetResponseStream() ) )
+                {
+                    t.InsertElement( new BSObject( "body" ), new BSObject( tr.ReadToEnd() ) );
+                }
+            
 
             return t;
         }

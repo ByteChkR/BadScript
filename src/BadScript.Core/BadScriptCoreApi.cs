@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
@@ -221,6 +223,17 @@ namespace BadScript.Core
                 )
             );
 
+            root.InsertElement( new BSObject( "escape" ), new BSFunction( "function escape(str)", EscapeString, 1 ) );
+            root.InsertElement(
+                new BSObject( "base64" ),
+                new BSTable(
+                    SourcePosition.Unknown,
+                    new Dictionary < ABSObject, ABSObject >
+                    {
+                        { new BSObject( "to" ), new BSFunction( "function to(dataArray)", ToBase64, 1 ) },
+                        { new BSObject( "from" ), new BSFunction( "function from(str)", FromBase64, 1 ) },
+                    } ) );
+
             root.InsertElement(
                 new BSObject( "sleep" ),
                 new BSFunction(
@@ -244,6 +257,36 @@ namespace BadScript.Core
                     1
                 )
             );
+        }
+
+        private ABSObject EscapeString( ABSObject[] arg )
+        {
+            string str = arg[0].ConvertString();
+            return new BSObject(Uri.EscapeUriString(str));
+        }
+
+        private ABSObject FromBase64( ABSObject[] arg )
+        {
+            string str = arg[0].ConvertString();
+            byte[] data = Convert.FromBase64String( str );
+            return new BSArray( data.Select( x => new BSObject( ( decimal ) x ) ) );
+        }
+
+        private ABSObject ToBase64( ABSObject[] arg )
+        {
+            if ( arg[0] is ABSArray a )
+            {
+                byte[] data = new byte[a.GetLength()];
+
+                for ( int i = 0; i < data.Length; i++ )
+                {
+                    data[i] = ( byte ) a.GetElement( i ).ConvertDecimal();
+                }
+
+                return new BSObject( Convert.ToBase64String( data ) );
+            }
+
+            throw new BSRuntimeException( "Invalid Type. Expected Array of Numbers" );
         }
 
         #endregion

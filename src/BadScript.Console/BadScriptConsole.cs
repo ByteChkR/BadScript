@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using BadScript.Console.IO;
+using BadScript.Console.Plugins;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
 using BadScript.Http;
@@ -18,8 +19,12 @@ namespace BadScript.Console
 
     internal class BadScriptConsole
     {
-        private static readonly IConsoleIORoot m_IORoot =
-            new ConsoleIORoot( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "configs/" ) );
+
+        private static PluginLoader m_PluginLoader;
+
+
+        private static readonly ConsoleIORoot m_IORoot =
+            new ConsoleIORoot( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "bs-data/" ) );
 
         #region Private
 
@@ -58,6 +63,9 @@ namespace BadScript.Console
 
         private static void Main( string[] args )
         {
+            m_PluginLoader = new PluginLoader( m_IORoot, new ConsoleIODirectory( "plugins", m_IORoot, null ) );
+
+            m_PluginLoader.LoadPlugins();
             BSEngine.AddStatic( new BS2JsonInterface() );
             BSEngine.AddStatic( new BSFileSystemInterface() );
             BSEngine.AddStatic( new BSFileSystemPathInterface() );

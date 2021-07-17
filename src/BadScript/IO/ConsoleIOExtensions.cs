@@ -17,7 +17,7 @@ namespace BadScript.IO
 
             while ( current != null )
             {
-                sb.Insert( 0, e.GetName() + "/" );
+                sb.Insert( 0, current.GetName() + "/" );
                 current = current.GetParent();
             }
 
