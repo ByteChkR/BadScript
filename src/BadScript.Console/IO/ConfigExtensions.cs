@@ -9,12 +9,6 @@ namespace BadScript.Console.IO
     {
         #region Public
 
-        public static void EnsureExistsSelf( this IConsoleIODirectory d )
-        {
-            d.EnsureExistParent();
-            Directory.CreateDirectory(d.GetFullName());
-        }
-
         public static void EnsureExistParent( this IConsoleIOEntry e )
         {
             IConsoleIODirectory parent = e.GetParent();
@@ -25,6 +19,12 @@ namespace BadScript.Console.IO
             }
 
             Directory.CreateDirectory( parent.GetFullName() );
+        }
+
+        public static void EnsureExistsSelf( this IConsoleIODirectory d )
+        {
+            d.EnsureExistParent();
+            Directory.CreateDirectory( d.GetFullName() );
         }
 
         public static T ParseJson < T >( this IConsoleIOFile file )

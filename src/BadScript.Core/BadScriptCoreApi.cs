@@ -157,24 +157,24 @@ namespace BadScript.Core
             );
 
             root.InsertElement(
-                new BSObject("lock"),
+                new BSObject( "lock" ),
                 new BSFunction(
                     "function lock(array/table)",
-                    (args) =>
+                    ( args ) =>
                     {
 
                         ABSObject arg = args[0].ResolveReference();
 
-                        if (arg is BSArray arr)
+                        if ( arg is BSArray arr )
                         {
                             arr.Lock();
                         }
-                        else if (arg is BSTable table)
+                        else if ( arg is BSTable table )
                         {
                             table.Lock();
                         }
 
-                        return new BSObject((decimal)0);
+                        return new BSObject( ( decimal ) 0 );
 
                     },
                     1
@@ -182,15 +182,15 @@ namespace BadScript.Core
             );
 
             root.InsertElement(
-                new BSObject("hasKey"),
+                new BSObject( "hasKey" ),
                 new BSFunction(
                     "function hasKey(table, key)",
-                    (args) =>
+                    ( args ) =>
                     {
 
                         ABSObject arg = args[0].ResolveReference();
 
-                        if (arg is ABSTable table)
+                        if ( arg is ABSTable table )
                         {
                             return new BSObject(
                                 ( decimal ) ( table.HasElement( args[1].ResolveReference() ) ? 1 : 0 ) );
@@ -224,6 +224,7 @@ namespace BadScript.Core
             );
 
             root.InsertElement( new BSObject( "escape" ), new BSFunction( "function escape(str)", EscapeString, 1 ) );
+
             root.InsertElement(
                 new BSObject( "base64" ),
                 new BSTable(
@@ -259,16 +260,22 @@ namespace BadScript.Core
             );
         }
 
+        #endregion
+
+        #region Private
+
         private ABSObject EscapeString( ABSObject[] arg )
         {
             string str = arg[0].ConvertString();
-            return new BSObject(Uri.EscapeUriString(str));
+
+            return new BSObject( Uri.EscapeUriString( str ) );
         }
 
         private ABSObject FromBase64( ABSObject[] arg )
         {
             string str = arg[0].ConvertString();
             byte[] data = Convert.FromBase64String( str );
+
             return new BSArray( data.Select( x => new BSObject( ( decimal ) x ) ) );
         }
 

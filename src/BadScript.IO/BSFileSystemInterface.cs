@@ -332,6 +332,7 @@ namespace BadScript.IO
                     GetCheckSum,
                     1
                 ) );
+
             ret.InsertElement(
                 new BSObject( "open" ),
                 new BSFunction(
@@ -391,11 +392,11 @@ namespace BadScript.IO
             );
 
         }
-        private static ABSObject GetCheckSum(ABSObject[] arg)
-        {
-            return new BSObject((decimal)Crc.GetCrc(arg[0].ConvertString()));
-        }
 
+        private static ABSObject GetCheckSum( ABSObject[] arg )
+        {
+            return new BSObject( ( decimal ) Crc.GetCrc( arg[0].ConvertString() ) );
+        }
 
         #endregion
     }

@@ -53,6 +53,14 @@ namespace BadScript.Common.Types.Implementations
             return ReferenceEquals( this, other );
         }
 
+        public override IEnumerable < T > ForEach < T >( Func < ABSObject, T > o )
+        {
+            foreach ( ABSObject absObject in m_InnerArray )
+            {
+                yield return o( absObject );
+            }
+        }
+
         public override ABSReference GetElement( int i )
         {
             return new BSArrayReference( this, i, m_Locked );
@@ -168,14 +176,6 @@ namespace BadScript.Common.Types.Implementations
         public override void SetElement( int k, ABSObject o )
         {
             m_InnerArray[k] = o;
-        }
-
-        public override IEnumerable < T > ForEach < T >( Func < ABSObject, T > o )
-        {
-            foreach ( ABSObject absObject in m_InnerArray )
-            {
-                yield return o( absObject );
-            }
         }
 
         public override void SetProperty( string propertyName, ABSObject obj )

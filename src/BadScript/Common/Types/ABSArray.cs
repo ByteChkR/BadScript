@@ -10,6 +10,8 @@ namespace BadScript.Common.Types
     {
         #region Public
 
+        public abstract IEnumerable < T > ForEach < T >( Func < ABSObject, T > o );
+
         public abstract ABSReference GetElement( int i );
 
         public abstract int GetLength();
@@ -44,8 +46,6 @@ namespace BadScript.Common.Types
         }
 
         #endregion
-
-        public abstract IEnumerable < T > ForEach < T >( Func <  ABSObject,T > o );
     }
 
 }

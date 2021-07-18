@@ -19,9 +19,7 @@ namespace BadScript.Console
 
     internal class BadScriptConsole
     {
-
         private static PluginLoader m_PluginLoader;
-
 
         private static readonly ConsoleIORoot m_IORoot =
             new ConsoleIORoot( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "bs-data/" ) );

@@ -15,20 +15,6 @@ namespace BadScript.Common.Types.Implementations
 
     public class BSTable : ABSTable, IEnumerable < IForEachIteration >
     {
-        public static BSTable FromEnum<T>()where T: Enum
-        {
-            BSTable t = new BSTable(SourcePosition.Unknown);
-           string[] keys = Enum.GetNames( typeof( T ) );
-
-           foreach ( string key in keys )
-           {
-               int v = (int)Enum.Parse(typeof(T), key );
-               t.InsertElement( new BSObject( key ), new BSObject( ( decimal ) v ) );
-           }
-
-           return t;
-        }
-
         private readonly Dictionary < ABSObject, ABSObject > m_InnerTable =
             new Dictionary < ABSObject, ABSObject >();
 
@@ -49,6 +35,20 @@ namespace BadScript.Common.Types.Implementations
         public BSTable( SourcePosition pos, Dictionary < ABSObject, ABSObject > startObjects ) : base( pos )
         {
             m_InnerTable = startObjects;
+        }
+
+        public static BSTable FromEnum < T >() where T : Enum
+        {
+            BSTable t = new BSTable( SourcePosition.Unknown );
+            string[] keys = Enum.GetNames( typeof( T ) );
+
+            foreach ( string key in keys )
+            {
+                int v = ( int ) Enum.Parse( typeof( T ), key );
+                t.InsertElement( new BSObject( key ), new BSObject( ( decimal ) v ) );
+            }
+
+            return t;
         }
 
         public override void Clear()

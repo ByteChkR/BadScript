@@ -819,6 +819,7 @@ namespace BadScript
                 if ( step != "step" )
                 {
                     m_CurrentPosition -= step.Length;
+
                     cInc = new BSAssignExpression(
                         CreateSourcePosition( pos ),
                         cProp,

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -44,6 +43,7 @@ namespace BadScript.Console.Plugins
             BSEngineInstance scriptInstance = null;
             string[] activePlugins = m_PluginIndexFile.ParseJson < string[] >();
             Dictionary < string, ABSObject > loadedScripts = new Dictionary < string, ABSObject >();
+
             foreach ( string activePlugin in activePlugins )
             {
                 IConsoleIOFile pluginFile = new ConsoleIOFile(
@@ -54,7 +54,8 @@ namespace BadScript.Console.Plugins
                 if ( pluginFile.Exists )
                 {
                     string fullName = pluginFile.GetFullName();
-                    if(fullName.EndsWith(".dll"))
+
+                    if ( fullName.EndsWith( ".dll" ) )
                     {
                         try
                         {
@@ -69,9 +70,12 @@ namespace BadScript.Console.Plugins
                     else if ( fullName.EndsWith( ".bs" ) )
                     {
                         if ( scriptInstance == null )
+                        {
                             scriptInstance = BSEngine.CreateEngineInstance( BSEngine.GetDefaultInterfaces() );
-                        ABSObject o= scriptInstance.
-                                 LoadFile( fullName, new string[0] );
+                        }
+
+                        ABSObject o = scriptInstance.
+                            LoadFile( fullName, new string[0] );
 
                         loadedScripts[Path.GetFileNameWithoutExtension( fullName )] = o;
                     }
