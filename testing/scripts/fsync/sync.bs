@@ -1,0 +1,8 @@
+fs = environment.loadInterface("fs")
+fsync = modules.require("fsync")
+fsync.synchronize("https://byt3.dev/apps/BigCodeWebArchive/Assignments", "./fsync/Assignments")
+fsync.synchronize("https://byt3.dev/apps/BigCodeWebArchive/Brobots", "./fsync/Brobots")
+fsync.synchronize("https://byt3.dev/apps/BigCodeWebArchive/GobbleRun", "./fsync/GobbleRun")
+fsync.synchronize("https://byt3.dev/apps/BigCodeWebArchive/MinorSkilled", "./fsync/MinorSkilled")
+fsync.synchronize("https://byt3.dev/apps/BigCodeWebArchive/OMNIBuild", "./fsync/OMNIBuild")
+fsync.synchronize("https://byt3.dev/apps/BigCodeWebArchive/MissAtom", "./fsync/MissAtom")

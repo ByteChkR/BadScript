@@ -1,0 +1,12 @@
+fs = environment.loadInterface("fs")
+path = environment.loadInterface("path")
+json = environment.loadInterface("json")
+fsync = modules.require("fsync")
+
+
+fsync.indexFolder("../Assignments")
+fsync.indexFolder("../Brobots")
+fsync.indexFolder("../GobbleRun")
+fsync.indexFolder("../MinorSkilled")
+fsync.indexFolder("../OMNIBuild")
+fsync.indexFolder("../MissAtom")
