@@ -1,0 +1,1 @@
+start PowerShell -ArgumentList "-noexit -command . ./BSShell.ps1"
