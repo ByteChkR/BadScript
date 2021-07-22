@@ -1,0 +1,53 @@
+global function for_each(!enumerable, !func)
+{
+	foreach v in enumerable
+	{
+		func(v)
+	}
+}
+
+global function where(!enumerable, !selector)
+{
+	r = []
+	foreach v in enumerable
+	{
+		if(selector(v))
+		{
+			r.add(v)
+		}
+	}
+}
+
+global function select(!enumerable, !selector)
+{
+	r = []
+	foreach v in enumerable
+	{
+		r.add(selector(v))
+	}
+	return r
+}
+
+global function first(!enumerable, !selector)
+{
+	foreach v in enumerable
+	{
+		if(selector(v))
+		{
+			return v
+		}
+	}
+	error("Could not find first with selector: " + selector)
+}
+
+global function first_or_null(!enumerable, !selector)
+{
+	foreach v in enumerable
+	{
+		if(selector(v))
+		{
+			return v
+		}
+	}
+	return null
+}

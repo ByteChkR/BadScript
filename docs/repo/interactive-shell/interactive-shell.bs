@@ -46,6 +46,18 @@ function readExpression()
 	}
 }
 
+function loadPlugins()
+{
+	fs = environment.loadInterface("fs", {})
+	fs.createDir("./plugins")
+	files = fs.getFiles("./plugins", "*.bs", 1)
+	foreach file in files
+	{
+		log("Loading Plugin: " + file)
+		environment.loadScopedString(interactiveScope, fs.readAll(file))
+	}
+}
+
 function loadInteractiveSession()
 {
 	log("Loading Interfaces.. ")
@@ -55,6 +67,9 @@ function loadInteractiveSession()
 	interactiveScope = environment.createScope()
 	interactiveScript = ""
 	
+	loadPlugins()
+
+
 	log("Starting Session..")
 	log("\tQuit with \\QUIT or \\EXIT")
 	log("\tExecute Script with \\EXEC or \\RUN")

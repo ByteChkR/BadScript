@@ -1,0 +1,13 @@
+// BS Utilities
+fs = environment.loadInterface("fs")
+
+global function loadFile(!path)
+{
+	return environment.loadString(fs.readAll(path))
+}
+
+global function loadScopedFile(!scope, !path)
+{
+	return environment.loadScopedString(scope, path)
+}
+
