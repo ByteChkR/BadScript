@@ -46,9 +46,9 @@ function loadIndex(url)
 
 function updateFile(url, file, localDir)
 {
-	log("Updating File: "+ file)
 	u = path.combine(url, file)
 	p = path.combine(localDir, file)
+	log("GET: " + u)
 	if(fs.exists(p))
 	{
 		fs.delete(p)

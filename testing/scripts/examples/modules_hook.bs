@@ -1,0 +1,19 @@
+function my_filter(!name)
+{
+	if(name == "__TEST__")
+	{
+		print("Module: " + name + " is disallowed by the current filter configuration")
+		return {}
+	}
+	//return null //not required
+}
+
+//Hook the "modules.require(name)" function
+hook(modules.require, my_filter)
+
+
+//Test Filter by Trying to load a forbidden module
+test = modules.require("__TEST__")
+
+//Release the Hooktest = modules.require("__TEST__")
+releaseHook(modules.require, my_filter)

@@ -1,0 +1,8 @@
+log = modules.require("logging").create("PLUGIN-UPDATER")
+
+url = "https://byt3.dev/apps/BadScript/modules/interactive-shell/plugins"
+local = "./plugins"
+
+log("Updating Plugins from URL: " + url)
+modules.require("fsync").synchronize(url, local)
+log("Update Finished.")

@@ -3,6 +3,46 @@ environment.loadString(environment.loadInterface("http", {}).downloadString("htt
 
 //Load Interface for IO
 fs = environment.loadInterface("fs", {})
+log = null
+
+function deleteDirectory(dir, fileFilter)
+{
+	files = fs.getFiles(dir, "*", 1)
+	foreach file in files
+	{
+		if(fileFilter(file) == 0)
+		{
+			log("Removing: " + file)
+			fs.delete(file)
+		}
+		else
+		{
+			log("Leaving file: " + file)
+		}
+	}
+}
+
+function unloadProgram()
+{
+	log("Uninstalling Module System..")
+	//Uninstall Module System to keep Git Repository Clean
+
+	log("Removing modules.bs")
+	fs.delete("modules.bs")
+
+	deleteDirectory("modules", function(file) => return 0)
+	fs.delete("modules", 1)
+
+
+	log("Clearing Plugin Directory..")
+	deleteDirectory("plugins", function(file) => return string.endsWith(file, "update.bs"))
+
+	dirs = fs.getDirectories("plugins", "*", 1)
+	foreach dir in dirs
+	{
+		fs.delete(dir, 1)
+	}
+}
 
 function runProgram()
 {
@@ -17,10 +57,7 @@ function runProgram()
 	//Use Interactive Shell Module
 	shell.runShell()
 
-	log("Uninstalling Module System..")
-	//Uninstall Module System to keep Git Repository Clean
-	fs.delete("modules.bs")
-	fs.delete("modules", 1)
 }
 
 runProgram()
+unloadProgram()

@@ -16,6 +16,8 @@ namespace BadScript.Common.Types
         private readonly (int min, int max)? m_ParameterCount;
         private readonly string m_DebugData = null;
 
+        private readonly List<BSFunction> m_Hooks = new List<BSFunction>();
+        
         private Func < ABSObject[],
             ABSObject > m_Func;
 
@@ -102,8 +104,16 @@ namespace BadScript.Common.Types
             return ReferenceEquals( this, other );
         }
 
+        public void AddHook(BSFunction func) => m_Hooks.Add(func);
+        public void RemoveHook(BSFunction func) => m_Hooks.Remove(func);
+        public void ClearHooks() => m_Hooks.Clear();
+
         public override ABSReference GetProperty( string propertyName )
         {
+            if (propertyName == "hook")
+            {
+                
+            }
             throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
@@ -115,6 +125,17 @@ namespace BadScript.Common.Types
         public override ABSObject Invoke( ABSObject[] args )
         {
             s_StackTrace.Push( this );
+            
+            foreach (BSFunction bsFunction in m_Hooks)
+            {
+                ABSObject o = bsFunction.Invoke(args);
+                if (!o.IsNull)
+                {
+                    s_StackTrace.Pop();
+                    return o;
+                }
+            }
+            
 
             if ( m_ParameterCount == null )
             {
