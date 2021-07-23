@@ -4,5 +4,6 @@
 	"vector",
 	"structs",
 	"fl-client",
-	"fsync"
+	"fsync",
+	"http-server"
 ]
