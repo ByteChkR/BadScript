@@ -9,7 +9,6 @@ using BadScript.Common.Types.References;
 
 namespace BadScript.Http
 {
-
     public class HttpApi : ABSScriptInterface
     {
         #region Public
@@ -20,7 +19,7 @@ namespace BadScript.Http
 
         public override void AddApi( ABSTable t )
         {
-            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1 ) );
+            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1) );
 
             t.InsertElement(
                 new BSObject( "post" ),
@@ -36,6 +35,8 @@ namespace BadScript.Http
                 new BSObject( "downloadString" ),
                 new BSFunction( "function downloadString(url)", DownloadString, 1 )
             );
+            
+            t.InsertElement(new BSObject("createListener"), new BSFunction("function createListener()", CreateListener, 0));
 
             t.InsertElement(
                 new BSObject( "createUri" ),
@@ -44,10 +45,16 @@ namespace BadScript.Http
 
         }
 
+        private ABSObject CreateListener(ABSObject[] arg)
+        {
+            return new HttpListenerObject(SourcePosition.Unknown, new HttpListener());
+        }
+
         #endregion
 
         #region Private
 
+        
         private static ABSObject DownloadFile( ABSObject[] args )
         {
             string url = args[0].ResolveReference().ConvertString();
@@ -78,6 +85,9 @@ namespace BadScript.Http
 
             HttpWebRequest request = WebRequest.CreateHttp( url );
             request.Credentials = CredentialCache.DefaultCredentials;
+            
+            
+            
             HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
             BSTable t = new BSTable( SourcePosition.Unknown );
 
@@ -133,6 +143,9 @@ namespace BadScript.Http
             table.InsertElement(
                 new BSObject( "getHost" ),
                 new BSFunction( "function getHost()", objects => new BSObject( uri.Host ), 0 ) );
+            table.InsertElement(
+                new BSObject( "getLocalPath" ),
+                new BSFunction( "function getLocalPath()", objects => new BSObject( uri.LocalPath ), 0 ) );
 
             table.InsertElement(
                 new BSObject( "getAuthority" ),

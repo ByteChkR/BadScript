@@ -326,6 +326,7 @@ namespace BadScript
 
                 List < BSExpression > exprs = new List < BSExpression >();
 
+                ReadWhitespaceAndNewLine();
                 if ( !Is( ')' ) )
                 {
                     ReadWhitespaceAndNewLine();
@@ -514,18 +515,66 @@ namespace BadScript
                 return ParseNumber();
             }
 
-            if ( Is( '[' ) && Is( 1, ']' ) )
+            if ( Is( '[' ))
             {
-                m_CurrentPosition += 2;
+                m_CurrentPosition += 1;
+                List<BSExpression> es = new List<BSExpression>();
+                ReadWhitespaceAndNewLine();
+                if(!Is(']'))
+                {
+                    es.Add(ParseExpression(int.MaxValue));
+                    ReadWhitespaceAndNewLine();
+                    while (Is(','))
+                    {
+                        m_CurrentPosition++;
+                        ReadWhitespaceAndNewLine();
+                        if(Is(']'))
+                        {
+                            break;
+                        }
+                        es.Add(ParseExpression(int.MaxValue));
+                        ReadWhitespaceAndNewLine();
+                    }
+                    
+                }
+                m_CurrentPosition += 1;
 
-                return new BSArrayExpression( CreateSourcePosition( pos ) );
+                return new BSArrayExpression( CreateSourcePosition( pos ), es.ToArray() );
             }
 
-            if ( Is( '{' ) && Is( 1, '}' ) )
+            if ( Is( '{' ) )
             {
-                m_CurrentPosition += 2;
+                
+                m_CurrentPosition += 1;
+                Dictionary<string, BSExpression> es = new Dictionary<string, BSExpression>();
+                ReadWhitespaceAndNewLine();
+                if (!Is('}'))
+                {
+                    string key = ParseKey();
+                    ReadWhitespaceAndNewLine();
+                    string equal = ParseKeyword();
+                    ReadWhitespaceAndNewLine();
+                    es[key] = ParseExpression(int.MaxValue);
+                    ReadWhitespaceAndNewLine();
+                    while (Is(','))
+                    {
+                        m_CurrentPosition += 1;
+                        key = ParseKey();
+                        ReadWhitespaceAndNewLine();
+                        equal = ParseKeyword();
+                        ReadWhitespaceAndNewLine();
+                        es[key] = ParseExpression(int.MaxValue);
+                        ReadWhitespaceAndNewLine();
+                        if(Is(']'))
+                        {
+                            break;
+                        }
+                    }
+                }
+                
+                m_CurrentPosition += 1;
 
-                return new BSTableExpression( CreateSourcePosition( pos ) );
+                return new BSTableExpression( CreateSourcePosition( pos ), es );
             }
 
             if ( Is( '(' ) )
