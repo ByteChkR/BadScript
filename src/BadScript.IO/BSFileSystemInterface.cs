@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -356,6 +357,13 @@ namespace BadScript.IO
                 )
             );
 
+            
+            
+            ret.InsertElement(
+                new BSObject( "AppRoot" ),
+                new BSObject(AppDomain.CurrentDomain.BaseDirectory)
+            );
+            
             ret.InsertElement(
                 new BSObject( "writeAll" ),
                 new BSFunction(

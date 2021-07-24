@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BadScript.Console.IO;
@@ -16,85 +17,134 @@ using BadScript.Zip;
 
 namespace BadScript.Console
 {
+    internal static class ConsoleSyntaxHelper
+    {
+        public static string FixExtension(this string t)
+        {
+            var ext = Path.GetExtension(t);
+            if (string.IsNullOrEmpty(ext)) return t + ".bs";
+            return t;
+        }
+
+        public static string FindScript(this string t)
+        {
+            if (File.Exists(t))
+                return t;
+            var p = Path.Combine(BadScriptConsole.AppDirectory.GetFullName(), t);
+            if (File.Exists(p))
+                return p;
+            return t;
+        }
+    }
+
+    internal struct ConsoleExecution
+    {
+        public readonly string OriginalFileName;
+        public readonly string[] Arguments;
+
+        public ConsoleExecution(string file, string[] arguments)
+        {
+            OriginalFileName = file;
+            Arguments = arguments;
+        }
+
+        public string FileName => OriginalFileName.FixExtension().FindScript();
+
+        public void Run(BSEngineInstance engine)
+        {
+            engine.LoadFile(FileName, Arguments);
+        }
+    }
 
     internal class BadScriptConsole
     {
         private static PluginLoader m_PluginLoader;
 
         private static readonly ConsoleIORoot m_IORoot =
-            new ConsoleIORoot( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "bs-data/" ) );
+            new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bs-data/"));
+
+        public static readonly ConsoleIODirectory AppDirectory = new("apps", m_IORoot, null);
 
         #region Private
 
         private static string GetConsoleIncludeDir()
         {
-            string p = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "include" );
-            Directory.CreateDirectory( p );
+            var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "include");
+            Directory.CreateDirectory(p);
 
             return p;
         }
 
         private static string[] GetDefaultInterfaces()
         {
-            IConsoleIOFile configFile = new ConsoleIOFile( "interfaces.json", m_IORoot, null );
+            IConsoleIOFile configFile = new ConsoleIOFile("interfaces.json", m_IORoot, null);
             configFile.EnsureExistParent();
 
-            if ( configFile.Exists )
+            if (configFile.Exists)
             {
-                string[] ret = configFile.ParseJson < string[] >();
+                var ret = configFile.ParseJson<string[]>();
 
                 return ret;
             }
             else
             {
-                string[] ret = new[] { "#core", "#console" };
-                configFile.WriteJson( ret );
+                string[] ret = {"#core", "#console"};
+                configFile.WriteJson(ret);
 
                 return ret;
             }
         }
 
-        private static string LoadConfig( BSEngineInstance i, string src )
+        private static string LoadConfig(BSEngineInstance i, string src)
         {
-            return i.LoadFile( src, new string[0] ).ConvertString();
+            return i.LoadFile(src, new string[0]).ConvertString();
         }
 
-        private static void Main( string[] args )
+
+        private static void Main(string[] args)
         {
-            m_PluginLoader = new PluginLoader( m_IORoot, new ConsoleIODirectory( "plugins", m_IORoot, null ) );
+            m_PluginLoader = new PluginLoader(m_IORoot, new ConsoleIODirectory("plugins", m_IORoot, null));
 
             m_PluginLoader.LoadPlugins();
-            BSEngine.AddStatic( new BS2JsonInterface() );
-            BSEngine.AddStatic( new BSFileSystemInterface() );
-            BSEngine.AddStatic( new BSFileSystemPathInterface() );
-            BSEngine.AddStatic( new BadScriptCoreApi() );
-            BSEngine.AddStatic( new BSMathApi() );
-            BSEngine.AddStatic( new ConsoleApi() );
-            BSEngine.AddStatic( new HttpApi() );
-            BSEngine.AddStatic( new Json2BSInterface() );
-            BSEngine.AddStatic( new ProcessApi() );
-            BSEngine.AddStatic( new StringUtilsApi() );
-            BSEngine.AddStatic( new ZipApi() );
-            BSEngine.AddStatic( new ImagingApi() );
-            BSEngineInstance engine = BSEngine.CreateEngineInstance( GetDefaultInterfaces(), GetConsoleIncludeDir() );
+            BSEngine.AddStatic(new BS2JsonInterface());
+            BSEngine.AddStatic(new BSFileSystemInterface());
+            BSEngine.AddStatic(new BSFileSystemPathInterface());
+            BSEngine.AddStatic(new BadScriptCoreApi());
+            BSEngine.AddStatic(new BSMathApi());
+            BSEngine.AddStatic(new ConsoleApi());
+            BSEngine.AddStatic(new HttpApi());
+            BSEngine.AddStatic(new Json2BSInterface());
+            BSEngine.AddStatic(new ProcessApi());
+            BSEngine.AddStatic(new StringUtilsApi());
+            BSEngine.AddStatic(new ZipApi());
+            BSEngine.AddStatic(new ImagingApi());
 
-            string a = "";
+            AppDirectory.EnsureExistsSelf();
 
-            foreach ( string s in args )
+            var engine = BSEngine.CreateEngineInstance(GetDefaultInterfaces(), GetConsoleIncludeDir());
+
+            var a = "";
+
+            foreach (var s in args) a += " " + s;
+
+            var ar = a.Split(';');
+
+            var executions = new List<ConsoleExecution>();
+            foreach (var execStr in ar)
             {
-                a += " " + s;
+                var parts = execStr.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                executions.Add(new ConsoleExecution(parts[0], parts.Skip(1).ToArray()));
             }
 
-            string[] ar = a.Split( ';' );
+            foreach (var consoleExecution in executions) consoleExecution.Run(engine);
 
-            foreach ( string s in ar )
+            /*foreach ( string s in ar )
             {
                 string[] parts = s.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
                 engine.LoadFile( parts[0], parts.Skip( 1 ).ToArray() );
-            }
+            }*/
         }
 
         #endregion
     }
-
 }

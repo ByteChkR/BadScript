@@ -1,0 +1,173 @@
+fs = environment.loadInterface("fs")
+json = environment.loadInterface("json")
+path = environment.loadInterface("path")
+appRoot = fs.AppRoot
+bsDataPath = path.combine(appRoot, "bs-data")
+consoleInterfacePath = path.combine(bsDataPath, "interfaces.json")
+pluginsPath = path.combine(bsDataPath, "plugins")
+activePluginsPath = path.combine(pluginsPath, "active-plugins.json")
+activePluginsAssemblyPath = path.combine(pluginsPath, "plugins")
+
+function generateHelpFunction(!system)
+{
+	return function(!arguments)
+	{
+		print("Available Commands: ")
+		print(debug(keys(system)))
+	}
+}
+
+function generateConsoleFunction0(!func)
+{
+	return function(!arguments) => func()
+}
+
+function generateConsoleFunction1(!func)
+{
+	return function(!arguments) => func(arguments[0])
+}
+
+function generateConsoleFunction2(!func)
+{
+	return function(!arguments) => func(arguments[0], arguments[1])
+}
+
+function loadJson(!path)
+{
+	return json.fromJson(fs.readAll(path))
+}
+
+function saveJson(!path, !data)
+{
+	if(fs.exists(path))
+	{
+		fs.delete(path)
+	}	
+	fs.writeAll(path, json.toJson(data))
+}
+
+function addInterface(!name)
+{
+	print("Add Interface: " + name )
+	interfaces = loadJson(consoleInterfacePath)
+	interfaces.add(name)
+	saveJson(consoleInterfacePath, interfaces)
+}
+
+function removeInterface(!name)
+{
+	print("Remove Interface: " + name )
+	interfaces = loadJson(consoleInterfacePath)
+	interfaces.remove(name)
+	saveJson(consoleInterfacePath, interfaces)
+}
+
+function listInterfaces()
+{
+	print("Interfaces:")
+	print(debug(loadJson(consoleInterfacePath)))
+}
+
+function activatePlugin(!name)
+{
+	print("Activate Interface: " + name )
+	interfaces = loadJson(activePluginsPath)
+	interfaces.add(name)
+	saveJson(activePluginsPath, interfaces)
+}
+
+function deactivatePlugin(!name)
+{
+	print("Deactivate Plugin: " + name )
+	interfaces = loadJson(activePluginsPath)
+	interfaces.remove(name)
+	saveJson(activePluginsPath, interfaces)
+}
+
+function listPlugins()
+{
+	print("Interfaces:")
+	print(debug(loadJson(activePluginsPath)))
+}
+
+interfaces = {}
+interfaces.list = generateConsoleFunction0(listInterfaces)
+interfaces.add = generateConsoleFunction1(addInterface)
+interfaces.remove = generateConsoleFunction1(removeInterface)
+interfaces.help = generateHelpFunction(interfaces)
+plugins = {}
+plugins.list = generateConsoleFunction0(listPlugins)
+plugins.activate = generateConsoleFunction1(activatePlugin)
+plugins.deactivate = generateConsoleFunction1(deactivatePlugin)
+plugins.help = generateHelpFunction(plugins)
+
+
+cliRoot = {}
+cliRoot.interfaces = interfaces
+cliRoot.plugins = plugins
+cliRoot.help = generateHelpFunction(cliRoot)
+
+function listAllTables()
+{
+	print("All Interfaces:")
+	print(debug(cliRoot))
+}
+
+cliRoot["list-all"] = generateConsoleFunction0(listAllTables)
+
+function findCommand(system, name)
+{
+	if(isTable(system))
+	{
+		foreach k in system
+		{
+			if(k == name)
+			{
+				return system[k]
+			}
+		}
+	}
+}
+
+function removeBegin(arr, count)
+{
+	for i = 0 while< count
+	{
+		arr.removeAt(0)
+	}
+}
+
+function runCommand(!arguments)
+{
+	current = cliRoot
+	depth = 0
+	if(arguments.size() == 0)
+	{
+		print("No Arguments. Try 'help' for a list of commands")
+		return null
+	}
+	while(1)
+	{
+		current = findCommand(current, arguments[depth])
+		if(current == null)
+		{
+			error("Could not Find Command: "+ arguments[depth])
+			break
+		}
+		if(isTable(current) == 0)
+		{
+			removeBegin(arguments, depth+1)
+			current(arguments)
+			break
+		}
+		else if(arguments.size() == depth + 1)
+		{
+			print("Try 'help' for a list of commands of the subsystem: '" + arguments[depth] + "'")
+			break
+		}
+		depth = depth + 1
+	}
+
+}
+
+runCommand(args)
