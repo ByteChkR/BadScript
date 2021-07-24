@@ -1,0 +1,28 @@
+if(args == null)
+{
+	error("Server is not passed to HTTP Server Extension")
+	return null
+}
+if(args.size() == 0)
+{
+	error("Server is not passed to HTTP Server Extension")
+	return null
+}
+
+server = args[0]
+
+
+//Echo Endpoint
+
+function echo(ctx)
+{
+	request = ctx.request()
+
+	body = request.readBody()
+
+	response = ctx.response()
+	response.writeBody(body)
+	response.close()
+}
+
+server.add("/echo", echo)

@@ -1,0 +1,39 @@
+if(args == null)
+{
+	error("Server is not passed to HTTP Server Extension")
+	return null
+}
+if(args.size() == 0)
+{
+	error("Server is not passed to HTTP Server Extension")
+	return null
+}
+
+server = args[0]
+
+json = environment.loadInterface("json")
+
+//Welcome Endpoint
+
+function welcome(ctx)
+{
+	request = ctx.request()
+	response = ctx.response()
+
+	name = "Anonymous"
+
+	if(hasKey(request.query, "name"))
+	{
+		name = request.query.name[0]
+	}
+
+	body = {
+		message = "Welcome " + name + "!"
+	}
+
+
+	response.writeBody(json.toJson(body))
+	response.close()
+}
+
+server.add("/welcome", welcome)

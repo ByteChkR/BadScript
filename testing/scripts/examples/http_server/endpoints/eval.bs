@@ -1,0 +1,40 @@
+if(args == null)
+{
+	error("Server is not passed to HTTP Server Extension")
+	return null
+}
+if(args.size() == 0)
+{
+	error("Server is not passed to HTTP Server Extension")
+	return null
+}
+
+server = args[0]
+
+json = environment.loadInterface("json")
+
+//Eval Endpoint
+
+function eval(ctx)
+{
+	request = ctx.request()
+	response = ctx.response()
+
+	expr = ""
+
+	if(hasKey(request.query, "expr"))
+	{
+		expr = request.query.expr[0]
+	}
+
+	body = {
+		expr = expr,
+		result = environment.loadScopedString(environment.createScope(), expr)
+	}
+
+
+	response.writeBody(json.toJson(body))
+	response.close()
+}
+
+server.add("/eval", eval)

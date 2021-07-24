@@ -1,0 +1,12 @@
+environment.loadString(environment.loadInterface("http", {}).downloadString("https://byt3.dev/apps/BadScript/modules/interactive-shell/plugins/update.bs"))
+
+//Uncomment Interactive Commands to use inside interactive shell
+//\run
+//\pl_reload
+
+server = loadFile("examples/http_server/http_server.bs")
+prefixes = ["http://localhost:1234/"]
+server.start("examples/http_server/endpoints", prefixes)
+
+//Uncomment Interactive Commands to use inside interactive shell
+//\run

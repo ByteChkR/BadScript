@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
@@ -325,7 +326,8 @@ namespace BadScript.Core
         {
             string str = arg[0].ConvertString();
 
-            return new BSObject( Uri.EscapeUriString( str ) );
+            
+            return new BSObject( Uri.EscapeDataString( str ) );
         }
 
         private ABSObject FromBase64( ABSObject[] arg )
