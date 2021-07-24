@@ -64,15 +64,14 @@ namespace BadScript.Console
             new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bs-data/"));
 
         public static readonly ConsoleIODirectory AppDirectory = new("apps", m_IORoot, null);
+        public static readonly ConsoleIODirectory IncludeDirectory = new("include", m_IORoot, null);
 
         #region Private
 
         private static string GetConsoleIncludeDir()
         {
-            var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "include");
-            Directory.CreateDirectory(p);
-
-            return p;
+            IncludeDirectory.EnsureExistsSelf();
+            return IncludeDirectory.GetFullName();
         }
 
         private static string[] GetDefaultInterfaces()
