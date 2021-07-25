@@ -35,6 +35,14 @@
     <Content Include="bs-data\apps\tools\http-server.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="bs-data\apps\modules\server.bs" />
+    <Content Include="bs-data\apps\modules\server.bs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="bs-data\apps\interactive.bs" />
+    <Content Include="bs-data\apps\interactive.bs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

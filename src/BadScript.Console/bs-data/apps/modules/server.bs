@@ -1,0 +1,164 @@
+
+
+//Load interfaces
+json = environment.loadInterface("json", {})
+fs = environment.loadInterface("fs", {})
+string = environment.loadInterface("string", {})
+path = environment.loadInterface("path", {})
+
+
+//Parse Arguments
+prefix = args[0]
+moduleDir = path.getFullPath(args[1])
+
+
+//Set Local Path to temp dir
+tempPath = path.combine(path.getAppPath(), "bs-data", "temp")
+tempServerPath = path.combine(tempPath, "module-server")
+fs.createDir(tempServerPath)
+
+//Install(or Load) Module System Client to be able to require modules
+environment.loadString(environment.loadInterface("http", {}).downloadString("http://static.byt3.dev/apps/BadScript/modules-core/modules_install.bs")).loadAt(tempServerPath)
+
+//load http-server module
+server = modules.require("http-server")
+
+
+function sendResponse(response, body)
+{	
+	response.writeBody(json.toJson(body))
+	response.close()
+}
+
+function sendError(response, message)
+{
+	body = {
+		error = message
+	}
+	sendResponse(response, body)
+}
+
+function getModuleList()
+{
+	dirs = fs.getDirectories(moduleDir, "*")
+	r = []
+	foreach dir in dirs
+	{
+		r.add(path.getFileName(dir))
+	}
+	return r
+}
+
+
+
+//Define Endpoint "/list?filter="
+function epListModules(ctx)
+{
+	request = ctx.request()
+	list = getModuleList()
+	body = list
+	if(hasKey(request.query, "filter"))
+	{
+		filter = request.query.filter[0]
+		r = []
+		foreach module in list
+		{
+			if(string.startsWith(module, filter))
+			{
+				r.add(module)
+			}
+		}
+		body = r
+	}
+	response = ctx.response()
+	response.writeBody(json.toJson(body))
+	response.close()
+}
+
+function getModule(!name)
+{
+	list = getModuleList()
+	foreach	module in list
+	{
+		if(name == module)
+		{
+			return fs.readAll(path.combine(moduleDir, name, name + ".bs"))
+		}
+	}
+}
+
+function epGetModule(ctx)
+{
+	request = ctx.request()
+	response = ctx.response()
+	if(hasKey(request.query, "name"))
+	{
+		name = request.query.name[0]
+		src = getModule(name)
+		if(src == null)
+		{
+			sendError(response, "Could not find Module: " + name)
+		}
+		else
+		{
+			body = {
+				name = name,
+				src = src
+			}
+			sendResponse(response, body)
+		}
+	}
+	else
+	{
+		sendError(response, "No Module Name Specified")
+	}
+}
+
+function setModuleData(!name, !data)
+{
+	
+	modDir = path.combine(moduleDir, name)
+	moduleFile = path.combine(modDir, name + ".bs")
+	fs.createDir(modDir)
+	if(fs.exists(moduleFile))
+	{
+		fs.delete(moduleFile)
+	}
+	fs.writeAll(moduleFile, data)
+}
+
+function epSetModule(ctx)
+{
+	request = ctx.request()
+	response = ctx.response()
+	if(hasKey(request.query, "name"))
+	{
+		name = request.query.name[0]
+		if(hasKey(request.query, "data"))
+		{
+
+			setModuleData(name, request.query.data[0])
+
+			body = {
+				status = "Success"
+			}
+			sendResponse(response, body)
+		}
+		else
+		{
+			sendError(response, "No Data Supplied")
+		}
+	}
+	else
+	{
+		sendError(response, "No Module Name Specified")
+	}
+	
+}
+
+
+server.add("/list", epListModules)
+server.add("/get", epGetModule)
+server.add("/set", epSetModule)
+
+server.start([prefix])
