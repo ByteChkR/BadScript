@@ -1,6 +1,6 @@
 # Information
 
-`bs main.bs` starts the Interactive Shell Session
+`bs interactive` starts the Interactive Shell Session
 
 ## Installing the Module System
 Installing the module system is a requirement for the interactive shell to function properly(the shell itself is a module)

@@ -1,10 +1,13 @@
 fs = environment.loadInterface("fs")
 json = environment.loadInterface("json")
 path = environment.loadInterface("path")
+string = environment.loadInterface("string")
 appRoot = path.getAppPath()
 bsDataPath = path.combine(appRoot, "bs-data")
 consoleInterfacePath = path.combine(bsDataPath, "interfaces.json")
 pluginsPath = path.combine(bsDataPath, "plugins")
+cliAppPath = path.combine(bsDataPath, "apps")
+cliAppDataPath = path.combine(bsDataPath, "app-data")
 activePluginsPath = path.combine(pluginsPath, "active-plugins.json")
 activePluginsAssemblyPath = path.combine(pluginsPath, "plugins")
 
@@ -107,11 +110,34 @@ cliRoot.interfaces = interfaces
 cliRoot.plugins = plugins
 cliRoot.help = generateHelpFunction(cliRoot)
 
+
+apps = {}
+function listApps()
+{
+	print("Apps: ")
+	files = fs.getFiles(cliAppPath, "*", 1)
+	foreach file in files
+	{
+		print("\t"+string.remove(file, 0, string.length(cliAppPath)+1))
+	}
+}
+apps.list = generateConsoleFunction0(listApps)
+apps.help = generateHelpFunction(apps)
+
+function clearAppData()
+{
+	fs.delete(cliAppDataPath, 1)
+}
+apps["clear-data"] = generateConsoleFunction0(clearAppData)
+
+
 function listAllTables()
 {
 	print("All Interfaces:")
 	print(debug(cliRoot))
 }
+
+cliRoot.apps = apps
 
 cliRoot["list-all"] = generateConsoleFunction0(listAllTables)
 
