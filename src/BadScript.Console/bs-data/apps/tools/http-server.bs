@@ -1,0 +1,12 @@
+environment.loadString(environment.loadInterface("http", {}).downloadString("http://static.byt3.dev/apps/BadScript/modules-core/modules_install.bs")).load()
+
+environment.loadString(environment.loadInterface("http", {}).downloadString("https://byt3.dev/apps/BadScript/modules/interactive-shell/plugins/update.bs"))
+
+server = modules.require("http-server-advanced")
+
+print("Loading Arguments..")
+prefix = args[0]
+
+prefixes = [prefix]
+endpointdir = args[1]
+server.start(endpointdir, prefixes)

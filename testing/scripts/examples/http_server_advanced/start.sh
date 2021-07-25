@@ -1,0 +1,1 @@
+bs tools/http-server http://localhost:1234/ endpoints

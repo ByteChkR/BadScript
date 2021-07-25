@@ -31,6 +31,10 @@
     <Content Include="bs-data\apps\cliconf.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="bs-data\apps\tools\http-server.bs" />
+    <Content Include="bs-data\apps\tools\http-server.bs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
