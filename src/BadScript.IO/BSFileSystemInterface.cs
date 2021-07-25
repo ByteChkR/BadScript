@@ -359,10 +359,6 @@ namespace BadScript.IO
 
             
             
-            ret.InsertElement(
-                new BSObject( "AppRoot" ),
-                new BSObject(AppDomain.CurrentDomain.BaseDirectory)
-            );
             
             ret.InsertElement(
                 new BSObject( "writeAll" ),

@@ -1,7 +1,7 @@
 fs = environment.loadInterface("fs")
 json = environment.loadInterface("json")
 path = environment.loadInterface("path")
-appRoot = fs.AppRoot
+appRoot = path.getAppPath()
 bsDataPath = path.combine(appRoot, "bs-data")
 consoleInterfacePath = path.combine(bsDataPath, "interfaces.json")
 pluginsPath = path.combine(bsDataPath, "plugins")
