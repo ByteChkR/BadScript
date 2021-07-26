@@ -1,0 +1,12 @@
+
+global function safe_execute(!func)
+{
+	try
+	{
+		return func()
+	}
+	catch (e)
+	{
+		print("ERROR: " + e)
+	}
+}

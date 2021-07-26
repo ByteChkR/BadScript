@@ -1,0 +1,19 @@
+log = modules.require("logging").create("PLUGIN-UPDATER")
+fs = environment.loadInterface("fs")
+path = environment.loadInterface("path")
+
+local = path.combine(path.getAppPath(), "bs-data", "app-data", "interactive", "plugins")
+fs.createDir(local)
+
+url = "https://byt3.dev/apps/BadScript/modules/interactive-shell/plugins"
+
+log("Updating Plugins from URL: " + url)
+hasUpdated = modules.require("fsync").synchronize(url, local)
+if(hasUpdated)
+{
+	log("Update Finished. For the updated plugins to be loaded it may be needed to restart the Interactive Shell with \\RELOAD or reload the Plugins with \\PLUGIN_RELOAD")	
+}
+else
+{
+	log("Plugins Up to Date!")
+}

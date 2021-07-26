@@ -1,5 +1,8 @@
 log = modules.require("logging").create("INTERACTIVE")
+path = environment.loadInterface("path", {})
 
+dataPath = path.combine(path.getAppPath(), "bs-data", "app-data", "interactive")
+pluginPath = path.combine(dataPath, "plugins")
 
 interactiveScope = null
 interactiveScript = null
@@ -39,6 +42,11 @@ function readExpression()
 		{
 			return 1
 		}
+		else if(string.toUpper(line) == "\\PLUGIN_RELOAD" ||
+				string.toUpper(line) == "\\PL_RELOAD")
+		{
+			loadPlugins()
+		}
 		else
 		{
 			interactiveScript = interactiveScript + "\n" + line
@@ -49,11 +57,11 @@ function readExpression()
 function loadPlugins()
 {
 	fs = environment.loadInterface("fs", {})
-	fs.createDir("./plugins")
-	files = fs.getFiles("./plugins", "*.bs", 1)
+	fs.createDir(pluginPath)
+	files = fs.getFiles(pluginPath, "*.bs", 1)
 	foreach file in files
 	{
-		log("Loading Plugin: " + file)
+		log("Loading Plugin: " + path.getFileName(file))
 		environment.loadScopedString(interactiveScope, fs.readAll(file))
 	}
 }
@@ -75,6 +83,7 @@ function loadInteractiveSession()
 	log("\tExecute Script with \\EXEC or \\RUN")
 	log("\tDelete Written Script with \\RESET or \\CLEAR")
 	log("\tReload Shell Session with \\RELOAD or \\RESTART")
+	log("\tReload Shell Session with \\PLUGIN_RELOAD or \\PL_RELOAD")
 	return readExpression()
 }
 
