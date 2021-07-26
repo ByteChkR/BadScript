@@ -1,11 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
+
 
 namespace BadScript.Http
 {
@@ -32,12 +35,9 @@ namespace BadScript.Http
             );
 
             t.InsertElement(
-                new BSObject( "downloadString" ),
-                new BSFunction( "function downloadString(url)", DownloadString, 1 )
+                new BSObject("downloadString"),
+                new BSFunction("function downloadString(url)", DownloadString, 1)
             );
-            
-            t.InsertElement(new BSObject("createListener"), new BSFunction("function createListener()", CreateListener, 0));
-
             t.InsertElement(
                 new BSObject( "createUri" ),
                 new BSFunction( "function createUri(url)", CreateUri, 1 )
@@ -45,10 +45,6 @@ namespace BadScript.Http
 
         }
 
-        private ABSObject CreateListener(ABSObject[] arg)
-        {
-            return new HttpListenerObject(SourcePosition.Unknown, new HttpListener());
-        }
 
         #endregion
 
