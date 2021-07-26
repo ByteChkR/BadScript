@@ -10,6 +10,11 @@ path = environment.loadInterface("path", {})
 //Parse Arguments
 repoName = args[0]
 fileName = args[1]
+apiKey = null
+if(args.size() == 3)
+{
+	apiKey = args[2]
+}
 
 
 
@@ -51,7 +56,7 @@ function uploadFile()
 	repo = findRepository(repoName)
 	loader = findLoader(repo)
 	src = fs.readAll(fileName)
-	loader.set(repo.url, moduleName, src)
+	loader.set(repo.url, moduleName, src, apiKey)
 }
 
 uploadFile()
