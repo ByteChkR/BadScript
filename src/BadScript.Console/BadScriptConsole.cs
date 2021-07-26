@@ -7,6 +7,7 @@ using BadScript.Console.Plugins;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
 using BadScript.Http;
+using BadScript.Https;
 using BadScript.Imaging;
 using BadScript.IO;
 using BadScript.Json;
@@ -112,6 +113,7 @@ namespace BadScript.Console
             BSEngine.AddStatic(new BSMathApi());
             BSEngine.AddStatic(new ConsoleApi());
             BSEngine.AddStatic(new HttpApi());
+            BSEngine.AddStatic(new HttpServerApi());
             BSEngine.AddStatic(new Json2BSInterface());
             BSEngine.AddStatic(new ProcessApi());
             BSEngine.AddStatic(new StringUtilsApi());

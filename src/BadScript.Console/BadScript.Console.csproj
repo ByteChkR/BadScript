@@ -44,6 +44,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj" />
     <ProjectReference Include="..\BadScript.Core\BadScript.Core.csproj" />
+    <ProjectReference Include="..\BadScript.HttpServer\BadScript.HttpServer.csproj" />
     <ProjectReference Include="..\BadScript.Http\BadScript.Http.csproj" />
     <ProjectReference Include="..\BadScript.Imaging\BadScript.Imaging.csproj" />
     <ProjectReference Include="..\BadScript.IO\BadScript.IO.csproj" />
