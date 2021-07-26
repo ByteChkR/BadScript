@@ -10,11 +10,14 @@ namespace BadScript.IO
 
     public class BSFileSystemPathInterface : ABSScriptInterface
     {
-        #region Public
+        private readonly string m_RootPath;
 
-        public BSFileSystemPathInterface() : base( "path" )
+        public BSFileSystemPathInterface( string rootPath ) : base( "path")
         {
+            m_RootPath = Path.GetFullPath( rootPath );
         }
+        #region Public
+        
 
         public override void AddApi( ABSTable root )
         {

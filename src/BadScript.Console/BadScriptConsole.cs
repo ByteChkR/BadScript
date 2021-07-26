@@ -107,7 +107,7 @@ namespace BadScript.Console
             m_PluginLoader.LoadPlugins();
             BSEngine.AddStatic(new BS2JsonInterface());
             BSEngine.AddStatic(new BSFileSystemInterface());
-            BSEngine.AddStatic(new BSFileSystemPathInterface());
+            BSEngine.AddStatic(new BSFileSystemPathInterface(AppDomain.CurrentDomain.BaseDirectory));
             BSEngine.AddStatic(new BadScriptCoreApi());
             BSEngine.AddStatic(new BSMathApi());
             BSEngine.AddStatic(new ConsoleApi());
