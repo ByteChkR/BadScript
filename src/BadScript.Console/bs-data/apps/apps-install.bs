@@ -1,0 +1,46 @@
+fs = environment.loadInterface("fs", {})
+path = environment.loadInterface("path", {})
+json = environment.loadInterface("json", {})
+string = environment.loadInterface("string", {})
+
+if(args.size() != 1)
+{
+	print("Expected 'bs apps/install <AppName>'")
+	return null
+}
+appName = args[0]
+
+//Set Local Path to temp dir
+tempPath = path.combine(path.getAppPath(), "bs-data", "app-data")
+appsPath = path.combine(path.getAppPath(), "bs-data", "apps")
+tempServerPath = path.combine(tempPath, "app-manager")
+fs.createDir(tempServerPath)
+
+//Install(or Load) Module System Client to be able to require modules
+environment.loadString(environment.loadInterface("http", {}).downloadString("http://static.byt3.dev/apps/BadScript/modules-core/modules_install.bs")).loadAt(tempServerPath)
+
+moduleRepositoriesPath = path.combine(tempServerPath, "app-repos.json")
+
+if(fs.exists(moduleRepositoriesPath))
+{
+	modules.repositories = json.fromJson(fs.readAll(moduleRepositoriesPath))
+}
+else
+{
+	modules.repositories.clear()
+	modules.repositories[0] = {}
+	modules.repositories[0].name = "BSConsole-Apps-Repository"
+	modules.repositories[0].url = "http://bs-apps.byt3.dev:3785/"
+	modules.repositories[0].loader = "rest-api"
+	fs.writeAll(moduleRepositoriesPath, json.toJson(modules.repositories))
+}
+
+src = modules.requireSource(appName)
+print("Installing " + appName)
+localPath = path.combine(appsPath, appName + ".bs")
+if(fs.exists(localPath))
+{
+	print("Updating App: " + appName)
+	fs.delete(localPath)
+}
+fs.writeAll(localPath, src)

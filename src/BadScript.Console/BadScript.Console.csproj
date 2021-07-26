@@ -9,6 +9,39 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="bs-data\apps\apps\**" />
+    <Compile Remove="bs-data\apps\modules\**" />
+    <Compile Remove="bs-data\apps\tools\**" />
+    <EmbeddedResource Remove="bs-data\apps\apps\**" />
+    <EmbeddedResource Remove="bs-data\apps\modules\**" />
+    <EmbeddedResource Remove="bs-data\apps\tools\**" />
+    <None Remove="bs-data\apps\apps\**" />
+    <None Remove="bs-data\apps\modules\**" />
+    <None Remove="bs-data\apps\tools\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="bs-data\apps\apps-add-repo.bs" />
+    <None Remove="bs-data\apps\apps-install.bs" />
+    <None Remove="bs-data\apps\apps-list-repos.bs" />
+    <None Remove="bs-data\apps\apps-update.bs" />
+    <None Remove="bs-data\apps\cliconf.bs" />
+    <None Remove="bs-data\apps\http-server.bs" />
+    <None Remove="bs-data\apps\interactive.bs" />
+    <None Remove="bs-data\apps\module-add-repo.bs" />
+    <None Remove="bs-data\apps\module-list-repos.bs" />
+    <None Remove="bs-data\apps\module-server.bs" />
+    <None Remove="bs-data\apps\module-update.bs" />
+    <None Remove="bs-data\apps\wget.bs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bs-data\apps\apps-install.bs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj" />
     <ProjectReference Include="..\BadScript.Core\BadScript.Core.csproj" />
     <ProjectReference Include="..\BadScript.Http\BadScript.Http.csproj" />
@@ -24,44 +57,6 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="bs-data\apps\cliconf.bs" />
-    <None Remove="bs-data\apps\modules\update.bs" />
-    <None Remove="bs-data\apps\modules\upload.bs" />
-    <None Remove="bs-data\apps\tools\install-app.bs" />
-    <None Remove="bs-data\apps\tools\wget.bs" />
-    <Content Include="bs-data\apps\cliconf.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Remove="bs-data\apps\tools\http-server.bs" />
-    <Content Include="bs-data\apps\modules\update.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="bs-data\apps\tools\http-server.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Remove="bs-data\apps\modules\server.bs" />
-    <Content Include="bs-data\apps\modules\server.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Remove="bs-data\apps\interactive.bs" />
-    <Content Include="bs-data\apps\interactive.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="bs-data\apps\tools\install-app.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="bs-data\apps\tools\wget.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="bs-data\apps\modules\upload.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
 </Project>
