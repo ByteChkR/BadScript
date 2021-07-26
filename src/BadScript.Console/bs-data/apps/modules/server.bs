@@ -8,13 +8,14 @@ path = environment.loadInterface("path", {})
 
 
 //Parse Arguments
-prefix = args[0]
-moduleDir = path.getFullPath(args[1])
+prefix = args[0] + args[1]
+rootPath = args[1]
+moduleDir = path.getFullPath(args[2])
 
 
 //Set Local Path to temp dir
-tempPath = path.combine(path.getAppPath(), "bs-data", "temp")
-tempServerPath = path.combine(tempPath, "module-server")
+tempPath = path.combine(path.getAppPath(), "bs-data", "app-data")
+tempServerPath = path.combine(tempPath, "modules")
 fs.createDir(tempServerPath)
 
 //Install(or Load) Module System Client to be able to require modules
@@ -156,9 +157,16 @@ function epSetModule(ctx)
 	
 }
 
+listUrl = rootPath + "list"
+print("Adding Endpoint: "+listUrl)
+server.add(listUrl, epListModules)
 
-server.add("/list", epListModules)
-server.add("/get", epGetModule)
-server.add("/set", epSetModule)
+getUrl = rootPath + "get"
+print("Adding Endpoint: " + getUrl)
+server.add(getUrl, epGetModule)
+
+setUrl = rootPath + "set"
+print("Adding Endpoint: " + setUrl)
+server.add(setUrl, epSetModule)
 
 server.start([prefix])

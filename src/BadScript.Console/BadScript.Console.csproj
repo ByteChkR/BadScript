@@ -28,10 +28,15 @@
 
   <ItemGroup>
     <None Remove="bs-data\apps\cliconf.bs" />
+    <None Remove="bs-data\apps\modules\update.bs" />
+    <None Remove="bs-data\apps\modules\upload.bs" />
     <Content Include="bs-data\apps\cliconf.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Remove="bs-data\apps\tools\http-server.bs" />
+    <Content Include="bs-data\apps\modules\update.bs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="bs-data\apps\tools\http-server.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -43,6 +48,12 @@
     <Content Include="bs-data\apps\interactive.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="bs-data\apps\modules\upload.bs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

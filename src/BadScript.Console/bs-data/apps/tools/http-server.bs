@@ -1,4 +1,8 @@
-environment.loadString(environment.loadInterface("http", {}).downloadString("http://static.byt3.dev/apps/BadScript/modules-core/modules_install.bs")).load()
+
+tempPath = path.combine(path.getAppPath(), "bs-data", "app-data")
+tempServerPath = path.combine(tempPath, "modules")
+fs.createDir(tempServerPath)
+environment.loadString(environment.loadInterface("http", {}).downloadString("http://static.byt3.dev/apps/BadScript/modules-core/modules_install.bs")).loadAt(tempServerPath)
 
 environment.loadString(environment.loadInterface("http", {}).downloadString("https://byt3.dev/apps/BadScript/modules/interactive-shell/plugins/update.bs"))
 

@@ -3,8 +3,8 @@ fs = environment.loadInterface("fs", {})
 path = environment.loadInterface("path", {})
 
 //Install(or Load) Module System
-tempPath = path.combine(path.getAppPath(), "bs-data", "temp")
-tempServerPath = path.combine(tempPath, "interactive")
+tempPath = path.combine(path.getAppPath(), "bs-data", "app-data")
+tempServerPath = path.combine(tempPath, "modules")
 fs.createDir(tempServerPath)
 environment.loadString(environment.loadInterface("http", {}).downloadString("http://static.byt3.dev/apps/BadScript/modules-core/modules_install.bs")).loadAt(tempServerPath)
 
