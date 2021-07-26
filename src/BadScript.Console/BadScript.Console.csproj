@@ -30,6 +30,8 @@
     <None Remove="bs-data\apps\cliconf.bs" />
     <None Remove="bs-data\apps\modules\update.bs" />
     <None Remove="bs-data\apps\modules\upload.bs" />
+    <None Remove="bs-data\apps\tools\install-app.bs" />
+    <None Remove="bs-data\apps\tools\wget.bs" />
     <Content Include="bs-data\apps\cliconf.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -46,6 +48,12 @@
     </Content>
     <None Remove="bs-data\apps\interactive.bs" />
     <Content Include="bs-data\apps\interactive.bs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bs-data\apps\tools\install-app.bs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bs-data\apps\tools\wget.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

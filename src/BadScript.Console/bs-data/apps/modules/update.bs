@@ -50,9 +50,8 @@ function uploadFile()
 	moduleName = path.getFileNameWithoutExtension(fileName)
 	repo = findRepository(repoName)
 	loader = findLoader(repo)
-	print("URL:" + repo.url)
-	print("Module Name: "+ moduleName)
-	loader.set(repo.url, moduleName, fs.readAll(fileName))
+	src = fs.readAll(fileName)
+	loader.set(repo.url, moduleName, src)
 }
 
 uploadFile()

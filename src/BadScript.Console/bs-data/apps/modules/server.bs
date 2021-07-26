@@ -15,7 +15,7 @@ moduleDir = path.getFullPath(args[2])
 
 //Set Local Path to temp dir
 tempPath = path.combine(path.getAppPath(), "bs-data", "app-data")
-tempServerPath = path.combine(tempPath, "modules")
+tempServerPath = path.combine(tempPath, "modules-server")
 fs.createDir(tempServerPath)
 
 //Install(or Load) Module System Client to be able to require modules
@@ -117,15 +117,17 @@ function epGetModule(ctx)
 
 function setModuleData(!name, !data)
 {
-	
+	exists = 0
 	modDir = path.combine(moduleDir, name)
 	moduleFile = path.combine(modDir, name + ".bs")
 	fs.createDir(modDir)
 	if(fs.exists(moduleFile))
 	{
+		exists = 1
 		fs.delete(moduleFile)
 	}
 	fs.writeAll(moduleFile, data)
+	return exists
 }
 
 function epSetModule(ctx)
@@ -137,11 +139,13 @@ function epSetModule(ctx)
 		name = request.query.name[0]
 		if(hasKey(request.query, "data"))
 		{
-
-			setModuleData(name, request.query.data[0])
-
+			isUpdate = setModuleData(name, request.query.data[0])
 			body = {
 				status = "Success"
+			}
+			if(isUpdate)
+			{
+				body.status = body.status + "(Updated)"
 			}
 			sendResponse(response, body)
 		}

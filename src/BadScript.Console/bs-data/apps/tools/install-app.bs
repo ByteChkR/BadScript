@@ -1,0 +1,26 @@
+http = environment.loadInterface("http", {})
+path = environment.loadInterface("path", {})
+fs = environment.loadInterface("fs", {})
+
+if(args == null)
+{
+	error("No Arguments. Expected Syntax: install-app <url>")
+}
+if(args.size() != 1)
+{
+	error("No Arguments. Expected Syntax: install-app <url>")
+}
+
+srcUrl = args[0]
+appsPath = path.combine(path.getAppPath(), "bs-data", "apps")
+appPath = path.combine(appsPath, path.getFileName(srcUrl))
+
+
+print("[GET]: " + srcUrl)
+src = http.downloadString(srcUrl)
+print("[INSTALL] Installing App: "+ path.getFileName(srcUrl))
+if(fs.exists(appPath))
+{
+	fs.delete(appPath)
+}
+fs.writeAll(appPath, src)
