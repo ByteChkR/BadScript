@@ -1,13 +1,13 @@
 Add-Type -Assembly System.IO.Compression.FileSystem
 $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
 
+$inRoot = "$pwd/../src/BadScript.Console/bin/Release/net5.0"
 $inWin = "$pwd/../src/BadScript.Console/bin/Release/net5.0/win-x64/publish"
 $inLinux = "$pwd/../src/BadScript.Console/bin/Release/net5.0/linux-x64/publish"
 $outWin = "$pwd/build-win.zip"
 $outLinux = "$pwd/build-linux.zip"
 
-del $inWin -Recurse
-del $inLinux -Recurse
+del $inRoot -Recurse
 del $outWin
 del $outLinux
 

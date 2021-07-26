@@ -3,12 +3,12 @@ path = environment.loadInterface("path", {})
 json = environment.loadInterface("json", {})
 string = environment.loadInterface("string", {})
 
-if(args.size() != 1)
+if(args.size() == 0)
 {
-	print("Expected 'bs apps/install <AppName>'")
+	print("Expected 'bs apps-install <AppName> <AppName> ...'")
 	return null
 }
-appName = args[0]
+appNames = args
 
 //Set Local Path to temp dir
 tempPath = path.combine(path.getAppPath(), "bs-data", "app-data")
@@ -35,12 +35,23 @@ else
 	fs.writeAll(moduleRepositoriesPath, json.toJson(modules.repositories))
 }
 
-src = modules.requireSource(appName)
-print("Installing " + appName)
-localPath = path.combine(appsPath, appName + ".bs")
-if(fs.exists(localPath))
+
+function install(appName)
 {
-	print("Updating App: " + appName)
-	fs.delete(localPath)
+
+	src = modules.requireSource(appName)
+	print("Installing " + appName)
+	localPath = path.combine(appsPath, appName + ".bs")
+	if(fs.exists(localPath))
+	{
+		print("Updating App: " + appName)
+		fs.delete(localPath)
+	}
+	fs.writeAll(localPath, src)
+	
 }
-fs.writeAll(localPath, src)
+
+foreach	name in appNames
+{
+	install(name)
+}
