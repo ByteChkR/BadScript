@@ -52,6 +52,7 @@ $Env:Path += ";$bs"
 
 ```powershell
 # Create New Powershell Window and run the BS Shell Opener.
+# Shell can now be opened by doubleclicking this file
 start PowerShell -ArgumentList "-noexit -command . <path/to/first/script>"
 ```
 
