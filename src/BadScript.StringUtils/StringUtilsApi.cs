@@ -20,12 +20,19 @@ namespace BadScript.StringUtils
         {
 
             apiRoot.InsertElement(
+                "toNumber",
+                MakeFunction(
+                    "function toNumber(str)/",
+                    x => new BSObject(decimal.Parse(x[0].ConvertString().Trim())),
+                    1,
+                    1));
+            apiRoot.InsertElement(
                 "trim",
                 MakeFunction(
                     "function trim(str)/",
-                    x => new BSObject( x[0].ConvertString().Trim() ),
+                    x => new BSObject(x[0].ConvertString().Trim()),
                     1,
-                    1 ) );
+                    1));
 
             apiRoot.InsertElement(
                 "trimEnd",
