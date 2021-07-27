@@ -30,7 +30,7 @@ else
 	modules.repositories.clear()
 	modules.repositories[0] = {}
 	modules.repositories[0].name = "BSConsole-Apps-Repository"
-	modules.repositories[0].url = "http://bs-apps.byt3.dev:3785/"
+	modules.repositories[0].url = "https://byt3.dev:3785/"
 	modules.repositories[0].loader = "rest-api"
 	fs.writeAll(moduleRepositoriesPath, json.toJson(modules.repositories))
 }
