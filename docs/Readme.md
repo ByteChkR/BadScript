@@ -11,15 +11,21 @@ ________
 ### Install on Linux
 
 1 . `mkdir ~/BadScriptEngine`
+
 2 . `cd ~/BadScriptEngine`
+
 3 . `wget https://bytechkr.github.io/BadScript/build-linux.zip`
+
 4 . `unzip build-linux.zip`
+
 5 . `chmod +x bs`
 
 Optional Steps:
 
 6 . Make Alias to access `bs` anywhere by adding `alias bs="<home>/BadScriptEngine/bs"` to `~/.bashrc`
+
 7 . Reload Bash Environment Variables with `source ~/.bashrc`
+
 8 . Test Alias with `type -a bs`. It should print `bs is aliased to '/home/tim/BadScriptEngine/bs'`
 
 ________
