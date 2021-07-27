@@ -28,10 +28,18 @@ if(fs.exists(moduleRepositoriesPath))
 else
 {
 	modules.repositories.clear()
+	localPath = path.combine(modules.repositoryPath, "local")
+	fs.createDir(localPath)
+
+	//Local Repository
 	modules.repositories[0] = {}
-	modules.repositories[0].name = "BSConsole-Apps-Repository"
-	modules.repositories[0].url = "https://byt3.dev:3785/"
-	modules.repositories[0].loader = "rest-api"
+	modules.repositories[0].name = "Local-App-Repository"
+	modules.repositories[0].url = localPath
+	modules.repositories[0].loader = "local"
+	modules.repositories[1] = {}
+	modules.repositories[1].name = "BSConsole-Apps-Repository"
+	modules.repositories[1].url = "https://byt3.dev:3785/"
+	modules.repositories[1].loader = "rest-api"
 	fs.writeAll(moduleRepositoriesPath, json.toJson(modules.repositories))
 }
 
