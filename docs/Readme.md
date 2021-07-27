@@ -1,8 +1,45 @@
 # Bad Script Engine
 
-## Download
+## First Steps
+
+### Download
 - [Windows x64](https://bytechkr.github.io/BadScript/build-win.zip)
 - [Linux x64](https://bytechkr.github.io/BadScript/build-linux.zip)
+
+### Usage
+- Running Scripts: `bs <path/to/script>`
+- Running Apps: `bs <appname/path>`
+
+________
+
+Notes:
+
+The file extension is optional if the path points to a `*.bs` file(e.g: `bs main` is the same as `bs main.bs`).
+
+Apps are stored `./bs-data/apps/` and can be called by passing the relative path of the app based on `./bs-data/apps/`.
+
+Scripts are able to hide apps, `bs myApp` will execute `myApp.bs` in the current directory if it exists, otherwise it will try to execute app `./bs-data/apps/myApp.bs`
+
+________
+
+
+### Setup
+The runtime comes with a default app called `apps-install` that can install other apps from repositories.
+
+A good first step is to update the `apps-install` script with the command `bs apps-install apps-install`
+
+After the script has been updated, other apps can be installed([Default App List](https://byt3.dev:3785/list)).
+
+A small tool to manage the BS Runtime and its files is called `cliconf` and is recommended to be installed.
+
+________
+
+Notes:
+
+The app `interactive` is very useful when prototyping or testing.(Install with `bs apps-install interactive`)
+
+________
+
 
 ## Base Functions
 Base Functions are available by default in every execution environment and can be replaced by custom implementations.
