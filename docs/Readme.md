@@ -1,5 +1,9 @@
 # Bad Script Engine
 
+## Download
+- [Windows x64](https://bytechkr.github.io/BadScript/build-win.zip)
+- [Linux x64](https://bytechkr.github.io/BadScript/build-linux.zip)
+
 ## Base Functions
 Base Functions are available by default in every execution environment and can be replaced by custom implementations.
 
