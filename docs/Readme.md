@@ -29,6 +29,7 @@ ________
 Optional Steps:
 
 2. Add BS Shell Opener by writing a small powershell script with content. Usage: `PS> . <path/to/script>`
+
 ```powershell
 # Path of the Install Directory(location of bs.exe)
 $bs = "<Path of Install Directory>"
@@ -41,6 +42,7 @@ $Env:Path += ";$bs"
 ```
 
 3. Add Second Powershell Script that Opens a new Powershell Window with the First Script as start command.
+
 ```powershell
 # Create New Powershell Window and run the BS Shell Opener.
 start PowerShell -ArgumentList "-noexit -command . <path/to/first/script>"
