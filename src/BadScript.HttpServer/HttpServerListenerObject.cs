@@ -60,8 +60,9 @@ namespace BadScript.Https
         {
             if(m_Listener != null)
             {
-                m_Listener = null;
                 m_TokenSource.Cancel();
+                m_Listener.Wait();
+                m_Listener = null;
             }
             else
             {

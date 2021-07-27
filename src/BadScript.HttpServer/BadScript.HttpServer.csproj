@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Ceen.Httpd" Version="0.9.9" />
+      <PackageReference Include="OpenSSL.X509Certificate2.Provider" Version="1.3.0" />
     </ItemGroup>
 
     <ItemGroup>
