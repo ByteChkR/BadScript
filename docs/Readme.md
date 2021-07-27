@@ -46,6 +46,8 @@ $Env:Path += ";$bs"
 start PowerShell -ArgumentList "-noexit -command . <path/to/first/script>"
 ```
 
+4. Test Setup with `echo $Env:Path`(should print the Install Directory as one of the last entries).
+
 ### Usage
 - Running Scripts: `bs <path/to/script>`
 - Running Apps: `bs <appname/path>`
