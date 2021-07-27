@@ -10,25 +10,26 @@ ________
 
 ### Install on Linux
 
-1. `mkdir ~/BadScriptEngine`
-2. `cd ~/BadScriptEngine`
-3. `wget https://bytechkr.github.io/BadScript/build-linux.zip`
-4. `unzip build-linux.zip`
-5. `chmod +x bs`
+1 . `mkdir ~/BadScriptEngine`
+2 . `cd ~/BadScriptEngine`
+3 . `wget https://bytechkr.github.io/BadScript/build-linux.zip`
+4 . `unzip build-linux.zip`
+5 . `chmod +x bs`
 
 Optional Steps:
 
-6. Make Alias to access `bs` anywhere by adding `alias bs="<home>/BadScriptEngine/bs"` to `~/.bashrc`
-7. Reload Bash Environment Variables with `source ~/.bashrc`
-8. Test Alias with `type -a bs`. It should print `bs is aliased to '/home/tim/BadScriptEngine/bs'`
+6 . Make Alias to access `bs` anywhere by adding `alias bs="<home>/BadScriptEngine/bs"` to `~/.bashrc`
+7 . Reload Bash Environment Variables with `source ~/.bashrc`
+8 . Test Alias with `type -a bs`. It should print `bs is aliased to '/home/tim/BadScriptEngine/bs'`
+
 ________
 
 ### Install on Windows
-1. Download Build and Extract
+1 . Download Build and Extract
 
 Optional Steps:
 
-2. Add BS Shell Opener by writing a small powershell script with content. Usage: `PS> . <path/to/script>`
+2 . Add BS Shell Opener by writing a small powershell script with content. Usage: `PS> . <path/to/script>`
 
 ```powershell
 # Path of the Install Directory(location of bs.exe)
@@ -41,14 +42,14 @@ $bs = (Get-Item $bs).fullname
 $Env:Path += ";$bs" 
 ```
 
-3. Add Second Powershell Script that Opens a new Powershell Window with the First Script as start command.
+3 . Add Second Powershell Script that Opens a new Powershell Window with the First Script as start command.
 
 ```powershell
 # Create New Powershell Window and run the BS Shell Opener.
 start PowerShell -ArgumentList "-noexit -command . <path/to/first/script>"
 ```
 
-4. Test Setup with `echo $Env:Path`(should print the Install Directory as one of the last entries).
+4 . Test Setup with `echo $Env:Path`(should print the Install Directory as one of the last entries).
 
 ### Usage
 - Running Scripts: `bs <path/to/script>`
