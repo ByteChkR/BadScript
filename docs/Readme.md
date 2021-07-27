@@ -6,6 +6,46 @@
 - [Windows x64](https://bytechkr.github.io/BadScript/build-win.zip)
 - [Linux x64](https://bytechkr.github.io/BadScript/build-linux.zip)
 
+________
+
+### Install on Linux
+
+1. `mkdir ~/BadScriptEngine`
+2. `cd ~/BadScriptEngine`
+3. `wget https://bytechkr.github.io/BadScript/build-linux.zip`
+4. `unzip build-linux.zip`
+5. `chmod +x bs`
+
+Optional Steps:
+
+6. Make Alias to access `bs` anywhere by adding `alias bs="<home>/BadScriptEngine/bs"` to `~/.bashrc`
+7. Reload Bash Environment Variables with `source ~/.bashrc`
+8. Test Alias with `type -a bs`. It should print `bs is aliased to '/home/tim/BadScript/bs'`
+________
+
+### Install on Windows
+1. Download Build and Extract
+
+Optional Steps:
+
+2. Add BS Shell Opener by writing a small powershell script with content. Usage: `PS> . <path/to/script>`
+```powershell
+# Path of the Install Directory(location of bs.exe)
+$bs = "<Path of Install Directory>"
+
+# Make Sure that the Path is fully qualified
+$bs = (Get-Item $bs).fullname
+
+# Add to Environment Path Variable, Only for this powershell session
+$Env:Path += ";$bs" 
+```
+
+3. Add Second Powershell Script that Opens a new Powershell Window with the First Script as start command.
+```powershell
+# Create New Powershell Window and run the BS Shell Opener.
+start PowerShell -ArgumentList "-noexit -command . <path/to/first/script>"
+```
+
 ### Usage
 - Running Scripts: `bs <path/to/script>`
 - Running Apps: `bs <appname/path>`
