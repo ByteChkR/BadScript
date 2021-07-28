@@ -11,3 +11,10 @@ if(environment.hasInterface("console-colors"))
 		console_colors.setForeColor(last)
 	}
 }
+else
+{
+	global function print_colored(obj, col)
+	{
+		print(obj)
+	}
+}
