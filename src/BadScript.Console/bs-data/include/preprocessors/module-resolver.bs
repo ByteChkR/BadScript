@@ -11,9 +11,9 @@ function findEnd(source, idx)
 	newLIndex = string.indexOf(tempSrc, "\n")
 	if(newLIndex == -1)
 	{
-		return string.length(source)
+		return string.length(source) - 1
 	}
-	return newLIndex + idx
+	return newLIndex
 }
 
 function parseModuleName(line)
@@ -28,7 +28,7 @@ function moduleResolver(source)
 	while(nextIdx != -1)
 	{
 		endIdx = findEnd(source, nextIdx)
-		line = string.substr(source, nextIdx, endIdx-nextIdx)
+		line = string.substr(source, nextIdx, endIdx)
 		name = parseModuleName(line)
 		expr = generateModuleLoadExpression(name)
 		source = string.replace(source, line, expr)

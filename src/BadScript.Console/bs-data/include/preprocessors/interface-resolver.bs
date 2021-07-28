@@ -11,8 +11,7 @@ function findEnd(source, idx)
 	newLIndex = string.indexOf(tempSrc, "\n")
 	if(newLIndex == -1)
 	{
-		print("END")
-		return string.length(source)
+		return string.length(source) - 1
 	}
 	return newLIndex
 }
@@ -27,6 +26,7 @@ function parseInterfaceName(line)
 function interfaceResolver(source)
 {
 	nextIdx = string.indexOf(source, "#interface")
+
 	while(nextIdx != -1)
 	{
 		endIdx = findEnd(source, nextIdx)
