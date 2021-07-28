@@ -33,6 +33,7 @@
     <None Remove="bs-data\apps\module-server.bs" />
     <None Remove="bs-data\apps\module-update.bs" />
     <None Remove="bs-data\apps\wget.bs" />
+    <None Remove="bs-data\include\console_tools.bs" />
     <None Remove="bs-data\include\preprocessors\interface-resolver.bs" />
     <None Remove="bs-data\include\preprocessors\module-resolver.bs" />
     <None Remove="bs-data\include\preprocessor_loader.bs" />
@@ -40,6 +41,9 @@
 
   <ItemGroup>
     <Content Include="bs-data\apps\apps-install.bs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bs-data\include\console_tools.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="bs-data\include\preprocessors\interface-resolver.bs">
