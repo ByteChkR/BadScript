@@ -27,7 +27,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
                 objs[new BSObject( initExpression.Key )] = initExpression.Value.Execute( scope );
             }
 
-            return new BSTable( SourcePosition.Unknown, objs );
+            return new BSTable( m_Position, objs );
         }
 
         #endregion

@@ -122,7 +122,7 @@ namespace BadScript
             foreach ( string file in Directory.GetFiles( dir, "*.bs", SearchOption.TopDirectoryOnly ) )
             {
                 Console.WriteLine( "Loading File: " + file );
-                instance.LoadFile( file, new string[0] );
+                instance.LoadFile( file, new []{dir} );
             }
         }
 

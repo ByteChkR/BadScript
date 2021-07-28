@@ -1092,7 +1092,7 @@ namespace BadScript
 
             //Find Closing
             int start = m_CurrentPosition;
-            int end = FindClosing( "{", "}", ( "@\"", "\"" ) );
+            int end = FindClosing( "{", "}" );
 
             string s = m_OriginalSource.Substring( start, end - start );
 

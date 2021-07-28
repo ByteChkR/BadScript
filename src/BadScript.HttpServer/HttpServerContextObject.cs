@@ -23,7 +23,7 @@ namespace BadScript.HttpServer
             m_Context = context;
 
             m_InstanceFunctions = new BSTable(
-                SourcePosition.Unknown,
+                pos,
                 new Dictionary < ABSObject, ABSObject >
                 {
                     { new BSObject( "request" ), new BSFunction( "function request()", ContextGetRequest, 0 ) },

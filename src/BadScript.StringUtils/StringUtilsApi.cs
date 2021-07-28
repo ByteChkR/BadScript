@@ -177,7 +177,12 @@ namespace BadScript.StringUtils
 
         private static ABSObject IndexOf( ABSObject[] arg )
         {
-            return new BSObject( ( decimal ) arg[0].ConvertString().IndexOf( arg[1].ConvertString() ) );
+            string test = "HELLO WORLD\r\nHELLO WORLD\r\n";
+            int testI = test.IndexOf( "\n" );
+            string str = arg[0].ConvertString();
+            string searchStr = arg[1].ConvertString();
+            int idx = str.IndexOf( searchStr);
+            return new BSObject( ( decimal )idx  );
         }
 
         private static ABSObject Insert( ABSObject[] arg )
@@ -208,7 +213,10 @@ namespace BadScript.StringUtils
 
         private static ABSObject Replace( ABSObject[] arg )
         {
-            return new BSObject( arg[0].ConvertString().Replace( arg[1].ConvertString(), arg[2].ConvertString() ) );
+            string str = arg[0].ConvertString();
+            string oldS = arg[1].ConvertString();
+            string newS = arg[2].ConvertString();
+            return new BSObject( str.Replace( oldS, newS ) );
         }
 
         private static ABSObject Split( ABSObject[] arg )

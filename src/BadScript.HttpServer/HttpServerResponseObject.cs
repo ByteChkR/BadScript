@@ -32,10 +32,10 @@ namespace BadScript.HttpServer
             }
 
             m_InstanceFunctions = new BSTable(
-                SourcePosition.Unknown,
+                pos,
                 new Dictionary < ABSObject, ABSObject >
                 {
-                    { new BSObject( "headers" ), new BSTable( SourcePosition.Unknown, headers ) },
+                    { new BSObject( "headers" ), new BSTable( pos, headers ) },
                     {
                         new BSObject( "addHeader" ),
                         new BSFunction( "function addHeader(key, value)", ResponseAddHeader, 2 )

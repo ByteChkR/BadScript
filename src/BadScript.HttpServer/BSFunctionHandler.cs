@@ -19,7 +19,7 @@ namespace BadScript.HttpServer
 
         public async Task < bool > HandleAsync( IHttpContext context )
         {
-            m_Func.Invoke( new ABSObject[] { new HttpServerContextObject( SourcePosition.Unknown, context ) } );
+            m_Func.Invoke( new ABSObject[] { new HttpServerContextObject( m_Func.Position, context ) } );
 
             return true;
         }

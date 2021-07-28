@@ -58,7 +58,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
                 if ( !string.IsNullOrEmpty( m_CapturedVar ) )
                 {
-                    catchScope.AddLocalVar( m_CapturedVar, MakeExceptionTable( trace, SourcePosition.Unknown, e ) );
+                    catchScope.AddLocalVar( m_CapturedVar, MakeExceptionTable( trace, m_Position, e ) );
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
@@ -103,7 +103,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 new BSObject( "getInner" ),
                 new BSFunction(
                     "function getInner()",
-                    objects => MakeExceptionTable( stack, SourcePosition.Unknown, e.InnerException ),
+                    objects => MakeExceptionTable( stack, p, e.InnerException ),
                     0,
                     0 ) );
 

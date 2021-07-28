@@ -40,10 +40,10 @@ namespace BadScript.HttpServer
             }
 
             m_InstanceFunctions = new BSTable(
-                SourcePosition.Unknown,
+                pos,
                 new Dictionary < ABSObject, ABSObject >
                 {
-                    { new BSObject( "headers" ), new BSTable( SourcePosition.Unknown, headers ) },
+                    { new BSObject( "headers" ), new BSTable( pos, headers ) },
                     { new BSObject( "uri" ), new BSObject( m_Request.RawHttpRequestLine.ToString() ) },
                     {
                         new BSObject( "acceptTypes" ),
@@ -54,7 +54,7 @@ namespace BadScript.HttpServer
                     { new BSObject( "contentLength" ), new BSObject( ( decimal ) m_Request.ContentLength ) },
                     { new BSObject( "contentType" ), new BSObject( m_Request.ContentType ) },
                     { new BSObject( "httpMethod" ), new BSObject( m_Request.Method ) },
-                    { new BSObject( "query" ), new BSTable( SourcePosition.Unknown, queryTable ) },
+                    { new BSObject( "query" ), new BSTable( pos, queryTable ) },
                     { new BSObject( "readBody" ), new BSFunction( "function readBody()", RequestReadBody, 0 ) },
                 }
             );

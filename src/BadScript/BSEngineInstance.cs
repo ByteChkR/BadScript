@@ -13,6 +13,7 @@ namespace BadScript
 
     public class BSEngineInstance
     {
+        private readonly Dictionary <string, ABSObject > m_Preprocessors;
         private readonly ABSTable m_StaticData;
         private readonly ABSTable m_GlobalTable;
         private readonly List < ABSScriptInterface > m_Interfaces;
@@ -27,6 +28,7 @@ namespace BadScript
             Dictionary < string, ABSObject > gTable = null )
         {
             m_Interfaces = interfaces;
+            m_Preprocessors = new Dictionary < string, ABSObject >();
 
             Dictionary < ABSObject, ABSObject > staticData =
                 new Dictionary < ABSObject, ABSObject >();
@@ -75,6 +77,11 @@ namespace BadScript
                     int.MaxValue ) );
 
             env.InsertElement(
+                new BSObject("addPreprocessor"),
+                new BSFunction("function addPreprocessor(ppName, func)", AddPreprocessorApi, 2)
+            );
+
+            env.InsertElement(
                 new BSObject( "loadString" ),
                 new BSFunction( "function loadString(str)", LoadStringApi, 1, int.MaxValue )
             );
@@ -103,6 +110,24 @@ namespace BadScript
             m_GlobalTable.InsertElement( new BSObject( "environment" ), env );
 
             m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
+        }
+
+        private string Preprocess(string script)
+        {
+            ABSObject current = new BSObject(script.Replace("\r", ""));
+
+            foreach (KeyValuePair <string,ABSObject> preprocessor in m_Preprocessors)
+            {
+                current = preprocessor.Value.Invoke(new[] { current });
+            }
+
+            return current.ConvertString();
+        }
+
+        private ABSObject AddPreprocessorApi( ABSObject[] arg )
+        {
+            m_Preprocessors[arg[0].ConvertString()] = arg[1];
+            return new BSObject(null);
         }
 
         public void AddInterface( ABSScriptInterface i )
@@ -173,7 +198,7 @@ namespace BadScript
 
         public ABSObject LoadString( BSScope scope, string script, ABSObject[] args )
         {
-            BSParser parser = new BSParser( script );
+            BSParser parser = new BSParser(Preprocess(script));
             BSExpression[] exprs = parser.ParseToEnd();
 
             scope.AddLocalVar(

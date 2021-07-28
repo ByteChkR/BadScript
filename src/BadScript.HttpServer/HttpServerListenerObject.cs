@@ -40,7 +40,7 @@ namespace BadScript.HttpServer
             m_UseSSL = useSsl;
 
             m_InstanceFunctions = new BSTable(
-                SourcePosition.Unknown,
+                pos,
                 new Dictionary < ABSObject, ABSObject >
                 {
                     { new BSObject( "stop" ), new BSFunction( "function stop()", StopListener, 0 ) },
