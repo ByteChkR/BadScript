@@ -13,7 +13,7 @@ appNames = args
 //Set Local Path to temp dir
 tempPath = path.combine(path.getAppPath(), "bs-data", "app-data")
 appsPath = path.combine(path.getAppPath(), "bs-data", "apps")
-tempServerPath = path.combine(tempPath, "app-manager")
+tempServerPath = path.combine(tempPath, "apps-manager")
 fs.createDir(tempServerPath)
 
 //Install(or Load) Module System Client to be able to require modules
@@ -48,11 +48,11 @@ function install(appName)
 {
 
 	src = modules.requireSource(appName)
-	print("Installing " + appName)
+	print("[APPS-INSTALL] Installing " + appName)
 	localPath = path.combine(appsPath, appName + ".bs")
 	if(fs.exists(localPath))
 	{
-		print("Updating App: " + appName)
+		print("[APPS-INSTALL] Updating App: " + appName)
 		fs.delete(localPath)
 	}
 	fs.writeAll(localPath, src)

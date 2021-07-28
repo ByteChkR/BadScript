@@ -1,0 +1,46 @@
+string = environment.loadInterface("string")
+
+function generateInterfaceLoadExpression(interface)
+{
+	return string.format("{0} = environment.loadInterface(\"{0}\", {1})", interface, "{}")
+}
+
+function findEnd(source, idx)
+{
+	tempSrc = string.remove(source, 0, idx)
+	newLIndex = string.indexOf(tempSrc, "\n")
+	if(newLIndex == -1)
+	{
+		print("END")
+		return string.length(source)
+	}
+	return newLIndex
+}
+
+function parseInterfaceName(line)
+{
+	name = string.trim(string.replace(line, "#interface", ""))
+	return name
+}
+
+
+function interfaceResolver(source)
+{
+	nextIdx = string.indexOf(source, "#interface")
+	while(nextIdx != -1)
+	{
+		endIdx = findEnd(source, nextIdx)
+		line = string.substr(source, nextIdx, endIdx)
+		name = parseInterfaceName(line)
+		expr = generateInterfaceLoadExpression(name)
+		source = string.replace(source, line, expr)
+		nextIdx = string.indexOf(source, "#interface")
+	}
+	return source
+}
+
+
+return {
+	name = "interface-resolver",
+	func = interfaceResolver
+}

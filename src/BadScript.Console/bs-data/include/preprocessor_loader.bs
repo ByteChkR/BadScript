@@ -1,0 +1,18 @@
+fs = environment.loadInterface("fs", {})
+path = environment.loadInterface("path", {})
+
+
+ppDir = path.combine(args[0], "preprocessors")
+
+ppfiles = fs.getFiles(ppDir, "*.bs", 1)
+pps = []
+foreach ppfile in ppfiles
+{
+	pps.add(environment.loadString(fs.readAll(ppfile)))
+}
+
+foreach pp in pps
+{
+	print("[PP-LOADER] Loading Preprocessor: " + pp.name)
+	environment.addPreprocessor(pp.name, pp.func)
+}
