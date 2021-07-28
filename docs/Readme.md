@@ -68,6 +68,8 @@ Notes:
 
 The file extension is optional if the path points to a `*.bs` file(e.g: `bs main` is the same as `bs main.bs`).
 
+It is possible to run multiple scripts and/or apps at once by splitting the executions with `,` or `;`. Example: `bs apps-install interactive,interactive` updates and starts the script or app `interactive.bs`
+
 Apps are stored `./bs-data/apps/` and can be called by passing the relative path of the app based on `./bs-data/apps/`.
 
 Scripts are able to hide apps, `bs myApp` will execute `myApp.bs` in the current directory if it exists, otherwise it will try to execute app `./bs-data/apps/myApp.bs`
@@ -84,11 +86,13 @@ After the script has been updated, other apps can be installed([Default App List
 
 A small tool to manage the BS Runtime and its files is called `cliconf` and is recommended to be installed.
 
+
 ________
 
 Notes:
 
 The app `interactive` is very useful when prototyping or testing.(Install with `bs apps-install interactive`)
+
 
 
 ________
