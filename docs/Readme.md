@@ -84,16 +84,14 @@ A good first step is to update the `apps-install` script with the command `bs ap
 
 After the script has been updated, other apps can be installed([Default App List](https://byt3.dev:3785/list)).
 
-A small tool to manage the BS Runtime and its files is called `cliconf` and is recommended to be installed.
+A small tool to manage the BS Runtime and its files is called `cliconf` and is recommended to be installed. For a list of commands run `bs cliconf list-all` or `bs cliconf help`
 
 
 ________
 
 Notes:
 
-The app `interactive` is very useful when prototyping or testing.(Install with `bs apps-install interactive`)
-
-
+The app `interactive` is an interactive shell session that is very useful when prototyping or testing.(Install with `bs apps-install interactive`)
 
 ________
 
