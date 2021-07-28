@@ -9,8 +9,9 @@ using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 using Ceen;
 
-namespace BadScript.Https
+namespace BadScript.HttpServer
 {
+
     public class HttpServerRequestObject : ABSObject
     {
         private BSTable m_InstanceFunctions;
@@ -20,45 +21,44 @@ namespace BadScript.Https
 
         #region Public
 
-        public HttpServerRequestObject( SourcePosition pos, IHttpRequest request) : base( pos )
+        public HttpServerRequestObject( SourcePosition pos, IHttpRequest request ) : base( pos )
         {
             m_Request = request;
 
+            Dictionary < ABSObject, ABSObject > headers = new Dictionary < ABSObject, ABSObject >();
 
-            Dictionary<ABSObject, ABSObject> headers = new Dictionary<ABSObject, ABSObject>();
-            foreach (KeyValuePair<string, string> header in m_Request.Headers)
+            foreach ( KeyValuePair < string, string > header in m_Request.Headers )
             {
-                headers[new BSObject(header.Key)] = new BSObject(m_Request.Headers[header.Value]);
+                headers[new BSObject( header.Key )] = new BSObject( m_Request.Headers[header.Value] );
             }
-            Dictionary<ABSObject, ABSObject> queryTable = new Dictionary<ABSObject, ABSObject>();
-            foreach (KeyValuePair<string, string> s in m_Request.QueryString)
+
+            Dictionary < ABSObject, ABSObject > queryTable = new Dictionary < ABSObject, ABSObject >();
+
+            foreach ( KeyValuePair < string, string > s in m_Request.QueryString )
             {
-                queryTable[new BSObject(s.Key)] = new BSObject(s.Value);
+                queryTable[new BSObject( s.Key )] = new BSObject( s.Value );
             }
 
             m_InstanceFunctions = new BSTable(
                 SourcePosition.Unknown,
                 new Dictionary < ABSObject, ABSObject >
                 {
-                    {new BSObject("headers"), new BSTable(SourcePosition.Unknown, headers)},
-                    {new BSObject("uri"), new BSObject(m_Request.RawHttpRequestLine.ToString())},
-                    {new BSObject("acceptTypes"), new BSArray((m_Request.GetAcceptLanguages().Select(x=>x.ToString()) ?? new string[0]).Select(x=>new BSObject(x)))},
-                    {new BSObject("contentLength"), new BSObject((decimal)m_Request.ContentLength)},
-                    {new BSObject("contentType"), new BSObject(m_Request.ContentType)},
-                    {new BSObject("httpMethod"), new BSObject(m_Request.Method)},
-                    {new BSObject("query"), new BSTable(SourcePosition.Unknown, queryTable)},
-                    {new BSObject("readBody"), new BSFunction("function readBody()", RequestReadBody,0 ) },
+                    { new BSObject( "headers" ), new BSTable( SourcePosition.Unknown, headers ) },
+                    { new BSObject( "uri" ), new BSObject( m_Request.RawHttpRequestLine.ToString() ) },
+                    {
+                        new BSObject( "acceptTypes" ),
+                        new BSArray(
+                            ( m_Request.GetAcceptLanguages().Select( x => x.ToString() ) ?? new string[0] ).Select(
+                                x => new BSObject( x ) ) )
+                    },
+                    { new BSObject( "contentLength" ), new BSObject( ( decimal ) m_Request.ContentLength ) },
+                    { new BSObject( "contentType" ), new BSObject( m_Request.ContentType ) },
+                    { new BSObject( "httpMethod" ), new BSObject( m_Request.Method ) },
+                    { new BSObject( "query" ), new BSTable( SourcePosition.Unknown, queryTable ) },
+                    { new BSObject( "readBody" ), new BSFunction( "function readBody()", RequestReadBody, 0 ) },
                 }
             );
         }
-
-        private ABSObject RequestReadBody(ABSObject[] arg)
-        {
-            Encoding enc = Encoding.UTF8;
-            using (BinaryReader r = new BinaryReader(m_Request.Body))
-                return new BSObject(enc.GetString(r.ReadBytes((int)m_Request.ContentLength)));
-        }
-
 
         public override bool Equals( ABSObject other )
         {
@@ -112,5 +112,20 @@ namespace BadScript.Https
         }
 
         #endregion
+
+        #region Private
+
+        private ABSObject RequestReadBody( ABSObject[] arg )
+        {
+            Encoding enc = Encoding.UTF8;
+
+            using ( BinaryReader r = new BinaryReader( m_Request.Body ) )
+            {
+                return new BSObject( enc.GetString( r.ReadBytes( ( int ) m_Request.ContentLength ) ) );
+            }
+        }
+
+        #endregion
     }
+
 }

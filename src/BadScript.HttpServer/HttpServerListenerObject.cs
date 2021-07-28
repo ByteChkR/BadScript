@@ -9,16 +9,15 @@ using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 using Ceen.Httpd;
 
-namespace BadScript.Https
+namespace BadScript.HttpServer
 {
+
     public class HttpServerListenerObject : ABSObject
     {
-        
         private BSTable m_InstanceFunctions;
         private Task m_Listener;
         private CancellationTokenSource m_TokenSource;
-        
-        
+
         private ServerConfig m_Config;
         private IPEndPoint m_EndPoint;
         private bool m_UseSSL;
@@ -27,7 +26,12 @@ namespace BadScript.Https
 
         #region Public
 
-        public HttpServerListenerObject( SourcePosition pos, IPEndPoint ep, bool useSsl, ServerConfig config, CancellationTokenSource src) : base( pos )
+        public HttpServerListenerObject(
+            SourcePosition pos,
+            IPEndPoint ep,
+            bool useSsl,
+            ServerConfig config,
+            CancellationTokenSource src ) : base( pos )
         {
             m_TokenSource = src;
             m_Listener = null;
@@ -37,51 +41,18 @@ namespace BadScript.Https
 
             m_InstanceFunctions = new BSTable(
                 SourcePosition.Unknown,
-                new Dictionary<ABSObject, ABSObject>
+                new Dictionary < ABSObject, ABSObject >
                 {
+                    { new BSObject( "stop" ), new BSFunction( "function stop()", StopListener, 0 ) },
+                    { new BSObject( "start" ), new BSFunction( "function start()", StartListener, 0 ) },
                     {
-                        new BSObject("stop"),
-                        new BSFunction("function stop()", StopListener, 0)
-                    },
-                    {
-                        new BSObject("start"),
-                        new BSFunction("function start()", StartListener, 0)
-                    },
-                    {
-                        new BSObject("isRunning"),
-                        new BSFunction("function isRunning()",
-                            objects => new BSObject((decimal) (m_Listener == null ? 0 : 1)), 0)
+                        new BSObject( "isRunning" ), new BSFunction(
+                            "function isRunning()",
+                            objects => new BSObject( ( decimal ) ( m_Listener == null ? 0 : 1 ) ),
+                            0 )
                     }
                 }
             );
-        }
-
-        private ABSObject StopListener(ABSObject[] arg)
-        {
-            if(m_Listener != null)
-            {
-                m_TokenSource.Cancel();
-                m_Listener.Wait();
-                m_Listener = null;
-            }
-            else
-            {
-                throw new BSRuntimeException("HTTP Server is not running");
-            }
-            return new BSObject(null);
-        }
-        
-        private ABSObject StartListener(ABSObject[] arg)
-        {
-            if(m_Listener == null)
-            {
-                m_Listener = HttpServer.ListenAsync(m_EndPoint, m_UseSSL, m_Config, m_TokenSource.Token);
-            }
-            else
-            {
-                throw new BSRuntimeException("HTTP Server is already running");
-            }
-            return new BSObject(null);
         }
 
         public override bool Equals( ABSObject other )
@@ -139,7 +110,37 @@ namespace BadScript.Https
 
         #region Private
 
+        private ABSObject StartListener( ABSObject[] arg )
+        {
+            if ( m_Listener == null )
+            {
+                m_Listener = Ceen.Httpd.HttpServer.ListenAsync( m_EndPoint, m_UseSSL, m_Config, m_TokenSource.Token );
+            }
+            else
+            {
+                throw new BSRuntimeException( "HTTP Server is already running" );
+            }
+
+            return new BSObject( null );
+        }
+
+        private ABSObject StopListener( ABSObject[] arg )
+        {
+            if ( m_Listener != null )
+            {
+                m_TokenSource.Cancel();
+                m_Listener.Wait();
+                m_Listener = null;
+            }
+            else
+            {
+                throw new BSRuntimeException( "HTTP Server is not running" );
+            }
+
+            return new BSObject( null );
+        }
 
         #endregion
     }
+
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -7,57 +6,62 @@ using BadScript.Common.Types.References;
 
 namespace BadScript.IO
 {
+
     public class BSFileSystemInterface : ABSScriptInterface
     {
         #region Public
 
-        public BSFileSystemInterface() : base("fs")
+        public BSFileSystemInterface() : base( "fs" )
         {
         }
 
-        public override void AddApi(ABSTable root)
+        public override void AddApi( ABSTable root )
         {
-            GenerateFSApi(root);
+            GenerateFSApi( root );
         }
 
         #endregion
 
         #region Private
 
-        private static void CopyDir(string src, string dst)
+        private static void CopyDir( string src, string dst )
         {
-            foreach (var dirPath in Directory.GetDirectories(
+            foreach ( string dirPath in Directory.GetDirectories(
                 src,
                 "*",
                 SearchOption.AllDirectories
-            ))
-                Directory.CreateDirectory(dirPath.Replace(src, dst));
+            ) )
+            {
+                Directory.CreateDirectory( dirPath.Replace( src, dst ) );
+            }
 
-            foreach (var newPath in Directory.GetFiles(
+            foreach ( string newPath in Directory.GetFiles(
                 src,
                 "*.*",
                 SearchOption.AllDirectories
-            ))
-                File.Copy(newPath, newPath.Replace(src, dst), true);
+            ) )
+            {
+                File.Copy( newPath, newPath.Replace( src, dst ), true );
+            }
         }
 
-        private static void GenerateFSApi(ABSTable ret)
+        private static void GenerateFSApi( ABSTable ret )
         {
             ret.InsertElement(
-                new BSObject("exists"),
+                new BSObject( "exists" ),
                 new BSFunction(
                     "function exists(path)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
+                        ABSObject o = args[0].ResolveReference();
 
-                        var path = o.ConvertString();
+                        string path = o.ConvertString();
 
                         return new BSObject(
-                            (decimal) (File.Exists(path) ||
-                                       Directory.Exists(path)
+                            ( decimal ) ( File.Exists( path ) ||
+                                          Directory.Exists( path )
                                 ? 1
-                                : 0)
+                                : 0 )
                         );
                     },
                     1
@@ -65,53 +69,57 @@ namespace BadScript.IO
             );
 
             ret.InsertElement(
-                new BSObject("setCurrentDir"),
+                new BSObject( "setCurrentDir" ),
                 new BSFunction(
                     "function setCurrentDir(path)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
-                        var path = o.ConvertString();
+                        ABSObject o = args[0].ResolveReference();
+                        string path = o.ConvertString();
 
-                        Directory.SetCurrentDirectory(path);
+                        Directory.SetCurrentDirectory( path );
 
-                        return new BSObject(null);
+                        return new BSObject( null );
                     },
                     1
                 )
             );
 
             ret.InsertElement(
-                new BSObject("getFiles"),
+                new BSObject( "getFiles" ),
                 new BSFunction(
                     "function getFiles(path)/getFiles(path, searchPattern)/getFiles(path, searchPattern, recurse)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
+                        ABSObject o = args[0].ResolveReference();
 
-                        var path = o.ConvertString();
+                        string path = o.ConvertString();
 
-                        if (args.Length >= 1)
+                        if ( args.Length >= 1 )
                         {
-                            var pattern = args[1].ResolveReference().ConvertString();
+                            string pattern = args[1].ResolveReference().ConvertString();
 
-                            var recurse = false;
+                            bool recurse = false;
 
-                            if (args.Length > 2) recurse = args[2].ResolveReference().ConvertBool();
+                            if ( args.Length > 2 )
+                            {
+                                recurse = args[2].ResolveReference().ConvertBool();
+                            }
 
                             return new BSArray(
                                 Directory.GetFiles(
-                                    path,
-                                    pattern,
-                                    recurse
-                                        ? SearchOption.AllDirectories
-                                        : SearchOption.TopDirectoryOnly
-                                ).Select(x => new BSObject(x))
+                                              path,
+                                              pattern,
+                                              recurse
+                                                  ? SearchOption.AllDirectories
+                                                  : SearchOption.TopDirectoryOnly
+                                          ).
+                                          Select( x => new BSObject( x ) )
                             );
                         }
 
                         return new BSArray(
-                            Directory.GetFiles(path).Select(x => new BSObject(x))
+                            Directory.GetFiles( path ).Select( x => new BSObject( x ) )
                         );
                     },
                     1,
@@ -120,36 +128,40 @@ namespace BadScript.IO
             );
 
             ret.InsertElement(
-                new BSObject("getDirectories"),
+                new BSObject( "getDirectories" ),
                 new BSFunction(
                     "function getDirectories(path)/getDirectories(path, searchPattern)/getDirectories(path, searchPattern, recurse)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
+                        ABSObject o = args[0].ResolveReference();
 
-                        var path = o.ConvertString();
+                        string path = o.ConvertString();
 
-                        if (args.Length >= 1)
+                        if ( args.Length >= 1 )
                         {
-                            var pattern = args[1].ResolveReference().ConvertString();
+                            string pattern = args[1].ResolveReference().ConvertString();
 
-                            var recurse = false;
+                            bool recurse = false;
 
-                            if (args.Length > 2) recurse = args[2].ResolveReference().ConvertBool();
+                            if ( args.Length > 2 )
+                            {
+                                recurse = args[2].ResolveReference().ConvertBool();
+                            }
 
                             return new BSArray(
                                 Directory.GetDirectories(
-                                    path,
-                                    pattern,
-                                    recurse
-                                        ? SearchOption.AllDirectories
-                                        : SearchOption.TopDirectoryOnly
-                                ).Select(x => new BSObject(x))
+                                              path,
+                                              pattern,
+                                              recurse
+                                                  ? SearchOption.AllDirectories
+                                                  : SearchOption.TopDirectoryOnly
+                                          ).
+                                          Select( x => new BSObject( x ) )
                             );
                         }
 
                         return new BSArray(
-                            Directory.GetDirectories(path).Select(x => new BSObject(x))
+                            Directory.GetDirectories( path ).Select( x => new BSObject( x ) )
                         );
                     },
                     1,
@@ -158,7 +170,7 @@ namespace BadScript.IO
             );
 
             ret.InsertElement(
-                new BSObject("getCurrentDir"),
+                new BSObject( "getCurrentDir" ),
                 new BSFunction(
                     "function getCurrentDir()",
                     args =>
@@ -172,15 +184,15 @@ namespace BadScript.IO
             );
 
             ret.InsertElement(
-                new BSObject("isDir"),
+                new BSObject( "isDir" ),
                 new BSFunction(
                     "function isDir(path)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
+                        ABSObject o = args[0].ResolveReference();
 
                         return new BSObject(
-                            (decimal) (Directory.Exists(o.ConvertString()) ? 1 : 0)
+                            ( decimal ) ( Directory.Exists( o.ConvertString() ) ? 1 : 0 )
                         );
                     },
                     1
@@ -188,15 +200,15 @@ namespace BadScript.IO
             );
 
             ret.InsertElement(
-                new BSObject("isFile"),
+                new BSObject( "isFile" ),
                 new BSFunction(
                     "function isFile(path)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
+                        ABSObject o = args[0].ResolveReference();
 
                         return new BSObject(
-                            (decimal) (File.Exists(o.ConvertString()) ? 1 : 0)
+                            ( decimal ) ( File.Exists( o.ConvertString() ) ? 1 : 0 )
                         );
                     },
                     1
@@ -204,88 +216,96 @@ namespace BadScript.IO
             );
 
             ret.InsertElement(
-                new BSObject("createDir"),
+                new BSObject( "createDir" ),
                 new BSFunction(
                     "function createDir(path)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
-                        var source = o.ConvertString();
-                        Directory.CreateDirectory(source);
+                        ABSObject o = args[0].ResolveReference();
+                        string source = o.ConvertString();
+                        Directory.CreateDirectory( source );
 
-                        return new BSObject(null);
+                        return new BSObject( null );
                     },
                     1
                 )
             );
 
             ret.InsertElement(
-                new BSObject("copy"),
+                new BSObject( "copy" ),
                 new BSFunction(
                     "function copy(source, destination)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
+                        ABSObject o = args[0].ResolveReference();
 
-                        var source = o.ConvertString();
-                        var destination = args[1].ResolveReference().ConvertString();
+                        string source = o.ConvertString();
+                        string destination = args[1].ResolveReference().ConvertString();
 
-                        if (Directory.Exists(source))
-                            CopyDir(source, destination);
+                        if ( Directory.Exists( source ) )
+                        {
+                            CopyDir( source, destination );
+                        }
                         else
-                            File.Copy(source, destination, true);
+                        {
+                            File.Copy( source, destination, true );
+                        }
 
-                        return new BSObject(null);
+                        return new BSObject( null );
                     },
                     2
                 )
             );
 
             ret.InsertElement(
-                new BSObject("move"),
+                new BSObject( "move" ),
                 new BSFunction(
                     "function move(source, destination)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
-                        var source = o.ConvertString();
-                        var destination = args[1].ResolveReference().ConvertString();
+                        ABSObject o = args[0].ResolveReference();
+                        string source = o.ConvertString();
+                        string destination = args[1].ResolveReference().ConvertString();
 
-                        if (Directory.Exists(source))
-                            Directory.Move(source, destination);
+                        if ( Directory.Exists( source ) )
+                        {
+                            Directory.Move( source, destination );
+                        }
                         else
-                            File.Move(source, destination);
+                        {
+                            File.Move( source, destination );
+                        }
 
-                        return new BSObject(null);
+                        return new BSObject( null );
                     },
                     2
                 )
             );
 
             ret.InsertElement(
-                new BSObject("delete"),
+                new BSObject( "delete" ),
                 new BSFunction(
                     "function delete(path)|function delete(path, recurse)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
+                        ABSObject o = args[0].ResolveReference();
 
-                        var path = o.ConvertString();
+                        string path = o.ConvertString();
 
-                        if (Directory.Exists(path))
+                        if ( Directory.Exists( path ) )
                         {
-                            var recurse =
+                            bool recurse =
                                 args.Length > 1 &&
                                 args[1].ResolveReference().ConvertBool();
 
-                            Directory.Delete(path, recurse);
+                            Directory.Delete( path, recurse );
                         }
-                        else if (File.Exists(path))
+                        else if ( File.Exists( path ) )
                         {
-                            File.Delete(path);
+                            File.Delete( path );
                         }
 
-                        return new BSObject(null);
+                        return new BSObject( null );
                     },
                     1,
                     2
@@ -293,21 +313,21 @@ namespace BadScript.IO
             );
 
             ret.InsertElement(
-                new BSObject("crc"),
+                new BSObject( "crc" ),
                 new BSFunction(
                     "function crc(path)",
                     GetCheckSum,
                     1
-                ));
+                ) );
 
             ret.InsertElement(
-                new BSObject("open"),
+                new BSObject( "open" ),
                 new BSFunction(
                     "function open(path)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
-                        var m = FileAccess.ReadWrite;
+                        ABSObject o = args[0].ResolveReference();
+                        FileAccess m = FileAccess.ReadWrite;
 
                         return new BSFileSystemObject(
                             o.Position,
@@ -323,20 +343,19 @@ namespace BadScript.IO
                 )
             );
 
-
             ret.InsertElement(
-                new BSObject("writeAll"),
+                new BSObject( "writeAll" ),
                 new BSFunction(
                     "function writeAll(path, data)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
-                        var d = args[1].ResolveReference();
-                        var m = FileAccess.ReadWrite;
+                        ABSObject o = args[0].ResolveReference();
+                        ABSObject d = args[1].ResolveReference();
+                        FileAccess m = FileAccess.ReadWrite;
 
-                        File.WriteAllText(o.ConvertString(), d.ConvertString());
+                        File.WriteAllText( o.ConvertString(), d.ConvertString() );
 
-                        return new BSObject(null);
+                        return new BSObject( null );
                     },
                     2,
                     2
@@ -344,15 +363,15 @@ namespace BadScript.IO
             );
 
             ret.InsertElement(
-                new BSObject("readAll"),
+                new BSObject( "readAll" ),
                 new BSFunction(
                     "function readAll(path, data)",
                     args =>
                     {
-                        var o = args[0].ResolveReference();
-                        var m = FileAccess.ReadWrite;
+                        ABSObject o = args[0].ResolveReference();
+                        FileAccess m = FileAccess.ReadWrite;
 
-                        return new BSObject(File.ReadAllText(o.ConvertString()));
+                        return new BSObject( File.ReadAllText( o.ConvertString() ) );
                     },
                     1,
                     1
@@ -360,11 +379,12 @@ namespace BadScript.IO
             );
         }
 
-        private static ABSObject GetCheckSum(ABSObject[] arg)
+        private static ABSObject GetCheckSum( ABSObject[] arg )
         {
-            return new BSObject((decimal) Crc.GetCrc(arg[0].ConvertString()));
+            return new BSObject( ( decimal ) Crc.GetCrc( arg[0].ConvertString() ) );
         }
 
         #endregion
     }
+
 }

@@ -6,8 +6,9 @@ using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 using Ceen;
 
-namespace BadScript.Https
+namespace BadScript.HttpServer
 {
+
     public class HttpServerContextObject : ABSObject
     {
         private BSTable m_InstanceFunctions;
@@ -17,7 +18,7 @@ namespace BadScript.Https
 
         #region Public
 
-        public HttpServerContextObject( SourcePosition pos, IHttpContext context) : base( pos )
+        public HttpServerContextObject( SourcePosition pos, IHttpContext context ) : base( pos )
         {
             m_Context = context;
 
@@ -25,21 +26,10 @@ namespace BadScript.Https
                 SourcePosition.Unknown,
                 new Dictionary < ABSObject, ABSObject >
                 {
-                    {new BSObject("request"), new BSFunction("function request()", ContextGetRequest,0 )},
-                    {new BSObject("response"), new BSFunction("function response()", ContextGetResponse,0 )}
+                    { new BSObject( "request" ), new BSFunction( "function request()", ContextGetRequest, 0 ) },
+                    { new BSObject( "response" ), new BSFunction( "function response()", ContextGetResponse, 0 ) }
                 }
             );
-        }
-
-        private ABSObject ContextGetRequest(ABSObject[] arg)
-        {
-            IHttpRequest r = m_Context.Request;
-            return new HttpServerRequestObject(SourcePosition.Unknown, r);
-        }
-        private ABSObject ContextGetResponse(ABSObject[] arg)
-        {
-            IHttpResponse r = m_Context.Response;
-            return new HttpServerResponseObject(SourcePosition.Unknown,  r);
         }
 
         public override bool Equals( ABSObject other )
@@ -95,5 +85,23 @@ namespace BadScript.Https
 
         #endregion
 
+        #region Private
+
+        private ABSObject ContextGetRequest( ABSObject[] arg )
+        {
+            IHttpRequest r = m_Context.Request;
+
+            return new HttpServerRequestObject( SourcePosition.Unknown, r );
+        }
+
+        private ABSObject ContextGetResponse( ABSObject[] arg )
+        {
+            IHttpResponse r = m_Context.Response;
+
+            return new HttpServerResponseObject( SourcePosition.Unknown, r );
+        }
+
+        #endregion
     }
+
 }

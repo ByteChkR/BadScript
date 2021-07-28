@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
@@ -259,63 +258,18 @@ namespace BadScript.Core
                     1
                 )
             );
-            
+
             root.InsertElement(
-                new BSObject("hook"),
-                new BSFunction("function hook(target, hook)", HookFunction, 2));
+                new BSObject( "hook" ),
+                new BSFunction( "function hook(target, hook)", HookFunction, 2 ) );
+
             root.InsertElement(
-                new BSObject("releaseHook"),
-                new BSFunction("function releaseHook(target, hook)", ReleaseHookFunction, 2));
+                new BSObject( "releaseHook" ),
+                new BSFunction( "function releaseHook(target, hook)", ReleaseHookFunction, 2 ) );
+
             root.InsertElement(
-                new BSObject("releaseHooks"),
-                new BSFunction("function releaseHooks(target)", ReleaseHooksFunction, 1));
-        }
-
-        private ABSObject ReleaseHooksFunction(ABSObject[] arg)
-        {
-            if (arg[0] is BSFunction target)
-            {
-                target.ClearHooks();
-            }
-
-            throw new BSInvalidTypeException(SourcePosition.Unknown, "Expected Function as argument.", arg[0],
-                "BSFunction");
-        }
-
-        private ABSObject ReleaseHookFunction(ABSObject[] arg)
-        { 
-            if (arg[0] is BSFunction target)
-            {
-                if (arg[1] is BSFunction hook)
-                {
-                    target.RemoveHook(hook);
-                    return new BSObject(null);
-                }
-
-                throw new BSInvalidTypeException(SourcePosition.Unknown, "Expected Function as argument.", arg[1],
-                    "BSFunction");
-            }
-
-            throw new BSInvalidTypeException(SourcePosition.Unknown, "Expected Function as argument.", arg[0],
-                "BSFunction");
-        }
-
-        private ABSObject HookFunction(ABSObject[] arg)
-        {
-            if (arg[0] is BSFunction target)
-            {
-                if (arg[1] is BSFunction hook)
-                {
-                    target.AddHook(hook);
-                    return new BSObject(null);
-                }
-
-                throw new BSInvalidTypeException(SourcePosition.Unknown, "Expected Function as argument.", arg[1],
-                    "BSFunction");
-            }
-
-            throw new BSInvalidTypeException(SourcePosition.Unknown, "Expected Function as argument.", arg[0],
-                "BSFunction");
+                new BSObject( "releaseHooks" ),
+                new BSFunction( "function releaseHooks(target)", ReleaseHooksFunction, 1 ) );
         }
 
         #endregion
@@ -326,7 +280,6 @@ namespace BadScript.Core
         {
             string str = arg[0].ConvertString();
 
-            
             return new BSObject( Uri.EscapeDataString( str ) );
         }
 
@@ -336,6 +289,70 @@ namespace BadScript.Core
             byte[] data = Convert.FromBase64String( str );
 
             return new BSArray( data.Select( x => new BSObject( ( decimal ) x ) ) );
+        }
+
+        private ABSObject HookFunction( ABSObject[] arg )
+        {
+            if ( arg[0] is BSFunction target )
+            {
+                if ( arg[1] is BSFunction hook )
+                {
+                    target.AddHook( hook );
+
+                    return new BSObject( null );
+                }
+
+                throw new BSInvalidTypeException(
+                    SourcePosition.Unknown,
+                    "Expected Function as argument.",
+                    arg[1],
+                    "BSFunction" );
+            }
+
+            throw new BSInvalidTypeException(
+                SourcePosition.Unknown,
+                "Expected Function as argument.",
+                arg[0],
+                "BSFunction" );
+        }
+
+        private ABSObject ReleaseHookFunction( ABSObject[] arg )
+        {
+            if ( arg[0] is BSFunction target )
+            {
+                if ( arg[1] is BSFunction hook )
+                {
+                    target.RemoveHook( hook );
+
+                    return new BSObject( null );
+                }
+
+                throw new BSInvalidTypeException(
+                    SourcePosition.Unknown,
+                    "Expected Function as argument.",
+                    arg[1],
+                    "BSFunction" );
+            }
+
+            throw new BSInvalidTypeException(
+                SourcePosition.Unknown,
+                "Expected Function as argument.",
+                arg[0],
+                "BSFunction" );
+        }
+
+        private ABSObject ReleaseHooksFunction( ABSObject[] arg )
+        {
+            if ( arg[0] is BSFunction target )
+            {
+                target.ClearHooks();
+            }
+
+            throw new BSInvalidTypeException(
+                SourcePosition.Unknown,
+                "Expected Function as argument.",
+                arg[0],
+                "BSFunction" );
         }
 
         private ABSObject ToBase64( ABSObject[] arg )
