@@ -1,4 +1,5 @@
 ﻿using System;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -16,7 +17,6 @@ namespace BadScript.ConsoleUtils
 
         public override void AddApi( ABSTable root )
         {
-
             root.InsertElement(
                 new BSObject( "print" ),
                 new BSFunction(
@@ -74,6 +74,37 @@ namespace BadScript.ConsoleUtils
                 )
             );
 
+        }
+
+        private ABSObject GetConsoleForeColor(ABSObject[] arg)
+        {
+            return new BSObject( Console.ForegroundColor.ToString() );
+        }
+        private ABSObject GetConsoleBackColor(ABSObject[] arg)
+        {
+            return new BSObject(Console.BackgroundColor.ToString());
+        }
+
+        private ABSObject SetConsoleBackColor( ABSObject[] arg )
+        {
+            if ( !Enum.TryParse( arg[0].ConvertString(), true, out ConsoleColor col ) )
+            {
+                throw new BSRuntimeException( "Could not create Console Color: " + arg[0].ConvertString() );
+            }
+
+            Console.BackgroundColor = col;
+            return new BSObject(null);
+        }
+
+        private ABSObject SetConsoleForeColor( ABSObject[] arg )
+        {
+            if (!Enum.TryParse(arg[0].ConvertString(), true, out ConsoleColor col))
+            {
+                throw new BSRuntimeException("Could not create Console Color: " + arg[0].ConvertString());
+            }
+
+            Console.ForegroundColor = col;
+            return new BSObject(null);
         }
 
         #endregion

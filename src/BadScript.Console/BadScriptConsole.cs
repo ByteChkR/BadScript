@@ -18,44 +18,6 @@ using BadScript.Zip;
 
 namespace BadScript.Console
 {
-    internal static class ConsoleSyntaxHelper
-    {
-        public static string FixExtension(this string t)
-        {
-            var ext = Path.GetExtension(t);
-            if (string.IsNullOrEmpty(ext)) return t + ".bs";
-            return t;
-        }
-
-        public static string FindScript(this string t)
-        {
-            if (File.Exists(t))
-                return t;
-            var p = Path.Combine(BadScriptConsole.AppDirectory.GetFullName(), t);
-            if (File.Exists(p))
-                return p;
-            return t;
-        }
-    }
-
-    internal struct ConsoleExecution
-    {
-        public readonly string OriginalFileName;
-        public readonly string[] Arguments;
-
-        public ConsoleExecution(string file, string[] arguments)
-        {
-            OriginalFileName = file;
-            Arguments = arguments;
-        }
-
-        public string FileName => OriginalFileName.FixExtension().FindScript();
-
-        public void Run(BSEngineInstance engine)
-        {
-            engine.LoadFile(FileName, Arguments);
-        }
-    }
 
     internal class BadScriptConsole
     {
@@ -112,6 +74,7 @@ namespace BadScript.Console
             BSEngine.AddStatic(new BadScriptCoreApi());
             BSEngine.AddStatic(new BSMathApi());
             BSEngine.AddStatic(new ConsoleApi());
+            BSEngine.AddStatic(new ConsoleColorApi());
             BSEngine.AddStatic(new HttpApi());
             BSEngine.AddStatic(new HttpServerApi());
             BSEngine.AddStatic(new Json2BSInterface());

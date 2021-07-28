@@ -89,8 +89,11 @@ namespace BadScript
                 new BSFunction( "function getScriptBaseDir()", GetScriptBaseDirApi, 0, 0 ) );
 
             env.InsertElement(
-                new BSObject( "getInterfaceNames" ),
-                new BSFunction( "function getInterfaceNames()", GetInterfaceNamesApi, 0, 0 )
+                new BSObject("getInterfaceNames"),
+                new BSFunction("function getInterfaceNames()", GetInterfaceNamesApi, 0, 0)
+            ); env.InsertElement(
+                new BSObject("hasInterface"),
+                new BSFunction("function hasInterface(interfaceName)", HasInterfaceName, 1)
             );
 
             env.Lock();
@@ -98,6 +101,11 @@ namespace BadScript
             m_GlobalTable.InsertElement( new BSObject( "environment" ), env );
 
             m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
+        }
+
+        private ABSObject HasInterfaceName( ABSObject[] arg )
+        {
+            return new BSObject( ( decimal ) ( InterfaceNames.Contains( arg[0].ConvertString() ) ? 1 : 0 ) );
         }
 
         public void AddInterface( ABSScriptInterface i )
