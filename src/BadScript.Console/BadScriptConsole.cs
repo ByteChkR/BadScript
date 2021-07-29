@@ -115,12 +115,7 @@ namespace BadScript.Console
             {
                 consoleExecution.Run( engine );
             }
-
-            /*foreach ( string s in ar )
-            {
-                string[] parts = s.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
-                engine.LoadFile( parts[0], parts.Skip( 1 ).ToArray() );
-            }*/
+            
         }
 
         #endregion

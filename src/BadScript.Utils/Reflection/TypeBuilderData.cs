@@ -10,18 +10,41 @@ using BadScript.Common.Types.References;
 namespace BadScript.Utils
 {
 
+    public enum TypeBuilderTypeFilter
+    {
+        Blacklist,
+        Whitelist
+    }
+
     internal struct TypeBuilderData
     {
+        private static readonly List < Type > s_FilterTypes = new List < Type >();
+        private static TypeBuilderTypeFilter s_FilterType = TypeBuilderTypeFilter.Blacklist;
+
+        internal static void SetFilterType(TypeBuilderTypeFilter filter)
+        {
+            s_FilterType = filter;
+        }
+
+        internal static void AddFilterType( Type t )
+        {
+            if ( !s_FilterTypes.Contains( t ) )
+            {
+                s_FilterTypes.Add( t );
+            }
+        }
+
         private static readonly Dictionary < Type, TypeBuilderData > s_Builders =
             new Dictionary < Type, TypeBuilderData >();
         private readonly Dictionary < string, TypePropertyBuilderData > m_PropertyData;
-        private static readonly Dictionary < string, List<BSFunction>> s_Constructors = new Dictionary < string, List<BSFunction>>();
+        private static readonly Dictionary < string, List < BSFunction > > s_Constructors =
+            new Dictionary < string, List < BSFunction > >();
 
         internal static ABSTable GetConstructorData()
         {
             Dictionary < ABSObject, ABSObject > d = new Dictionary < ABSObject, ABSObject >();
 
-            foreach ( KeyValuePair < string, List <BSFunction> > keyValuePair in s_Constructors )
+            foreach ( KeyValuePair < string, List < BSFunction > > keyValuePair in s_Constructors )
             {
                 d[new BSObject( keyValuePair.Key )] = new BSArray( keyValuePair.Value );
             }
@@ -34,7 +57,6 @@ namespace BadScript.Utils
 
         internal static void Expand()
         {
-
             foreach ( KeyValuePair < Type, TypeBuilderData > typeBuilderData in s_Builders.ToArray() )
             {
                 typeBuilderData.Value.Initialize();
@@ -79,7 +101,8 @@ namespace BadScript.Utils
                 {
                     if ( absObject is BSObject rtype )
                     {
-                        pi.SetValue( o, rtype.GetInternalObject() );
+                        object val = Convert.ChangeType( rtype.GetInternalObject(), pi.PropertyType );
+                        pi.SetValue( o, val);
                     }
                 };
             }
@@ -99,18 +122,37 @@ namespace BadScript.Utils
                 {
                     if ( absObject is BSObject rtype )
                     {
-                        pi.SetValue( o, rtype.GetInternalObject() );
+                        object val = Convert.ChangeType(rtype.GetInternalObject(), pi.FieldType);
+
+                        pi.SetValue( o, val );
                     }
                 };
             }
 
             return new TypePropertyBuilderData( o => tData.WrapObject( pi.GetValue( o ) ), setter );
         }
+        private static (int, int) GetParamRange(ParameterInfo[] pis)
+        {
+            int min = 0;
+            int max = 0;
 
+            foreach (ParameterInfo parameterInfo in pis)
+            {
+                if (!parameterInfo.IsOptional)
+                {
+                    min++;
+                }
+
+                max++;
+            }
+
+            return ( min, max );
+        }
         private static TypePropertyBuilderData GenerateData( Type t, MethodInfo mi )
         {
             TypeBuilderData tRet = GetData( mi.ReturnType );
 
+            ParameterInfo[] pis = mi.GetParameters();
             Func < object, ABSObject > getter = o =>
             {
                 Func < ABSObject[], ABSObject > func = objects =>
@@ -123,23 +165,14 @@ namespace BadScript.Utils
 
                         if ( absObject is BSObject arg )
                         {
-                            args[i] = arg.GetInternalObject();
+                            args[i] = Convert.ChangeType( arg.GetInternalObject(), pis[i].ParameterType );
                         }
                     }
+
                     return tRet.WrapObject( mi.Invoke( o, args ) );
                 };
 
-                ParameterInfo[] pis = mi.GetParameters();
-                int min = 0;
-                int max = 0;
-                foreach ( ParameterInfo parameterInfo in pis )
-                {
-                    if(!parameterInfo.IsOptional)
-                    {
-                        min++;
-                    }
-                    max++;
-                }
+                ( int min, int max ) = GetParamRange( pis );
 
                 BSFunction f = new BSFunction( $"function c#reflectedfunc", func, min, max );
 
@@ -153,6 +186,7 @@ namespace BadScript.Utils
         {
             TypeBuilderData tRet = GetData( mi.DeclaringType );
 
+            ParameterInfo[] pis = mi.GetParameters();
             Func < ABSObject[], ABSObject > func = objects =>
             {
                 object[] args = new object[objects.Length];
@@ -161,21 +195,27 @@ namespace BadScript.Utils
                 {
                     ABSObject absObject = objects[i];
 
-                    if ( absObject is BSObject arg )
+                    if (absObject is BSObject arg)
                     {
-                        args[i] = arg.GetInternalObject();
+                        args[i] = Convert.ChangeType(arg.GetInternalObject(), pis[i].ParameterType);
                     }
                 }
 
                 return tRet.WrapObject( mi.Invoke( args ) );
             };
+            (int min, int max) = GetParamRange(pis);
 
-            BSFunction f = new BSFunction( $"function {mi.DeclaringType.Name}.ctor", func, mi.GetParameters().Length );
+            BSFunction f = new BSFunction( $"function {mi.DeclaringType.Name}.ctor", func, min, max );
 
             if ( s_Constructors.ContainsKey( mi.DeclaringType.Name ) )
+            {
                 s_Constructors[mi.DeclaringType.Name].Add( f );
+            }
             else
+            {
                 s_Constructors[mi.DeclaringType.Name] = new List < BSFunction > { f };
+            }
+
             return new TypePropertyBuilderData( o => f, null );
         }
 
@@ -201,17 +241,19 @@ namespace BadScript.Utils
                 return GenerateData( t, ci );
             }
 
-
             return TypePropertyBuilderData.Empty;
 
-             }
+        }
 
         private void Initialize()
         {
-            if ( m_Initialized )
+            if ( m_Initialized ||
+                 s_FilterType == TypeBuilderTypeFilter.Blacklist && s_FilterTypes.Contains( m_Type ) ||
+                 s_FilterType == TypeBuilderTypeFilter.Whitelist && !s_FilterTypes.Contains( m_Type ) )
             {
                 return;
             }
+
             m_Initialized = true;
 
             MemberInfo[] mis = m_Type.GetMembers();
@@ -219,18 +261,20 @@ namespace BadScript.Utils
             foreach ( MemberInfo memberInfo in mis )
             {
                 string name = memberInfo.Name;
-                if (memberInfo is MethodInfo mi)
+
+                if ( memberInfo is MethodInfo mi )
                 {
                     ParameterInfo[] pis = mi.GetParameters();
 
-                    if ( pis.Length != 0 && !pis.All(x=>x.IsOptional) )
+                    if ( pis.Length != 0 && !pis.All( x => x.IsOptional ) )
                     {
                         name = name + "_" + mi.GetParameters().Length;
                     }
                 }
-                if (!m_PropertyData.ContainsKey(name))
+
+                if ( !m_PropertyData.ContainsKey( name ) )
                 {
-                    m_PropertyData[name] = GenerateData(m_Type, memberInfo);
+                    m_PropertyData[name] = GenerateData( m_Type, memberInfo );
                 }
             }
 
@@ -261,7 +305,7 @@ namespace BadScript.Utils
                     typePropertyBuilderData.Value.MakeSetter( instance ) );
             }
 
-            return new BSReflectionTypeObject(m_Type, instance, props );
+            return new BSReflectionTypeObject( m_Type, instance, props );
         }
     }
 
