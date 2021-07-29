@@ -40,7 +40,7 @@ namespace BadScript
             return CreateSourcePosition( m_CurrentPosition );
         }
 
-        public int FindClosing( string open, string close, params (string open, string close)[] skipTokens )
+        public int FindClosing( string open, string close)
         {
             int level = 1;
 
@@ -53,12 +53,10 @@ namespace BadScript
 
                 ReadWhitespaceAndNewLine();
 
-                foreach ( (string open, string close) valueTuple in skipTokens )
+                if (IsStringQuotes())
                 {
-                    if ( Is( valueTuple.open ) )
-                    {
-                        FindClosing( valueTuple.open, valueTuple.close );
-                    }
+                    BSExpression e = ParseString();
+                    continue;
                 }
 
                 if ( Is( open ) )
