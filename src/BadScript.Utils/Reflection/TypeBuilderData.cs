@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -37,16 +38,16 @@ namespace BadScript.Utils
         private static readonly Dictionary < Type, TypeBuilderData > s_Builders =
             new Dictionary < Type, TypeBuilderData >();
         private readonly Dictionary < string, TypePropertyBuilderData > m_PropertyData;
-        private static readonly Dictionary < string, List < BSFunction > > s_Constructors =
-            new Dictionary < string, List < BSFunction > >();
+        private static readonly Dictionary < string, (bool locked, List<BSFunction> ctors) > s_Constructors =
+            new Dictionary < string, (bool locked, List<BSFunction> ctors)>();
 
         internal static ABSTable GetConstructorData()
         {
             Dictionary < ABSObject, ABSObject > d = new Dictionary < ABSObject, ABSObject >();
 
-            foreach ( KeyValuePair < string, List < BSFunction > > keyValuePair in s_Constructors )
+            foreach ( KeyValuePair < string, (bool locked, List<BSFunction> ctors)> keyValuePair in s_Constructors )
             {
-                d[new BSObject( keyValuePair.Key )] = new BSArray( keyValuePair.Value );
+                d[new BSObject( keyValuePair.Key )] = new BSArray( keyValuePair.Value.ctors );
             }
 
             return new BSTable( SourcePosition.Unknown, d );
@@ -78,7 +79,6 @@ namespace BadScript.Utils
                 return s_Builders[t];
             }
 
-            Console.WriteLine( "Building Data for Type: " + t );
 
             if ( t.IsArray )
             {
@@ -174,12 +174,32 @@ namespace BadScript.Utils
 
                 ( int min, int max ) = GetParamRange( pis );
 
-                BSFunction f = new BSFunction( $"function c#reflectedfunc", func, min, max );
+                BSFunction f = new BSFunction(GenerateSignature($"{mi.Name}", pis), func, min, max );
 
                 return f;
             };
 
             return new TypePropertyBuilderData( getter, null );
+        }
+
+        private static string GenerateSignature(string fname, ParameterInfo[] parameter)
+        {
+            StringBuilder sb = new StringBuilder( $"function {fname}(" );
+
+            for ( int i = 0; i < parameter.Length; i++ )
+            {
+                if(i == 0)
+                {
+                    sb.Append( parameter[i].Name );
+                }
+                else
+                {
+                    sb.Append( ", " + parameter[i].Name);
+                }
+            }
+
+            sb.Append( ")" );
+            return sb.ToString();
         }
 
         private static TypePropertyBuilderData GenerateData( Type t, ConstructorInfo mi )
@@ -205,15 +225,15 @@ namespace BadScript.Utils
             };
             (int min, int max) = GetParamRange(pis);
 
-            BSFunction f = new BSFunction( $"function {mi.DeclaringType.Name}.ctor", func, min, max );
+            BSFunction f = new BSFunction( GenerateSignature($"{mi.DeclaringType.Name}.ctor", pis), func, min, max );
 
-            if ( s_Constructors.ContainsKey( mi.DeclaringType.Name ) )
+            if ( s_Constructors.ContainsKey( mi.DeclaringType.Name ) && !s_Constructors[mi.DeclaringType.Name].locked)
             {
-                s_Constructors[mi.DeclaringType.Name].Add( f );
+                s_Constructors[mi.DeclaringType.Name].ctors.Add( f );
             }
             else
             {
-                s_Constructors[mi.DeclaringType.Name] = new List < BSFunction > { f };
+                s_Constructors[mi.DeclaringType.Name] = (false, new List<BSFunction> { f });
             }
 
             return new TypePropertyBuilderData( o => f, null );
@@ -272,12 +292,15 @@ namespace BadScript.Utils
                     }
                 }
 
-                if ( !m_PropertyData.ContainsKey( name ) )
+                if ( !m_PropertyData.ContainsKey( name ) || name == ".ctor" )
                 {
                     m_PropertyData[name] = GenerateData( m_Type, memberInfo );
                 }
             }
 
+            (bool locked, List <BSFunction> ctors ) e = s_Constructors[m_Type.Name];
+            e.locked = true;
+            s_Constructors[m_Type.Name] = e;
         }
 
         public TypeBuilderData( Type t )
