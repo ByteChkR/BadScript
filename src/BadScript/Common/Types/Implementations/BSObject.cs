@@ -54,9 +54,16 @@ namespace BadScript.Common.Types.Implementations
             throw new BSRuntimeException( Position, $"Can not invoke '{this}'" );
         }
 
-        public override string SafeToString( Dictionary < ABSObject, string > doneList )
+        
+
+        public override void SetProperty( string propertyName, ABSObject obj )
         {
-            if ( doneList.ContainsKey( this ) )
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
+        }
+
+        public override string SafeToString(Dictionary<ABSObject, string> doneList)
+        {
+            if (doneList.ContainsKey(this))
             {
                 return doneList[this];
             }
@@ -64,11 +71,6 @@ namespace BadScript.Common.Types.Implementations
             {
                 return doneList[this] = m_InternalObject?.ToString() ?? "NULL";
             }
-        }
-
-        public override void SetProperty( string propertyName, ABSObject obj )
-        {
-            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override string ToString()

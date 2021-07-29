@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
 using BadScript.Console.IO;
 using BadScript.Console.Plugins;
 using BadScript.ConsoleUtils;
@@ -14,6 +16,7 @@ using BadScript.Json;
 using BadScript.Math;
 using BadScript.Process;
 using BadScript.StringUtils;
+using BadScript.Utils;
 using BadScript.Zip;
 
 namespace BadScript.Console
@@ -63,6 +66,8 @@ namespace BadScript.Console
 
         private static void Main( string[] args )
         {
+
+
             m_PluginLoader = new PluginLoader( m_IORoot, new ConsoleIODirectory( "plugins", m_IORoot, null ) );
 
             m_PluginLoader.LoadPlugins();
@@ -80,6 +85,9 @@ namespace BadScript.Console
             BSEngine.AddStatic( new StringUtilsApi() );
             BSEngine.AddStatic( new ZipApi() );
             BSEngine.AddStatic( new ImagingApi() );
+            BSEngine.AddStatic( new BSReflectionScriptInterface() );
+
+
 
             AppDirectory.EnsureExistsSelf();
 
@@ -101,6 +109,7 @@ namespace BadScript.Console
                 string[] parts = execStr.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
                 executions.Add( new ConsoleExecution( parts[0], parts.Skip( 1 ).ToArray() ) );
             }
+
 
             foreach ( ConsoleExecution consoleExecution in executions )
             {

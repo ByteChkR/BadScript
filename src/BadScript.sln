@@ -29,9 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Core", "BadScript
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.ConsoleUtils", "BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj", "{3D2988C2-DE1B-4EFC-87BF-AA836674C20E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Imaging", "BadScript.Imaging\BadScript.Imaging.csproj", "{39F965E2-CD17-4E35-B207-FB3263AD8B75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Imaging", "BadScript.Imaging\BadScript.Imaging.csproj", "{39F965E2-CD17-4E35-B207-FB3263AD8B75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.HttpServer", "BadScript.HttpServer\BadScript.HttpServer.csproj", "{90439F93-CB50-4A00-BAF8-BE43DBDCA6C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.HttpServer", "BadScript.HttpServer\BadScript.HttpServer.csproj", "{90439F93-CB50-4A00-BAF8-BE43DBDCA6C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Utils", "BadScript.Utils\BadScript.Utils.csproj", "{987106A0-3A16-480C-9C87-02710411623C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +97,10 @@ Global
 		{90439F93-CB50-4A00-BAF8-BE43DBDCA6C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90439F93-CB50-4A00-BAF8-BE43DBDCA6C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90439F93-CB50-4A00-BAF8-BE43DBDCA6C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{987106A0-3A16-480C-9C87-02710411623C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{987106A0-3A16-480C-9C87-02710411623C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{987106A0-3A16-480C-9C87-02710411623C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{987106A0-3A16-480C-9C87-02710411623C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
