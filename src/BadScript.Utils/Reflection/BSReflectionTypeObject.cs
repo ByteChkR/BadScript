@@ -2,12 +2,11 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
-namespace BadScript.Utils
+namespace BadScript.Utils.Reflection
 {
 
     internal class BSReflectionTypeObject : BSObject
@@ -57,11 +56,12 @@ namespace BadScript.Utils
             IndentedTextWriter tw = new IndentedTextWriter( sw );
             tw.WriteLine( '{' );
             tw.Indent = 1;
+
             foreach ( KeyValuePair < string, ABSReference > absReference in m_Properties )
             {
                 tw.WriteLine( $"{absReference.Key}" );
             }
-            
+
             tw.Indent = 0;
             tw.WriteLine( '}' );
 

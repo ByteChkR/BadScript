@@ -11,6 +11,25 @@ namespace BadScript.Common.Runtime
 
     public static class BSOperatorImplementationResolver
     {
+        private static readonly Dictionary < string, string > s_KeyMapping = new Dictionary < string, string >
+        {
+            { "+", "op_Plus" },
+            { "-", "op_Minus" },
+            { "*", "op_Multiply" },
+            { "/", "op_Divide" },
+            { "&&", "op_And" },
+            { "||", "op_Or" },
+            { "==", "op_Equals" },
+            { "!=", "op_InEqual" },
+            { "<=", "op_LessOrEqual" },
+            { ">=", "op_GreaterOrEqual" },
+            { "<", "op_LessThan" },
+            { ">", "op_GreaterThan" },
+            { "!", "op_Not" },
+            { "^", "op_XOr" },
+            { "??", "op_NullCheck" },
+        };
+
         private static List < ABSOperatorImplementation > m_Implementations;
 
         #region Public
@@ -25,6 +44,22 @@ namespace BadScript.Common.Runtime
             for ( int i = 0; i < args.Length; i++ )
             {
                 args[i] = args[i].ResolveReference();
+            }
+
+            ABSObject firstO = args.First();
+
+            string opImplName = ResolveKey( key );
+
+            if ( firstO.HasProperty( opImplName ) )
+            {
+                ABSObject impl = firstO.GetProperty( opImplName ).ResolveReference();
+
+                if ( impl is BSFunction fnc )
+                {
+                    return new BSOperatorImplementation( key, fnc );
+                }
+
+                throw new BSRuntimeException( $"Operator Implementation: '{opImplName}' is not a valid function." );
             }
 
             ABSOperatorImplementation imp = m_Implementations.
@@ -61,6 +96,11 @@ namespace BadScript.Common.Runtime
             m_Implementations.Add( new BSOrOperatorImplementation() );
             m_Implementations.Add( new BSXOrDefaultOperatorImplementation() );
             m_Implementations.Add( new BSNullTestOperatorImplementation() );
+        }
+
+        private static string ResolveKey( string key )
+        {
+            return s_KeyMapping[key];
         }
 
         #endregion

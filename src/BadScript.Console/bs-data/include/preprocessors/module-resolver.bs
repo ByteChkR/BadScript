@@ -39,5 +39,5 @@ function moduleResolver(source)
 
 return {
 	name = "module-resolver",
-	func = moduleResolver
+	preprocess = moduleResolver
 }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
 using BadScript.Console.IO;
 using BadScript.Console.Plugins;
 using BadScript.ConsoleUtils;
@@ -16,7 +14,7 @@ using BadScript.Json;
 using BadScript.Math;
 using BadScript.Process;
 using BadScript.StringUtils;
-using BadScript.Utils;
+using BadScript.Utils.Reflection;
 using BadScript.Zip;
 
 namespace BadScript.Console
@@ -28,6 +26,7 @@ namespace BadScript.Console
             new( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "bs-data/" ) );
         public static readonly ConsoleIODirectory AppDirectory = new( "apps", m_IORoot, null );
         public static readonly ConsoleIODirectory IncludeDirectory = new( "include", m_IORoot, null );
+
         private static PluginLoader m_PluginLoader;
 
         #region Private
@@ -67,7 +66,6 @@ namespace BadScript.Console
         private static void Main( string[] args )
         {
 
-
             m_PluginLoader = new PluginLoader( m_IORoot, new ConsoleIODirectory( "plugins", m_IORoot, null ) );
 
             m_PluginLoader.LoadPlugins();
@@ -87,8 +85,6 @@ namespace BadScript.Console
             BSEngine.AddStatic( new ImagingApi() );
             BSEngine.AddStatic( new BSReflectionScriptInterface() );
 
-
-
             AppDirectory.EnsureExistsSelf();
 
             BSEngineInstance engine = BSEngine.CreateEngineInstance( GetDefaultInterfaces(), GetConsoleIncludeDir() );
@@ -100,7 +96,7 @@ namespace BadScript.Console
                 a += " " + s;
             }
 
-            string[] ar = a.Split( new char[]{ ';' , ','} );
+            string[] ar = a.Split( new char[] { ';', ',' } );
 
             List < ConsoleExecution > executions = new List < ConsoleExecution >();
 
@@ -110,12 +106,11 @@ namespace BadScript.Console
                 executions.Add( new ConsoleExecution( parts[0], parts.Skip( 1 ).ToArray() ) );
             }
 
-
             foreach ( ConsoleExecution consoleExecution in executions )
             {
                 consoleExecution.Run( engine );
             }
-            
+
         }
 
         #endregion

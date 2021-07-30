@@ -42,5 +42,5 @@ function interfaceResolver(source)
 
 return {
 	name = "interface-resolver",
-	func = interfaceResolver
+	preprocess = interfaceResolver
 }

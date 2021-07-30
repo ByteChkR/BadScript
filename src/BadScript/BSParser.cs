@@ -40,7 +40,7 @@ namespace BadScript
             return CreateSourcePosition( m_CurrentPosition );
         }
 
-        public int FindClosing( string open, string close)
+        public int FindClosing( string open, string close )
         {
             int level = 1;
 
@@ -53,9 +53,10 @@ namespace BadScript
 
                 ReadWhitespaceAndNewLine();
 
-                if (IsStringQuotes())
+                if ( IsStringQuotes() )
                 {
                     BSExpression e = ParseString();
+
                     continue;
                 }
 
@@ -555,7 +556,7 @@ namespace BadScript
 
                 if ( !Is( '}' ) )
                 {
-                    string key = ParseKey();
+                    string key = GetNextWord();
                     ReadWhitespaceAndNewLine();
                     string equal = ParseKeyword();
                     ReadWhitespaceAndNewLine();
@@ -565,7 +566,8 @@ namespace BadScript
                     while ( Is( ',' ) )
                     {
                         m_CurrentPosition += 1;
-                        key = ParseKey();
+                        ReadWhitespaceAndNewLine();
+                        key = GetNextWord();
                         ReadWhitespaceAndNewLine();
                         equal = ParseKeyword();
                         ReadWhitespaceAndNewLine();
@@ -1103,7 +1105,7 @@ namespace BadScript
         {
             if ( m_OriginalSource.Length > m_CurrentPosition + 1 &&
                  m_OriginalSource[m_CurrentPosition] == '/' &&
-                 m_OriginalSource[m_CurrentPosition] == '/' )
+                 m_OriginalSource[m_CurrentPosition + 1] == '/' )
             {
                 while ( Current != '\n' && Current != '\0' )
                 {

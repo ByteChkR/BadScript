@@ -46,8 +46,7 @@ namespace BadScript.HttpServer
                     { new BSObject( "headers" ), new BSTable( pos, headers ) },
                     { new BSObject( "uri" ), new BSObject( m_Request.RawHttpRequestLine.ToString() ) },
                     {
-                        new BSObject( "acceptTypes" ),
-                        new BSArray(
+                        new BSObject( "acceptTypes" ), new BSArray(
                             ( m_Request.GetAcceptLanguages().Select( x => x.ToString() ) ?? new string[0] ).Select(
                                 x => new BSObject( x ) ) )
                     },

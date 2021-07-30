@@ -14,5 +14,5 @@ foreach ppfile in ppfiles
 foreach pp in pps
 {
 	print("[PP-LOADER] Loading Preprocessor: " + pp.name)
-	environment.addPreprocessor(pp.name, pp.func)
+	environment.addPreprocessor(pp.name, pp)
 }

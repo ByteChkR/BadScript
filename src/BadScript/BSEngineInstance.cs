@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BadScript.Common.Exceptions;
@@ -13,7 +14,7 @@ namespace BadScript
 
     public class BSEngineInstance
     {
-        private readonly Dictionary <string, ABSObject > m_Preprocessors;
+        private readonly Dictionary < string, ABSObject > m_Preprocessors;
         private readonly ABSTable m_StaticData;
         private readonly ABSTable m_GlobalTable;
         private readonly List < ABSScriptInterface > m_Interfaces;
@@ -77,8 +78,8 @@ namespace BadScript
                     int.MaxValue ) );
 
             env.InsertElement(
-                new BSObject("addPreprocessor"),
-                new BSFunction("function addPreprocessor(ppName, func)", AddPreprocessorApi, 2)
+                new BSObject( "addPreprocessor" ),
+                new BSFunction( "function addPreprocessor(ppName, func)", AddPreprocessorApi, 2 )
             );
 
             env.InsertElement(
@@ -90,10 +91,6 @@ namespace BadScript
                 new BSObject( "loadInterface" ),
                 new BSFunction( "function loadInterface(key)/loadInterface(key, root)", LoadInterfaceApi, 1, 2 )
             );
-
-            env.InsertElement(
-                new BSObject( "getScriptBaseDir" ),
-                new BSFunction( "function getScriptBaseDir()", GetScriptBaseDirApi, 0, 0 ) );
 
             env.InsertElement(
                 new BSObject( "getInterfaceNames" ),
@@ -110,24 +107,6 @@ namespace BadScript
             m_GlobalTable.InsertElement( new BSObject( "environment" ), env );
 
             m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
-        }
-
-        private string Preprocess(string script)
-        {
-            ABSObject current = new BSObject(script.Replace("\r", ""));
-
-            foreach (KeyValuePair <string,ABSObject> preprocessor in m_Preprocessors)
-            {
-                current = preprocessor.Value.Invoke(new[] { current });
-            }
-
-            return current.ConvertString();
-        }
-
-        private ABSObject AddPreprocessorApi( ABSObject[] arg )
-        {
-            m_Preprocessors[arg[0].ConvertString()] = arg[1];
-            return new BSObject(null);
         }
 
         public void AddInterface( ABSScriptInterface i )
@@ -198,7 +177,7 @@ namespace BadScript
 
         public ABSObject LoadString( BSScope scope, string script, ABSObject[] args )
         {
-            BSParser parser = new BSParser(Preprocess(script));
+            BSParser parser = new BSParser( Preprocess( script ) );
             BSExpression[] exprs = parser.ParseToEnd();
 
             scope.AddLocalVar(
@@ -255,6 +234,25 @@ namespace BadScript
 
         #region Private
 
+        private ABSObject AddPreprocessorApi( ABSObject[] arg )
+        {
+            string name = arg[0].ConvertString();
+            ABSObject preprocessor = arg[1];
+
+            if ( preprocessor.HasProperty( "preprocess" ) )
+            {
+
+                m_Preprocessors[name] = preprocessor.GetProperty( "preprocess" ).ResolveReference();
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"PreProcessor '{name}' does not define function 'preprocess(src)'\nPassed Value: {preprocessor.SafeToString()}" );
+            }
+
+            return new BSObject( null );
+        }
+
         private ABSObject CreateScope( ABSObject[] args )
         {
             BSScope scope;
@@ -274,11 +272,6 @@ namespace BadScript
         private ABSObject GetInterfaceNamesApi( ABSObject[] arg )
         {
             return new BSArray( InterfaceNames.Select( x => new BSObject( x ) ) );
-        }
-
-        private ABSObject GetScriptBaseDirApi( ABSObject[] arg )
-        {
-            return null;
         }
 
         private ABSObject HasInterfaceName( ABSObject[] arg )
@@ -345,6 +338,18 @@ namespace BadScript
                 o,
                 "string"
             );
+        }
+
+        private string Preprocess( string script )
+        {
+            ABSObject current = new BSObject( script.Replace( "\r", "" ) );
+
+            foreach ( KeyValuePair < string, ABSObject > preprocessor in m_Preprocessors )
+            {
+                current = preprocessor.Value.Invoke( new[] { current } );
+            }
+
+            return current.ConvertString();
         }
 
         #endregion

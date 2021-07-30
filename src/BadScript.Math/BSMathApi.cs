@@ -385,7 +385,7 @@ namespace BadScript.Math
                             )
                         );
                     },
-                    1
+                    2
                 )
             );
 

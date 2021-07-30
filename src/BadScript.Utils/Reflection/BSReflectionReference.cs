@@ -4,14 +4,18 @@ using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.References;
 
-namespace BadScript.Utils
+namespace BadScript.Utils.Reflection
 {
 
     internal class BSReflectionReference : ABSReference
     {
         private Func < ABSObject > m_Getter;
-        private Action<ABSObject> m_Setter;
-        public BSReflectionReference( Func <ABSObject> get, Action<ABSObject> set ) : base( SourcePosition.Unknown )
+        private Action < ABSObject > m_Setter;
+
+        #region Public
+
+        public BSReflectionReference( Func < ABSObject > get, Action < ABSObject > set ) : base(
+            SourcePosition.Unknown )
         {
             m_Getter = get;
             m_Setter = set;
@@ -23,6 +27,7 @@ namespace BadScript.Utils
             {
                 throw new BSRuntimeException( "Reflection Reference is Readonly" );
             }
+
             m_Setter( obj );
         }
 
@@ -30,6 +35,8 @@ namespace BadScript.Utils
         {
             return m_Getter();
         }
+
+        #endregion
     }
 
 }

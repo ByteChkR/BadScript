@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BadScript.Common.Expressions;
@@ -121,7 +120,7 @@ namespace BadScript
         {
             foreach ( string file in Directory.GetFiles( dir, "*.bs", SearchOption.TopDirectoryOnly ) )
             {
-                instance.LoadFile( file, new []{dir} );
+                instance.LoadFile( file, new[] { dir } );
             }
         }
 

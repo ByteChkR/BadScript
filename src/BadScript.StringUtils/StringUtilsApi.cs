@@ -181,8 +181,9 @@ namespace BadScript.StringUtils
             int testI = test.IndexOf( "\n" );
             string str = arg[0].ConvertString();
             string searchStr = arg[1].ConvertString();
-            int idx = str.IndexOf( searchStr);
-            return new BSObject( ( decimal )idx  );
+            int idx = str.IndexOf( searchStr );
+
+            return new BSObject( ( decimal ) idx );
         }
 
         private static ABSObject Insert( ABSObject[] arg )
@@ -216,6 +217,7 @@ namespace BadScript.StringUtils
             string str = arg[0].ConvertString();
             string oldS = arg[1].ConvertString();
             string newS = arg[2].ConvertString();
+
             return new BSObject( str.Replace( oldS, newS ) );
         }
 

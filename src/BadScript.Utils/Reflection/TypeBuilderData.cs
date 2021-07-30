@@ -8,21 +8,15 @@ using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
-namespace BadScript.Utils
+namespace BadScript.Utils.Reflection
 {
-
-    public enum TypeBuilderTypeFilter
-    {
-        Blacklist,
-        Whitelist
-    }
 
     internal struct TypeBuilderData
     {
         private static readonly List < Type > s_FilterTypes = new List < Type >();
         private static TypeBuilderTypeFilter s_FilterType = TypeBuilderTypeFilter.Blacklist;
 
-        internal static void SetFilterType(TypeBuilderTypeFilter filter)
+        internal static void SetFilterType( TypeBuilderTypeFilter filter )
         {
             s_FilterType = filter;
         }
@@ -38,14 +32,14 @@ namespace BadScript.Utils
         private static readonly Dictionary < Type, TypeBuilderData > s_Builders =
             new Dictionary < Type, TypeBuilderData >();
         private readonly Dictionary < string, TypePropertyBuilderData > m_PropertyData;
-        private static readonly Dictionary < string, (bool locked, List<BSFunction> ctors) > s_Constructors =
-            new Dictionary < string, (bool locked, List<BSFunction> ctors)>();
+        private static readonly Dictionary < string, (bool locked, List < BSFunction > ctors) > s_Constructors =
+            new Dictionary < string, (bool locked, List < BSFunction > ctors) >();
 
         internal static ABSTable GetConstructorData()
         {
             Dictionary < ABSObject, ABSObject > d = new Dictionary < ABSObject, ABSObject >();
 
-            foreach ( KeyValuePair < string, (bool locked, List<BSFunction> ctors)> keyValuePair in s_Constructors )
+            foreach ( KeyValuePair < string, (bool locked, List < BSFunction > ctors) > keyValuePair in s_Constructors )
             {
                 d[new BSObject( keyValuePair.Key )] = new BSArray( keyValuePair.Value.ctors );
             }
@@ -79,7 +73,6 @@ namespace BadScript.Utils
                 return s_Builders[t];
             }
 
-
             if ( t.IsArray )
             {
                 //Add Array Element
@@ -102,7 +95,7 @@ namespace BadScript.Utils
                     if ( absObject is BSObject rtype )
                     {
                         object val = Convert.ChangeType( rtype.GetInternalObject(), pi.PropertyType );
-                        pi.SetValue( o, val);
+                        pi.SetValue( o, val );
                     }
                 };
             }
@@ -122,7 +115,7 @@ namespace BadScript.Utils
                 {
                     if ( absObject is BSObject rtype )
                     {
-                        object val = Convert.ChangeType(rtype.GetInternalObject(), pi.FieldType);
+                        object val = Convert.ChangeType( rtype.GetInternalObject(), pi.FieldType );
 
                         pi.SetValue( o, val );
                     }
@@ -131,14 +124,15 @@ namespace BadScript.Utils
 
             return new TypePropertyBuilderData( o => tData.WrapObject( pi.GetValue( o ) ), setter );
         }
-        private static (int, int) GetParamRange(ParameterInfo[] pis)
+
+        private static (int, int) GetParamRange( ParameterInfo[] pis )
         {
             int min = 0;
             int max = 0;
 
-            foreach (ParameterInfo parameterInfo in pis)
+            foreach ( ParameterInfo parameterInfo in pis )
             {
-                if (!parameterInfo.IsOptional)
+                if ( !parameterInfo.IsOptional )
                 {
                     min++;
                 }
@@ -148,11 +142,13 @@ namespace BadScript.Utils
 
             return ( min, max );
         }
+
         private static TypePropertyBuilderData GenerateData( Type t, MethodInfo mi )
         {
             TypeBuilderData tRet = GetData( mi.ReturnType );
 
             ParameterInfo[] pis = mi.GetParameters();
+
             Func < object, ABSObject > getter = o =>
             {
                 Func < ABSObject[], ABSObject > func = objects =>
@@ -174,7 +170,7 @@ namespace BadScript.Utils
 
                 ( int min, int max ) = GetParamRange( pis );
 
-                BSFunction f = new BSFunction(GenerateSignature($"{mi.Name}", pis), func, min, max );
+                BSFunction f = new BSFunction( GenerateSignature( $"{mi.Name}", pis ), func, min, max );
 
                 return f;
             };
@@ -182,23 +178,24 @@ namespace BadScript.Utils
             return new TypePropertyBuilderData( getter, null );
         }
 
-        private static string GenerateSignature(string fname, ParameterInfo[] parameter)
+        private static string GenerateSignature( string fname, ParameterInfo[] parameter )
         {
             StringBuilder sb = new StringBuilder( $"function {fname}(" );
 
             for ( int i = 0; i < parameter.Length; i++ )
             {
-                if(i == 0)
+                if ( i == 0 )
                 {
                     sb.Append( parameter[i].Name );
                 }
                 else
                 {
-                    sb.Append( ", " + parameter[i].Name);
+                    sb.Append( ", " + parameter[i].Name );
                 }
             }
 
             sb.Append( ")" );
+
             return sb.ToString();
         }
 
@@ -207,6 +204,7 @@ namespace BadScript.Utils
             TypeBuilderData tRet = GetData( mi.DeclaringType );
 
             ParameterInfo[] pis = mi.GetParameters();
+
             Func < ABSObject[], ABSObject > func = objects =>
             {
                 object[] args = new object[objects.Length];
@@ -215,25 +213,26 @@ namespace BadScript.Utils
                 {
                     ABSObject absObject = objects[i];
 
-                    if (absObject is BSObject arg)
+                    if ( absObject is BSObject arg )
                     {
-                        args[i] = Convert.ChangeType(arg.GetInternalObject(), pis[i].ParameterType);
+                        args[i] = Convert.ChangeType( arg.GetInternalObject(), pis[i].ParameterType );
                     }
                 }
 
                 return tRet.WrapObject( mi.Invoke( args ) );
             };
-            (int min, int max) = GetParamRange(pis);
 
-            BSFunction f = new BSFunction( GenerateSignature($"{mi.DeclaringType.Name}.ctor", pis), func, min, max );
+            ( int min, int max ) = GetParamRange( pis );
 
-            if ( s_Constructors.ContainsKey( mi.DeclaringType.Name ) && !s_Constructors[mi.DeclaringType.Name].locked)
+            BSFunction f = new BSFunction( GenerateSignature( $"{mi.DeclaringType.Name}.ctor", pis ), func, min, max );
+
+            if ( s_Constructors.ContainsKey( mi.DeclaringType.Name ) && !s_Constructors[mi.DeclaringType.Name].locked )
             {
                 s_Constructors[mi.DeclaringType.Name].ctors.Add( f );
             }
             else
             {
-                s_Constructors[mi.DeclaringType.Name] = (false, new List<BSFunction> { f });
+                s_Constructors[mi.DeclaringType.Name] = ( false, new List < BSFunction > { f } );
             }
 
             return new TypePropertyBuilderData( o => f, null );
@@ -298,7 +297,7 @@ namespace BadScript.Utils
                 }
             }
 
-            (bool locked, List <BSFunction> ctors ) e = s_Constructors[m_Type.Name];
+            (bool locked, List < BSFunction > ctors ) e = s_Constructors[m_Type.Name];
             e.locked = true;
             s_Constructors[m_Type.Name] = e;
         }
