@@ -3,6 +3,10 @@ path = environment.loadInterface("path", {})
 
 
 ppDir = path.combine(args[0], "preprocessors")
+if(fs.exists(ppDir) == 0)
+{
+	fs.createDir(ppDir)
+}
 
 ppfiles = fs.getFiles(ppDir, "*.bs", 1)
 pps = []

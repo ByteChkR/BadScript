@@ -46,12 +46,6 @@
     <Content Include="bs-data\include\console_tools.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="bs-data\include\preprocessors\interface-resolver.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="bs-data\include\preprocessors\module-resolver.bs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="bs-data\include\preprocessor_loader.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -75,6 +69,10 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bs-data\include\preprocessors\" />
   </ItemGroup>
 
 </Project>
