@@ -6,6 +6,7 @@
     <StartupObject>BadScript.Console.BadScriptConsole</StartupObject>
     <AssemblyName>bs</AssemblyName>
     <LangVersion>latest</LangVersion>
+    <Version>2021.8.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
