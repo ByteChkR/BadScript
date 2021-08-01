@@ -113,7 +113,7 @@ namespace BadScript
 
         private static BSEngine GetInstance()
         {
-            return s_Instance ?? ( s_Instance = new BSEngine() );
+            return s_Instance ??= new BSEngine();
         }
 
         private static void LoadDirectory( BSEngineInstance instance, string dir )
