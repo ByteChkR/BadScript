@@ -8,6 +8,7 @@ using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Utils.Reflection;
 using Ceen.Httpd;
 using Ceen.Httpd.Logging;
 using OpenSSL.PrivateKeyDecoder;
@@ -25,9 +26,17 @@ namespace BadScript.HttpServer
 
         public override void AddApi( ABSTable root )
         {
+
             root.InsertElement(
                 new BSObject( "createListener" ),
                 new BSFunction( "function createListener(config)", CreateListener, 1 ) );
+
+            BSTable statusCodes = EnumBuilder < HttpStatusCode >.Build();
+            statusCodes.Lock();
+
+            root.InsertElement(
+                new BSObject( "statusCodes" ),
+                statusCodes );
         }
 
         #endregion

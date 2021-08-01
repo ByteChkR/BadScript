@@ -10,7 +10,7 @@ namespace BadScript.Utils.Reflection
     {
         #region Public
 
-        public static ABSTable Build()
+        public static BSTable Build()
         {
             return EnumBuilder.Build( typeof( T ) );
         }
@@ -22,7 +22,7 @@ namespace BadScript.Utils.Reflection
     {
         #region Public
 
-        public static ABSTable Build( Type type )
+        public static BSTable Build( Type type )
         {
             BSTable t = new BSTable( SourcePosition.Unknown );
             string[] keys = Enum.GetNames( type );
@@ -32,7 +32,7 @@ namespace BadScript.Utils.Reflection
                 int v = ( int ) Enum.Parse( type, key );
                 t.InsertElement( new BSObject( key ), new BSObject( ( decimal ) v ) );
             }
-
+            
             return t;
         }
 
