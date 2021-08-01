@@ -50,7 +50,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
                         scope.SetFlag( funcScope.Flags );
                     }
 
-                    return new BSObject( null );
+                    return BSObject.Null;
                 }
 
             }
@@ -76,7 +76,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 }
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion

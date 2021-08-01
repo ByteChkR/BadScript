@@ -34,7 +34,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
             bool lD = lVal.ConvertBool();
             bool rD = rVal.ConvertBool();
 
-            return new BSObject( ( decimal ) ( Execute( lD, rD ) ? 1 : 0 ) );
+            return Execute( lD, rD ) ? BSObject.One : BSObject.Zero;
         }
 
         #endregion

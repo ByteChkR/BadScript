@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using BadScript.Common.Exceptions;
@@ -78,6 +79,14 @@ namespace BadScript
                     int.MaxValue ) );
 
             env.InsertElement(
+                new BSObject( "loadScopedBenchmark" ),
+                new BSFunction(
+                    "function loadScopedBenchmark(scope, str, args..)/loadScopedString(rootTable, str, args..)",
+                    LoadStringScopedApi,
+                    2,
+                    int.MaxValue ) );
+
+            env.InsertElement(
                 new BSObject( "addPreprocessor" ),
                 new BSFunction( "function addPreprocessor(ppName, func)", AddPreprocessorApi, 2 )
             );
@@ -85,6 +94,11 @@ namespace BadScript
             env.InsertElement(
                 new BSObject( "loadString" ),
                 new BSFunction( "function loadString(str)", LoadStringApi, 1, int.MaxValue )
+            );
+
+            env.InsertElement(
+                new BSObject( "loadBenchmark" ),
+                new BSFunction( "function loadBenchmark(str)", LoadStringApi, 1, int.MaxValue )
             );
 
             env.InsertElement(
@@ -124,14 +138,14 @@ namespace BadScript
             return m_Interfaces.Any( x => x.Name == key );
         }
 
-        public ABSObject LoadFile( string file, string[] args = null )
+        public ABSObject LoadFile( bool isBenchmark, string file, string[] args = null )
         {
-            return LoadString( File.ReadAllText( file ), args );
+            return LoadString( isBenchmark, File.ReadAllText( file ), args );
         }
 
-        public ABSObject LoadFile( string file, ABSObject[] args = null )
+        public ABSObject LoadFile( bool isBenchmark, string file, ABSObject[] args = null )
         {
-            return LoadString( File.ReadAllText( file ), args );
+            return LoadString( isBenchmark, File.ReadAllText( file ), args );
         }
 
         public ABSTable LoadInterface( string key, ABSTable t = null )
@@ -158,24 +172,26 @@ namespace BadScript
             return table;
         }
 
-        public ABSObject LoadString( string script, string[] args = null )
+        public ABSObject LoadString( bool isBenchmark, string script, string[] args = null )
         {
             return LoadString(
+                isBenchmark,
                 script,
                 args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray()
             );
         }
 
-        public ABSObject LoadString( BSScope scope, string script, string[] args = null )
+        public ABSObject LoadString( bool isBenchmark, BSScope scope, string script, string[] args = null )
         {
             return LoadString(
+                isBenchmark,
                 scope,
                 script,
                 args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray()
             );
         }
 
-        public ABSObject LoadString( BSScope scope, string script, ABSObject[] args )
+        public ABSObject LoadString( bool isBenchmark, BSScope scope, string script, ABSObject[] args )
         {
             BSParser parser = new BSParser( Preprocess( script ) );
             BSExpression[] exprs = parser.ParseToEnd();
@@ -183,9 +199,16 @@ namespace BadScript
             scope.AddLocalVar(
                 "args",
                 args == null
-                    ? ( ABSObject ) new BSObject( null )
+                    ? ( ABSObject ) BSObject.Null
                     : new BSArray( args )
             );
+
+            Stopwatch sw = null;
+
+            if ( isBenchmark )
+            {
+                sw = Stopwatch.StartNew();
+            }
 
             foreach ( BSExpression buildScriptExpression in exprs )
             {
@@ -197,12 +220,18 @@ namespace BadScript
                 }
             }
 
+            if ( isBenchmark )
+            {
+                sw.Stop();
+                Console.WriteLine( $"[BS Benchmark] Execution took: {sw.ElapsedMilliseconds}ms ({sw.Elapsed})" );
+            }
+
             return scope.Return ?? scope.GetLocals();
         }
 
-        public ABSObject LoadString( string script, ABSObject[] args = null )
+        public ABSObject LoadString( bool isBenchmark, string script, ABSObject[] args = null )
         {
-            return LoadString( new BSScope( this ), script, args );
+            return LoadString( isBenchmark, new BSScope( this ), script, args );
         }
 
         internal ABSObject GetElement( ABSObject name )
@@ -250,7 +279,7 @@ namespace BadScript
                     $"PreProcessor '{name}' does not define function 'preprocess(src)'\nPassed Value: {preprocessor.SafeToString()}" );
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject CreateScope( ABSObject[] args )
@@ -276,7 +305,7 @@ namespace BadScript
 
         private ABSObject HasInterfaceName( ABSObject[] arg )
         {
-            return new BSObject( ( decimal ) ( InterfaceNames.Contains( arg[0].ConvertString() ) ? 1 : 0 ) );
+            return InterfaceNames.Contains( arg[0].ConvertString() ) ? BSObject.One : BSObject.Zero;
         }
 
         private ABSObject LoadInterfaceApi( ABSObject[] arg )
@@ -297,7 +326,26 @@ namespace BadScript
 
             if ( o.TryConvertString( out string path ) )
             {
-                ABSObject ret = LoadString( path, arg.Skip( 1 ).ToArray() );
+                ABSObject ret = LoadString( false, path, arg.Skip( 1 ).ToArray() );
+
+                return ret;
+            }
+
+            throw new BSInvalidTypeException(
+                o.Position,
+                "Expected String",
+                o,
+                "string"
+            );
+        }
+
+        private ABSObject LoadStringBenchmarkApi( ABSObject[] arg )
+        {
+            ABSObject o = arg[0].ResolveReference();
+
+            if ( o.TryConvertString( out string path ) )
+            {
+                ABSObject ret = LoadString( true, path, arg.Skip( 1 ).ToArray() );
 
                 return ret;
             }
@@ -321,7 +369,37 @@ namespace BadScript
                 if ( scope is BSObject obj )
                 {
                     BSScope sc = ( BSScope ) obj.GetInternalObject();
-                    ABSObject ret = LoadString( sc, path, arg.Skip( 2 ).ToArray() );
+                    ABSObject ret = LoadString( false, sc, path, arg.Skip( 2 ).ToArray() );
+
+                    return ret;
+                }
+
+                throw new BSRuntimeException(
+                    o.Position,
+                    "'function loadScopedString(scope, script, args..)' requires a valid scope to be passed as first argument" );
+
+            }
+
+            throw new BSInvalidTypeException(
+                o.Position,
+                "Expected String",
+                o,
+                "string"
+            );
+        }
+
+        private ABSObject LoadStringScopedBenchmarkApi( ABSObject[] arg )
+        {
+
+            ABSObject scope = arg[0].ResolveReference();
+            ABSObject o = arg[1].ResolveReference();
+
+            if ( o.TryConvertString( out string path ) )
+            {
+                if ( scope is BSObject obj )
+                {
+                    BSScope sc = ( BSScope ) obj.GetInternalObject();
+                    ABSObject ret = LoadString( true, sc, path, arg.Skip( 2 ).ToArray() );
 
                     return ret;
                 }

@@ -169,7 +169,7 @@ namespace BadScript.IO
             m_Stream.Close();
             m_Stream = null;
 
-            return new BSObject( 0 );
+            return BSObject.Null;
         }
 
         private ABSObject GetLength( ABSObject[] arg )
@@ -244,7 +244,7 @@ namespace BadScript.IO
             ABSObject o = arg[0].ResolveReference();
             m_Stream.SetLength( ( long ) o.ConvertDecimal() );
 
-            return new BSObject( 0 );
+            return BSObject.Null;
 
         }
 
@@ -259,7 +259,7 @@ namespace BadScript.IO
 
             m_Stream.Position = ( long ) o.ConvertDecimal();
 
-            return new BSObject( 0 );
+            return BSObject.Null;
         }
 
         private ABSObject WriteBinary( ABSObject[] arg )
@@ -279,7 +279,7 @@ namespace BadScript.IO
                 }
             }
 
-            return new BSObject( 0 );
+            return BSObject.Null;
         }
 
         private ABSObject WriteLine( ABSObject[] arg )
@@ -296,7 +296,7 @@ namespace BadScript.IO
                 writer.WriteLine( o.ConvertString() );
             }
 
-            return new BSObject( 0 );
+            return BSObject.Null;
         }
 
         private ABSObject WriteString( ABSObject[] arg )
@@ -313,7 +313,7 @@ namespace BadScript.IO
                 writer.Write( o.ConvertString() );
             }
 
-            return new BSObject( 0 );
+            return BSObject.Null;
         }
 
         #endregion

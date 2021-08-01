@@ -31,7 +31,7 @@ namespace BadScript.Process
         {
             p.Kill();
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private static ABSObject ProcExitCode( System.Diagnostics.Process p )
@@ -41,7 +41,7 @@ namespace BadScript.Process
 
         private static ABSObject ProcHasExited( System.Diagnostics.Process p )
         {
-            return new BSObject( ( decimal ) ( p.HasExited ? 1 : 0 ) );
+            return p.HasExited ? BSObject.One : BSObject.Zero;
         }
 
         private static ABSObject ProcWaitForExit( System.Diagnostics.Process p, ABSObject time = null )
@@ -55,7 +55,7 @@ namespace BadScript.Process
                 p.WaitForExit( ( int ) time.ResolveReference().ConvertDecimal() );
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private static ABSObject StartProcess( ABSObject[] args )

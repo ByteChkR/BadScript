@@ -78,7 +78,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 }
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion
@@ -89,7 +89,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         {
             if ( e == null )
             {
-                return new BSObject( null );
+                return BSObject.Null;
             }
 
             ABSTable t = new BSTable( p );

@@ -9,10 +9,25 @@ namespace BadScript.ConsoleUtils
 
     public class ConsoleApi : ABSScriptInterface
     {
+        public event Action Clear;
+
+        public event Action < ABSObject > Write;
+
+        public event Action < ABSObject > WriteLine;
+
+        public event Func < ABSObject > ReadLine;
+
         #region Public
 
-        public ConsoleApi() : base( "console" )
+        public ConsoleApi( bool addDefaultHandlers = true ) : base( "console" )
         {
+            if ( addDefaultHandlers )
+            {
+                WriteLine = Console.WriteLine;
+                ReadLine = () => new BSObject( Console.ReadLine() );
+                Write = Console.Write;
+                Clear = Console.Clear;
+            }
         }
 
         public override void AddApi( ABSTable root )
@@ -26,9 +41,9 @@ namespace BadScript.ConsoleUtils
 
                         ABSObject arg = args[0].ResolveReference();
 
-                        Console.WriteLine( arg );
+                        WriteLine?.Invoke( arg );
 
-                        return new BSObject( null );
+                        return BSObject.Null;
                     },
                     1
                 )
@@ -43,9 +58,9 @@ namespace BadScript.ConsoleUtils
 
                         ABSObject arg = args[0].ResolveReference();
 
-                        Console.Write( arg );
+                        Write?.Invoke( arg );
 
-                        return new BSObject( null );
+                        return BSObject.Null;
                     },
                     1
                 )
@@ -55,7 +70,7 @@ namespace BadScript.ConsoleUtils
                 new BSObject( "read" ),
                 new BSFunction(
                     "function read()",
-                    ( args ) => new BSObject( Console.ReadLine() ),
+                    ( args ) => ReadLine?.Invoke() ?? BSObject.Null,
                     0
                 )
             );
@@ -66,9 +81,9 @@ namespace BadScript.ConsoleUtils
                     "function clear()",
                     ( args ) =>
                     {
-                        Console.Clear();
+                        Clear?.Invoke();
 
-                        return new BSObject( null );
+                        return BSObject.Null;
                     },
                     0
                 )
@@ -99,7 +114,7 @@ namespace BadScript.ConsoleUtils
 
             Console.BackgroundColor = col;
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject SetConsoleForeColor( ABSObject[] arg )
@@ -111,7 +126,7 @@ namespace BadScript.ConsoleUtils
 
             Console.ForegroundColor = col;
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion

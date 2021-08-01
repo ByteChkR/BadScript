@@ -53,7 +53,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 o = m_Condition.Execute( funcScope ).ResolveReference();
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion

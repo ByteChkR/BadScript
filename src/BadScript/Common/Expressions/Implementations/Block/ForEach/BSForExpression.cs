@@ -66,7 +66,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion

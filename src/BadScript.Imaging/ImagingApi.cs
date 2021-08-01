@@ -43,7 +43,7 @@ namespace BadScript.Imaging
         {
             bmp.Dispose();
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject BitmapGetPixelApi( Bitmap bmp, ABSObject[] arg )
@@ -64,7 +64,7 @@ namespace BadScript.Imaging
             RotateFlipType t = ( RotateFlipType ) arg[0].ConvertDecimal();
             bmp.RotateFlip( t );
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject BitmapSerializeApi( Bitmap bmp, ABSObject[] arg )
@@ -82,7 +82,7 @@ namespace BadScript.Imaging
             int y = ( int ) arg[1].ConvertDecimal();
             bmp.SetPixel( x, y, ConvertColor( arg[2] ) );
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject BitmapWidthApi( Bitmap bmp )

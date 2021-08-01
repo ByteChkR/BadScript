@@ -29,7 +29,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
             ABSObject lVal = arg[0].ResolveReference();
             bool lD = lVal.ConvertBool();
 
-            return new BSObject( ( decimal ) ( lD ? 1 : 0 ) );
+            return lD ? BSObject.One : BSObject.Zero;
 
         }
 

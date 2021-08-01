@@ -30,7 +30,7 @@ namespace BadScript.HttpServer
             {
                 headers[new BSObject( header.Key )] = new BSObject( m_Response.Headers[header.Value] );
             }
-            
+
             m_InstanceFunctions = new BSTable(
                 pos,
                 new Dictionary < ABSObject, ABSObject >
@@ -46,21 +46,14 @@ namespace BadScript.HttpServer
                         new BSFunction( "function writeBody(bodyStr)", ResponseWriteBody, 1 )
                     },
                     {
-                        new BSObject( "setStatus" ),
-                        new BSFunction( "function setStatus(statusCode)/setStatus(statusCode, message)", SetStatusCode, 1 ,2)
+                        new BSObject( "setStatus" ), new BSFunction(
+                            "function setStatus(statusCode)/setStatus(statusCode, message)",
+                            SetStatusCode,
+                            1,
+                            2 )
                     },
                 }
             );
-        }
-
-        private ABSObject SetStatusCode( ABSObject[] arg )
-        {
-            if(arg.Length==1)
-                m_Response.SetStatus((HttpStatusCode)arg[0].ConvertDecimal());
-            else
-                m_Response.SetStatus((HttpStatusCode)arg[0].ConvertDecimal(), arg[1].ConvertString());
-
-            return new BSObject( null );
         }
 
         public override bool Equals( ABSObject other )
@@ -122,7 +115,7 @@ namespace BadScript.HttpServer
         {
             m_Response.AddHeader( arg[0].ConvertString(), arg[1].ConvertString() );
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject ResponseRedirect( ABSObject[] arg )
@@ -131,7 +124,7 @@ namespace BadScript.HttpServer
 
             m_Response = null;
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject ResponseWriteBody( ABSObject[] arg )
@@ -141,7 +134,21 @@ namespace BadScript.HttpServer
             Task t = m_Response.WriteAllAsync( buf );
             Task.WaitAll( t );
 
-            return new BSObject( null );
+            return BSObject.Null;
+        }
+
+        private ABSObject SetStatusCode( ABSObject[] arg )
+        {
+            if ( arg.Length == 1 )
+            {
+                m_Response.SetStatus( ( HttpStatusCode ) arg[0].ConvertDecimal() );
+            }
+            else
+            {
+                m_Response.SetStatus( ( HttpStatusCode ) arg[0].ConvertDecimal(), arg[1].ConvertString() );
+            }
+
+            return BSObject.Null;
         }
 
         #endregion

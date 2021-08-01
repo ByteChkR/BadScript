@@ -58,7 +58,7 @@ namespace BadScript.Http
                 wc.DownloadFile( url, file );
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private static ABSObject DownloadString( ABSObject[] args )

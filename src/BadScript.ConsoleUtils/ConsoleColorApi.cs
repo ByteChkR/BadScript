@@ -57,7 +57,7 @@ namespace BadScript.ConsoleUtils
 
             Console.BackgroundColor = col;
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject SetConsoleForeColor( ABSObject[] arg )
@@ -69,7 +69,7 @@ namespace BadScript.ConsoleUtils
 
             Console.ForegroundColor = col;
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion

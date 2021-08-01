@@ -23,7 +23,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
         protected override ABSObject Execute( ABSObject[] arg )
         {
-            return new BSObject( ( decimal ) ( arg[0].Equals( arg[1] ) ? 0 : 1 ) );
+            return arg[0].Equals( arg[1] ) ? BSObject.Zero : BSObject.One;
         }
 
         #endregion

@@ -141,7 +141,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         {
             BSScope funcScope = new BSScope( BSScopeFlags.Function, rootScope );
 
-            return InvokeBlockFunction( funcScope, Block, ArgNames, arg ) ?? new BSObject( null );
+            return InvokeBlockFunction( funcScope, Block, ArgNames, arg ) ?? BSObject.Null;
         }
 
         #endregion

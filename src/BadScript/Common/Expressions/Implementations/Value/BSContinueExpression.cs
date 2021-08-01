@@ -17,7 +17,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
         {
             scope.SetFlag( BSScopeFlags.Continue );
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion

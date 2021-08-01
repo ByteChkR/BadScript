@@ -146,10 +146,10 @@ namespace BadScript.Core
 
                         if ( arg is ABSArray )
                         {
-                            return new BSObject( ( decimal ) 1 );
+                            return BSObject.One;
                         }
 
-                        return new BSObject( ( decimal ) 0 );
+                        return BSObject.Zero;
 
                     },
                     1
@@ -174,7 +174,7 @@ namespace BadScript.Core
                             table.Lock();
                         }
 
-                        return new BSObject( ( decimal ) 0 );
+                        return BSObject.Null;
 
                     },
                     1
@@ -213,10 +213,10 @@ namespace BadScript.Core
 
                         if ( arg is ABSTable )
                         {
-                            return new BSObject( ( decimal ) 1 );
+                            return BSObject.One;
                         }
 
-                        return new BSObject( ( decimal ) 0 );
+                        return BSObject.Zero;
 
                     },
                     1
@@ -245,7 +245,7 @@ namespace BadScript.Core
                         {
                             Thread.Sleep( ( int ) lD );
 
-                            return new BSObject( null );
+                            return BSObject.Null;
                         }
 
                         throw new BSInvalidTypeException(
@@ -299,7 +299,7 @@ namespace BadScript.Core
                 {
                     target.AddHook( hook );
 
-                    return new BSObject( null );
+                    return BSObject.Null;
                 }
 
                 throw new BSInvalidTypeException(
@@ -324,7 +324,7 @@ namespace BadScript.Core
                 {
                     target.RemoveHook( hook );
 
-                    return new BSObject( null );
+                    return BSObject.Null;
                 }
 
                 throw new BSInvalidTypeException(

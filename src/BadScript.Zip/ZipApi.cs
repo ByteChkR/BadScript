@@ -45,7 +45,7 @@ namespace BadScript.Zip
                 args[0].ResolveReference().ConvertString(),
                 args[1].ResolveReference().ConvertString() );
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private static ABSObject ExtractToFolder( ABSObject[] args )
@@ -54,7 +54,7 @@ namespace BadScript.Zip
                 args[0].ResolveReference().ConvertString(),
                 args[1].ResolveReference().ConvertString() );
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion

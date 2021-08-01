@@ -172,7 +172,7 @@ namespace BadScript.StringUtils
 
         private static ABSObject EndsWith( ABSObject[] arg )
         {
-            return new BSObject( ( decimal ) ( arg[0].ConvertString().EndsWith( arg[1].ConvertString() ) ? 1 : 0 ) );
+            return arg[0].ConvertString().EndsWith( arg[1].ConvertString() ) ? BSObject.One : BSObject.Zero;
         }
 
         private static ABSObject IndexOf( ABSObject[] arg )
@@ -233,7 +233,7 @@ namespace BadScript.StringUtils
 
         private static ABSObject StartsWith( ABSObject[] arg )
         {
-            return new BSObject( ( decimal ) ( arg[0].ConvertString().StartsWith( arg[1].ConvertString() ) ? 1 : 0 ) );
+            return arg[0].ConvertString().StartsWith( arg[1].ConvertString() ) ? BSObject.One : BSObject.Zero;
         }
 
         private static ABSObject Substr( ABSObject[] arg )
@@ -270,17 +270,17 @@ namespace BadScript.StringUtils
 
         private ABSObject StringIsDigit( ABSObject[] arg )
         {
-            return new BSObject( ( decimal ) ( char.IsDigit( arg[0].ConvertString()[0] ) ? 1 : 0 ) );
+            return char.IsDigit( arg[0].ConvertString()[0] ) ? BSObject.One : BSObject.Zero;
         }
 
         private ABSObject StringIsLetter( ABSObject[] arg )
         {
-            return new BSObject( ( decimal ) ( char.IsLetter( arg[0].ConvertString()[0] ) ? 1 : 0 ) );
+            return char.IsLetter( arg[0].ConvertString()[0] ) ? BSObject.One : BSObject.Zero;
         }
 
         private ABSObject StringIsWhiteSpace( ABSObject[] arg )
         {
-            return new BSObject( ( decimal ) ( string.IsNullOrWhiteSpace( arg[0].ConvertString() ) ? 1 : 0 ) );
+            return string.IsNullOrWhiteSpace( arg[0].ConvertString() ) ? BSObject.One : BSObject.Zero;
         }
 
         #endregion

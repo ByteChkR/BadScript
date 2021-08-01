@@ -80,7 +80,7 @@ namespace BadScript.Utils.Reflection
                 }
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject WrapInstance( ABSObject[] arg )

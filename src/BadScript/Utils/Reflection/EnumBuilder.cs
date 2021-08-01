@@ -1,6 +1,5 @@
 ﻿using System;
 using BadScript.Common.Expressions;
-using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
 namespace BadScript.Utils.Reflection
@@ -32,7 +31,7 @@ namespace BadScript.Utils.Reflection
                 int v = ( int ) Enum.Parse( type, key );
                 t.InsertElement( new BSObject( key ), new BSObject( ( decimal ) v ) );
             }
-            
+
             return t;
         }
 

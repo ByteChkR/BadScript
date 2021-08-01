@@ -79,7 +79,7 @@ namespace BadScript.IO
 
                         Directory.SetCurrentDirectory( path );
 
-                        return new BSObject( null );
+                        return BSObject.Null;
                     },
                     1
                 )
@@ -225,7 +225,7 @@ namespace BadScript.IO
                         string source = o.ConvertString();
                         Directory.CreateDirectory( source );
 
-                        return new BSObject( null );
+                        return BSObject.Null;
                     },
                     1
                 )
@@ -251,7 +251,7 @@ namespace BadScript.IO
                             File.Copy( source, destination, true );
                         }
 
-                        return new BSObject( null );
+                        return BSObject.Null;
                     },
                     2
                 )
@@ -276,7 +276,7 @@ namespace BadScript.IO
                             File.Move( source, destination );
                         }
 
-                        return new BSObject( null );
+                        return BSObject.Null;
                     },
                     2
                 )
@@ -305,7 +305,7 @@ namespace BadScript.IO
                             File.Delete( path );
                         }
 
-                        return new BSObject( null );
+                        return BSObject.Null;
                     },
                     1,
                     2
@@ -355,7 +355,7 @@ namespace BadScript.IO
 
                         File.WriteAllText( o.ConvertString(), d.ConvertString() );
 
-                        return new BSObject( null );
+                        return BSObject.Null;
                     },
                     2,
                     2

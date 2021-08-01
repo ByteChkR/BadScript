@@ -7,7 +7,7 @@ namespace BadScript.Utils.Reflection
 
     internal readonly struct TypePropertyBuilderData : ITypePropertyData
     {
-        public static TypePropertyBuilderData Empty => new TypePropertyBuilderData( o => new BSObject( null ), null );
+        public static TypePropertyBuilderData Empty => new TypePropertyBuilderData( o => BSObject.Null, null );
 
         private readonly Func < object, ABSObject > m_Getter;
         private readonly Action < object, ABSObject > m_Setter;

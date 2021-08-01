@@ -75,7 +75,7 @@ namespace BadScript.Console.Plugins
                         }
 
                         ABSObject o = scriptInstance.
-                            LoadFile( fullName, new string[0] );
+                            LoadFile( false, fullName, new string[0] );
 
                         loadedScripts[Path.GetFileNameWithoutExtension( fullName )] = o;
                     }

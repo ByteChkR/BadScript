@@ -48,7 +48,7 @@ namespace BadScript.HttpServer
                     {
                         new BSObject( "isRunning" ), new BSFunction(
                             "function isRunning()",
-                            objects => new BSObject( ( decimal ) ( m_Listener == null ? 0 : 1 ) ),
+                            objects => m_Listener == null ? BSObject.Zero : BSObject.One,
                             0 )
                     }
                 }
@@ -121,7 +121,7 @@ namespace BadScript.HttpServer
                 throw new BSRuntimeException( "HTTP Server is already running" );
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         private ABSObject StopListener( ABSObject[] arg )
@@ -137,7 +137,7 @@ namespace BadScript.HttpServer
                 throw new BSRuntimeException( "HTTP Server is not running" );
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion

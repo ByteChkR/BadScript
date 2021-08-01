@@ -40,7 +40,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
                     for ( int i = 0; i < m_Vars.Length; i++ )
                     {
-                        foreachScope.AddLocalVar( m_Vars[i], objs.Length > i ? objs[i] : new BSObject( null ) );
+                        foreachScope.AddLocalVar( m_Vars[i], objs.Length > i ? objs[i] : BSObject.Null );
                     }
 
                     ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
@@ -78,7 +78,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
                 );
             }
 
-            return new BSObject( null );
+            return BSObject.Null;
         }
 
         #endregion

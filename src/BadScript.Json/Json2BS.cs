@@ -98,7 +98,7 @@ namespace BadScript.Json
                     return new BSObject( token.Value < bool >() ? 1 : 0 );
 
                 case JTokenType.Null:
-                    return new BSObject( null );
+                    return BSObject.Null;
 
                 default:
                     throw new JsonConverterException( $"Expected Compatible Json Type. Got {token.Type}" );

@@ -97,7 +97,7 @@ namespace BadScript.Common.Types.Implementations
         {
             ABSObject key = m_InnerTable.Keys.FirstOrDefault( x => x.Equals( k ) );
 
-            return key != null ? m_InnerTable[key] : new BSObject( null );
+            return key != null ? m_InnerTable[key] : BSObject.Null;
         }
 
         public override bool HasElement( ABSObject i )

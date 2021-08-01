@@ -6,44 +6,46 @@ namespace BadScript.Utils
 
     public static class VersionExtensions
     {
-        public static Version ChangeVersion(this Version version, string changeStr)
+        #region Public
+
+        public static Version ChangeVersion( this Version version, string changeStr )
         {
-            string[] subVersions = changeStr.Split('.');
+            string[] subVersions = changeStr.Split( '.' );
             int[] wrapValues = { ushort.MaxValue, ushort.MaxValue, ushort.MaxValue, ushort.MaxValue };
             int[] original = { version.Major, version.Minor, version.Build, version.Revision };
             int[] versions = { version.Major, version.Minor, version.Build, version.Revision };
             bool[] changeReset = new bool[4];
 
-            for (int i = 4 - 1; i >= 0; i--)
+            for ( int i = 4 - 1; i >= 0; i-- )
             {
                 string current = subVersions[i];
 
-                if (current.StartsWith("("))
+                if ( current.StartsWith( "(" ) )
                 {
                     int j = 0;
 
-                    for (; j < current.Length; j++)
+                    for ( ; j < current.Length; j++ )
                     {
-                        if (current[j] == ')')
+                        if ( current[j] == ')' )
                         {
                             break;
                         }
                     }
 
-                    if (j == current.Length)
+                    if ( j == current.Length )
                     {
                         continue; //Broken. No number left. better ignore
                     }
 
-                    string max = current.Substring(1, j - 1);
+                    string max = current.Substring( 1, j - 1 );
 
-                    if (max == "~")
+                    if ( max == "~" )
                     {
                         changeReset[i] = true;
                     }
-                    else if (int.TryParse(max, out int newMax))
+                    else if ( int.TryParse( max, out int newMax ) )
                     {
-                        if (i == 0)
+                        if ( i == 0 )
                         {
                             continue; //Can not wrap the last digit
                         }
@@ -51,48 +53,48 @@ namespace BadScript.Utils
                         wrapValues[i] = newMax;
                     }
 
-                    current = current.Remove(0, j + 1);
+                    current = current.Remove( 0, j + 1 );
                 }
 
-                if (i != 0) //Check if we wrapped
+                if ( i != 0 ) //Check if we wrapped
                 {
-                    if (versions[i] >= wrapValues[i])
+                    if ( versions[i] >= wrapValues[i] )
                     {
                         versions[i] = 0;
                         versions[i - 1]++;
                     }
                 }
 
-                if (current == "+")
+                if ( current == "+" )
                 {
                     versions[i]++;
                 }
-                else if (current == "-" && versions[i] != 0)
+                else if ( current == "-" && versions[i] != 0 )
                 {
                     versions[i]--;
                 }
-                else if (current.ToLower(CultureInfo.InvariantCulture) == "x")
+                else if ( current.ToLower( CultureInfo.InvariantCulture ) == "x" )
                 {
                     //Do nothing, X stands for leave the value as is, except the next lower version part wrapped around.
                 }
-                else if (current.StartsWith("{") && current.EndsWith("}"))
+                else if ( current.StartsWith( "{" ) && current.EndsWith( "}" ) )
                 {
-                    string format = current.Remove(current.Length - 1, 1).Remove(0, 1);
+                    string format = current.Remove( current.Length - 1, 1 ).Remove( 0, 1 );
 
-                    string value = DateTime.Now.ToString(format);
+                    string value = DateTime.Now.ToString( format );
 
-                    if (long.TryParse(value, out long newValue))
+                    if ( long.TryParse( value, out long newValue ) )
                     {
-                        versions[i] = (int)(newValue % ushort.MaxValue);
+                        versions[i] = ( int ) ( newValue % ushort.MaxValue );
                     }
                 }
-                else if (int.TryParse(current, out int v))
+                else if ( int.TryParse( current, out int v ) )
                 {
                     versions[i] = v;
                 }
             }
 
-            ApplyChangeReset(changeReset, original, versions);
+            ApplyChangeReset( changeReset, original, versions );
 
             return new Version(
                 versions[0],
@@ -102,15 +104,19 @@ namespace BadScript.Utils
             );
         }
 
-        private static void ApplyChangeReset(bool[] changeReset, int[] original, int[] versions)
+        #endregion
+
+        #region Private
+
+        private static void ApplyChangeReset( bool[] changeReset, int[] original, int[] versions )
         {
-            for (int j = 0; j < changeReset.Length; j++)
+            for ( int j = 0; j < changeReset.Length; j++ )
             {
-                if (changeReset[j] && versions[j] != original[j])
+                if ( changeReset[j] && versions[j] != original[j] )
                 {
-                    for (int i = j + 1; i < versions.Length; i++)
+                    for ( int i = j + 1; i < versions.Length; i++ )
                     {
-                        if (!changeReset[i])
+                        if ( !changeReset[i] )
                         {
                             versions[i] = 0;
                         }
@@ -118,6 +124,8 @@ namespace BadScript.Utils
                 }
             }
         }
+
+        #endregion
     }
 
 }

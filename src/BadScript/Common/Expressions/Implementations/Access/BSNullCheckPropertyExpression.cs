@@ -28,7 +28,7 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
                 if ( !l.HasProperty( Right ) )
                 {
-                    return new BSObject( null );
+                    return BSObject.Null;
                 }
 
                 return Left.Execute( scope ).GetProperty( Right );

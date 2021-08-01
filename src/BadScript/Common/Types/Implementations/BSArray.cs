@@ -97,7 +97,7 @@ namespace BadScript.Common.Types.Implementations
         {
             if ( m_InnerArray.Count <= i || i < 0 )
             {
-                return new BSObject( null );
+                return BSObject.Null;
             }
 
             return m_InnerArray[i];
@@ -220,7 +220,7 @@ namespace BadScript.Common.Types.Implementations
                 {
                     m_InnerArray.Clear();
 
-                    return new BSObject( null );
+                    return BSObject.Null;
                 },
                 0 );
 
@@ -235,7 +235,7 @@ namespace BadScript.Common.Types.Implementations
                 {
                     m_InnerArray.AddRange( objects );
 
-                    return new BSObject( null );
+                    return BSObject.Null;
                 },
                 1,
                 int.MaxValue );
@@ -249,7 +249,7 @@ namespace BadScript.Common.Types.Implementations
                         m_InnerArray.Remove( absObject );
                     }
 
-                    return new BSObject( null );
+                    return BSObject.Null;
                 },
                 1,
                 int.MaxValue );
@@ -263,7 +263,7 @@ namespace BadScript.Common.Types.Implementations
                         m_InnerArray.RemoveAt( ( int ) absObject.ConvertDecimal() );
                     }
 
-                    return new BSObject( null );
+                    return BSObject.Null;
                 },
                 1,
                 int.MaxValue );

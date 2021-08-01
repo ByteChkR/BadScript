@@ -17,6 +17,7 @@ namespace BadScript.Common.Runtime
             { "-", "op_Minus" },
             { "*", "op_Multiply" },
             { "/", "op_Divide" },
+            { "%", "op_Modulus" },
             { "&&", "op_And" },
             { "||", "op_Or" },
             { "==", "op_Equals" },
