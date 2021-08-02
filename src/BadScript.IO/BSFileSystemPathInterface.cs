@@ -21,21 +21,21 @@ namespace BadScript.IO
 
         public override void AddApi( ABSTable root )
         {
-            GeneratePathApi( root );
+            GeneratePathApi( root, m_RootPath);
         }
 
         #endregion
 
         #region Private
 
-        private static void GeneratePathApi( ABSTable ret )
+        private static void GeneratePathApi( ABSTable ret, string root )
         {
 
             ret.InsertElement(
                 new BSObject( "getAppPath" ),
                 new BSFunction(
                     "function getAppPath()",
-                    args => { return new BSObject( Path.GetFullPath( AppDomain.CurrentDomain.BaseDirectory ) ); },
+                    args => { return new BSObject( Path.GetFullPath( root ) ); },
                     0
                 )
             );
