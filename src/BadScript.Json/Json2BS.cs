@@ -86,6 +86,7 @@ namespace BadScript.Json
                 case JTokenType.String:
                 case JTokenType.Guid:
                 case JTokenType.Uri:
+                case JTokenType.Date:
                     return new BSObject( token.Value < string >() );
 
                 case JTokenType.Integer:

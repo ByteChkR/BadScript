@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using BadScript.Common.Expressions;
+using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -20,7 +21,7 @@ namespace BadScript.Http
 
         public override void AddApi( ABSTable t )
         {
-            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1 ) );
+            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1, 2 ) );
 
             t.InsertElement(
                 new BSObject( "post" ),
@@ -77,6 +78,18 @@ namespace BadScript.Http
             string url = args[0].ResolveReference().ConvertString();
 
             HttpWebRequest request = WebRequest.CreateHttp( url );
+
+            if ( args.Length == 2 )
+            {
+                BSTable headers = ( BSTable ) args[1].ResolveReference();
+
+                foreach ( IForEachIteration forEachIteration in headers )
+                {
+                    ABSObject[] kvp = forEachIteration.GetObjects();
+                    request.Headers.Add( kvp[0].ConvertString(), kvp[1].ConvertString() );
+                }
+            }
+
             request.Credentials = CredentialCache.DefaultCredentials;
 
             HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
