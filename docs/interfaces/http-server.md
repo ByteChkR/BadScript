@@ -1,5 +1,7 @@
 # Http Server Interface
 
+Interface Key: `http-server`
+
 Provides a HTTP Server Implementation with SSL Support and concurrent requests
 
 ## Objects

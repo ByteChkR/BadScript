@@ -1,5 +1,7 @@
 # Reflection Interface
 
+Interface Key: `reflection`
+
 Provides Functionality to use C# Reflection inside a BS Script
 
 ## Objects

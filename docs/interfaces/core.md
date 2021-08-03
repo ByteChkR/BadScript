@@ -1,5 +1,7 @@
 # Core Interface
 
+Interface Key: `core`
+
 Provides Default Functions and Language Specific Features
 
 ## size(table/array)

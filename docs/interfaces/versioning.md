@@ -1,5 +1,7 @@
 # Versioning Interface
 
+Interface Key: `versioning`
+
 Provides functionality to work with versions.
 
 ## Objects

@@ -1,5 +1,7 @@
 # Http Interface
 
+Interface Key: `http`
+
 Provides HTTP Functions and Features
 
 ## Objects

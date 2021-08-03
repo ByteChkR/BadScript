@@ -1,5 +1,7 @@
 # Process API
 
+Interface Key: `process`
+
 Provides functionality to start seperare processes
 
 ## Objects

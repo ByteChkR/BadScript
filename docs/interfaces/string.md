@@ -1,5 +1,7 @@
 # String Interface
 
+Interface Key: `string`
+
 Provides Functionality to perform string manipulation
 
 ## Functions

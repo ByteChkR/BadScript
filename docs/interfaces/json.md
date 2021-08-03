@@ -1,5 +1,7 @@
 # Json Interface
 
+Interface Key: `json`
+
 Provides Functionality to convert BS Object to JSON and vice versa.
 
 ## Functions

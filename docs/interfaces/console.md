@@ -1,5 +1,7 @@
 # Console Interface
 
+Interface Key: `console`
+
 Provides Console Related Functions and Features
 
 ## print(obj)

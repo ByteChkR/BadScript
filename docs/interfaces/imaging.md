@@ -1,5 +1,7 @@
 # Imaging Interface
 
+Interface Key: `drawing`
+
 Provides Functionality to open/edit and save bitmaps
 
 ## Objects

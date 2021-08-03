@@ -1,5 +1,7 @@
 # IO Interface
 
+Interface Key: `fs`
+
 Provides Functionality that allows accessing the local disk
 
 ## Object

@@ -1,5 +1,7 @@
 # Math Interface
 
+Interface Key: `math`
+
 Provides Common Math operations from C# Class `System.Math`
 
 ## Properties

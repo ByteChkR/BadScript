@@ -1,5 +1,7 @@
 # Zip Interface
 
+Interface Key: `zip`
+
 Provides functionality to do simple packing/unpacking of zip files
 
 ## Functions

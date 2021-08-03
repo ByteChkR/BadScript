@@ -1,5 +1,7 @@
 # XML Interface
 
+Interface Key: `xml`
+
 Provides Functionality to parse and change XML Files
 
 ## Objects
