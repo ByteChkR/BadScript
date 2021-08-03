@@ -81,8 +81,8 @@ namespace BadScript
             env.InsertElement(
                 new BSObject( "loadScopedBenchmark" ),
                 new BSFunction(
-                    "function loadScopedBenchmark(scope, str, args..)/loadScopedString(rootTable, str, args..)",
-                    LoadStringScopedApi,
+                    "function loadScopedBenchmark(scope, str, args..)/loadScopedBenchmark(rootTable, str, args..)",
+                    LoadStringScopedBenchmarkApi,
                     2,
                     int.MaxValue ) );
 

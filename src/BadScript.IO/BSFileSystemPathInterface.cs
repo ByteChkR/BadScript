@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -21,7 +20,7 @@ namespace BadScript.IO
 
         public override void AddApi( ABSTable root )
         {
-            GeneratePathApi( root, m_RootPath);
+            GeneratePathApi( root, m_RootPath );
         }
 
         #endregion

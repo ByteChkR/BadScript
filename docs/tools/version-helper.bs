@@ -1,0 +1,87 @@
+xml = environment.loadInterface("xml")
+fs = environment.loadInterface("fs")
+path = environment.loadInterface("path")
+versioning = environment.loadInterface("versioning")
+
+function loadCSProject(p)
+{
+	return xml.createDoc(fs.readAll(p))
+}
+
+function getProjectVersion(projDoc)
+{
+	projNode = projDoc.findChild("Project")
+	propNode = projNode.findChild("PropertyGroup")
+	versionNode = propNode.findChild("Version")
+	return versionNode
+}
+
+function setProjectVersion(projDoc, version)
+{
+	projNode = projDoc.findChild("Project")
+	propNode = projNode.findChild("PropertyGroup")
+	versionNode = propNode.findChild("Version")
+	versionNode.innerText = version
+}
+
+function printVersion(p)
+{
+	verFmt = "(~){yyyy}.(~){MM}.(~){dd}.+"
+	doc = loadCSProject(p)
+	version = getProjectVersion(doc)
+
+	oldVersion = versioning.parse(version.innerText)
+	newVersion = oldVersion.change(verFmt)
+
+
+	str = path.getFileNameWithoutExtension(p) + ": " + oldVersion + " => " + newVersion
+	
+	print(str)
+
+	setProjectVersion(doc, newVersion)
+
+	fs.writeAll(p, doc.toString())
+}
+
+if(args.size() == 1)
+{
+	print("Directory: " + args[0])
+	files = fs.getFiles(args[0], "*.csproj", 1)
+	foreach file in files
+	{
+		printVersion(file)
+	}
+	return null
+}
+
+
+print("Write 'exit' to quit")
+while(1)
+{
+	write("CS Project Path: ")
+	url = read()
+	if(url == "exit")
+	{
+		break
+	}
+	if(fs.exists(url))
+	{
+		if(fs.isFile(url))
+		{
+			printVersion(url)
+		}
+		else
+		{
+			files = fs.getFiles(url, "*.csproj", 1)
+			foreach file in files
+			{
+				printVersion(file)
+			}
+		}
+	}
+	else
+	{
+		print("File does not exist!")
+	}
+}
+

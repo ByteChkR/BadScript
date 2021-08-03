@@ -64,6 +64,7 @@
     <ProjectReference Include="..\BadScript.Process\BadScript.Process.csproj" />
     <ProjectReference Include="..\BadScript.StringUtils\BadScript.StringUtils.csproj" />
     <ProjectReference Include="..\BadScript.Utils\BadScript.Utils.csproj" />
+    <ProjectReference Include="..\BadScript.Xml\BadScript.Xml.csproj" />
     <ProjectReference Include="..\BadScript.Zip\BadScript.Zip.csproj" />
     <ProjectReference Include="..\BadScript\BadScript.csproj" />
   </ItemGroup>

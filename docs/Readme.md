@@ -2,9 +2,15 @@
 
 ## First Steps
 
-### Download
-- [Windows x64](https://bytechkr.github.io/BadScript/build-win.zip)
-- [Linux x64](https://bytechkr.github.io/BadScript/build-linux.zip)
+### Build
+
+#### Windows
+1. Clone Repository `git clone https://github.com/ByteChkR/BadScript.git`
+2. Run `dotnet publish -c Release -r "win-x64"`
+
+#### Linux
+1. Clone Repository `git clone https://github.com/ByteChkR/BadScript.git`
+2. Run `dotnet publish -c Release -r "linux-x64"`
 
 ________
 

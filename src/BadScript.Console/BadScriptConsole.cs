@@ -18,6 +18,7 @@ using BadScript.Process;
 using BadScript.StringUtils;
 using BadScript.Utils;
 using BadScript.Utils.Reflection;
+using BadScript.Xml;
 using BadScript.Zip;
 
 namespace BadScript.Console
@@ -26,7 +27,6 @@ namespace BadScript.Console
     internal class BadScriptConsole
     {
         public static string AppRoot = AppDomain.CurrentDomain.BaseDirectory;
-
         private static readonly ConsoleIORoot m_IORoot =
             new( Path.Combine( AppRoot, "bs-data/" ) );
         public static readonly ConsoleIODirectory AppDirectory = new( "apps", m_IORoot, null );
@@ -101,7 +101,8 @@ namespace BadScript.Console
             BSEngine.AddStatic( new ZipApi() );
             BSEngine.AddStatic( new ImagingApi() );
             BSEngine.AddStatic( new BSReflectionScriptInterface() );
-            BSEngine.AddStatic( new VersionToolsInterface() );
+            BSEngine.AddStatic(new VersionToolsInterface());
+            BSEngine.AddStatic(new XmlInterface());
 
             AppDirectory.EnsureExistsSelf();
 
@@ -111,7 +112,40 @@ namespace BadScript.Console
         {
             PrintHeaderInfo();
             Initialize();
+            Run( args );
+        }
 
+        private static void PrintHeaderInfo()
+        {
+            string h =
+                $"Bad Script Console (CLI: {typeof( BadScriptConsole ).Assembly.GetName().Version}, Runtime: {typeof( BSEngine ).Assembly.GetName().Version})\n";
+
+            System.Console.WriteLine( h );
+        }
+
+        private static void PrintSyntax()
+        {
+            System.Console.WriteLine( "Syntax: bs <app/filepath>" );
+            System.Console.WriteLine( "Syntax: bs --help" );
+            System.Console.WriteLine( "Syntax: bs --version" );
+            System.Console.WriteLine( "Syntax: bs --benchmark <app/filepath>" );
+        }
+
+        private static void PrintVersionInfo()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine( "Versions:" );
+
+            foreach ( KeyValuePair < string, Assembly > keyValuePair in s_VersionTags )
+            {
+                sb.AppendLine( "\t" + keyValuePair.Key + ": " + keyValuePair.Value.GetName().Version );
+            }
+
+            System.Console.WriteLine( sb.ToString() );
+        }
+
+        private static void Run( string[] args )
+        {
             bool isBenchmark = false;
 
             if ( args.Length == 0 )
@@ -158,6 +192,14 @@ namespace BadScript.Console
             foreach ( string execStr in ar )
             {
                 string[] parts = execStr.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
+
+                if ( Directory.Exists( parts[0] ) )
+                {
+                    string[] files = Directory.GetFiles( parts[0], "*.bs", SearchOption.AllDirectories );
+
+                    executions.AddRange(
+                        files.Select( x => new ConsoleExecution( x, parts.Skip( 1 ).ToArray(), isBenchmark ) ) );
+                }else
                 executions.Add( new ConsoleExecution( parts[0], parts.Skip( 1 ).ToArray(), isBenchmark ) );
             }
 
@@ -166,34 +208,6 @@ namespace BadScript.Console
                 consoleExecution.Run( engine );
             }
 
-        }
-
-        private static void PrintHeaderInfo()
-        {
-            string h =
-                $"Bad Script Console (CLI: {typeof( BadScriptConsole ).Assembly.GetName().Version}, Runtime: {typeof( BSEngine ).Assembly.GetName().Version})\n";
-
-            System.Console.WriteLine( h );
-        }
-
-        private static void PrintSyntax()
-        {
-            System.Console.WriteLine( "Syntax: bs <app/filepath>" );
-            System.Console.WriteLine( "Syntax: bs --help" );
-            System.Console.WriteLine( "Syntax: bs --version" );
-        }
-
-        private static void PrintVersionInfo()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine( "Versions:" );
-
-            foreach ( KeyValuePair < string, Assembly > keyValuePair in s_VersionTags )
-            {
-                sb.AppendLine( "\t" + keyValuePair.Key + ": " + keyValuePair.Value.GetName().Version );
-            }
-
-            System.Console.WriteLine( sb.ToString() );
         }
 
         #endregion

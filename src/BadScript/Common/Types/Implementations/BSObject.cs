@@ -11,8 +11,9 @@ namespace BadScript.Common.Types.Implementations
         public static readonly BSObject Null = new BSObject( null );
         public static readonly BSObject One = new BSObject( ( decimal ) 1 );
         public static readonly BSObject Zero = new BSObject( ( decimal ) 0 );
-        
+
         protected readonly object m_InternalObject;
+
         public override bool IsNull => m_InternalObject == null;
 
         #region Public
