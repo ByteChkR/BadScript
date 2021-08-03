@@ -18,9 +18,7 @@ ________
 
 2 . `cd ~/BadScriptEngine`
 
-3 . `wget https://bytechkr.github.io/BadScript/build-linux.zip`
-
-4 . `unzip build-linux.zip`
+3 . Move Build to `~/BadScriptEngine`
 
 5 . `chmod +x bs`
 
@@ -35,11 +33,13 @@ Optional Steps:
 ________
 
 ## Install on Windows
-1 . Download Build and Extract
+1 . Build the Project with `dotnet publish -c Release -r "win-x64"`
+
+2 . Move Build to desired install directory
 
 Optional Steps:
 
-2 . Add BS Shell Opener by writing a small powershell script with content. Usage: `PS> . <path/to/script>`
+3 . Add BS Shell Opener by writing a small powershell script with content. Usage: `PS> . <path/to/script>`
 
 ```powershell
 # Path of the Install Directory(location of bs.exe)
@@ -52,7 +52,7 @@ $bs = (Get-Item $bs).fullname
 $Env:Path += ";$bs" 
 ```
 
-3 . Add Second Powershell Script that Opens a new Powershell Window with the First Script as start command.
+4 . Add Second Powershell Script that Opens a new Powershell Window with the First Script as start command.
 
 ```powershell
 # Create New Powershell Window and run the BS Shell Opener.
@@ -60,7 +60,7 @@ $Env:Path += ";$bs"
 start PowerShell -ArgumentList "-noexit -command . <path/to/first/script>"
 ```
 
-4 . Test Setup with `echo $Env:Path`(should print the Install Directory as one of the last entries).
+5 . Test Setup with `echo $Env:Path`(should print the Install Directory as one of the last entries).
 
 ## Usage
 - Running Scripts: `bs <path/to/script>`
