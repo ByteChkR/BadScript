@@ -59,6 +59,11 @@ namespace BadScript.Common.Types.References
             return Get().TryConvertString( out v );
         }
 
+        public override string ToString()
+        {
+            return Get().ToString();
+        }
+
         #endregion
 
         #region Protected
