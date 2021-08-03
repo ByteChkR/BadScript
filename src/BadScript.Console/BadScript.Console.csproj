@@ -1,14 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="utf-16"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <StartupObject>BadScript.Console.BadScriptConsole</StartupObject>
     <AssemblyName>bs</AssemblyName>
     <LangVersion>latest</LangVersion>
-    <Version>2021.8.1.0</Version>
+    <Version>2021.8.3.0</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="bs-data\apps\apps\**" />
     <Compile Remove="bs-data\apps\modules\**" />
@@ -20,7 +19,6 @@
     <None Remove="bs-data\apps\modules\**" />
     <None Remove="bs-data\apps\tools\**" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="bs-data\apps\apps-add-repo.bs" />
     <None Remove="bs-data\apps\apps-install.bs" />
@@ -39,7 +37,6 @@
     <None Remove="bs-data\include\preprocessors\module-resolver.bs" />
     <None Remove="bs-data\include\preprocessor_loader.bs" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="bs-data\apps\apps-install.bs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -51,7 +48,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj" />
     <ProjectReference Include="..\BadScript.Core\BadScript.Core.csproj" />
@@ -68,13 +64,10 @@
     <ProjectReference Include="..\BadScript.Zip\BadScript.Zip.csproj" />
     <ProjectReference Include="..\BadScript\BadScript.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="bs-data\include\preprocessors\" />
   </ItemGroup>
-
 </Project>
