@@ -46,6 +46,7 @@ namespace BadScript.Console
             { "BadScript.Math", typeof( BSMathApi ).Assembly },
             { "BadScript.Process", typeof( ProcessApi ).Assembly },
             { "BadScript.StringUtils", typeof( StringUtilsApi ).Assembly },
+            { "BadScript.Xml", typeof( XmlInterface ).Assembly },
             { "BadScript.Zip", typeof( ZipApi ).Assembly },
             { "BadScript.Utils", typeof( BSVersionObject ).Assembly },
         };
@@ -118,7 +119,7 @@ namespace BadScript.Console
         private static void PrintHeaderInfo()
         {
             string h =
-                $"Bad Script Console (CLI: {typeof( BadScriptConsole ).Assembly.GetName().Version}, Runtime: {typeof( BSEngine ).Assembly.GetName().Version})\n";
+                $"Bad Script Console (CLI: {typeof( BadScriptConsole ).Assembly.GetName().Version}, Runtime: {typeof( BSEngine ).Assembly.GetName().Version})\n\nLoading Runtime...\n";
 
             System.Console.WriteLine( h );
         }
