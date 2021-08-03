@@ -1,8 +1,8 @@
 $bs = "$pwd/../src/BadScript.Console/bin/Release/net5.0/"
+$bsFile = $bs + 'bs.exe'
 
-
-if (!(Test-Path $bs)) {
-  Write-Warning "$bs Folder is was not found.. Rebuilding"
+if (!(Test-Path $bsFile)) {
+  Write-Warning "$bsFile File is was not found.. Rebuilding"
   cd ../src
   dotnet build -c Release
   cd ../docs
