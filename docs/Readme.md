@@ -2,10 +2,10 @@
 - [First Steps/Setup](./Setup.md)
 
 ## Bad Script Language Definition
-- [C# Type System Implementation](./type-system.md)
-- [Available Operators](./operators.md)
-- [Loops](./loops.md)
-- [Functions](./functions.md)
+- [C# Type System Implementation](./language/type-system.md)
+- [Available Operators](./language/operators.md)
+- [Loops](./language/loops.md)
+- [Functions](./language/functions.md)
 
 ## Interface Documentation
 - [Console](./interfaces/console.md)
