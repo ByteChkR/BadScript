@@ -1,11 +1,11 @@
 ﻿namespace BadScript.Common.OperatorImplementations.Implementations
 {
 
-    public class BSLessOrEqualOperatorImplementation : BSRelationalOperatorImplementation
+    public class BSLessThanOperatorImplementation : ABSRelationalOperatorImplementation
     {
         #region Public
 
-        public BSLessOrEqualOperatorImplementation() : base( "<=" )
+        public BSLessThanOperatorImplementation() : base( "<" )
         {
         }
 
@@ -15,7 +15,7 @@
 
         protected override bool Execute( decimal l, decimal r )
         {
-            return l <= r;
+            return l < r;
         }
 
         #endregion

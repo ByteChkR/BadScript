@@ -181,8 +181,122 @@ namespace BadScript
                 ),
                 new BSAssignmentOperator(),
                 new BSMemberAccessOperator(),
-                new BSNullCheckedMemberAccessOperator()
+                new BSNullCheckedMemberAccessOperator(),
+                new BSBinaryOperator(
+                    6,
+                    "+=",
+                    new BSFunction(
+                        "function +=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "+=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
+                new BSBinaryOperator(
+                    6,
+                    "-=",
+                    new BSFunction(
+                        "function -=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "-=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
+                new BSBinaryOperator(
+                    5,
+                    "*=",
+                    new BSFunction(
+                        "function *=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "*=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
+                new BSBinaryOperator(
+                    5,
+                    "/=",
+                    new BSFunction(
+                        "function /=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "/=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
+                new BSBinaryOperator(
+                    5,
+                    "%=",
+                    new BSFunction(
+                        "function %=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "%=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
+                new BSBinaryOperator(
+                    13,
+                    "&=",
+                    new BSFunction(
+                        "function &=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "&=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
+                new BSBinaryOperator(
+                    14,
+                    "|=",
+                    new BSFunction(
+                        "function |=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "|=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                ),
+                new BSBinaryOperator(
+                    11,
+                    "^=",
+                    new BSFunction(
+                        "function ^=(a, b)",
+                        objects => BSOperatorImplementationResolver.
+                                   ResolveImplementation( "^=", objects ).
+                                   ExecuteOperator( objects ),
+                        2
+                    )
+                )
             };
+
+        private static readonly List < BSOperator > s_PostfixOperators = new List < BSOperator >
+        {
+            new BSUnaryOperator(
+                "++",
+                new BSFunction(
+                    "function ++(a)",
+                    objects =>
+                        BSOperatorImplementationResolver.
+                            ResolveImplementation( "++_Post", objects ).
+                            ExecuteOperator( objects ),
+                    1
+                )
+            ),
+            new BSUnaryOperator(
+                "--",
+                new BSFunction(
+                    "function --(a)",
+                    objects =>
+                        BSOperatorImplementationResolver.
+                            ResolveImplementation( "--_Post", objects ).
+                            ExecuteOperator( objects ),
+                    1
+                )
+            )
+        };
 
         private static readonly List < BSOperator > s_PrefixOperators =
             new List < BSOperator >
@@ -197,6 +311,28 @@ namespace BadScript
                                 ExecuteOperator( objects ),
                         1
                     )
+                ),
+                new BSUnaryOperator(
+                    "++",
+                    new BSFunction(
+                        "function ++(a)",
+                        objects =>
+                            BSOperatorImplementationResolver.
+                                ResolveImplementation( "++_Pre", objects ).
+                                ExecuteOperator( objects ),
+                        1
+                    )
+                ),
+                new BSUnaryOperator(
+                    "--",
+                    new BSFunction(
+                        "function --(a)",
+                        objects =>
+                            BSOperatorImplementationResolver.
+                                ResolveImplementation( "--_Pre", objects ).
+                                ExecuteOperator( objects ),
+                        1
+                    )
                 )
             };
 
@@ -207,6 +343,11 @@ namespace BadScript
             return Get( s_Operators, p, key );
         }
 
+        public static BSOperator GetPostfix( int p, string key )
+        {
+            return Get( s_PostfixOperators, p, key );
+        }
+
         public static BSOperator GetPrefix( int p, string key )
         {
             return Get( s_PrefixOperators, p, key );
@@ -215,6 +356,16 @@ namespace BadScript
         public static bool Has( int p, string k )
         {
             return s_Operators.Any( x => x.Preceedence <= p && x.OperatorKey == k );
+        }
+
+        public static bool HasPostfix( int p, string k )
+        {
+            return s_PostfixOperators.Any( x => x.Preceedence <= p && x.OperatorKey == k );
+        }
+
+        public static bool HasPrefix( int p, string k )
+        {
+            return s_PrefixOperators.Any( x => x.Preceedence <= p && x.OperatorKey == k );
         }
 
         #endregion

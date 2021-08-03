@@ -223,6 +223,19 @@ namespace BadScript
         {
             BSExpression expr = ParseValue();
 
+            string preop = ParseKey();
+
+            if ( BSOperatorPreceedenceTable.HasPostfix( start, preop ) )
+            {
+                expr = BSOperatorPreceedenceTable.GetPostfix( int.MaxValue, preop ).
+                                                  Parse( expr, this );
+
+            }
+            else
+            {
+                m_CurrentPosition -= preop.Length;
+            }
+
             while ( Is( '(' ) || Is( '[' ) )
             {
                 if ( Is( '(' ) )
@@ -369,7 +382,8 @@ namespace BadScript
 
             while ( m_OriginalSource.Length > m_CurrentPosition &&
                     !char.IsWhiteSpace( m_OriginalSource, m_CurrentPosition ) &&
-                    m_OriginalSource[m_CurrentPosition] != '_' )
+                    m_OriginalSource[m_CurrentPosition] != '_' &&
+                    m_OriginalSource[m_CurrentPosition] != ')' )
             {
                 sb.Append( m_OriginalSource[m_CurrentPosition] );
                 m_CurrentPosition++;
@@ -510,7 +524,7 @@ namespace BadScript
                 return ParseWord();
             }
 
-            if ( IsDigit() || Is( '-' ) || Is( '.' ) )
+            if ( IsDigit() || Is( '-' ) && !Is( 1, '-' ) || Is( '.' ) )
             {
                 return ParseNumber();
             }
@@ -595,13 +609,22 @@ namespace BadScript
                 return expr;
             }
 
-            if ( Is( '!' ) )
-            {
-                m_CurrentPosition++;
+            string k = ParseKeyword();
 
-                return BSOperatorPreceedenceTable.GetPrefix( int.MaxValue, "!" ).
+            if ( BSOperatorPreceedenceTable.HasPrefix( int.MaxValue, k ) )
+            {
+                return BSOperatorPreceedenceTable.GetPrefix( int.MaxValue, k ).
                                                   Parse( ParseExpression( int.MaxValue ), this );
+
             }
+
+            //if ( Is( '!' ) )
+            //{
+            //    m_CurrentPosition++;
+
+            //    return BSOperatorPreceedenceTable.GetPrefix( int.MaxValue, "!" ).
+            //                                      Parse( ParseExpression( int.MaxValue ), this );
+            //}
 
             throw new BSParserException( "Can not Parse Value", this );
         }

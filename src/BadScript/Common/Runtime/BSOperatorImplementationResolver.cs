@@ -13,13 +13,26 @@ namespace BadScript.Common.Runtime
     {
         private static readonly Dictionary < string, string > s_KeyMapping = new Dictionary < string, string >
         {
+            { "++_Pre", "op_PreIncrement" },
+            { "--_Pre", "op_PreDecrement" },
+            { "++_Post", "op_PostIncrement" },
+            { "--_Post", "op_PostDecrement" },
             { "+", "op_Plus" },
             { "-", "op_Minus" },
             { "*", "op_Multiply" },
             { "/", "op_Divide" },
             { "%", "op_Modulus" },
+            { "+=", "op_SelfPlus" },
+            { "-=", "op_SelfMinus" },
+            { "*=", "op_SelfMultiply" },
+            { "/=", "op_SelfDivide" },
+            { "%=", "op_SelfModulus" },
             { "&&", "op_And" },
             { "||", "op_Or" },
+            { "^", "op_XOr" },
+            { "&=", "op_SelfAnd" },
+            { "|=", "op_SelfOr" },
+            { "^=", "op_SelfXOr" },
             { "==", "op_Equals" },
             { "!=", "op_InEqual" },
             { "<=", "op_LessOrEqual" },
@@ -27,7 +40,6 @@ namespace BadScript.Common.Runtime
             { "<", "op_LessThan" },
             { ">", "op_GreaterThan" },
             { "!", "op_Not" },
-            { "^", "op_XOr" },
             { "??", "op_NullCheck" },
         };
 
@@ -44,7 +56,7 @@ namespace BadScript.Common.Runtime
         {
             for ( int i = 0; i < args.Length; i++ )
             {
-                args[i] = args[i].ResolveReference();
+                //args[i] = args[i].ResolveReference();
             }
 
             ABSObject firstO = args.First();
@@ -95,8 +107,24 @@ namespace BadScript.Common.Runtime
             m_Implementations.Add( new BSMultiplyOperatorImplementation() );
             m_Implementations.Add( new BSNotOperatorImplementation() );
             m_Implementations.Add( new BSOrOperatorImplementation() );
-            m_Implementations.Add( new BSXOrDefaultOperatorImplementation() );
+            m_Implementations.Add( new BSXOrOperatorImplementation() );
             m_Implementations.Add( new BSNullTestOperatorImplementation() );
+
+            m_Implementations.Add( new BSSelfAddOperatorImplementation() );
+            m_Implementations.Add( new BSSelfMinusOperatorImplementation() );
+            m_Implementations.Add( new BSSelfDivideOperatorImplementation() );
+            m_Implementations.Add( new BSSelfMultiplyOperatorImplementation() );
+            m_Implementations.Add( new BSSelfModuloOperatorImplementation() );
+
+            m_Implementations.Add( new BSSelfAndOperatorImplementation() );
+            m_Implementations.Add( new BSSelfOrOperatorImplementation() );
+            m_Implementations.Add( new BSSelfXOrOperatorImplementation() );
+
+            m_Implementations.Add( new BSPrefixIncrementOperatorImplementation() );
+            m_Implementations.Add( new BSPostfixIncrementOperatorImplementation() );
+            m_Implementations.Add( new BSPrefixDecrementOperatorImplementation() );
+            m_Implementations.Add( new BSPostfixDecrementOperatorImplementation() );
+
         }
 
         private static string ResolveKey( string key )

@@ -1,11 +1,11 @@
 ﻿namespace BadScript.Common.OperatorImplementations.Implementations
 {
 
-    public class BSXOrDefaultOperatorImplementation : ABSLogicOperatorImplementation
+    public class BSXOrOperatorImplementation : ABSLogicOperatorImplementation
     {
         #region Public
 
-        public BSXOrDefaultOperatorImplementation() : base( "^" )
+        public BSXOrOperatorImplementation() : base( "^" )
         {
         }
 

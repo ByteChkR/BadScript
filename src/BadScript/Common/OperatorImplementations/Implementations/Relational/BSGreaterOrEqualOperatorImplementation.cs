@@ -1,7 +1,7 @@
 ﻿namespace BadScript.Common.OperatorImplementations.Implementations
 {
 
-    public class BSGreaterOrEqualOperatorImplementation : BSRelationalOperatorImplementation
+    public class BSGreaterOrEqualOperatorImplementation : ABSRelationalOperatorImplementation
     {
         #region Public
 

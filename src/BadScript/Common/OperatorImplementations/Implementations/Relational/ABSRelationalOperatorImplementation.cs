@@ -5,7 +5,7 @@ using BadScript.Common.Types.References;
 namespace BadScript.Common.OperatorImplementations.Implementations
 {
 
-    public abstract class BSRelationalOperatorImplementation : ABSOperatorImplementation
+    public abstract class ABSRelationalOperatorImplementation : ABSOperatorImplementation
     {
         #region Public
 
@@ -21,7 +21,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
         #region Protected
 
-        protected BSRelationalOperatorImplementation( string key ) : base( key )
+        protected ABSRelationalOperatorImplementation( string key ) : base( key )
         {
         }
 

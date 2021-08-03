@@ -2,7 +2,6 @@
 using BadScript.Common.Expressions.Implementations.Unary;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
-using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Expressions.Implementations.Value
 {
@@ -26,7 +25,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
             return obj.Invoke(
                 Parameters.Select( x => x.Execute( scope ) ).
-                           Select( x => x.ResolveReference() ).
                            ToArray()
             );
         }
