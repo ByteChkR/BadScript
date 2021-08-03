@@ -102,8 +102,8 @@ namespace BadScript.Console
             BSEngine.AddStatic( new ZipApi() );
             BSEngine.AddStatic( new ImagingApi() );
             BSEngine.AddStatic( new BSReflectionScriptInterface() );
-            BSEngine.AddStatic(new VersionToolsInterface());
-            BSEngine.AddStatic(new XmlInterface());
+            BSEngine.AddStatic( new VersionToolsInterface() );
+            BSEngine.AddStatic( new XmlInterface() );
 
             AppDirectory.EnsureExistsSelf();
 
@@ -200,8 +200,11 @@ namespace BadScript.Console
 
                     executions.AddRange(
                         files.Select( x => new ConsoleExecution( x, parts.Skip( 1 ).ToArray(), isBenchmark ) ) );
-                }else
-                executions.Add( new ConsoleExecution( parts[0], parts.Skip( 1 ).ToArray(), isBenchmark ) );
+                }
+                else
+                {
+                    executions.Add( new ConsoleExecution( parts[0], parts.Skip( 1 ).ToArray(), isBenchmark ) );
+                }
             }
 
             foreach ( ConsoleExecution consoleExecution in executions )

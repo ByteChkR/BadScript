@@ -85,7 +85,6 @@ namespace BadScript.Utils
         }
 
         #endregion
-
     }
 
 }

@@ -14,21 +14,6 @@ namespace BadScript.Utils
 
         }
 
-        #endregion
-
-        public static void SetSetting( string categoryName, string setting, string value )
-        {
-            SettingsCategory c = FindCategory( categoryName );
-            c.SetSetting( setting, value );
-        }
-
-        public static SettingsPair GetSetting( string categoryName, string setting )
-        {
-            SettingsCategory c = FindCategory( categoryName );
-
-            return c.GetSetting( setting );
-        }
-
         public static SettingsCategory FindCategory( string categoryName )
         {
             string[] parts = categoryName.Split( '.' );
@@ -48,6 +33,21 @@ namespace BadScript.Utils
 
             return current;
         }
+
+        public static SettingsPair GetSetting( string categoryName, string setting )
+        {
+            SettingsCategory c = FindCategory( categoryName );
+
+            return c.GetSetting( setting );
+        }
+
+        public static void SetSetting( string categoryName, string setting, string value )
+        {
+            SettingsCategory c = FindCategory( categoryName );
+            c.SetSetting( setting, value );
+        }
+
+        #endregion
     }
 
 }

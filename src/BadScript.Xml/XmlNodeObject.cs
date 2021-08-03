@@ -13,27 +13,61 @@ namespace BadScript.Xml
     public class XmlNodeObject : ABSObject
     {
         protected XmlNode m_Node;
-        protected Dictionary<string, ABSReference> m_Properties = new Dictionary<string, ABSReference>();
-        public XmlNodeObject(XmlNode node) : base(SourcePosition.Unknown)
+        protected Dictionary < string, ABSReference > m_Properties = new Dictionary < string, ABSReference >();
+
+        public override bool IsNull => false;
+
+        #region Public
+
+        public XmlNodeObject( XmlNode node ) : base( SourcePosition.Unknown )
         {
             m_Node = node;
-            m_Properties.Add("parentNode", new BSReflectionReference(() => new XmlNodeObject(m_Node.ParentNode), null));
-            m_Properties.Add("firstChild", new BSReflectionReference(() => new XmlNodeObject(m_Node.FirstChild), null));
+
+            m_Properties.Add(
+                "parentNode",
+                new BSReflectionReference( () => new XmlNodeObject( m_Node.ParentNode ), null ) );
+
+            m_Properties.Add(
+                "firstChild",
+                new BSReflectionReference( () => new XmlNodeObject( m_Node.FirstChild ), null ) );
 
             m_Properties.Add(
                 "findChild",
                 new BSFunctionReference( new BSFunction( "function findChildNode(name)", FindChildByName, 1 ) ) );
-            m_Properties.Add("lastChild", new BSReflectionReference(() => new XmlNodeObject(m_Node.LastChild), null));
-            m_Properties.Add("nextSibling", new BSReflectionReference(() => new XmlNodeObject(m_Node.NextSibling), null));
-            m_Properties.Add("previousSibling", new BSReflectionReference(() => new XmlNodeObject(m_Node.PreviousSibling), null));
-            m_Properties.Add("childCount", new BSReflectionReference(() => new BSObject((decimal)m_Node.ChildNodes.Count), null));
+
+            m_Properties.Add(
+                "lastChild",
+                new BSReflectionReference( () => new XmlNodeObject( m_Node.LastChild ), null ) );
+
+            m_Properties.Add(
+                "nextSibling",
+                new BSReflectionReference( () => new XmlNodeObject( m_Node.NextSibling ), null ) );
+
+            m_Properties.Add(
+                "previousSibling",
+                new BSReflectionReference( () => new XmlNodeObject( m_Node.PreviousSibling ), null ) );
+
+            m_Properties.Add(
+                "childCount",
+                new BSReflectionReference( () => new BSObject( ( decimal ) m_Node.ChildNodes.Count ), null ) );
 
             m_Properties.Add(
                 "childAt",
                 new BSFunctionReference( new BSFunction( "function childAt(index)", ChildAt, 1 ) ) );
-            m_Properties.Add("value", new BSReflectionReference(() => new BSObject(m_Node.Value), o => m_Node.Value = o.ConvertString()));
-            m_Properties.Add("innerText", new BSReflectionReference(() => new BSObject(m_Node.InnerText), o => m_Node.InnerText = o.ConvertString()));
-            m_Properties.Add("name", new BSReflectionReference(() => new BSObject(m_Node.Name), null));
+
+            m_Properties.Add(
+                "value",
+                new BSReflectionReference(
+                    () => new BSObject( m_Node.Value ),
+                    o => m_Node.Value = o.ConvertString() ) );
+
+            m_Properties.Add(
+                "innerText",
+                new BSReflectionReference(
+                    () => new BSObject( m_Node.InnerText ),
+                    o => m_Node.InnerText = o.ConvertString() ) );
+
+            m_Properties.Add( "name", new BSReflectionReference( () => new BSObject( m_Node.Name ), null ) );
 
             m_Properties.Add(
                 "hasChildNodes",
@@ -41,75 +75,82 @@ namespace BadScript.Xml
 
         }
 
-        private ABSObject FindChildByName( ABSObject[] arg )
+        public override bool Equals( ABSObject other )
         {
-            string name = arg[0].ConvertString();
-            foreach ( XmlNode child in m_Node.ChildNodes )
-            {
-                if ( child.Name == name )
-                    return new XmlNodeObject( child );
-            }
-
-            throw new BSRuntimeException( "Can not find Child: " + name );
+            return ReferenceEquals( this, other );
         }
 
-        private ABSObject ChildAt( ABSObject[] arg )
-        {
-            return new XmlNodeObject( m_Node.ChildNodes[( int ) arg[0].ConvertDecimal()] );
-        }
-
-        public override bool IsNull => false;
-
-        public override bool Equals(ABSObject other)
-        {
-            return ReferenceEquals(this, other);
-        }
-
-        public override ABSReference GetProperty(string propertyName)
+        public override ABSReference GetProperty( string propertyName )
         {
             return m_Properties[propertyName];
         }
 
-        public override bool HasProperty(string propertyName)
+        public override bool HasProperty( string propertyName )
         {
-            return m_Properties.ContainsKey(propertyName);
+            return m_Properties.ContainsKey( propertyName );
         }
 
-        public override ABSObject Invoke(ABSObject[] args)
+        public override ABSObject Invoke( ABSObject[] args )
         {
-            throw new BSRuntimeException("Can not Invoke XML Document Object");
+            throw new BSRuntimeException( "Can not Invoke XML Document Object" );
         }
 
-        public override string SafeToString(Dictionary<ABSObject, string> doneList)
+        public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return m_Node.ToString();
         }
 
-        public override void SetProperty(string propertyName, ABSObject obj)
+        public override void SetProperty( string propertyName, ABSObject obj )
         {
             throw new BSRuntimeException( "Can not edit properties on a XML Document Object" );
         }
 
-        public override bool TryConvertBool(out bool v)
+        public override bool TryConvertBool( out bool v )
         {
             v = false;
 
             return false;
         }
 
-        public override bool TryConvertDecimal(out decimal d)
+        public override bool TryConvertDecimal( out decimal d )
         {
             d = 0;
 
             return false;
         }
 
-        public override bool TryConvertString(out string v)
+        public override bool TryConvertString( out string v )
         {
             v = SafeToString();
 
             return true;
         }
+
+        #endregion
+
+        #region Private
+
+        private ABSObject ChildAt( ABSObject[] arg )
+        {
+            return new XmlNodeObject( m_Node.ChildNodes[( int ) arg[0].ConvertDecimal()] );
+        }
+
+        private ABSObject FindChildByName( ABSObject[] arg )
+        {
+            string name = arg[0].ConvertString();
+
+            foreach ( XmlNode child in m_Node.ChildNodes )
+            {
+                if ( child.Name == name )
+                {
+                    return new XmlNodeObject( child );
+                }
+            }
+
+            throw new BSRuntimeException( "Can not find Child: " + name );
+        }
+
+        #endregion
     }
 
 }
