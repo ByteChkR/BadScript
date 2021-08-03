@@ -1,5 +1,6 @@
 ﻿using System;
 using BadScript.Common.Expressions;
+using BadScript.Common.Types;
 
 namespace BadScript.Common.Exceptions
 {
@@ -26,7 +27,7 @@ namespace BadScript.Common.Exceptions
 
         private static string GenerateMessage( SourcePosition p, string msg )
         {
-            return $"Runtime Exception: '{msg}' at {p.Line}:{p.Collumn}\nLine: '{p.LineStr}'";
+            return $"Runtime Exception: '{msg}' at {p.Line}:{p.Collumn}\nLine: '{p.LineStr}'\n{BSFunction.FlatTrace}";
 
         }
 

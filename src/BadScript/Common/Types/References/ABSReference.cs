@@ -16,7 +16,7 @@ namespace BadScript.Common.Types.References
 
         public override bool Equals( ABSObject other )
         {
-            return Get().Equals( other );
+            return Get().Equals( other.ResolveReference() );
         }
 
         public override ABSReference GetProperty( string propertyName )
