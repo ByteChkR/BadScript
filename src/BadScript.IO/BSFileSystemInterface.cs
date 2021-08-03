@@ -57,12 +57,10 @@ namespace BadScript.IO
 
                         string path = o.ConvertString();
 
-                        return new BSObject(
-                            ( decimal ) ( File.Exists( path ) ||
-                                          Directory.Exists( path )
-                                ? 1
-                                : 0 )
-                        );
+                        return File.Exists( path ) ||
+                               Directory.Exists( path )
+                            ? BSObject.One
+                            : BSObject.Zero;
                     },
                     1
                 )

@@ -92,44 +92,7 @@ namespace BadScript.ConsoleUtils
         }
 
         #endregion
-
-        #region Private
-
-        private ABSObject GetConsoleBackColor( ABSObject[] arg )
-        {
-            return new BSObject( Console.BackgroundColor.ToString() );
-        }
-
-        private ABSObject GetConsoleForeColor( ABSObject[] arg )
-        {
-            return new BSObject( Console.ForegroundColor.ToString() );
-        }
-
-        private ABSObject SetConsoleBackColor( ABSObject[] arg )
-        {
-            if ( !Enum.TryParse( arg[0].ConvertString(), true, out ConsoleColor col ) )
-            {
-                throw new BSRuntimeException( "Could not create Console Color: " + arg[0].ConvertString() );
-            }
-
-            Console.BackgroundColor = col;
-
-            return BSObject.Null;
-        }
-
-        private ABSObject SetConsoleForeColor( ABSObject[] arg )
-        {
-            if ( !Enum.TryParse( arg[0].ConvertString(), true, out ConsoleColor col ) )
-            {
-                throw new BSRuntimeException( "Could not create Console Color: " + arg[0].ConvertString() );
-            }
-
-            Console.ForegroundColor = col;
-
-            return BSObject.Null;
-        }
-
-        #endregion
+        
     }
 
 }

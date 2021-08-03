@@ -33,7 +33,7 @@ namespace BadScript.Xml
 
             m_Properties.Add(
                 "findChild",
-                new BSFunctionReference( new BSFunction( "function findChildNode(name)", FindChildByName, 1 ) ) );
+                new BSFunctionReference( new BSFunction("function findChild(name)", FindChildByName, 1 ) ) );
 
             m_Properties.Add(
                 "lastChild",

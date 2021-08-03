@@ -21,7 +21,7 @@ namespace BadScript.Http
 
         public override void AddApi( ABSTable t )
         {
-            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)", Get, 1, 2 ) );
+            t.InsertElement( new BSObject( "get" ), new BSFunction( "function get(url)/get(url, headers)", Get, 1, 2 ) );
 
             t.InsertElement(
                 new BSObject( "post" ),
