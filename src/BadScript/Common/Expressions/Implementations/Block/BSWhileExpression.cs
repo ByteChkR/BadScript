@@ -8,28 +8,30 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSWhileExpression : BSExpression
     {
-        private BSExpression m_Condition;
-        private BSExpression[] m_Block;
+        public BSExpression Condition;
+        public BSExpression[] Block;
+
+        public override bool IsConstant => Condition.IsConstant;
 
         #region Public
 
         public BSWhileExpression( SourcePosition srcPos, BSExpression condition, BSExpression[] block ) : base( srcPos )
         {
-            m_Condition = condition;
-            m_Block = block;
+            Condition = condition;
+            Block = block;
         }
 
         public override ABSObject Execute( BSScope scope )
         {
             BSScope funcScope = new BSScope( BSScopeFlags.Loop, scope );
-            ABSObject o = m_Condition.Execute( funcScope ).ResolveReference();
+            ABSObject o = Condition.Execute( funcScope ).ResolveReference();
 
             while ( o.TryConvertBool( out bool d ) && d )
             {
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     funcScope,
-                    m_Block,
+                    Block,
                     new string[0],
                     new ABSObject[0]
                 );
@@ -50,7 +52,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
                     break;
                 }
 
-                o = m_Condition.Execute( funcScope ).ResolveReference();
+                o = Condition.Execute( funcScope ).ResolveReference();
             }
 
             return BSObject.Null;

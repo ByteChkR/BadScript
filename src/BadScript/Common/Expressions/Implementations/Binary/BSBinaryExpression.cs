@@ -3,8 +3,8 @@
 
     public abstract class BSBinaryExpression : BSExpression
     {
-        protected readonly BSExpression Left;
-        protected readonly BSExpression Right;
+        public BSExpression Left;
+        public BSExpression Right;
 
         #region Protected
 

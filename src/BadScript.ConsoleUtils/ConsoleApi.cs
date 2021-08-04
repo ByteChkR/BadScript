@@ -1,5 +1,4 @@
 ﻿using System;
-using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -92,7 +91,6 @@ namespace BadScript.ConsoleUtils
         }
 
         #endregion
-        
     }
 
 }

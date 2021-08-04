@@ -7,20 +7,20 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSValueExpression : BSExpression
     {
-        private readonly object m_Value;
+        private readonly BSObject m_Value;
+
+        public override bool IsConstant => true;
 
         #region Public
 
         public BSValueExpression( SourcePosition srcPos, object o ) : base( srcPos )
         {
-            m_Value = o;
+            m_Value = new BSObject( o );
         }
 
         public override ABSObject Execute( BSScope scope )
         {
-            ABSObject ret = new BSObject( m_Value );
-
-            return ret;
+            return m_Value;
         }
 
         #endregion

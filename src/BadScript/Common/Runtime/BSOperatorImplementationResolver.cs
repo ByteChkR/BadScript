@@ -3,6 +3,11 @@ using System.Linq;
 using BadScript.Common.Exceptions;
 using BadScript.Common.OperatorImplementations;
 using BadScript.Common.OperatorImplementations.Implementations;
+using BadScript.Common.OperatorImplementations.Implementations.Logic;
+using BadScript.Common.OperatorImplementations.Implementations.Logic.Self;
+using BadScript.Common.OperatorImplementations.Implementations.Math;
+using BadScript.Common.OperatorImplementations.Implementations.Math.Self;
+using BadScript.Common.OperatorImplementations.Implementations.Relational;
 using BadScript.Common.Types;
 using BadScript.Common.Types.References;
 

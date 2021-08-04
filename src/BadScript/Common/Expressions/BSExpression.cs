@@ -8,6 +8,8 @@ namespace BadScript.Common.Expressions
     {
         protected readonly SourcePosition m_Position;
 
+        public abstract bool IsConstant { get; }
+
         #region Public
 
         public abstract ABSObject Execute( BSScope scope );

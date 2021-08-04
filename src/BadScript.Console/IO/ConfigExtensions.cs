@@ -45,7 +45,7 @@ namespace BadScript.Console.IO
             s.SetLength( 0 );
             using TextWriter tr = new StreamWriter( s );
 
-            tr.Write( JsonConvert.SerializeObject( data ) );
+            tr.Write( JsonConvert.SerializeObject( data, Formatting.Indented ) );
 
         }
 

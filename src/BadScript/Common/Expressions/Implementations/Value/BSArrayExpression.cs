@@ -10,6 +10,8 @@ namespace BadScript.Common.Expressions.Implementations.Value
     {
         private readonly BSExpression[] m_InitExpressions;
 
+        public override bool IsConstant => m_InitExpressions.All( x => x.IsConstant );
+
         #region Public
 
         public BSArrayExpression( SourcePosition pos, BSExpression[] initExprs = null ) : base( pos )

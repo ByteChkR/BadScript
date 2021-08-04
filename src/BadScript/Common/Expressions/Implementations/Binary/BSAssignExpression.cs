@@ -8,6 +8,8 @@ namespace BadScript.Common.Expressions.Implementations.Binary
 
     public class BSAssignExpression : BSBinaryExpression
     {
+        public override bool IsConstant => Left.IsConstant && Right.IsConstant;
+
         #region Public
 
         public BSAssignExpression( SourcePosition srcPos, BSExpression left, BSExpression right ) : base(
@@ -38,11 +40,6 @@ namespace BadScript.Common.Expressions.Implementations.Binary
             }
 
             return right;
-        }
-
-        public BSExpression GetLeft()
-        {
-            return Left;
         }
 
         #endregion

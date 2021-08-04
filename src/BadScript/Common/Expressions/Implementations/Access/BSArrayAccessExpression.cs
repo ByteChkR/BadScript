@@ -1,5 +1,5 @@
 ﻿using BadScript.Common.Exceptions;
-using BadScript.Common.Expressions.Implementations.Unary;
+using BadScript.Common.Expressions.Implementations.Binary;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.References;
@@ -7,24 +7,24 @@ using BadScript.Common.Types.References;
 namespace BadScript.Common.Expressions.Implementations.Access
 {
 
-    public class BSArrayAccessExpression : BSUnaryExpression
+    public class BSArrayAccessExpression : BSBinaryExpression
     {
-        private BSExpression Parameter;
+        public override bool IsConstant => Left.IsConstant && Right.IsConstant;
 
         #region Public
 
         public BSArrayAccessExpression( SourcePosition srcPos, BSExpression left, BSExpression arg ) : base(
             srcPos,
-            left )
+            left,
+            arg )
         {
-            Parameter = arg;
         }
 
         public override ABSObject Execute( BSScope scope )
         {
             ABSObject obj = Left.Execute( scope ).ResolveReference();
 
-            ABSObject i = Parameter.Execute( scope ).ResolveReference();
+            ABSObject i = Right.Execute( scope ).ResolveReference();
 
             if ( obj is ABSTable t )
             {

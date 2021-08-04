@@ -8,10 +8,13 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
     public class BSForExpression : BSExpression
     {
-        private BSExpression m_CounterDefinition;
-        private BSExpression m_CounterCondition;
-        private BSExpression m_CounterIncrement;
-        private BSExpression[] m_Block;
+        public BSExpression CounterDefinition;
+        public BSExpression CounterCondition;
+        public BSExpression CounterIncrement;
+        public BSExpression[] Block;
+        public override bool IsConstant => CounterDefinition.IsConstant &&
+                                           CounterCondition.IsConstant &&
+                                           CounterIncrement.IsConstant;
 
         #region Public
 
@@ -22,24 +25,24 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             BSExpression cInc,
             BSExpression[] block ) : base( srcPos )
         {
-            m_CounterCondition = cCond;
-            m_CounterDefinition = cDef;
-            m_CounterIncrement = cInc;
-            m_Block = block;
+            CounterCondition = cCond;
+            CounterDefinition = cDef;
+            CounterIncrement = cInc;
+            Block = block;
         }
 
         public override ABSObject Execute( BSScope scope )
         {
             BSScope forScope = new BSScope( BSScopeFlags.Loop, scope );
-            m_CounterDefinition.Execute( forScope );
-            ABSObject c = m_CounterCondition.Execute( forScope ).ResolveReference();
+            CounterDefinition.Execute( forScope );
+            ABSObject c = CounterCondition.Execute( forScope ).ResolveReference();
 
             while ( c.TryConvertBool( out bool d ) && d )
             {
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     forScope,
-                    m_Block,
+                    Block,
                     new string[0],
                     new ABSObject[0]
                 );
@@ -60,9 +63,9 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
                     break;
                 }
 
-                m_CounterIncrement.Execute( forScope );
+                CounterIncrement.Execute( forScope );
 
-                c = m_CounterCondition.Execute( forScope ).ResolveReference();
+                c = CounterCondition.Execute( forScope ).ResolveReference();
 
             }
 

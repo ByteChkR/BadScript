@@ -10,6 +10,10 @@ namespace BadScript
 
     public class BSEngine
     {
+        public static BSRuntimeSettings RuntimeSettings = BSRuntimeSettings.Default;
+        public static BSParserSettings ParserSettings = BSParserSettings.Default;
+        public static bool AllowOptimization = true;
+
         private static BSEngine s_Instance;
 
         private readonly List < ABSScriptInterface > m_Interfaces = new List < ABSScriptInterface >();
@@ -42,11 +46,6 @@ namespace BadScript
             }
 
             return instance;
-        }
-
-        public static string[] GetDefaultInterfaces()
-        {
-            return new[] { "#core" };
         }
 
         public static Dictionary < string, ABSTable > GetInterfaceData( List < ABSScriptInterface > interfaces )

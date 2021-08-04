@@ -1,4 +1,4 @@
-﻿namespace BadScript.Common.OperatorImplementations.Implementations
+﻿namespace BadScript.Common.OperatorImplementations.Implementations.Relational
 {
 
     public class BSLessThanOperatorImplementation : ABSRelationalOperatorImplementation

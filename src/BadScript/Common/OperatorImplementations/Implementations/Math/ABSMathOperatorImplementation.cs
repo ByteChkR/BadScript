@@ -2,7 +2,7 @@
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
-namespace BadScript.Common.OperatorImplementations.Implementations
+namespace BadScript.Common.OperatorImplementations.Implementations.Math
 {
 
     public abstract class ABSMathOperatorImplementation : ABSOperatorImplementation

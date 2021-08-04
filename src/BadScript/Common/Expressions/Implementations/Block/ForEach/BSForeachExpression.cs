@@ -10,9 +10,11 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
     public class BSForeachExpression : BSExpression
     {
+        public BSExpression[] Block;
+        public BSExpression Enumerator;
         private string[] m_Vars;
-        private BSExpression[] m_Block;
-        private BSExpression m_Enumerator;
+
+        public override bool IsConstant => false;
 
         #region Public
 
@@ -23,14 +25,14 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             BSExpression[] block ) : base( srcPos )
         {
             m_Vars = vars;
-            m_Enumerator = enumExpr;
-            m_Block = block;
+            Enumerator = enumExpr;
+            Block = block;
         }
 
         public override ABSObject Execute( BSScope scope )
         {
             BSScope foreachScope = new BSScope( BSScopeFlags.Loop, scope );
-            ABSObject eObj = m_Enumerator.Execute( foreachScope ).ResolveReference();
+            ABSObject eObj = Enumerator.Execute( foreachScope ).ResolveReference();
 
             if ( eObj is IEnumerable < IForEachIteration > forEach )
             {
@@ -45,7 +47,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
                     ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                         foreachScope,
-                        m_Block,
+                        Block,
                         new string[0],
                         new ABSObject[0]
                     );

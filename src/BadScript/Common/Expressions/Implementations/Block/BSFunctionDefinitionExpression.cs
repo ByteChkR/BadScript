@@ -15,6 +15,8 @@ namespace BadScript.Common.Expressions.Implementations.Block
         public (bool, string)[] ArgNames;
         public BSExpression[] Block;
 
+        public override bool IsConstant => false;
+
         #region Public
 
         public BSFunctionDefinitionExpression(

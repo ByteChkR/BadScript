@@ -9,6 +9,8 @@ namespace BadScript.Common.Expressions.Implementations.Access
     {
         public readonly string Right;
 
+        public override bool IsConstant => false;
+
         public BSExpression Left { get; private set; }
 
         #region Public

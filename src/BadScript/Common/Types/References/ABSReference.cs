@@ -44,6 +44,11 @@ namespace BadScript.Common.Types.References
             Get().SetProperty( propertyName, obj );
         }
 
+        public override string ToString()
+        {
+            return Get().ToString();
+        }
+
         public override bool TryConvertBool( out bool v )
         {
             return Get().TryConvertBool( out v );
@@ -57,11 +62,6 @@ namespace BadScript.Common.Types.References
         public override bool TryConvertString( out string v )
         {
             return Get().TryConvertString( out v );
-        }
-
-        public override string ToString()
-        {
-            return Get().ToString();
         }
 
         #endregion

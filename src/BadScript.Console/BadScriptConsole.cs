@@ -62,28 +62,10 @@ namespace BadScript.Console
             return IncludeDirectory.GetFullName();
         }
 
-        private static string[] GetDefaultInterfaces()
-        {
-            IConsoleIOFile configFile = new ConsoleIOFile( "interfaces.json", m_IORoot, null );
-            configFile.EnsureExistParent();
-
-            if ( configFile.Exists )
-            {
-                string[] ret = configFile.ParseJson < string[] >();
-
-                return ret;
-            }
-            else
-            {
-                string[] ret = { "#core", "#console" };
-                configFile.WriteJson( ret );
-
-                return ret;
-            }
-        }
-
         private static void Initialize()
         {
+            LoadParserSettings();
+            LoadRuntimeSettings();
             m_PluginLoader = new PluginLoader( m_IORoot, new ConsoleIODirectory( "plugins", m_IORoot, null ) );
 
             m_PluginLoader.LoadPlugins();
@@ -107,6 +89,36 @@ namespace BadScript.Console
 
             AppDirectory.EnsureExistsSelf();
 
+        }
+
+        private static void LoadParserSettings()
+        {
+            IConsoleIOFile configFile = new ConsoleIOFile( "parser.json", m_IORoot, null );
+            configFile.EnsureExistParent();
+
+            if ( configFile.Exists )
+            {
+                BSEngine.ParserSettings = configFile.ParseJson < BSParserSettings >();
+            }
+            else
+            {
+                configFile.WriteJson( BSEngine.ParserSettings );
+            }
+        }
+
+        private static void LoadRuntimeSettings()
+        {
+            IConsoleIOFile configFile = new ConsoleIOFile( "runtime.json", m_IORoot, null );
+            configFile.EnsureExistParent();
+
+            if ( configFile.Exists )
+            {
+                BSEngine.RuntimeSettings = configFile.ParseJson < BSRuntimeSettings >();
+            }
+            else
+            {
+                configFile.WriteJson( BSEngine.RuntimeSettings );
+            }
         }
 
         private static void Main( string[] args )
@@ -177,7 +189,9 @@ namespace BadScript.Console
                 isBenchmark = true;
             }
 
-            BSEngineInstance engine = BSEngine.CreateEngineInstance( GetDefaultInterfaces(), GetConsoleIncludeDir() );
+            BSEngineInstance engine = BSEngine.CreateEngineInstance(
+                BSEngine.RuntimeSettings.DefaultInterfaces,
+                GetConsoleIncludeDir() );
 
             string a = "";
 

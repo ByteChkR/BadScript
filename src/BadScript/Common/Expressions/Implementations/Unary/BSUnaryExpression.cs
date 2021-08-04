@@ -3,7 +3,7 @@
 
     public abstract class BSUnaryExpression : BSExpression
     {
-        protected readonly BSExpression Left;
+        public BSExpression Left;
 
         #region Protected
 

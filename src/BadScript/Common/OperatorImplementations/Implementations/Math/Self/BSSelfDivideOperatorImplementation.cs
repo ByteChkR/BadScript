@@ -1,4 +1,4 @@
-﻿namespace BadScript.Common.OperatorImplementations.Implementations
+﻿namespace BadScript.Common.OperatorImplementations.Implementations.Math.Self
 {
 
     public class BSSelfDivideOperatorImplementation : ABSSelfMathOperatorImplementation

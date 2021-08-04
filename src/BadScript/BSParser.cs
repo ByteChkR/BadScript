@@ -827,7 +827,7 @@ namespace BadScript
             if ( wordName == "for" )
             {
                 BSAssignExpression cDecl = ( BSAssignExpression ) ParseExpression( int.MaxValue );
-                BSPropertyExpression cProp = ( BSPropertyExpression ) cDecl.GetLeft();
+                BSPropertyExpression cProp = ( BSPropertyExpression ) cDecl.Left;
 
                 string untilWord = ParseKey();
 

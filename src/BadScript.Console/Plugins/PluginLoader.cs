@@ -71,7 +71,8 @@ namespace BadScript.Console.Plugins
                     {
                         if ( scriptInstance == null )
                         {
-                            scriptInstance = BSEngine.CreateEngineInstance( BSEngine.GetDefaultInterfaces() );
+                            scriptInstance =
+                                BSEngine.CreateEngineInstance( BSEngine.RuntimeSettings.DefaultInterfaces );
                         }
 
                         ABSObject o = scriptInstance.

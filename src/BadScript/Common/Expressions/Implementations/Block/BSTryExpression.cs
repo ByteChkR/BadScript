@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -8,9 +9,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSTryExpression : BSExpression
     {
-        private BSExpression[] m_TryBlock;
-        private BSExpression[] m_CatchBlock;
+        public BSExpression[] TryBlock;
+        public BSExpression[] CatchBlock;
         private string m_CapturedVar;
+
+        public override bool IsConstant => TryBlock.All( x => x.IsConstant ) && CatchBlock.All( x => x.IsConstant );
 
         #region Public
 
@@ -20,8 +23,8 @@ namespace BadScript.Common.Expressions.Implementations.Block
             BSExpression[] catchBlock,
             string capturedVar ) : base( srcPos )
         {
-            m_TryBlock = tryBlock;
-            m_CatchBlock = catchBlock;
+            TryBlock = tryBlock;
+            CatchBlock = catchBlock;
             m_CapturedVar = capturedVar;
         }
 
@@ -35,7 +38,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     tryScope,
-                    m_TryBlock,
+                    TryBlock,
                     new string[0],
                     new ABSObject[0]
                 );
@@ -63,7 +66,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     catchScope,
-                    m_CatchBlock,
+                    CatchBlock,
                     new string[0],
                     new ABSObject[0]
                 );

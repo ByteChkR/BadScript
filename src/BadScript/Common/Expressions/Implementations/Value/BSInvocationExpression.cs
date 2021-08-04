@@ -8,7 +8,9 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSInvocationExpression : BSUnaryExpression
     {
-        private BSExpression[] Parameters;
+        public BSExpression[] Parameters;
+
+        public override bool IsConstant => Left.IsConstant && Parameters.All( x => x.IsConstant );
 
         #region Public
 

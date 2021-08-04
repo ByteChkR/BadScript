@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -9,8 +10,10 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSIfExpression : BSExpression
     {
-        private Dictionary < BSExpression, BSExpression[] > m_ConditionMap;
-        private BSExpression[] m_ElseBlock;
+        public Dictionary < BSExpression, BSExpression[] > ConditionMap;
+        public BSExpression[] ElseBlock;
+
+        public override bool IsConstant => ConditionMap.All( x => x.Key.IsConstant );
 
         #region Public
 
@@ -19,13 +22,13 @@ namespace BadScript.Common.Expressions.Implementations.Block
             Dictionary < BSExpression, BSExpression[] > conditions,
             BSExpression[] elseBlock = null ) : base( srcPos )
         {
-            m_ConditionMap = conditions;
-            m_ElseBlock = elseBlock;
+            ConditionMap = conditions;
+            ElseBlock = elseBlock;
         }
 
         public override ABSObject Execute( BSScope scope )
         {
-            foreach ( KeyValuePair < BSExpression, BSExpression[] > keyValuePair in m_ConditionMap )
+            foreach ( KeyValuePair < BSExpression, BSExpression[] > keyValuePair in ConditionMap )
             {
                 ABSObject o = keyValuePair.Key.Execute( scope ).ResolveReference();
                 bool d = o.ConvertBool();
@@ -55,13 +58,13 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
             }
 
-            if ( m_ElseBlock != null )
+            if ( ElseBlock != null )
             {
                 BSScope elseScope = new BSScope( BSScopeFlags.IfBlock, scope );
 
                 ABSObject elseR = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     elseScope,
-                    m_ElseBlock,
+                    ElseBlock,
                     new string[0],
                     new ABSObject[0]
                 );

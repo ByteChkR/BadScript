@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -9,6 +10,8 @@ namespace BadScript.Common.Expressions.Implementations.Value
     public class BSTableExpression : BSExpression
     {
         private readonly Dictionary < string, BSExpression > m_InitExpressions;
+
+        public override bool IsConstant => m_InitExpressions.All( x => x.Value.IsConstant );
 
         #region Public
 

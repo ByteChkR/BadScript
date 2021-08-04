@@ -7,6 +7,8 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSBreakExpression : BSExpression
     {
+        public override bool IsConstant => false;
+
         #region Public
 
         public BSBreakExpression( SourcePosition srcPos ) : base( srcPos )

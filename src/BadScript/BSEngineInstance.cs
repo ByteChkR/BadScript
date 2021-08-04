@@ -9,6 +9,7 @@ using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
+using BadScript.Utils.Optimization;
 
 namespace BadScript
 {
@@ -195,6 +196,11 @@ namespace BadScript
         {
             BSParser parser = new BSParser( Preprocess( script ) );
             BSExpression[] exprs = parser.ParseToEnd();
+
+            if ( BSEngine.AllowOptimization )
+            {
+                BSExpressionOptimizer.Optimize( exprs );
+            }
 
             scope.AddLocalVar(
                 "args",

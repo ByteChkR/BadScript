@@ -9,6 +9,8 @@ namespace BadScript.Common.Operators.Implementations
     {
         private ABSObject m_Object;
 
+        public override bool IsConstant => true;
+
         #region Public
 
         public BSProxyExpression( SourcePosition pos, ABSObject obj ) : base( pos )

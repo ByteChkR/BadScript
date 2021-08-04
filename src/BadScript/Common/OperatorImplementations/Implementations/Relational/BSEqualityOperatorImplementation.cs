@@ -1,7 +1,7 @@
 ﻿using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
-namespace BadScript.Common.OperatorImplementations.Implementations
+namespace BadScript.Common.OperatorImplementations.Implementations.Relational
 {
 
     public class BSEqualityOperatorImplementation : ABSOperatorImplementation
