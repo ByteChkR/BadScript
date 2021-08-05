@@ -294,9 +294,9 @@ namespace BadScript.Core
 
         private ABSObject HookFunction( ABSObject[] arg )
         {
-            if ( arg[0] is BSFunction target )
+            if ( arg[0].ResolveReference() is BSFunction target )
             {
-                if ( arg[1] is BSFunction hook )
+                if ( arg[1].ResolveReference() is BSFunction hook )
                 {
                     target.AddHook( hook );
 
@@ -319,9 +319,9 @@ namespace BadScript.Core
 
         private ABSObject ReleaseHookFunction( ABSObject[] arg )
         {
-            if ( arg[0] is BSFunction target )
+            if ( arg[0].ResolveReference() is BSFunction target )
             {
-                if ( arg[1] is BSFunction hook )
+                if ( arg[1].ResolveReference() is BSFunction hook )
                 {
                     target.RemoveHook( hook );
 
@@ -344,7 +344,7 @@ namespace BadScript.Core
 
         private ABSObject ReleaseHooksFunction( ABSObject[] arg )
         {
-            if ( arg[0] is BSFunction target )
+            if ( arg[0].ResolveReference() is BSFunction target )
             {
                 target.ClearHooks();
             }
@@ -358,7 +358,7 @@ namespace BadScript.Core
 
         private ABSObject ToBase64( ABSObject[] arg )
         {
-            if ( arg[0] is ABSArray a )
+            if ( arg[0].ResolveReference() is ABSArray a )
             {
                 byte[] data = new byte[a.GetLength()];
 

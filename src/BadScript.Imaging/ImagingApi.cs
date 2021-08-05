@@ -6,6 +6,7 @@ using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 using BadScript.Interfaces;
 
 namespace BadScript.Imaging
@@ -184,7 +185,7 @@ namespace BadScript.Imaging
 
         private ABSObject LoadImageApi( ABSObject[] arg )
         {
-            if ( arg[0] is ABSArray arr )
+            if ( arg[0].ResolveReference() is ABSArray arr )
             {
                 byte[] b = arr.ForEach( x => ( byte ) x.ConvertDecimal() ).ToArray();
                 MemoryStream ms = new MemoryStream( b );

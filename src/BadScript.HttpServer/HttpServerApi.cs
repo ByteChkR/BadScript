@@ -8,6 +8,7 @@ using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 using BadScript.Interfaces;
 using BadScript.Utils.Reflection;
 using Ceen.Httpd;
@@ -46,7 +47,7 @@ namespace BadScript.HttpServer
 
         private ABSObject CreateListener( ABSObject[] arg )
         {
-            if ( arg[0] is ABSTable configTable )
+            if ( arg[0].ResolveReference() is ABSTable configTable )
             {
                 CancellationTokenSource tcs = new CancellationTokenSource();
                 ServerConfig config = new ServerConfig().AddLogger( new CLFStdOut() );
