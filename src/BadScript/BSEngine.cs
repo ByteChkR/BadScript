@@ -71,62 +71,7 @@ namespace BadScript
                 m_GlobalTable = new BSTable( SourcePosition.Unknown, globalTable );
             }
 
-            BSTable env = new BSTable( SourcePosition.Unknown );
-
-            env.InsertElement(
-                new BSObject( "createScope" ),
-                new BSFunction( "function createScope()/createScope(parentScope)", CreateScope, 0, 1 ) );
-
-            env.InsertElement(
-                new BSObject( "loadScopedString" ),
-                new BSFunction(
-                    "function loadScopedString(scope, str, args..)/loadScopedString(rootTable, str, args..)",
-                    LoadStringScopedApi,
-                    2,
-                    int.MaxValue ) );
-
-            env.InsertElement(
-                new BSObject( "loadScopedBenchmark" ),
-                new BSFunction(
-                    "function loadScopedBenchmark(scope, str, args..)/loadScopedBenchmark(rootTable, str, args..)",
-                    LoadStringScopedBenchmarkApi,
-                    2,
-                    int.MaxValue ) );
-
-            env.InsertElement(
-                new BSObject( "addPreprocessor" ),
-                new BSFunction( "function addPreprocessor(ppName, func)", AddPreprocessorApi, 2 )
-            );
-
-            env.InsertElement(
-                new BSObject( "loadString" ),
-                new BSFunction( "function loadString(str)", LoadStringApi, 1, int.MaxValue )
-            );
-
-            env.InsertElement(
-                new BSObject( "loadBenchmark" ),
-                new BSFunction( "function loadBenchmark(str)", LoadStringApi, 1, int.MaxValue )
-            );
-
-            env.InsertElement(
-                new BSObject( "loadInterface" ),
-                new BSFunction( "function loadInterface(key)/loadInterface(key, root)", LoadInterfaceApi, 1, 2 )
-            );
-
-            env.InsertElement(
-                new BSObject( "getInterfaceNames" ),
-                new BSFunction( "function getInterfaceNames()", GetInterfaceNamesApi, 0, 0 )
-            );
-
-            env.InsertElement(
-                new BSObject( "hasInterface" ),
-                new BSFunction( "function hasInterface(interfaceName)", HasInterfaceName, 1 )
-            );
-
-            env.Lock();
-
-            m_GlobalTable.InsertElement( new BSObject( "environment" ), env );
-
+            
             m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
         }
 
