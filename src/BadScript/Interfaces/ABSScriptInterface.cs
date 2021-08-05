@@ -1,6 +1,6 @@
 ﻿using BadScript.Common.Types;
 
-namespace BadScript
+namespace BadScript.Interfaces
 {
 
     public abstract class ABSScriptInterface

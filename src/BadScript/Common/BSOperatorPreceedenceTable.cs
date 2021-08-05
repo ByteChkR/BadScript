@@ -6,7 +6,7 @@ using BadScript.Common.Operators.Implementations;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 
-namespace BadScript
+namespace BadScript.Common
 {
 
     public static class BSOperatorPreceedenceTable

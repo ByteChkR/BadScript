@@ -1,21 +1,21 @@
 ﻿using System.IO;
 using BadScript.IO;
 
-namespace BadScript.Console
+namespace BadScript.Console.Core
 {
 
     internal static class ConsoleSyntaxHelper
     {
         #region Public
 
-        public static string FindScript( this string t )
+        public static string FindScript( this BadScriptConsole cli, string t )
         {
             if ( File.Exists( t ) )
             {
                 return t;
             }
 
-            string p = Path.Combine( BadScriptConsole.AppDirectory.GetFullName(), t );
+            string p = Path.Combine( cli.Settings.AppDirectory.GetFullName(), t );
 
             if ( File.Exists( p ) )
             {

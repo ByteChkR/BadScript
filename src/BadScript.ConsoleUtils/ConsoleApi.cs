@@ -2,6 +2,7 @@
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
+using BadScript.Interfaces;
 
 namespace BadScript.ConsoleUtils
 {
@@ -17,6 +18,18 @@ namespace BadScript.ConsoleUtils
         public event Func < ABSObject > ReadLine;
 
         #region Public
+
+        public ConsoleApi(
+            Action < ABSObject > write,
+            Action < ABSObject > writeLine,
+            Action clear,
+            Func < ABSObject > read ) : this( false )
+        {
+            Clear = clear;
+            Write = write;
+            WriteLine = writeLine;
+            ReadLine = read;
+        }
 
         public ConsoleApi( bool addDefaultHandlers = true ) : base( "console" )
         {

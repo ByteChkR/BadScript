@@ -1,7 +1,7 @@
 ﻿using System;
 using BadScript.Common.Types;
 
-namespace BadScript
+namespace BadScript.Interfaces
 {
 
     public class BSConstantScriptInterface : ABSScriptInterface

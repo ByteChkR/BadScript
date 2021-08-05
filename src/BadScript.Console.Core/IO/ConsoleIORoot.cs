@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using BadScript.IO;
 
-namespace BadScript.Console.IO
+namespace BadScript.Console.Core.IO
 {
 
     public readonly struct ConsoleIORoot : IConsoleIORoot, IConsoleIODirectory

@@ -21,8 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Http", "BadScript
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{CA37FB78-B2B0-4552-A7FC-A68ACB93BDE8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.ExpGen", "BadScript.ExpGen\BadScript.ExpGen.csproj", "{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.StringUtils", "BadScript.StringUtils\BadScript.StringUtils.csproj", "{8366A94D-2E79-4858-B57A-AE1903BE39D7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Core", "BadScript.Core\BadScript.Core.csproj", "{A3DED68A-2692-4604-AC41-C96B2DCFC7DE}"
@@ -35,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.HttpServer", "Bad
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Utils", "BadScript.Utils\BadScript.Utils.csproj", "{987106A0-3A16-480C-9C87-02710411623C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Xml", "BadScript.Xml\BadScript.Xml.csproj", "{72233620-6ECE-40A3-AE24-BD2B718E9876}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Xml", "BadScript.Xml\BadScript.Xml.csproj", "{72233620-6ECE-40A3-AE24-BD2B718E9876}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Console.Core", "BadScript.Console.Core\BadScript.Console.Core.csproj", "{11F72E8C-F663-4925-9B89-26027537369B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,10 +75,6 @@ Global
 		{95924758-285D-4D56-8DB5-3FF565AF8BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95924758-285D-4D56-8DB5-3FF565AF8BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95924758-285D-4D56-8DB5-3FF565AF8BC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E60796B3-73F0-4311-8FE9-37A23F8B6FD0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8366A94D-2E79-4858-B57A-AE1903BE39D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8366A94D-2E79-4858-B57A-AE1903BE39D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8366A94D-2E79-4858-B57A-AE1903BE39D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -107,6 +103,10 @@ Global
 		{72233620-6ECE-40A3-AE24-BD2B718E9876}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72233620-6ECE-40A3-AE24-BD2B718E9876}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72233620-6ECE-40A3-AE24-BD2B718E9876}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11F72E8C-F663-4925-9B89-26027537369B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11F72E8C-F663-4925-9B89-26027537369B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11F72E8C-F663-4925-9B89-26027537369B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11F72E8C-F663-4925-9B89-26027537369B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

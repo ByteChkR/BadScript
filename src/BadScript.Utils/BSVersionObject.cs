@@ -96,118 +96,125 @@ namespace BadScript.Utils
                 "change",
                 new BSFunctionReference( new BSFunction( "function change(changeStr)", ChangeVersion, 1 ) ) );
 
-
             m_Properties.Add(
                 "op_Equals",
                 new BSFunctionReference(
-                    new BSFunction("function op_Equals(other)", VersionEquality, 1)));
+                    new BSFunction( "function op_Equals(other)", VersionEquality, 1 ) ) );
+
             m_Properties.Add(
                 "op_InEqual",
                 new BSFunctionReference(
-                    new BSFunction("function op_InEqual(other)", VersionInEquality, 1)));
+                    new BSFunction( "function op_InEqual(other)", VersionInEquality, 1 ) ) );
+
             m_Properties.Add(
                 "op_LessOrEqual",
                 new BSFunctionReference(
-                    new BSFunction("function op_LessOrEqual(other)", VersionLessOrEqual, 1)));
+                    new BSFunction( "function op_LessOrEqual(other)", VersionLessOrEqual, 1 ) ) );
+
             m_Properties.Add(
                 "op_GreaterOrEqual",
                 new BSFunctionReference(
-                    new BSFunction("function op_GreaterOrEqual(other)", VersionGreaterOrEqual, 1)));
+                    new BSFunction( "function op_GreaterOrEqual(other)", VersionGreaterOrEqual, 1 ) ) );
+
             m_Properties.Add(
                 "op_LessThan",
                 new BSFunctionReference(
-                    new BSFunction("function op_LessThan(other)", VersionLess, 1)));
+                    new BSFunction( "function op_LessThan(other)", VersionLess, 1 ) ) );
+
             m_Properties.Add(
                 "op_GreaterThan",
                 new BSFunctionReference(
-                    new BSFunction("function op_GreaterThan(other)", VersionGreater, 1)));
+                    new BSFunction( "function op_GreaterThan(other)", VersionGreater, 1 ) ) );
         }
 
-        private ABSObject VersionEquality(ABSObject[] arg)
+        private ABSObject VersionEquality( ABSObject[] arg )
         {
-            Version thisVersion = (Version)m_InternalObject;
+            Version thisVersion = ( Version ) m_InternalObject;
 
-            if (arg[0].ResolveReference() is BSVersionObject vO)
+            if ( arg[0].ResolveReference() is BSVersionObject vO )
             {
 
-                Version otherVersion = (Version)vO.m_InternalObject;
+                Version otherVersion = ( Version ) vO.m_InternalObject;
 
-                return thisVersion == otherVersion ? BSObject.One : BSObject.Zero;
+                return thisVersion == otherVersion ? One : Zero;
             }
 
-            return BSObject.Zero;
+            return Zero;
         }
 
-        private ABSObject VersionInEquality(ABSObject[] arg)
+        private ABSObject VersionGreater( ABSObject[] arg )
         {
-            Version thisVersion = (Version)m_InternalObject;
+            Version thisVersion = ( Version ) m_InternalObject;
 
-            if (arg[0].ResolveReference() is BSVersionObject vO)
+            if ( arg[0].ResolveReference() is BSVersionObject vO )
             {
 
-                Version otherVersion = (Version)vO.m_InternalObject;
+                Version otherVersion = ( Version ) vO.m_InternalObject;
 
-                return thisVersion != otherVersion ? BSObject.One : BSObject.Zero;
+                return thisVersion > otherVersion ? One : Zero;
             }
 
-            return BSObject.Zero;
+            return Zero;
         }
 
-        private ABSObject VersionLess(ABSObject[] arg)
+        private ABSObject VersionGreaterOrEqual( ABSObject[] arg )
         {
-            Version thisVersion = (Version)m_InternalObject;
+            Version thisVersion = ( Version ) m_InternalObject;
 
-            if (arg[0].ResolveReference() is BSVersionObject vO)
+            if ( arg[0].ResolveReference() is BSVersionObject vO )
             {
 
-                Version otherVersion = (Version)vO.m_InternalObject;
+                Version otherVersion = ( Version ) vO.m_InternalObject;
 
-                return thisVersion < otherVersion ? BSObject.One : BSObject.Zero;
+                return thisVersion >= otherVersion ? One : Zero;
             }
 
-            return BSObject.Zero;
+            return Zero;
         }
-        private ABSObject VersionGreater(ABSObject[] arg)
-        {
-            Version thisVersion = (Version)m_InternalObject;
 
-            if (arg[0].ResolveReference() is BSVersionObject vO)
+        private ABSObject VersionInEquality( ABSObject[] arg )
+        {
+            Version thisVersion = ( Version ) m_InternalObject;
+
+            if ( arg[0].ResolveReference() is BSVersionObject vO )
             {
 
-                Version otherVersion = (Version)vO.m_InternalObject;
+                Version otherVersion = ( Version ) vO.m_InternalObject;
 
-                return thisVersion > otherVersion ? BSObject.One : BSObject.Zero;
+                return thisVersion != otherVersion ? One : Zero;
             }
 
-            return BSObject.Zero;
+            return Zero;
         }
-        private ABSObject VersionLessOrEqual(ABSObject[] arg)
-        {
-            Version thisVersion = (Version)m_InternalObject;
 
-            if (arg[0].ResolveReference() is BSVersionObject vO)
+        private ABSObject VersionLess( ABSObject[] arg )
+        {
+            Version thisVersion = ( Version ) m_InternalObject;
+
+            if ( arg[0].ResolveReference() is BSVersionObject vO )
             {
 
-                Version otherVersion = (Version)vO.m_InternalObject;
+                Version otherVersion = ( Version ) vO.m_InternalObject;
 
-                return thisVersion <= otherVersion ? BSObject.One : BSObject.Zero;
+                return thisVersion < otherVersion ? One : Zero;
             }
 
-            return BSObject.Zero;
+            return Zero;
         }
-        private ABSObject VersionGreaterOrEqual(ABSObject[] arg)
-        {
-            Version thisVersion = (Version)m_InternalObject;
 
-            if (arg[0].ResolveReference() is BSVersionObject vO)
+        private ABSObject VersionLessOrEqual( ABSObject[] arg )
+        {
+            Version thisVersion = ( Version ) m_InternalObject;
+
+            if ( arg[0].ResolveReference() is BSVersionObject vO )
             {
 
-                Version otherVersion = (Version)vO.m_InternalObject;
+                Version otherVersion = ( Version ) vO.m_InternalObject;
 
-                return thisVersion >= otherVersion ? BSObject.One : BSObject.Zero;
+                return thisVersion <= otherVersion ? One : Zero;
             }
 
-            return BSObject.Zero;
+            return Zero;
         }
 
         #endregion

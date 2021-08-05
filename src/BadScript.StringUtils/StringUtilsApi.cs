@@ -4,6 +4,7 @@ using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
+using BadScript.Interfaces;
 
 namespace BadScript.StringUtils
 {

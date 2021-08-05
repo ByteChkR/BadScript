@@ -11,7 +11,7 @@ namespace BadScript.Common.Runtime
     {
         private readonly BSScopeFlags m_AllowedFlags;
         private BSScopeFlags m_CurrentFlag;
-        private readonly BSEngineInstance m_Instance;
+        private readonly BSEngine m_Instance;
         private readonly BSScope m_Parent;
         private readonly BSTable m_LocalVars = new BSTable( SourcePosition.Unknown );
 
@@ -24,7 +24,7 @@ namespace BadScript.Common.Runtime
 
         #region Public
 
-        public BSScope( BSEngineInstance instance ) : this()
+        public BSScope( BSEngine instance ) : this()
         {
             m_AllowedFlags = BSScopeFlags.Return;
             m_Instance = instance;

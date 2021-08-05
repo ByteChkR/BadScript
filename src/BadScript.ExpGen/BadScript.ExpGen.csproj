@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-16"?>
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Version>2021.8.4.0</Version>
-  </PropertyGroup>
-</Project>

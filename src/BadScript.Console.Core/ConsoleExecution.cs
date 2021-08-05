@@ -1,4 +1,4 @@
-﻿namespace BadScript.Console
+﻿namespace BadScript.Console.Core
 {
 
     internal struct ConsoleExecution
@@ -6,17 +6,19 @@
         public readonly string OriginalFileName;
         public readonly string[] Arguments;
         public readonly bool IsBenchmark;
+        private readonly BadScriptConsole Console;
 
-        public ConsoleExecution( string file, string[] arguments, bool isBenchmark = false )
+        public ConsoleExecution( BadScriptConsole console, string file, string[] arguments, bool isBenchmark = false )
         {
             OriginalFileName = file;
             Arguments = arguments;
             IsBenchmark = isBenchmark;
+            Console = console;
         }
 
-        public string FileName => OriginalFileName.FixExtension().FindScript();
+        public string FileName => Console.FindScript( OriginalFileName.FixExtension() );
 
-        public void Run( BSEngineInstance engine )
+        public void Run( BSEngine engine )
         {
             engine.LoadFile( IsBenchmark, FileName, Arguments );
         }

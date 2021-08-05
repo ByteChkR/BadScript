@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
-using BadScript.Console.IO;
+using BadScript.Console.Core.IO;
 using BadScript.IO;
 
-namespace BadScript.Console.Plugins
+namespace BadScript.Console.Core.Plugins
 {
 
     public class PluginLoader
@@ -40,9 +36,8 @@ namespace BadScript.Console.Plugins
 
         public void LoadPlugins()
         {
-            BSEngineInstance scriptInstance = null;
+            BSEngine scriptInstance = null;
             string[] activePlugins = m_PluginIndexFile.ParseJson < string[] >();
-            Dictionary < string, ABSObject > loadedScripts = new Dictionary < string, ABSObject >();
 
             foreach ( string activePlugin in activePlugins )
             {
@@ -67,34 +62,8 @@ namespace BadScript.Console.Plugins
                             throw new Exception( "Unable to load Plugin: " + pluginFile.GetFullName(), e );
                         }
                     }
-                    else if ( fullName.EndsWith( ".bs" ) )
-                    {
-                        if ( scriptInstance == null )
-                        {
-                            scriptInstance =
-                                BSEngine.CreateEngineInstance( BSEngine.RuntimeSettings.DefaultInterfaces );
-                        }
-
-                        ABSObject o = scriptInstance.
-                            LoadFile( false, fullName, new string[0] );
-
-                        loadedScripts[Path.GetFileNameWithoutExtension( fullName )] = o;
-                    }
                 }
             }
-
-            BSEngine.AddStatic(
-                new BSConstantScriptInterface(
-                    "plugins",
-                    x =>
-                    {
-                        foreach ( KeyValuePair < string, ABSObject > loadedScript in loadedScripts )
-                        {
-                            x.InsertElement(
-                                new BSObject( loadedScript.Key ),
-                                loadedScript.Value );
-                        }
-                    } ) );
         }
 
         #endregion

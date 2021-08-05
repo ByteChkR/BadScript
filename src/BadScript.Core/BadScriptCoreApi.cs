@@ -8,6 +8,7 @@ using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 using BadScript.Common.Types.References.Implementations;
+using BadScript.Interfaces;
 
 namespace BadScript.Core
 {

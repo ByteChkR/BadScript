@@ -2,7 +2,7 @@
 using BadScript.IO;
 using Newtonsoft.Json;
 
-namespace BadScript.Console.IO
+namespace BadScript.Console.Core.IO
 {
 
     public static class ConfigExtensions

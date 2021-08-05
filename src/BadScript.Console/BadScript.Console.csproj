@@ -3,10 +3,10 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <StartupObject>BadScript.Console.BadScriptConsole</StartupObject>
+    <StartupObject>BadScript.Console.Program</StartupObject>
     <AssemblyName>bs</AssemblyName>
     <LangVersion>latest</LangVersion>
-    <Version>2021.8.4.0</Version>
+    <Version>2021.8.5.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="bs-data\apps\apps\**" />
@@ -49,6 +49,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bs-data\include\preprocessors\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BadScript.Console.Core\BadScript.Console.Core.csproj" />
     <ProjectReference Include="..\BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj" />
     <ProjectReference Include="..\BadScript.Core\BadScript.Core.csproj" />
     <ProjectReference Include="..\BadScript.HttpServer\BadScript.HttpServer.csproj" />
@@ -63,11 +70,5 @@
     <ProjectReference Include="..\BadScript.Xml\BadScript.Xml.csproj" />
     <ProjectReference Include="..\BadScript.Zip\BadScript.Zip.csproj" />
     <ProjectReference Include="..\BadScript\BadScript.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bs-data\include\preprocessors\" />
   </ItemGroup>
 </Project>
