@@ -20,7 +20,6 @@ namespace BadScript
     public class BSEngine
     {
         public readonly BSParserSettings ParserSettings;
-        public readonly BSRuntimeSettings RuntimeSettings;
         private readonly Dictionary < string, ABSObject > m_Preprocessors;
         private readonly ABSTable m_StaticData;
         private readonly ABSTable m_GlobalTable;
@@ -32,13 +31,11 @@ namespace BadScript
 
         public BSEngine(
             BSParserSettings parserSettings,
-            BSRuntimeSettings runtimeSettings,
             Dictionary < string, ABSObject > startObjects,
             List < ABSScriptInterface > interfaces,
             Dictionary < string, ABSObject > gTable = null )
         {
             ParserSettings = parserSettings;
-            RuntimeSettings = runtimeSettings;
             m_Interfaces = interfaces;
             m_Preprocessors = new Dictionary < string, ABSObject >();
 

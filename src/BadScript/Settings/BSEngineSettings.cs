@@ -12,7 +12,6 @@ namespace BadScript.Settings
     public class BSEngineSettings
     {
         public readonly BSParserSettings ParserSettings;
-        public readonly BSRuntimeSettings RuntimeSettings;
         public readonly List < ABSScriptInterface > Interfaces;
         public readonly List < string > ActiveInterfaces;
         public readonly List < string > IncludeDirectories;
@@ -30,18 +29,17 @@ namespace BadScript.Settings
 
         #region Public
 
-        public BSEngineSettings( BSParserSettings parserSettings, BSRuntimeSettings runtimeSettings )
+        public BSEngineSettings( BSParserSettings parserSettings )
         {
             Interfaces = new List < ABSScriptInterface >();
             ActiveInterfaces = new List < string >();
             IncludeDirectories = new List < string >();
             ParserSettings = parserSettings;
-            RuntimeSettings = runtimeSettings;
         }
 
-        public static BSEngineSettings MakeDefault( BSParserSettings parserSettings, BSRuntimeSettings runtimeSettings )
+        public static BSEngineSettings MakeDefault( BSParserSettings parserSettings )
         {
-            BSEngineSettings s = new BSEngineSettings( parserSettings, runtimeSettings );
+            BSEngineSettings s = new BSEngineSettings( parserSettings );
             s.ActiveInterfaces.Add( "#core" );
             s.ActiveInterfaces.Add( "#console" );
 
@@ -52,7 +50,6 @@ namespace BadScript.Settings
         {
             BSEngine instance = new BSEngine(
                 ParserSettings,
-                RuntimeSettings,
                 GetInterfaceData( ActiveLocalInterfaces ),
                 Interfaces );
 
