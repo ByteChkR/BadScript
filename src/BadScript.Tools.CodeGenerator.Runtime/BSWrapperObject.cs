@@ -15,7 +15,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
         protected T m_InternalObject;
 
         public T GetInternalObject() => m_InternalObject;
-        protected Dictionary<string, ABSReference> m_Properties;
+        protected Dictionary<string, ABSReference> m_Properties = new Dictionary < string, ABSReference >();
         public BSWrapperObject(T obj) : base(SourcePosition.Unknown)
         {
             m_InternalObject = obj;
