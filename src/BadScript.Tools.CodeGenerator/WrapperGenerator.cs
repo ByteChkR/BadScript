@@ -16,9 +16,20 @@ namespace BadScript.Tools.CodeGenerator
             Dictionary < Type, (string, string) > wrapper )
         {
             string name = wrapper[pType].Item2;
-            string str = $"new {name}({pName})";
+            if ( name.StartsWith( "#" ) )
+            {
+                string[] p = name.Split(';');
+                string ct = p[0].Remove(0,1);
+                string wt = p[1];
 
-            return str;
+                return $"new {wt}(({ct}){pName})";
+            }
+            else
+            {
+                string str = $"new {name}({pName})";
+
+                return str;
+            }
         }
         private static string GenerateMethod( MethodInfo mi, Dictionary <Type, (string, string)> wrapper )
         {
@@ -94,18 +105,18 @@ namespace BadScript.Tools.CodeGenerator
         public static string Generate( Type t, string nameSpace = null, Dictionary <Type, (string, string)> wrappers=null )
         {
             wrappers ??= new Dictionary < Type, (string, string) >();
-            wrappers[typeof(string)] = ("", "");
-            wrappers[typeof(decimal)] = ("", "");
-            wrappers[typeof(sbyte)] = ("", "");
-            wrappers[typeof(byte)] = ("", "");
-            wrappers[typeof(short)] = ("", "");
-            wrappers[typeof(ushort)] = ("", "");
-            wrappers[typeof(int)] = ("", "");
-            wrappers[typeof(uint)] = ("", "");
-            wrappers[typeof(long)] = ("", "");
-            wrappers[typeof(ulong)] = ("", "");
-            wrappers[typeof(float)] = ("", "");
-            wrappers[typeof(double)] = ("", "");
+            wrappers[typeof(string)] = ("", "BSObject");
+            wrappers[typeof(decimal)] = ("", "BSObject");
+            wrappers[typeof(sbyte)] = ("", "#decimal;BSObject");
+            wrappers[typeof(byte)] = ("", "#decimal;BSObject");
+            wrappers[typeof(short)] = ("", "#decimal;BSObject");
+            wrappers[typeof(ushort)] = ("", "#decimal;BSObject");
+            wrappers[typeof(int)] = ("", "#decimal;BSObject");
+            wrappers[typeof(uint)] = ("", "#decimal;BSObject");
+            wrappers[typeof(long)] = ("", "#decimal;BSObject");
+            wrappers[typeof(ulong)] = ("", "#decimal;BSObject");
+            wrappers[typeof(float)] = ("", "#decimal;BSObject");
+            wrappers[typeof(double)] = ("", "#decimal;BSObject");
             wrappers[typeof(bool)] = ("", "");
             wrappers[typeof(void)] = ("", "");
             wrappers[typeof(Type)] = ("", "");
@@ -253,7 +264,7 @@ namespace BadScript.Tools.CodeGenerator
                 }
                 else
                 {
-                    isValid = wrappers[fieldType].Item1 != "";
+                    isValid = wrappers[fieldType].Item2 != "";
                 }
                 if (!isValid) continue;
 
