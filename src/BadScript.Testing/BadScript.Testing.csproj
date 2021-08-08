@@ -6,7 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BadScript.ConsoleUtils\BadScript.ConsoleUtils.csproj" />
+    <ProjectReference Include="..\BadScript.Core\BadScript.Core.csproj" />
+    <ProjectReference Include="..\BadScript.HttpServer\BadScript.HttpServer.csproj" />
+    <ProjectReference Include="..\BadScript.Http\BadScript.Http.csproj" />
+    <ProjectReference Include="..\BadScript.Imaging\BadScript.Imaging.csproj" />
+    <ProjectReference Include="..\BadScript.IO\BadScript.IO.csproj" />
+    <ProjectReference Include="..\BadScript.Json\BadScript.Json.csproj" />
+    <ProjectReference Include="..\BadScript.Math\BadScript.Math.csproj" />
+    <ProjectReference Include="..\BadScript.Process\BadScript.Process.csproj" />
+    <ProjectReference Include="..\BadScript.StringUtils\BadScript.StringUtils.csproj" />
+    <ProjectReference Include="..\BadScript.Tools.CodeGenerator.Runtime\BadScript.Tools.CodeGenerator.Runtime.csproj" />
     <ProjectReference Include="..\BadScript.Tools.CodeGenerator\BadScript.Tools.CodeGenerator.csproj" />
+    <ProjectReference Include="..\BadScript.Utils\BadScript.Utils.csproj" />
+    <ProjectReference Include="..\BadScript.Xml\BadScript.Xml.csproj" />
+    <ProjectReference Include="..\BadScript.Zip\BadScript.Zip.csproj" />
+    <ProjectReference Include="..\BadScript\BadScript.csproj" />
   </ItemGroup>
 
 </Project>

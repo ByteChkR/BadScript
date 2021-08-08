@@ -3,43 +3,122 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using BadScript.Tools.CodeGenerator.Runtime;
+using BadScript.Tools.CodeGenerator.Runtime.Attributes;
 
 namespace BadScript.Tools.CodeGenerator
 {
-    public static class WrapperGenerator
+
+
+public static class WrapperGenerator
     {
-        public static event Action < string > Log = Console.WriteLine;
+        private const string DB_TEMPLATE = @"
+    public class #DBNAME# : IWrapperConstructorDataBase
+    {
+        private readonly Dictionary < Type, (IWrapperObjectCreator[], Func < object[], object >) > m_Creators;
 
-        private static string GenerateObjectWrapper(
-            string pName,
-            Type pType,
-            Dictionary < Type, (string, string) > wrapper )
+        public DB()
         {
-            string name = wrapper[pType].Item2;
-            if ( name.StartsWith( "#" ) )
+            m_Creators = new Dictionary < Type, (IWrapperObjectCreator[], Func < object[], object >) >
             {
-                string[] p = name.Split(';');
-                string ct = p[0].Remove(0,1);
-                string wt = p[1];
-
-                return $"new {wt}(({ct}){pName})";
-            }
-            else
-            {
-                string str = $"new {name}({pName})";
-
-                return str;
-            }
+#CREATORDATA#
+            };
         }
-        private static string GenerateMethod( MethodInfo mi, Dictionary <Type, (string, string)> wrapper )
+        public bool HasType<T>()
+        {
+            return m_Creators.ContainsKey(typeof(T));
+        }
+
+        public BSWrapperObject<T> Get<T>(object[] args)
+        {
+            return (BSWrapperObject<T>)m_Creators[typeof(T)].Item2(args);
+        }
+    }
+    
+";
+
+        public static event Action<string> Log = Console.WriteLine;
+
+        public static string GenerateConstructorDataBase(string name, Dictionary < Type, WrapperTypeInfo > wrappers )
+        {
+            string body = DB_TEMPLATE;
+            int switchTypeCount = -1;
+
+            string GenerateObjectCreator( WrapperTypeInfo info )
+            {
+                string fmt = "new {0}()";
+                string r = "";
+
+                for ( int i = 0; i < info.Creators.Length; i++ )
+                {
+                    if (i != 0)
+                    {
+                        r += ", ";
+                    }
+
+                    BSWConstructorCreatorAttribute ca = info.Creators[i];
+                    r += string.Format( fmt, ca.ConstructorCreatorType.Name );
+
+                    
+                    r += "\n";
+                }
+
+                return r;
+            }
+            string GenerateDataEntry( Type t, WrapperTypeInfo typeInfo )
+            {
+                return
+                    $"{{typeof({t.Name}), (new {nameof( IWrapperObjectCreator )}[] {{{GenerateObjectCreator( typeInfo )}}}, a => new {typeInfo.GeneratedClass}(({t.Name})m_Creators[typeof({t.Name})].Item1.First(x=>x.ArgCount == a.Length).Create(a)))}}";
+            }
+
+
+            string entries = "";
+            foreach ( KeyValuePair < Type, WrapperTypeInfo > wrapperTypeInfo in wrappers )
+            {
+                if ( wrapperTypeInfo.Value.GeneratedClass.StartsWith( "#" ) ||
+                     wrapperTypeInfo.Value.GeneratedClass.StartsWith( "@") ||
+                     wrapperTypeInfo.Value.GeneratedClass == "BSObject" ||
+                     wrapperTypeInfo.Value.GeneratedClass == "")
+                {
+                    continue;
+                }
+                entries += GenerateDataEntry( wrapperTypeInfo.Key, wrapperTypeInfo.Value );
+               
+                entries += ",";
+
+                entries += "\n";
+            }
+
+            return body.Replace( "#CREATORDATA#", entries ).Replace( "#DBNAME#", name );
+        }
+        private static IWrapperObjectCreator[] GetCreators(Type t)
+        {
+            IEnumerable<BSWConstructorCreatorAttribute> creatorAttributes =
+                t.GetCustomAttributes<BSWConstructorCreatorAttribute>();
+
+            List<IWrapperObjectCreator> creators = new List<IWrapperObjectCreator>();
+            foreach (BSWConstructorCreatorAttribute bswConstructorCreatorAttribute in creatorAttributes)
+            {
+                IWrapperObjectCreator c =
+                    (IWrapperObjectCreator)Activator.CreateInstance(
+                        bswConstructorCreatorAttribute.ConstructorCreatorType);
+
+                creators.Add(c);
+            }
+
+            return creators.ToArray();
+        }
+
+        private static string GenerateMethod(MethodInfo mi, Dictionary<Type, WrapperTypeInfo> wrapper, string name = null)
         {
             string sig = "";
+            string pName = name ?? mi.Name;
             string dbgSig = "";
-            for ( int i = 0; i < mi.GetParameters().Length; i++ )
+            for (int i = 0; i < mi.GetParameters().Length; i++)
             {
                 ParameterInfo parameterInfo = mi.GetParameters()[i];
 
-                if ( i != 0 )
+                if (i != 0)
                 {
                     dbgSig += ", ";
                     sig += ", ";
@@ -50,82 +129,86 @@ namespace BadScript.Tools.CodeGenerator
             }
 
             string invocation = $"m_InternalObject.{mi.Name}({sig})";
-            string retCreator = GenerateObjectWrapper( invocation, mi.ReturnType, wrapper );
-             if ( mi.ReturnType == typeof( void ) )
+            string retCreator = wrapper[mi.ReturnType].GetWrapperCode(invocation);
+            if (mi.ReturnType == typeof(void))
             {
                 retCreator = $"{{\n{invocation};\nreturn new BSObject(null);\n}}";
             }
 
-            string str = $"m_Properties[\"{mi.Name}\"] = new BSFunctionReference(new BSFunction(\"function {mi.Name}({dbgSig})\", a => {retCreator}, {mi.GetParameters().Length}));";
+            string str = $"m_Properties[\"{pName}\"] = new BSFunctionReference(new BSFunction(\"function {pName}({dbgSig})\", a => {retCreator}, {mi.GetParameters().Length}));";
 
             return str;
         }
 
-        private static string GenerateField(FieldInfo fi, Dictionary<Type, (string, string)> wrapper)
+        private static string GenerateField(FieldInfo fi, Dictionary<Type, WrapperTypeInfo> wrapper, string name = null)
         {
             string setter = "null";
+            string pName = name ?? fi.Name;
 
-            if ( ( fi.Attributes & FieldAttributes.InitOnly ) == 0 )
+            if ((fi.Attributes & FieldAttributes.InitOnly) == 0)
             {
                 setter = $"x=> m_InternalObject.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.Name}>(x)";
             }
-            string str = $"m_Properties[\"{fi.Name}\"] = new BSReflectionReference(() => {GenerateObjectWrapper($"m_InternalObject.{fi.Name}", fi.FieldType, wrapper)}, {setter});";
+            string str = $"m_Properties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[fi.FieldType].GetWrapperCode($"m_InternalObject.{fi.Name}")}, {setter});";
 
             return str;
         }
 
-        private static string GenerateProperty(PropertyInfo pi, Dictionary<Type, (string, string)> wrapper)
+        private static string GenerateProperty(PropertyInfo pi, Dictionary<Type, WrapperTypeInfo> wrapper, string name = null)
         {
             string setter = "null";
-
-            if ( pi.CanWrite && pi.SetMethod.IsPublic )
+            string pName = name ?? pi.Name;
+            if (pi.CanWrite && pi.SetMethod.IsPublic)
                 setter = $"x=> m_InternalObject.{pi.Name} = WrapperHelper.UnwrapObject<{pi.PropertyType.Name}>(x)";
-            string str = $"m_Properties[\"{pi.Name}\"] = new BSReflectionReference(() => {GenerateObjectWrapper($"m_InternalObject.{pi.Name}", pi.PropertyType, wrapper)}, {setter});";
+            string str = $"m_Properties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[pi.PropertyType].GetWrapperCode($"m_InternalObject.{pi.Name}")}, {setter});";
 
             return str;
         }
 
-        private static string MakeUsings(List <Type> ts)
+        private static string MakeUsings(List<Type> ts)
         {
             string usings = "";
-            List < string > ns = new List < string >();
+            List<string> ns = new List<string>();
 
-            foreach ( Type type in ts )
+            foreach (Type type in ts)
             {
-                if ( ns.Contains( type.Namespace ) )
+                if (ns.Contains(type.Namespace))
                     continue;
 
-                ns.Add( type.Namespace );
+                ns.Add(type.Namespace);
                 usings += $"using {type.Namespace};\n";
             }
 
             return usings;
         }
 
-        public static string Generate( Type t, string nameSpace = null, Dictionary <Type, (string, string)> wrappers=null )
+        public static string Generate(Type t, string nameSpace = null, Dictionary<Type, WrapperTypeInfo> wrappers = null, string dbName = null)
         {
-            wrappers ??= new Dictionary < Type, (string, string) >();
-            wrappers[typeof(string)] = ("", "BSObject");
-            wrappers[typeof(decimal)] = ("", "BSObject");
-            wrappers[typeof(sbyte)] = ("", "#decimal;BSObject");
-            wrappers[typeof(byte)] = ("", "#decimal;BSObject");
-            wrappers[typeof(short)] = ("", "#decimal;BSObject");
-            wrappers[typeof(ushort)] = ("", "#decimal;BSObject");
-            wrappers[typeof(int)] = ("", "#decimal;BSObject");
-            wrappers[typeof(uint)] = ("", "#decimal;BSObject");
-            wrappers[typeof(long)] = ("", "#decimal;BSObject");
-            wrappers[typeof(ulong)] = ("", "#decimal;BSObject");
-            wrappers[typeof(float)] = ("", "#decimal;BSObject");
-            wrappers[typeof(double)] = ("", "#decimal;BSObject");
-            wrappers[typeof(bool)] = ("", "");
-            wrappers[typeof(void)] = ("", "");
-            wrappers[typeof(Type)] = ("", "");
-            ( string src, string name ) = Generate( t, wrappers );
+            wrappers ??= new Dictionary<Type, WrapperTypeInfo>();
+            wrappers[typeof(string)] = new WrapperTypeInfo("", "BSObject");
+            wrappers[typeof(decimal)] = new WrapperTypeInfo("", "BSObject");
+            wrappers[typeof(sbyte)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(byte)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(short)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(ushort)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(int)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(uint)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(long)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(ulong)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(float)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(double)] = new WrapperTypeInfo("", "#decimal;BSObject");
+            wrappers[typeof(bool)] = new WrapperTypeInfo("", "@{0} ? BSObject.One : BSObject.Zero");
+            wrappers[typeof(void)] = new WrapperTypeInfo("", "");
+            wrappers[typeof(Type)] = new WrapperTypeInfo("", "");
+            (string src, string name) = Generate(t, wrappers);
 
-            string usings = MakeUsings( wrappers.Keys.ToList() ) +
+            string usings = MakeUsings(wrappers.Keys.ToList()) +
                             "using BadScript.Tools.CodeGenerator.Runtime;\r\nusing BadScript.Common.Types;\r\nusing BadScript.Common.Types.Implementations;\r\nusing BadScript.Utils.Reflection;\n\n";
 
-            if (nameSpace==null)
+            if (dbName != null)
+                src += "\n" + GenerateConstructorDataBase(dbName, wrappers);
+
+            if (nameSpace == null)
             {
                 return usings + src;
             }
@@ -135,35 +218,25 @@ namespace BadScript.Tools.CodeGenerator
 
                 return usings + ns + "\n{\n" + src + "\n}\n";
             }
+
+
+
+
         }
 
-        private static string GenerateBaseType( Type t, Dictionary < Type, (string, string) > wrappers )
-        {
-            Type tB = t.BaseType;
-            string ret = null;
 
-            while ( tB != null )
-            {
-                string n = null;
-                if(!wrappers.ContainsKey(tB))
-                {
-                    ( string src, string name ) = Generate( tB, wrappers );
-                    n = name;
-                }
-                else
-                {
-                    n = wrappers[tB].Item2;
-                }
-                ret = n;
-                tB = tB.BaseType;
-            }
-
-            return ret;
-        }
-
-        private static (string, string) Generate( Type t , Dictionary <Type, (string, string)> wrappers)
+        private static (string, string) Generate(Type t, Dictionary<Type, WrapperTypeInfo> wrappers)
         {
             ObsoleteAttribute obsT = t.GetCustomAttribute<ObsoleteAttribute>();
+            BSWIgnoreAttribute ignoreT = t.GetCustomAttribute<BSWIgnoreAttribute>();
+
+            if (ignoreT != null)
+            {
+                Log(
+                    $"Skipping Type: {t.Name}  because it is marked with {nameof(BSWIgnoreAttribute)}");
+
+                return ("", "");
+            }
             if (obsT != null && obsT.IsError)
             {
                 Log(
@@ -171,29 +244,29 @@ namespace BadScript.Tools.CodeGenerator
                     t.Name +
                     $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
 
-                return ( "","");
+                return ("", "");
             }
             if (t.IsArray || t.IsEnum)
             {
                 return ("", "");
             }
 
-            if (t.GenericTypeArguments.Length != 0|| t.IsGenericType || t.IsGenericParameter || t.IsGenericTypeDefinition || t.IsConstructedGenericType )
+            if (t.GenericTypeArguments.Length != 0 || t.IsGenericType || t.IsGenericParameter || t.IsGenericTypeDefinition || t.IsConstructedGenericType)
             {
                 Log($"Generic Type '{t.Name}' is not Supported.");
                 return ("", "");
             }
-            else if ( t.Name.Contains( "+" ) || t.Name.Contains("&"))
+            else if (t.Name.Contains("+") || t.Name.Contains("&"))
             {
                 Log($"Detected unsupported character in type '{t.Name}'.");
 
-                return ( "", "" );
+                return ("", "");
             }
-            else if ( wrappers.ContainsKey( t ) )
+            else if (wrappers.ContainsKey(t))
             {
-                Log( $"Already Existing Type: {t.Name}" );
+                Log($"Already Existing Type: {t.Name}");
 
-                return ( "", "" );
+                return ("", "");
             }
             else
             {
@@ -203,7 +276,7 @@ namespace BadScript.Tools.CodeGenerator
 
             string className = $"BSWrapperObject_{t.Name}";
             string baseClassName = $"BSWrapperObject<{t.Name}>";
-            wrappers.Add(t, ("", className));
+            wrappers.Add(t, new WrapperTypeInfo("", className));
 
 
             StringBuilder sb = new StringBuilder();
@@ -211,10 +284,20 @@ namespace BadScript.Tools.CodeGenerator
             FieldInfo[] fis = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
             MethodInfo[] mis = t.GetMethods(BindingFlags.Instance | BindingFlags.Public);
 
-            List < string > invalidFuncs = new List < string >();
-            foreach ( PropertyInfo propertyInfo in pis )
+            List<string> invalidFuncs = new List<string>();
+
+            foreach (PropertyInfo propertyInfo in pis)
             {
                 ObsoleteAttribute obs = propertyInfo.GetCustomAttribute<ObsoleteAttribute>();
+                BSWNameAttribute nameAttrib = propertyInfo.GetCustomAttribute<BSWNameAttribute>();
+                BSWIgnoreAttribute ignoreAttrib = propertyInfo.GetCustomAttribute<BSWIgnoreAttribute>();
+
+                if (ignoreAttrib != null)
+                {
+                    Log(
+                        $"Skipping Property: {propertyInfo.Name}  because it is marked with {nameof(BSWIgnoreAttribute)}");
+                    continue;
+                }
                 if (obs != null && obs.IsError)
                 {
                     Log(
@@ -226,26 +309,38 @@ namespace BadScript.Tools.CodeGenerator
                 Type propType = propertyInfo.PropertyType;
 
                 bool isValid = true;
-                if ( !wrappers.ContainsKey( propType ) )
+                if (!wrappers.ContainsKey(propType))
                 {
-                   (string src, string name) = Generate(propType, wrappers);
-                   isValid = src != "";
+                    (string src, string name) = Generate(propType, wrappers);
+                    isValid = src != "";
                 }
                 else
                 {
-                    isValid = wrappers[propType].Item1 != "";
+                    isValid = wrappers[propType].Source != "";
                 }
-                if(!isValid)continue;
+                if (!isValid) continue;
 
-                
+
                 invalidFuncs.Add($"set_{propertyInfo.Name}");
                 invalidFuncs.Add($"get_{propertyInfo.Name}");
-                sb.AppendLine( GenerateProperty( propertyInfo , wrappers) );
+
+
+
+                sb.AppendLine(GenerateProperty(propertyInfo, wrappers, nameAttrib?.Name));
             }
 
-            foreach ( FieldInfo fieldInfo in fis )
+            foreach (FieldInfo fieldInfo in fis)
             {
+                BSWNameAttribute nameAttrib = fieldInfo.GetCustomAttribute<BSWNameAttribute>();
                 ObsoleteAttribute obs = fieldInfo.GetCustomAttribute<ObsoleteAttribute>();
+                BSWIgnoreAttribute ignoreAttrib = fieldInfo.GetCustomAttribute<BSWIgnoreAttribute>();
+
+                if (ignoreAttrib != null)
+                {
+                    Log(
+                        $"Skipping Property: {fieldInfo.Name}  because it is marked with {nameof(BSWIgnoreAttribute)}");
+                    continue;
+                }
                 if (obs != null && obs.IsError)
                 {
                     Log(
@@ -264,26 +359,35 @@ namespace BadScript.Tools.CodeGenerator
                 }
                 else
                 {
-                    isValid = wrappers[fieldType].Item2 != "";
+                    isValid = wrappers[fieldType].GeneratedClass != "";
                 }
                 if (!isValid) continue;
 
 
-                sb.AppendLine( GenerateField( fieldInfo , wrappers) );
+                sb.AppendLine(GenerateField(fieldInfo, wrappers, nameAttrib?.Name));
             }
 
-            foreach ( MethodInfo methodInfo in mis )
+            foreach (MethodInfo methodInfo in mis)
             {
-                ObsoleteAttribute obs = methodInfo.GetCustomAttribute < ObsoleteAttribute >();
-                if ( obs!=null && obs.IsError )
+                ObsoleteAttribute obs = methodInfo.GetCustomAttribute<ObsoleteAttribute>();
+                BSWNameAttribute nameAttrib = methodInfo.GetCustomAttribute<BSWNameAttribute>();
+                BSWIgnoreAttribute ignoreAttrib = methodInfo.GetCustomAttribute<BSWIgnoreAttribute>();
+
+                if (ignoreAttrib != null)
+                {
+                    Log(
+                        $"Skipping Property: {methodInfo.Name}  because it is marked with {nameof(BSWIgnoreAttribute)}");
+                    continue;
+                }
+                if (obs != null && obs.IsError)
                 {
                     Log(
                         "Skipping Method: " +
                         methodInfo.Name +
-                        $" because it is marked with {nameof( ObsoleteAttribute )} and does not compile(IsError is true)" );
+                        $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
                     continue;
                 }
-                if ( invalidFuncs.Contains( methodInfo.Name ) )
+                if (invalidFuncs.Contains(methodInfo.Name))
                     continue;
                 Type retType = methodInfo.ReturnType;
 
@@ -295,14 +399,14 @@ namespace BadScript.Tools.CodeGenerator
                 }
                 else
                 {
-                    isValid = wrappers[retType].Item1 != "";
+                    isValid = wrappers[retType].Source != "";
                 }
                 if (!isValid) continue;
 
 
                 ParameterInfo[] paramis = methodInfo.GetParameters();
 
-                foreach ( ParameterInfo parameterInfo in paramis )
+                foreach (ParameterInfo parameterInfo in paramis)
                 {
                     Type pType = parameterInfo.ParameterType;
 
@@ -314,12 +418,12 @@ namespace BadScript.Tools.CodeGenerator
                     }
                     else
                     {
-                        isValidFuncParam = wrappers[pType].Item1 != "";
+                        isValidFuncParam = wrappers[pType].Source != "";
                     }
                     if (!isValidFuncParam) continue;
 
 
-                    sb.AppendLine(GenerateMethod(methodInfo, wrappers));
+                    sb.AppendLine(GenerateMethod(methodInfo, wrappers, nameAttrib?.Name));
                 }
             }
 
@@ -328,18 +432,20 @@ namespace BadScript.Tools.CodeGenerator
 
             string ret = classHeader + "\n{\n" + classCtor + "\n{\n" + sb + "\n}\n}\n";
 
-            wrappers[t] = (ret, className);
+            wrappers[t] = new WrapperTypeInfo(ret, className, t.GetCustomAttributes<BSWConstructorCreatorAttribute>().ToArray());
+
+
 
             StringBuilder retB = new StringBuilder();
-            foreach ( KeyValuePair < Type, (string, string) > keyValuePair in wrappers )
+            foreach (KeyValuePair<Type, WrapperTypeInfo> keyValuePair in wrappers)
             {
-                retB.AppendLine( keyValuePair.Value.Item1 );
+                retB.AppendLine(keyValuePair.Value.Source);
             }
 
             return (retB.ToString(), className);
         }
 
-        public static string Generate < T >(string nameSpace = null, Dictionary<Type, (string, string)> wrappers = null) => Generate( typeof( T ), nameSpace, wrappers);
+        public static string Generate<T>(string nameSpace = null, Dictionary<Type, WrapperTypeInfo> wrappers = null, string dbName = null) => Generate(typeof(T), nameSpace, wrappers, dbName);
     }
 
 }
