@@ -203,7 +203,7 @@ public static class WrapperGenerator
             (string src, string name) = Generate(t, wrappers);
 
             string usings = MakeUsings(wrappers.Keys.ToList()) +
-                            "using BadScript.Tools.CodeGenerator.Runtime;\r\nusing BadScript.Common.Types;\r\nusing BadScript.Common.Types.Implementations;\r\nusing BadScript.Utils.Reflection;\n\n";
+                            "\nusing System.Collections.Generic;\nusing System.Linq;\nusing BadScript.Tools.CodeGenerator.Runtime;\r\nusing BadScript.Common.Types;\r\nusing BadScript.Common.Types.Implementations;\r\nusing BadScript.Utils.Reflection;\n\n";
 
             if (dbName != null)
                 src += "\n" + GenerateConstructorDataBase(dbName, wrappers);
