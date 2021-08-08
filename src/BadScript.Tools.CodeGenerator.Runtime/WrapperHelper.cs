@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using BadScript.Common.Exceptions;
+using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 using BadScript.Interfaces;
 
 namespace BadScript.Tools.CodeGenerator.Runtime
@@ -15,27 +17,32 @@ namespace BadScript.Tools.CodeGenerator.Runtime
             new List < IWrapperConstructorDataBase >();
 
         #region Public
+        
 
-        public static void AddObjectDB( IWrapperConstructorDataBase db )
+
+        public static ABSScriptInterface CreateInterface(this WrapperStaticDataBase db, string name)
         {
-            if ( s_DataBases.Contains( db ) )
-            {
-                return;
-            }
+            return new BSConstantScriptInterface(
+                name,
+                table =>
+                {
+                    foreach (KeyValuePair < Type, BSStaticWrapperObject> dbType in db.StaticTypes)
+                    {
+                        ABSTable t = table.HasElement(new BSObject(dbType.Key.Name))
+                            ? (ABSTable)table.GetRawElement(new BSObject(dbType.Key.Name)).ResolveReference()
+                            : new BSTable(SourcePosition.Unknown);
 
-            s_DataBases.Add( db );
-        }
+                        table.InsertElement(new BSObject(dbType.Key.Name), t);
 
-        public static ABSObject Create < T >( object[] args )
-        {
-            IWrapperConstructorDataBase db = s_DataBases.FirstOrDefault( x => x.HasType < T >() );
+                        foreach ( string valueProperty in dbType.Value.Properties )
+                        {
+                            t.InsertElement(
+                                new BSObject(valueProperty),
+                                dbType.Value.GetProperty(valueProperty));
+                        }
+                    }
 
-            if ( db != null )
-            {
-                return db.Get < T >( args );
-            }
-
-            throw new Exception( "Type not Found" );
+                });
         }
 
         public static ABSScriptInterface CreateInterface( this IWrapperConstructorDataBase db, string name )
@@ -46,18 +53,24 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                 {
                     foreach ( Type dbType in db.Types )
                     {
-                        table.InsertElement(
+                        ABSTable t = table.HasElement( new BSObject( dbType.Name ) )
+                            ? (ABSTable)table.GetRawElement( new BSObject( dbType.Name ) ).ResolveReference()
+                            : new BSTable( SourcePosition.Unknown );
+
+                        table.InsertElement( new BSObject( dbType.Name ), t );
+                        t.InsertElement(
                             new BSObject( dbType.Name ),
                             new
                                 BSFunction(
                                     $"function {dbType.Name}(args)",
                                     objects => db.Get(
                                         dbType,
-                                        objects.Select( x => UnwrapObject < object >( x ) ).
+                                        objects.Select( UnwrapObject < object > ).
                                                 ToArray() ),
                                     0,
                                     int.MaxValue ) );
                     }
+
                 } );
         }
 

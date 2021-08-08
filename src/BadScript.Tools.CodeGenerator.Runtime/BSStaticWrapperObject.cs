@@ -6,49 +6,35 @@ using System.Linq;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
 namespace BadScript.Tools.CodeGenerator.Runtime
 {
 
-    public class BSWrapperObject<T> : ABSObject, IBSWrappedObject
+    public class BSStaticWrapperObject : ABSObject
     {
+        protected Dictionary < string, ABSReference > m_StaticProperties;
 
-        protected T m_InternalObject;
-
-        public T GetInternalObject() => m_InternalObject;
-        protected Dictionary<string, ABSReference> m_Properties = new Dictionary < string, ABSReference >();
-        
-        public BSWrapperObject(T obj) : base(SourcePosition.Unknown)
+        public string[] Properties => m_StaticProperties.Keys.ToArray();
+        private Type m_WrappedType;
+        public BSStaticWrapperObject(Type t) : base( SourcePosition.Unknown )
         {
-            m_InternalObject = obj;
-
-            m_Properties.Add(
-                "ToString",
-                new BSFunctionReference(
-                    new BSFunction("function ToString()", x => new BSObject(SafeToString()), 0)));
-
-
+            m_WrappedType = t;
+            m_StaticProperties = new Dictionary < string, ABSReference >();
         }
 
-        public override bool IsNull => m_InternalObject == null;
+        public override bool IsNull => false;
 
         public override bool Equals(ABSObject other)
         {
-            if (other is BSWrapperObject<T> o)
-            {
-                return ReferenceEquals( m_InternalObject, o.m_InternalObject );
-            }
-
-            return false;
+            return ReferenceEquals( this, other );
         }
 
         public override ABSReference GetProperty(string propertyName)
         {
-            if (m_Properties.ContainsKey(propertyName))
+            if (m_StaticProperties.ContainsKey(propertyName))
             {
-                return m_Properties[propertyName];
+                return m_StaticProperties[propertyName];
             }
 
             throw new BSRuntimeException("Invalid Property Name: " + propertyName);
@@ -56,7 +42,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override bool HasProperty(string propertyName)
         {
-            return m_Properties.ContainsKey(propertyName);
+            return m_StaticProperties.ContainsKey(propertyName);
         }
 
         public override ABSObject Invoke(ABSObject[] args)
@@ -77,25 +63,25 @@ namespace BadScript.Tools.CodeGenerator.Runtime
             IndentedTextWriter tw = new IndentedTextWriter(sw);
             tw.WriteLine('{');
 
-            foreach (KeyValuePair<string, ABSReference> bsRuntimeObject in m_Properties)
+            foreach (KeyValuePair<string, ABSReference> bsRuntimeObject in m_StaticProperties)
             {
                 List<string> keyLines = bsRuntimeObject.Key.
-                                                           Split(
-                                                               new[] { '\n' },
-                                                               StringSplitOptions.RemoveEmptyEntries
-                                                           ).
-                                                           Select(x => x.Trim()).
-                                                           Where(x => !string.IsNullOrEmpty(x)).
-                                                           ToList();
+                                                        Split(
+                                                            new[] { '\n' },
+                                                            StringSplitOptions.RemoveEmptyEntries
+                                                        ).
+                                                        Select(x => x.Trim()).
+                                                        Where(x => !string.IsNullOrEmpty(x)).
+                                                        ToList();
 
                 List<string> valueLines = bsRuntimeObject.Value.ResolveReference().SafeToString(doneList).
-                                                             Split(
-                                                                 new[] { '\n' },
-                                                                 StringSplitOptions.RemoveEmptyEntries
-                                                             ).
-                                                             Select(x => x.Trim()).
-                                                             Where(x => !string.IsNullOrEmpty(x)).
-                                                             ToList();
+                                                          Split(
+                                                              new[] { '\n' },
+                                                              StringSplitOptions.RemoveEmptyEntries
+                                                          ).
+                                                          Select(x => x.Trim()).
+                                                          Where(x => !string.IsNullOrEmpty(x)).
+                                                          ToList();
 
                 tw.Indent = 1;
 
@@ -132,9 +118,9 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override void SetProperty(string propertyName, ABSObject obj)
         {
-            if (m_Properties.ContainsKey(propertyName))
+            if (m_StaticProperties.ContainsKey(propertyName))
             {
-                m_Properties[propertyName].Assign(obj);
+                m_StaticProperties[propertyName].Assign(obj);
 
                 return;
             }
@@ -143,7 +129,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override bool TryConvertBool(out bool v)
         {
-            v = m_InternalObject != null;
+            v = true;
 
             return true;
         }
@@ -158,14 +144,11 @@ namespace BadScript.Tools.CodeGenerator.Runtime
         public override bool TryConvertString(out string v)
         {
 
-            v= m_InternalObject?.ToString() ?? $"{typeof(T).Name}(NULL)";
+            v = m_WrappedType.Name;
 
             return true;
         }
-
-        object IBSWrappedObject.GetInternalObject()
-        {
-            return GetInternalObject();
-        }
+        
     }
+
 }
