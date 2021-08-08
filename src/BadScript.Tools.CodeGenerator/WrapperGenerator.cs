@@ -178,6 +178,12 @@ namespace BadScript.Tools.CodeGenerator
 
                 return ( "", "" );
             }
+            else if ( wrappers.ContainsKey( t ) )
+            {
+                Log( $"Already Existing Type: {t.Name}" );
+
+                return ( "", "" );
+            }
             else
             {
                 Log("Generating Type Wrapper: " + t.Name);
