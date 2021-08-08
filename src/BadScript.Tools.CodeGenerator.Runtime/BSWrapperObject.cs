@@ -1,5 +1,8 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
@@ -58,10 +61,70 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
             throw new BSRuntimeException("Can not Invoke Object");
         }
-
         public override string SafeToString(Dictionary<ABSObject, string> doneList)
         {
-            return m_InternalObject?.ToString() ?? $"{typeof(T).Name}(NULL)";
+            if (doneList.ContainsKey(this))
+            {
+                return "<recursion>";
+            }
+
+            doneList[this] = "{}";
+
+            StringWriter sw = new StringWriter();
+            IndentedTextWriter tw = new IndentedTextWriter(sw);
+            tw.WriteLine('{');
+
+            foreach (KeyValuePair<string, ABSReference> bsRuntimeObject in m_Properties)
+            {
+                List<string> keyLines = bsRuntimeObject.Key.
+                                                           Split(
+                                                               new[] { '\n' },
+                                                               StringSplitOptions.RemoveEmptyEntries
+                                                           ).
+                                                           Select(x => x.Trim()).
+                                                           Where(x => !string.IsNullOrEmpty(x)).
+                                                           ToList();
+
+                List<string> valueLines = bsRuntimeObject.Value.SafeToString(doneList).
+                                                             Split(
+                                                                 new[] { '\n' },
+                                                                 StringSplitOptions.RemoveEmptyEntries
+                                                             ).
+                                                             Select(x => x.Trim()).
+                                                             Where(x => !string.IsNullOrEmpty(x)).
+                                                             ToList();
+
+                tw.Indent = 1;
+
+                for (int i = 0; i < keyLines.Count; i++)
+                {
+                    string keyLine = keyLines[i];
+
+                    if (i < keyLines.Count - 1)
+                    {
+                        tw.WriteLine(keyLine);
+                    }
+                    else
+                    {
+                        tw.Write(keyLine + " = ");
+                    }
+                }
+
+                tw.Indent = 2;
+
+                for (int i = 0; i < valueLines.Count; i++)
+                {
+                    string valueLine = valueLines[i];
+                    tw.WriteLine(valueLine);
+                }
+            }
+
+            tw.Indent = 0;
+            tw.WriteLine('}');
+
+            doneList[this] = sw.ToString();
+
+            return doneList[this];
         }
 
         public override void SetProperty(string propertyName, ABSObject obj)
@@ -91,7 +154,8 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override bool TryConvertString(out string v)
         {
-            v = SafeToString();
+
+            v= m_InternalObject?.ToString() ?? $"{typeof(T).Name}(NULL)";
 
             return true;
         }
