@@ -173,9 +173,9 @@ namespace BadScript.Tools.CodeGenerator
 
                 return ( "","");
             }
-            if ( t.IsArray )
+            if (t.IsArray || t.IsEnum)
             {
-                return ( "", "" );
+                return ("", "");
             }
 
             if (t.GenericTypeArguments.Length != 0|| t.IsGenericType || t.IsGenericParameter || t.IsGenericTypeDefinition || t.IsConstructedGenericType )
