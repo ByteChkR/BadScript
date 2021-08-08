@@ -16,8 +16,9 @@ public static class WrapperGenerator
     public class #DBNAME# : IWrapperConstructorDataBase
     {
         private readonly Dictionary < Type, (IWrapperObjectCreator[], Func < object[], object >) > m_Creators;
+        public Type[] Types => m_Creators.Keys.ToArray();
 
-        public DB()
+        public #DBNAME#()
         {
             m_Creators = new Dictionary < Type, (IWrapperObjectCreator[], Func < object[], object >) >
             {
@@ -29,9 +30,9 @@ public static class WrapperGenerator
             return m_Creators.ContainsKey(typeof(T));
         }
 
-        public BSWrapperObject<T> Get<T>(object[] args)
+        public ABSObject Get(Type t, object[] args)
         {
-            return (BSWrapperObject<T>)m_Creators[typeof(T)].Item2(args);
+            return (ABSObject)m_Creators[t].Item2(args);
         }
     }
     
@@ -41,8 +42,8 @@ public static class WrapperGenerator
 
         public static string GenerateConstructorDataBase(string name, Dictionary < Type, WrapperTypeInfo > wrappers )
         {
+            
             string body = DB_TEMPLATE;
-            int switchTypeCount = -1;
 
             string GenerateObjectCreator( WrapperTypeInfo info )
             {

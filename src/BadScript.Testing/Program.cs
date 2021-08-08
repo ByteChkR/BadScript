@@ -52,8 +52,8 @@ namespace BadScript.Testing
         {
             string str = WrapperGenerator.Generate < Test >( null, null, "DB" );
             
-            //WrapperHelper.AddObjectDB(new DB());
-            BSWrapperObject <Test> t = WrapperHelper.Create< Test >(new object[0]);
+            WrapperHelper.AddObjectDB(new DB());
+            ABSObject t = WrapperHelper.Create< Test >(new object[0]);
 
             ConsoleApi cout = new ConsoleApi();
             BadScriptCoreApi core = new BadScriptCoreApi();
@@ -71,5 +71,57 @@ namespace BadScript.Testing
 
         #endregion
     }
+    public class BSWrapperObject_Test : BSWrapperObject<Test>
+
+    {
+        public BSWrapperObject_Test(Test obj) : base(obj)
+        {
+            m_Properties["MyValue"] = new BSReflectionReference(() => new BSObject((decimal)m_InternalObject.MyValue), x => m_InternalObject.MyValue = WrapperHelper.UnwrapObject<Single>(x));
+            m_Properties["MyBool"] = new BSReflectionReference(() => m_InternalObject.MyBool ? BSObject.One : BSObject.Zero, x => m_InternalObject.MyBool = WrapperHelper.UnwrapObject<Boolean>(x));
+            m_Properties["Sub"] = new BSReflectionReference(() => new BSWrapperObject_SubTest(m_InternalObject.Sub), x => m_InternalObject.Sub = WrapperHelper.UnwrapObject<SubTest>(x));
+            m_Properties["YEET"] = new BSReflectionReference(() => new BSWrapperObject_SubTest(m_InternalObject.RenamedSub), x => m_InternalObject.RenamedSub = WrapperHelper.UnwrapObject<SubTest>(x));
+
+        }
+    }
+
+    public class BSWrapperObject_SubTest : BSWrapperObject<SubTest>
+
+    {
+        public BSWrapperObject_SubTest(SubTest obj) : base(obj)
+        {
+            m_Properties["Name"] = new BSReflectionReference(() => new BSObject(m_InternalObject.Name), x => m_InternalObject.Name = WrapperHelper.UnwrapObject<String>(x));
+
+        }
+    }
+
+
+
+    public class DB : IWrapperConstructorDataBase
+    {
+        private readonly Dictionary<Type, (IWrapperObjectCreator[], Func<object[], object>)> m_Creators;
+        public Type[] Types => m_Creators.Keys.ToArray();
+
+        public DB()
+        {
+            m_Creators = new Dictionary<Type, (IWrapperObjectCreator[], Func<object[], object>)>
+            {
+{typeof(Test), (new IWrapperObjectCreator[] {new TestConstructor()
+}, a => new BSWrapperObject_Test((Test)m_Creators[typeof(Test)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
+{typeof(SubTest), (new IWrapperObjectCreator[] {}, a => new BSWrapperObject_SubTest((SubTest)m_Creators[typeof(SubTest)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
+
+            };
+        }
+        public bool HasType<T>()
+        {
+            return m_Creators.ContainsKey(typeof(T));
+        }
+
+        public ABSObject Get(Type t, object[] args)
+        {
+            return (ABSObject)m_Creators[t].Item2(args);
+        }
+    }
+
+
 
 }

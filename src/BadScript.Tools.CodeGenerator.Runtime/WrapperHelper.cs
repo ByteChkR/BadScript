@@ -4,60 +4,94 @@ using System.Linq;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
-using BadScript.Tools.CodeGenerator.Runtime.Attributes;
+using BadScript.Interfaces;
 
 namespace BadScript.Tools.CodeGenerator.Runtime
 {
 
     public static class WrapperHelper
     {
-        private static readonly List <IWrapperConstructorDataBase> s_DataBases =
-            new List<IWrapperConstructorDataBase>();
+        private static readonly List < IWrapperConstructorDataBase > s_DataBases =
+            new List < IWrapperConstructorDataBase >();
 
-        public static void AddObjectDB(IWrapperConstructorDataBase db)
+        #region Public
+
+        public static void AddObjectDB( IWrapperConstructorDataBase db )
         {
-            if (s_DataBases.Contains(db)) return;
+            if ( s_DataBases.Contains( db ) )
+            {
+                return;
+            }
 
-            s_DataBases.Add(db);
+            s_DataBases.Add( db );
         }
 
-        public static BSWrapperObject < T > Create < T >( object[] args )
+        public static ABSObject Create < T >( object[] args )
         {
             IWrapperConstructorDataBase db = s_DataBases.FirstOrDefault( x => x.HasType < T >() );
 
             if ( db != null )
-                return db.Get < T >(args);
+            {
+                return db.Get < T >( args );
+            }
 
             throw new Exception( "Type not Found" );
         }
 
-        public static T UnwrapObject<T>(ABSObject o)
+        public static ABSScriptInterface CreateInterface( this IWrapperConstructorDataBase db, string name )
         {
-            //TODO Convert Numbers and Strings
-            if(o is BSWrapperObject <T> ob )
-            {
-                return ob.GetInternalObject();
-            }
-            else if ( o is BSObject obj )
+            return new BSConstantScriptInterface(
+                name,
+                table =>
+                {
+                    foreach ( Type dbType in db.Types )
+                    {
+                        table.InsertElement(
+                            new BSObject( dbType.Name ),
+                            new
+                                BSFunction(
+                                    $"function {dbType.Name}(args)",
+                                    objects => db.Get(
+                                        dbType,
+                                        objects.Select( x => UnwrapObject < object >( x ) ).
+                                                ToArray() ),
+                                    0,
+                                    int.MaxValue ) );
+                    }
+                } );
+        }
+
+        public static object UnwrapObject( Type t, ABSObject o )
+        {
+            if ( o is IBSWrappedObject obj )
             {
                 object oi = obj.GetInternalObject();
 
-                if (typeof(T) == typeof(bool))
+                if ( t == typeof( bool ) )
                 {
-                    return (T)(object)o.ConvertBool();
+                    return o.ConvertBool();
                 }
-                else if (typeof(T) == typeof(decimal))
+                else if ( t == typeof( decimal ) )
                 {
-                    return (T)(object)o.ConvertDecimal();
+                    return o.ConvertDecimal();
                 }
-                else if (typeof(T) == typeof(string))
+                else if ( t == typeof( string ) )
                 {
-                    return (T)(object)o.ConvertString();
+                    return o.ConvertString();
                 }
-                return (T)Convert.ChangeType(oi, typeof(T));
+
+                return Convert.ChangeType( oi, t );
             }
+
             throw new BSRuntimeException( "Can not Unwrap Object" );
         }
+
+        public static T UnwrapObject < T >( ABSObject o )
+        {
+            return ( T ) UnwrapObject( typeof( T ), o );
+        }
+
+        #endregion
     }
 
 }

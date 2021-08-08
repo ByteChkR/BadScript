@@ -6,7 +6,11 @@ using BadScript.Common.Types.References;
 namespace BadScript.Common.Types.Implementations
 {
 
-    public class BSObject : ABSObject
+    public interface IBSWrappedObject
+    {
+        object GetInternalObject();
+    }
+    public class BSObject : ABSObject, IBSWrappedObject
     {
         public static readonly BSObject Null = new BSObject( null );
         public static readonly BSObject One = new BSObject( ( decimal ) 1 );

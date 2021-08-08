@@ -1,4 +1,4 @@
-﻿namespace BadScript.Tools.CodeGenerator.Runtime.Attributes
+﻿namespace BadScript.Tools.CodeGenerator.Runtime
 {
 
     public interface IWrapperObjectCreator

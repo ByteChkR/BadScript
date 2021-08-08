@@ -12,7 +12,8 @@ using BadScript.Common.Types.References;
 namespace BadScript.Tools.CodeGenerator.Runtime
 {
 
-    public class BSWrapperObject<T> : ABSObject
+
+    public class BSWrapperObject<T> : ABSObject, IBSWrappedObject
     {
 
         protected T m_InternalObject;
@@ -160,6 +161,11 @@ namespace BadScript.Tools.CodeGenerator.Runtime
             v= m_InternalObject?.ToString() ?? $"{typeof(T).Name}(NULL)";
 
             return true;
+        }
+
+        object IBSWrappedObject.GetInternalObject()
+        {
+            return GetInternalObject();
         }
     }
 }
