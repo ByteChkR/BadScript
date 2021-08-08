@@ -36,7 +36,9 @@ namespace BadScript.Tools.CodeGenerator.Runtime
         public override bool Equals(ABSObject other)
         {
             if (other is BSWrapperObject<T> o)
-                return ReferenceEquals(m_InternalObject, o.m_InternalObject);
+            {
+                return ReferenceEquals( m_InternalObject, o.m_InternalObject );
+            }
 
             return false;
         }
@@ -85,7 +87,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                                                            Where(x => !string.IsNullOrEmpty(x)).
                                                            ToList();
 
-                List<string> valueLines = bsRuntimeObject.Value.SafeToString(doneList).
+                List<string> valueLines = bsRuntimeObject.Value.ResolveReference().SafeToString(doneList).
                                                              Split(
                                                                  new[] { '\n' },
                                                                  StringSplitOptions.RemoveEmptyEntries
