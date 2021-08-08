@@ -126,7 +126,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
             doneList[this] = sw.ToString();
 
-            return doneList[this];
+            return sw.ToString();
         }
 
         public override void SetProperty(string propertyName, ABSObject obj)
