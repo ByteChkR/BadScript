@@ -8,6 +8,8 @@ namespace BadScript.Tools.CodeGenerator
 {
     public static class WrapperGenerator
     {
+        public static event Action < string > Log = Console.WriteLine;
+
         private static string GenerateObjectWrapper(
             string pName,
             Type pType,
@@ -89,9 +91,9 @@ namespace BadScript.Tools.CodeGenerator
             return usings;
         }
 
-        public static string Generate( Type t, string nameSpace = null )
+        public static string Generate( Type t, string nameSpace = null, Dictionary <Type, (string, string)> wrappers=null )
         {
-            Dictionary < Type, (string, string) > wrappers = new Dictionary < Type, (string, string) >();
+            wrappers ??= new Dictionary < Type, (string, string) >();
             wrappers[typeof(string)] = ("", "");
             wrappers[typeof(decimal)] = ("", "");
             wrappers[typeof(sbyte)] = ("", "");
@@ -150,6 +152,16 @@ namespace BadScript.Tools.CodeGenerator
 
         private static (string, string) Generate( Type t , Dictionary <Type, (string, string)> wrappers)
         {
+            ObsoleteAttribute obsT = t.GetCustomAttribute<ObsoleteAttribute>();
+            if (obsT != null && obsT.IsError)
+            {
+                Log(
+                    "Skipping Type: " +
+                    t.Name +
+                    $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
+
+                return ( "","");
+            }
             if ( t.IsArray )
             {
                 return ( "", "" );
@@ -157,18 +169,18 @@ namespace BadScript.Tools.CodeGenerator
 
             if (t.GenericTypeArguments.Length != 0|| t.IsGenericType || t.IsGenericParameter || t.IsGenericTypeDefinition || t.IsConstructedGenericType )
             {
-                Console.WriteLine($"Generic Type '{t.Name}' is not Supported.");
+                Log($"Generic Type '{t.Name}' is not Supported.");
                 return ("", "");
             }
             else if ( t.Name.EndsWith( "&" ) )
             {
-                Console.WriteLine( $"Unsafe Type '{t.Name}' is not supported" );
+                Log( $"Unsafe Type '{t.Name}' is not supported" );
 
                 return ( "", "" );
             }
             else
             {
-                Console.WriteLine("Generating Type Wrapper: " + t.Name);
+                Log("Generating Type Wrapper: " + t.Name);
             }
 
 
@@ -185,6 +197,15 @@ namespace BadScript.Tools.CodeGenerator
             List < string > invalidFuncs = new List < string >();
             foreach ( PropertyInfo propertyInfo in pis )
             {
+                ObsoleteAttribute obs = propertyInfo.GetCustomAttribute<ObsoleteAttribute>();
+                if (obs != null && obs.IsError)
+                {
+                    Log(
+                        "Skipping Property: " +
+                        propertyInfo.Name +
+                        $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
+                    continue;
+                }
                 Type propType = propertyInfo.PropertyType;
 
                 bool isValid = true;
@@ -207,6 +228,15 @@ namespace BadScript.Tools.CodeGenerator
 
             foreach ( FieldInfo fieldInfo in fis )
             {
+                ObsoleteAttribute obs = fieldInfo.GetCustomAttribute<ObsoleteAttribute>();
+                if (obs != null && obs.IsError)
+                {
+                    Log(
+                        "Skipping Field: " +
+                        fieldInfo.Name +
+                        $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
+                    continue;
+                }
                 Type fieldType = fieldInfo.FieldType;
 
                 bool isValid = true;
@@ -227,6 +257,15 @@ namespace BadScript.Tools.CodeGenerator
 
             foreach ( MethodInfo methodInfo in mis )
             {
+                ObsoleteAttribute obs = methodInfo.GetCustomAttribute < ObsoleteAttribute >();
+                if ( obs!=null && obs.IsError )
+                {
+                    Log(
+                        "Skipping Method: " +
+                        methodInfo.Name +
+                        $" because it is marked with {nameof( ObsoleteAttribute )} and does not compile(IsError is true)" );
+                    continue;
+                }
                 if ( invalidFuncs.Contains( methodInfo.Name ) )
                     continue;
                 Type retType = methodInfo.ReturnType;
@@ -283,7 +322,7 @@ namespace BadScript.Tools.CodeGenerator
             return (retB.ToString(), className);
         }
 
-        public static string Generate < T >() => Generate( typeof( T ) );
+        public static string Generate < T >(string nameSpace = null, Dictionary<Type, (string, string)> wrappers = null) => Generate( typeof( T ), nameSpace, wrappers);
     }
 
 }
