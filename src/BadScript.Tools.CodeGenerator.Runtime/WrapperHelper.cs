@@ -1,4 +1,5 @@
-﻿using BadScript.Common.Exceptions;
+﻿using System;
+using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -15,7 +16,9 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                 return ob.GetInternalObject();
             }
             else if ( o is BSObject obj )
-                return (T)obj.GetInternalObject();
+            {
+                return (T)Convert.ChangeType(obj.GetInternalObject(), typeof(T));
+            }
             throw new BSRuntimeException( "Can not Unwrap Object" );
         }
     }
