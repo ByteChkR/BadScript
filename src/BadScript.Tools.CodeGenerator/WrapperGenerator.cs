@@ -56,7 +56,7 @@ namespace BadScript.Tools.CodeGenerator
                 retCreator = $"{{\n{invocation};\nreturn new BSObject(null);\n}}";
             }
 
-            string str = $"m_Properties.Add(\"{mi.Name}\", new BSFunctionReference(new BSFunction(\"function {mi.Name}({dbgSig})\", a => {retCreator}, {mi.GetParameters().Length})));";
+            string str = $"m_Properties[\"{mi.Name}\"] = new BSFunctionReference(new BSFunction(\"function {mi.Name}({dbgSig})\", a => {retCreator}, {mi.GetParameters().Length}));";
 
             return str;
         }
@@ -69,7 +69,7 @@ namespace BadScript.Tools.CodeGenerator
             {
                 setter = $"x=> m_InternalObject.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.Name}>(x)";
             }
-            string str = $"m_Properties.Add(\"{fi.Name}\", new BSReflectionReference(() => {GenerateObjectWrapper($"m_InternalObject.{fi.Name}", fi.FieldType, wrapper)}, {setter}));";
+            string str = $"m_Properties[\"{fi.Name}\"] = new BSReflectionReference(() => {GenerateObjectWrapper($"m_InternalObject.{fi.Name}", fi.FieldType, wrapper)}, {setter});";
 
             return str;
         }
@@ -80,7 +80,7 @@ namespace BadScript.Tools.CodeGenerator
 
             if ( pi.CanWrite && pi.SetMethod.IsPublic )
                 setter = $"x=> m_InternalObject.{pi.Name} = WrapperHelper.UnwrapObject<{pi.PropertyType.Name}>(x)";
-            string str = $"m_Properties.Add(\"{pi.Name}\", new BSReflectionReference(() => {GenerateObjectWrapper($"m_InternalObject.{pi.Name}", pi.PropertyType, wrapper)}, {setter}));";
+            string str = $"m_Properties[\"{pi.Name}\"] = new BSReflectionReference(() => {GenerateObjectWrapper($"m_InternalObject.{pi.Name}", pi.PropertyType, wrapper)}, {setter});";
 
             return str;
         }
