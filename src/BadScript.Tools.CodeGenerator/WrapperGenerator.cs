@@ -172,9 +172,9 @@ namespace BadScript.Tools.CodeGenerator
                 Log($"Generic Type '{t.Name}' is not Supported.");
                 return ("", "");
             }
-            else if ( t.Name.EndsWith( "&" ) )
+            else if ( t.Name.Contains( "+" ) || t.Name.Contains("&"))
             {
-                Log( $"Unsafe Type '{t.Name}' is not supported" );
+                Log($"Detected unsupported character in type '{t.Name}'.");
 
                 return ( "", "" );
             }
