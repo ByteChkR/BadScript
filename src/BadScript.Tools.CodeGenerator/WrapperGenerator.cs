@@ -218,7 +218,7 @@ public static class WrapperGenerator
             string setter = "null";
             string pName = name ?? fi.Name;
 
-            if ((fi.Attributes & FieldAttributes.InitOnly) == 0)
+            if (!fi.IsLiteral && !fi.IsInitOnly)
             {
                 setter = $"x=> m_InternalObject.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.Name}>(x)";
             }
@@ -232,7 +232,7 @@ public static class WrapperGenerator
             string setter = "null";
             string pName = name ?? fi.Name;
 
-            if ((fi.Attributes & FieldAttributes.InitOnly) == 0)
+            if (!fi.IsLiteral && !fi.IsInitOnly)
             {
                 setter = $"x=> {fi.DeclaringType.Name}.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.Name}>(x)";
             }
@@ -322,9 +322,6 @@ public static class WrapperGenerator
 
                 return usings + ns + "\n{\n" + src + "\n}\n";
             }
-
-
-
 
         }
 
@@ -579,6 +576,12 @@ public static class WrapperGenerator
                         $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
                     continue;
                 }
+                if(methodInfo.GetParameters().Any(x=> x.IsOut))
+                {
+                    Log( $"Skipping Method '{methodInfo.Name}' because it has an out Parameter" );
+                    continue;
+                }
+
                 if (invalidFuncs.Contains(methodInfo.Name))
                     continue;
                 Type retType = methodInfo.ReturnType;

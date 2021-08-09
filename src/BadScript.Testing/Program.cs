@@ -38,8 +38,16 @@ namespace BadScript.Testing
 
         public static string MyStaticProperty { get; set; } = nameof(MyStaticProperty);
         public static string MyStaticField = nameof(MyStaticField);
+        public const string MyConstField = "HELLO";
 
         public static string MyStaticFunction( string a ) => a + a;
+
+        public static string MyOutFunction( out string a )
+        {
+            a = "";
+
+            return a;
+        }
 
         public Test()
         {
@@ -56,27 +64,29 @@ namespace BadScript.Testing
         private static void Main( string[] args )
         {
             string str = WrapperGenerator.Generate < Test >( null, null, "DB" , "SDB");
-            DB db = new DB();
-            SDB sdb = new SDB();
-            ABSObject t = db.Get<Test>(new object[0]);
+            //DB db = new DB();
+            //SDB sdb = new SDB();
+            //ABSObject t = db.Get<Test>(new object[0]);
 
             ConsoleApi cout = new ConsoleApi();
             BadScriptCoreApi core = new BadScriptCoreApi();
 
-            BSEngine e = new BSEngine(
-                BSParserSettings.Default,
-                new Dictionary < string, ABSObject >(),
-                new List < ABSScriptInterface > { cout, core, sdb.CreateInterface("test"), db.CreateInterface("test") } );
+            //BSEngine e = new BSEngine(
+            //    BSParserSettings.Default,
+            //    new Dictionary<string, ABSObject>(),
+            //    new List<ABSScriptInterface> { cout, core, sdb.CreateInterface("test"), db.CreateInterface("test") });
 
-            e.LoadInterface( "console" );
-            e.LoadInterface("core");
-            ABSTable t1= e.LoadInterface("test");
+            //e.LoadInterface("console");
+            //e.LoadInterface("core");
+            //ABSTable t1 = e.LoadInterface("test");
 
-            e.LoadString( false, "args[0].MyBool = 1\nconsole.print(core.debug(args[0].MyBool))\nconsole.print(core.debug(args[0]))\nconsole.print(core.debug(test))\n", new ABSObject[] { t } );
+            //e.LoadString(false, "args[0].MyBool = 1\nconsole.print(core.debug(args[0].MyBool))\nconsole.print(core.debug(args[0]))\nconsole.print(core.debug(test))\n", new ABSObject[] { t });
+
         }
 
         #endregion
     }
+
     public class BSWrapperObject_Test : BSWrapperObject<Test>
 
     {
@@ -98,6 +108,7 @@ namespace BadScript.Testing
         {
             m_StaticProperties["MyStaticProperty"] = new BSReflectionReference(() => new BSObject(Test.MyStaticProperty), x => Test.MyStaticProperty = WrapperHelper.UnwrapObject<String>(x));
             m_StaticProperties["MyStaticField"] = new BSReflectionReference(() => new BSObject(Test.MyStaticField), x => Test.MyStaticField = WrapperHelper.UnwrapObject<String>(x));
+            m_StaticProperties["MyConstField"] = new BSReflectionReference(() => new BSObject(Test.MyConstField), null);
             m_StaticProperties["MyStaticFunction"] = new BSFunctionReference(new BSFunction("function MyStaticFunction(a)", a => new BSObject(Test.MyStaticFunction(WrapperHelper.UnwrapObject<String>(a[0]))), 1));
 
         }
