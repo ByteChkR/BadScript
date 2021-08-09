@@ -91,7 +91,6 @@ namespace BadScript.Testing
 
         #endregion
     }
-
     public class BSStaticWrapperObject_BadScript_Testing_StaticTest : BSStaticWrapperObject
 
     {
@@ -154,6 +153,7 @@ namespace BadScript.Testing
     {
         public BSWrapperObject_System_Object(System.Object obj) : base(obj)
         {
+            m_Properties["Equals"] = new BSFunctionReference(new BSFunction("function Equals(obj)", a => m_InternalObject.Equals(WrapperHelper.UnwrapObject<System.Object>(a[0])) ? BSObject.One : BSObject.Zero, 1));
 
         }
     }
@@ -163,6 +163,8 @@ namespace BadScript.Testing
     {
         public BSStaticWrapperObject_System_Object() : base(typeof(System.Object))
         {
+            m_StaticProperties["Equals"] = new BSFunctionReference(new BSFunction("function Equals(objA, objB)", a => System.Object.Equals(WrapperHelper.UnwrapObject<System.Object>(a[0]), WrapperHelper.UnwrapObject<System.Object>(a[1])) ? BSObject.One : BSObject.Zero, 2));
+            m_StaticProperties["ReferenceEquals"] = new BSFunctionReference(new BSFunction("function ReferenceEquals(objA, objB)", a => System.Object.ReferenceEquals(WrapperHelper.UnwrapObject<System.Object>(a[0]), WrapperHelper.UnwrapObject<System.Object>(a[1])) ? BSObject.One : BSObject.Zero, 2));
 
         }
     }

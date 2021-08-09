@@ -395,7 +395,7 @@ public static class WrapperGenerator
             string baseClassName = $"BSWrapperObject<{t.FullName}>";
             string sclassName = $"BSStaticWrapperObject_{MakeValidType(t.FullName)}";
             string sbaseClassName = $"BSStaticWrapperObject";
-            wrappers.Add(t, new WrapperTypeInfo("", "", "", className));
+            wrappers.Add(t, new WrapperTypeInfo("", "", className, sclassName));
 
 
             StringBuilder sb = new StringBuilder();
