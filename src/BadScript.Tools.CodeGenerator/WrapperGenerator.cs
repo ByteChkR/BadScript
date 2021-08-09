@@ -602,6 +602,17 @@ public static class WrapperGenerator
                     Log( $"Skipping Method '{methodInfo.Name}' because it has an out Parameter" );
                     continue;
                 }
+                if (methodInfo.GetParameters().Select(x => x.ParameterType).
+                               All(
+                                   t => t.GenericTypeArguments.Length != 0 ||
+                                        t.IsGenericType ||
+                                        t.IsGenericParameter ||
+                                        t.IsGenericTypeDefinition ||
+                                        t.IsConstructedGenericType))
+                {
+                    Log("Generic Type Not Supported");
+                    continue;
+                }
 
                 if (invalidFuncs.Contains(methodInfo.Name))
                     continue;
@@ -639,11 +650,11 @@ public static class WrapperGenerator
                     {
                         isValidFuncParam = wrappers[pType].GeneratedClass != "";
                     }
-                    if (!isValidFuncParam) continue;
+                    if (!isValidFuncParam) throw new Exception("Invalid Function Parameter Type: " + pType);
 
 
-                    sb.AppendLine(GenerateMethod(methodInfo, wrappers, nameAttrib?.Name));
                 }
+                sb.AppendLine(GenerateMethod(methodInfo, wrappers, nameAttrib?.Name));
             }
 
             foreach (MethodInfo methodInfo in smis)
@@ -677,6 +688,18 @@ public static class WrapperGenerator
                         "Skipping Static Operator Overrides: " +
                         methodInfo.Name +
                         $" as it is currently not supported");
+                    continue;
+                }
+
+                if ( methodInfo.GetParameters().Select(x=>x.ParameterType).
+                                All(
+                                    t => t.GenericTypeArguments.Length != 0 ||
+                                         t.IsGenericType ||
+                                         t.IsGenericParameter ||
+                                         t.IsGenericTypeDefinition ||
+                                         t.IsConstructedGenericType ) )
+                {
+                    Log( "Generic Type Not Supported" );
                     continue;
                 }
                 if (invalidFuncs.Contains(methodInfo.Name))
@@ -713,11 +736,11 @@ public static class WrapperGenerator
                     {
                         isValidFuncParam = wrappers[pType].GeneratedClass != "";
                     }
-                    if (!isValidFuncParam) continue;
+                    if (!isValidFuncParam) throw new Exception("Invalid Static Function Parameter Type: " + pType);
 
 
-                    ssb.AppendLine(GenerateStaticMethod(methodInfo, wrappers, nameAttrib?.Name));
                 }
+                ssb.AppendLine(GenerateStaticMethod(methodInfo, wrappers, nameAttrib?.Name));
             }
 
             string classHeader = $"public class {className} : {baseClassName}\n";

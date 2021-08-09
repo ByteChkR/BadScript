@@ -19,6 +19,7 @@ namespace BadScript.Testing
     {
         public static Test TEST;
     }
+
     public class SubTest
     {
         public string Name;
