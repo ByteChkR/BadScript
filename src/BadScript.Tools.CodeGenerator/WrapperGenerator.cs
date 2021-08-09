@@ -313,7 +313,9 @@ public static class WrapperGenerator
             wrappers[typeof(bool)] = new WrapperTypeInfo("", "", "@{0} ? BSObject.One : BSObject.Zero", "");
             wrappers[typeof(void)] = new WrapperTypeInfo("", "", "", "");
             wrappers[typeof(Type)] = new WrapperTypeInfo("", "", "", "");
-            (string src, string name) = Generate(t, wrappers);
+            (string tsrc, string name) = Generate(t, wrappers);
+
+            string src = GenerateSource( wrappers );
 
             string usings = MakeUsings(wrappers.Keys.ToList()) +
                             "\nusing System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing BadScript.Tools.CodeGenerator.Runtime;\r\nusing BadScript.Common.Types;\r\nusing BadScript.Common.Types.Implementations;\r\nusing BadScript.Utils.Reflection;\n\n";
@@ -740,9 +742,20 @@ public static class WrapperGenerator
                 retB.AppendLine( keyValuePair.Value.StaticSource );
             }
 
-            return (retB.ToString(), className);
+            return (ret, className);
         }
 
+        public static string GenerateSource( Dictionary < Type, WrapperTypeInfo > wrappers )
+        {
+            StringBuilder retB = new StringBuilder();
+            foreach (KeyValuePair<Type, WrapperTypeInfo> keyValuePair in wrappers)
+            {
+                retB.AppendLine(keyValuePair.Value.Source);
+                retB.AppendLine(keyValuePair.Value.StaticSource);
+            }
+
+            return retB.ToString();
+        }
         public static string Generate<T>(string nameSpace = null, Dictionary<Type, WrapperTypeInfo> wrappers = null, string dbName = null, string staticDBName = null) => Generate(typeof(T), nameSpace, wrappers, dbName, staticDBName);
     }
 
