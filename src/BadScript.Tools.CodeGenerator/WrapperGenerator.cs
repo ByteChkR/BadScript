@@ -79,7 +79,7 @@ public static class WrapperGenerator
             string GenerateDataEntry(Type t, WrapperTypeInfo typeInfo)
             {
                 return
-                    $"{{typeof({t.FullName}), (new {nameof(IWrapperObjectCreator)}[] {{{GenerateObjectCreator(typeInfo)}}}, a => new {typeInfo.GeneratedClass}(({t.Name})m_Creators[typeof({t.Name})].Item1.First(x=>x.ArgCount == a.Length).Create(a)))}}";
+                    $"{{typeof({t.FullName}), (new {nameof(IWrapperObjectCreator)}[] {{{GenerateObjectCreator(typeInfo)}}}, a => new {typeInfo.GeneratedClass}(({t.FullName})m_Creators[typeof({t.FullName})].Item1.First(x=>x.ArgCount == a.Length).Create(a)))}}";
             }
 
 
@@ -222,7 +222,7 @@ public static class WrapperGenerator
 
             if (!fi.IsLiteral && !fi.IsInitOnly)
             {
-                setter = $"x=> m_InternalObject.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.Name}>(x)";
+                setter = $"x=> m_InternalObject.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.FullName}>(x)";
             }
 
             Log( $"Generating Field: {fi.DeclaringType.FullName}.{fi.Name}({pName})" );
