@@ -175,6 +175,7 @@ public static class WrapperGenerator
                 retCreator = $"{{\n{invocation};\nreturn new BSObject(null);\n}}";
             }
 
+            Log($"Generating Method: {mi.DeclaringType.Name}.{mi.Name}({pName})");
             string str = $"m_Properties[\"{pName}\"] = new BSFunctionReference(new BSFunction(\"function {pName}({dbgSig})\", a => {retCreator}, {mi.GetParameters().Length}));";
 
             return str;
@@ -207,6 +208,7 @@ public static class WrapperGenerator
             {
                 retCreator = $"{{\n{invocation};\nreturn new BSObject(null);\n}}";
             }
+            Log($"Generating Static Method: {mi.DeclaringType.Name}.{mi.Name}({pName})");
 
             string str = $"m_StaticProperties[\"{pName}\"] = new BSFunctionReference(new BSFunction(\"function {pName}({dbgSig})\", a => {retCreator}, {mi.GetParameters().Length}));";
 
@@ -222,6 +224,9 @@ public static class WrapperGenerator
             {
                 setter = $"x=> m_InternalObject.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.Name}>(x)";
             }
+
+            Log( $"Generating Field: {fi.DeclaringType.Name}.{fi.Name}({pName})" );
+
             string str = $"m_Properties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[fi.FieldType].GetWrapperCode($"m_InternalObject.{fi.Name}")}, {setter});";
 
             return str;
@@ -236,6 +241,8 @@ public static class WrapperGenerator
             {
                 setter = $"x=> {fi.DeclaringType.Name}.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.Name}>(x)";
             }
+
+            Log($"Generating Static Field: {fi.DeclaringType.Name}.{fi.Name}({pName})");
             string str = $"m_StaticProperties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[fi.FieldType].GetWrapperCode($"{fi.DeclaringType.Name}.{fi.Name}")}, {setter});";
 
             return str;
@@ -247,6 +254,8 @@ public static class WrapperGenerator
             string pName = name ?? pi.Name;
             if (pi.CanWrite && pi.SetMethod.IsPublic)
                 setter = $"x=> m_InternalObject.{pi.Name} = WrapperHelper.UnwrapObject<{pi.PropertyType.Name}>(x)";
+
+            Log($"Generating Property: {pi.DeclaringType.Name}.{pi.Name}({pName})");
             string str = $"m_Properties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[pi.PropertyType].GetWrapperCode($"m_InternalObject.{pi.Name}")}, {setter});";
 
             return str;
@@ -261,6 +270,8 @@ public static class WrapperGenerator
             string pName = name ?? pi.Name;
             if (pi.CanWrite && pi.SetMethod.IsPublic)
                 setter = $"x=> {pi.DeclaringType.Name}.{pi.Name} = WrapperHelper.UnwrapObject<{pi.PropertyType.Name}>(x)";
+            Log($"Generating Static Property: {pi.DeclaringType.Name}.{pi.Name}({pName})");
+
             string str = $"m_StaticProperties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[pi.PropertyType].GetWrapperCode($"{pi.DeclaringType.Name}.{pi.Name}")}, {setter});";
 
             return str;
@@ -349,6 +360,7 @@ public static class WrapperGenerator
             }
             if (t.IsArray || t.IsEnum)
             {
+                Log($"Arrays and Enums are currently not Supported");
                 return ("", "");
             }
 
@@ -640,6 +652,14 @@ public static class WrapperGenerator
                         "Skipping Static Method: " +
                         methodInfo.Name +
                         $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
+                    continue;
+                }
+                if (methodInfo.Name.StartsWith("op_"))
+                {
+                    Log(
+                        "Skipping Static Operator Overrides: " +
+                        methodInfo.Name +
+                        $" as it is currently not supported");
                     continue;
                 }
                 if (invalidFuncs.Contains(methodInfo.Name))
