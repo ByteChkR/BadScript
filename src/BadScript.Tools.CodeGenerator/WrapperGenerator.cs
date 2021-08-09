@@ -597,7 +597,7 @@ public static class WrapperGenerator
                 if (string.IsNullOrEmpty(retType.FullName)) continue;
 
 
-                if (!IsValidType(retType, wrappers) && methodInfo.GetParameters().All(x=>IsValidType(x.ParameterType, wrappers))) continue;
+                if (!IsValidType(retType, wrappers) || methodInfo.GetParameters().Any(x=>!IsValidType(x.ParameterType, wrappers))) continue;
 
                 
                 sb.AppendLine(GenerateMethod(methodInfo, wrappers, nameAttrib?.Name));
@@ -653,10 +653,10 @@ public static class WrapperGenerator
                 Type retType = methodInfo.ReturnType;
                 if(string.IsNullOrEmpty(retType.FullName))continue;
 
-                if (!IsValidType(retType, wrappers) && methodInfo.GetParameters().All(x => IsValidType(x.ParameterType, wrappers))) continue;
+                if (!IsValidType(retType, wrappers) || methodInfo.GetParameters().Any(x => !IsValidType(x.ParameterType, wrappers))) continue;
 
 
-                
+
                 ssb.AppendLine(GenerateStaticMethod(methodInfo, wrappers, nameAttrib?.Name));
             }
 
