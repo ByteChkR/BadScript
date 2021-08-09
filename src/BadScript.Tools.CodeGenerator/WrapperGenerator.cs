@@ -278,6 +278,19 @@ public static class WrapperGenerator
             return str;
         }
 
+        private static bool IsValidType( Type t, Dictionary < Type, WrapperTypeInfo > wrappers )
+        {
+            if (!wrappers.ContainsKey(t))
+            {
+                (string src, string name) = Generate(t, wrappers);
+                return name != "";
+            }
+            else
+            {
+                return wrappers[t].GeneratedClass != "";
+            }
+        }
+
         private static string MakeUsings(List<Type> ts)
         {
             string usings = "";
@@ -433,17 +446,7 @@ public static class WrapperGenerator
                 Type propType = propertyInfo.PropertyType;
                 if(string.IsNullOrEmpty( propType.FullName ))continue;
                 
-                bool isValid = true;
-                if (!wrappers.ContainsKey(propType))
-                {
-                    (string src, string name) = Generate(propType, wrappers);
-                    isValid = name != "";
-                }
-                else
-                {
-                    isValid = wrappers[propType].GeneratedClass != "";
-                }
-                if (!isValid) continue;
+                if (!IsValidType(propType, wrappers)) continue;
 
 
                 invalidStaticFuncs.Add($"set_{propertyInfo.Name}");
@@ -477,17 +480,8 @@ public static class WrapperGenerator
                 Type propType = propertyInfo.PropertyType;
 
                 if (string.IsNullOrEmpty(propType.FullName)) continue;
-                bool isValid = true;
-                if (!wrappers.ContainsKey(propType))
-                {
-                    (string src, string name) = Generate(propType, wrappers);
-                    isValid = name != "";
-                }
-                else
-                {
-                    isValid = wrappers[propType].GeneratedClass != "";
-                }
-                if (!isValid) continue;
+
+                if (!IsValidType(propType, wrappers)) continue;
 
 
                 invalidFuncs.Add($"set_{propertyInfo.Name}");
@@ -521,17 +515,8 @@ public static class WrapperGenerator
                 Type fieldType = fieldInfo.FieldType;
                 if (string.IsNullOrEmpty(fieldType.FullName)) continue;
 
-                bool isValid = true;
-                if (!wrappers.ContainsKey(fieldType))
-                {
-                    (string src, string name) = Generate(fieldType, wrappers);
-                    isValid = name != "";
-                }
-                else
-                {
-                    isValid = wrappers[fieldType].GeneratedClass != "";
-                }
-                if (!isValid) continue;
+
+                if (!IsValidType(fieldType, wrappers)) continue;
 
 
                 sb.AppendLine(GenerateField(fieldInfo, wrappers, nameAttrib?.Name));
@@ -561,17 +546,8 @@ public static class WrapperGenerator
 
                 if (string.IsNullOrEmpty(fieldType.FullName)) continue;
 
-                bool isValid = true;
-                if (!wrappers.ContainsKey(fieldType))
-                {
-                    (string src, string name) = Generate(fieldType, wrappers);
-                    isValid = name != "";
-                }
-                else
-                {
-                    isValid = wrappers[fieldType].GeneratedClass != "";
-                }
-                if (!isValid) continue;
+
+                if (!IsValidType(fieldType, wrappers)) continue;
 
 
                 ssb.AppendLine(GenerateStaticField(fieldInfo, wrappers, nameAttrib?.Name));
@@ -620,44 +596,10 @@ public static class WrapperGenerator
 
                 if (string.IsNullOrEmpty(retType.FullName)) continue;
 
-                bool isValid = true;
-                if (!wrappers.ContainsKey(retType))
-                {
-                    (string src, string name) = Generate(retType, wrappers);
-                    isValid = name != "";
-                }
-                else
-                {
-                    isValid = wrappers[retType].GeneratedClass != "";
-                }
-                if (!isValid) continue;
 
+                if (!IsValidType(retType, wrappers) && methodInfo.GetParameters().All(x=>IsValidType(x.ParameterType, wrappers))) continue;
 
-                ParameterInfo[] paramis = methodInfo.GetParameters();
-
-                foreach (ParameterInfo parameterInfo in paramis)
-                {
-                    Type pType = parameterInfo.ParameterType;
-
-
-                    bool isValidFuncParam = true;
-                    string dd = "";
-                    if (!wrappers.ContainsKey(pType))
-                    {
-                        (string src, string name) = Generate(pType, wrappers);
-                        isValidFuncParam = name != "";
-                        dd = src;
-                    }
-                    else
-                    {
-                        isValidFuncParam = wrappers[pType].GeneratedClass != "";
-                        dd = wrappers[pType].Source;
-                    }
-                    if (!isValidFuncParam) 
-                        throw new Exception($"Invalid Function Parameter Type: {pType}({dd})");
-
-
-                }
+                
                 sb.AppendLine(GenerateMethod(methodInfo, wrappers, nameAttrib?.Name));
             }
 
@@ -711,44 +653,10 @@ public static class WrapperGenerator
                 Type retType = methodInfo.ReturnType;
                 if(string.IsNullOrEmpty(retType.FullName))continue;
 
-                bool isValid = true;
-                if (!wrappers.ContainsKey(retType))
-                {
-                    (string src, string name) = Generate(retType, wrappers);
-                    isValid = src != "";
-                }
-                else
-                {
-                    isValid = wrappers[retType].GeneratedClass != "";
-                }
-                if (!isValid) continue;
+                if (!IsValidType(retType, wrappers) && methodInfo.GetParameters().All(x => IsValidType(x.ParameterType, wrappers))) continue;
 
 
-                ParameterInfo[] paramis = methodInfo.GetParameters();
-
-                foreach (ParameterInfo parameterInfo in paramis)
-                {
-                    Type pType = parameterInfo.ParameterType;
-
-                    bool isValidFuncParam = true;
-                    string dd = "";
-                    if (!wrappers.ContainsKey(pType))
-                    {
-                        (string src, string name) = Generate(pType, wrappers);
-                        isValidFuncParam = name != "";
-                        dd = src;
-                    }
-                    else
-                    {
-                        isValidFuncParam = wrappers[pType].GeneratedClass != "";
-                        dd = wrappers[pType].Source;
-                    }
-
-                    if (!isValidFuncParam)
-                        throw new Exception($"Invalid Function Parameter Type: {pType}({dd})");
-
-
-                }
+                
                 ssb.AppendLine(GenerateStaticMethod(methodInfo, wrappers, nameAttrib?.Name));
             }
 
