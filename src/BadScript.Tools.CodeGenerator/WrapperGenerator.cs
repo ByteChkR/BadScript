@@ -79,7 +79,7 @@ public static class WrapperGenerator
             string GenerateDataEntry(Type t, WrapperTypeInfo typeInfo)
             {
                 return
-                    $"{{typeof({t.Name}), (new {nameof(IWrapperObjectCreator)}[] {{{GenerateObjectCreator(typeInfo)}}}, a => new {typeInfo.GeneratedClass}(({t.Name})m_Creators[typeof({t.Name})].Item1.First(x=>x.ArgCount == a.Length).Create(a)))}}";
+                    $"{{typeof({t.FullName}), (new {nameof(IWrapperObjectCreator)}[] {{{GenerateObjectCreator(typeInfo)}}}, a => new {typeInfo.GeneratedClass}(({t.Name})m_Creators[typeof({t.Name})].Item1.First(x=>x.ArgCount == a.Length).Create(a)))}}";
             }
 
 
@@ -120,7 +120,7 @@ public static class WrapperGenerator
                 }
 
                 entries +=
-                    $"StaticTypes[typeof({wrapperTypeInfo.Key.Name})] = new {wrapperTypeInfo.Value.StaticGeneratedClass}()";
+                    $"StaticTypes[typeof({wrapperTypeInfo.Key.FullName})] = new {wrapperTypeInfo.Value.StaticGeneratedClass}()";
 
                 entries += ";";
 
@@ -165,7 +165,7 @@ public static class WrapperGenerator
                 }
 
                 dbgSig += $"{parameterInfo.Name ?? $"_{i}"}";
-                sig += $"WrapperHelper.UnwrapObject<{parameterInfo.ParameterType.Name}>(a[{i}])";
+                sig += $"WrapperHelper.UnwrapObject<{parameterInfo.ParameterType.FullName}>(a[{i}])";
             }
 
             string invocation = $"m_InternalObject.{mi.Name}({sig})";
@@ -175,7 +175,7 @@ public static class WrapperGenerator
                 retCreator = $"{{\n{invocation};\nreturn new BSObject(null);\n}}";
             }
 
-            Log($"Generating Method: {mi.DeclaringType.Name}.{mi.Name}({pName})");
+            Log($"Generating Method: {mi.DeclaringType.FullName}.{mi.Name}({pName})");
             string str = $"m_Properties[\"{pName}\"] = new BSFunctionReference(new BSFunction(\"function {pName}({dbgSig})\", a => {retCreator}, {mi.GetParameters().Length}));";
 
             return str;
@@ -199,16 +199,16 @@ public static class WrapperGenerator
                 }
 
                 dbgSig += $"{parameterInfo.Name ?? $"_{i}"}";
-                sig += $"WrapperHelper.UnwrapObject<{parameterInfo.ParameterType.Name}>(a[{i}])";
+                sig += $"WrapperHelper.UnwrapObject<{parameterInfo.ParameterType.FullName}>(a[{i}])";
             }
 
-            string invocation = $"{mi.DeclaringType.Name}.{mi.Name}({sig})";
+            string invocation = $"{mi.DeclaringType.FullName}.{mi.Name}({sig})";
             string retCreator = wrapper[mi.ReturnType].GetWrapperCode(invocation);
             if (mi.ReturnType == typeof(void))
             {
                 retCreator = $"{{\n{invocation};\nreturn new BSObject(null);\n}}";
             }
-            Log($"Generating Static Method: {mi.DeclaringType.Name}.{mi.Name}({pName})");
+            Log($"Generating Static Method: {mi.DeclaringType.FullName}.{mi.Name}({pName})");
 
             string str = $"m_StaticProperties[\"{pName}\"] = new BSFunctionReference(new BSFunction(\"function {pName}({dbgSig})\", a => {retCreator}, {mi.GetParameters().Length}));";
 
@@ -225,7 +225,7 @@ public static class WrapperGenerator
                 setter = $"x=> m_InternalObject.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.Name}>(x)";
             }
 
-            Log( $"Generating Field: {fi.DeclaringType.Name}.{fi.Name}({pName})" );
+            Log( $"Generating Field: {fi.DeclaringType.FullName}.{fi.Name}({pName})" );
 
             string str = $"m_Properties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[fi.FieldType].GetWrapperCode($"m_InternalObject.{fi.Name}")}, {setter});";
 
@@ -239,11 +239,11 @@ public static class WrapperGenerator
 
             if (!fi.IsLiteral && !fi.IsInitOnly)
             {
-                setter = $"x=> {fi.DeclaringType.Name}.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.Name}>(x)";
+                setter = $"x=> {fi.DeclaringType.FullName}.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.FullName}>(x)";
             }
 
-            Log($"Generating Static Field: {fi.DeclaringType.Name}.{fi.Name}({pName})");
-            string str = $"m_StaticProperties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[fi.FieldType].GetWrapperCode($"{fi.DeclaringType.Name}.{fi.Name}")}, {setter});";
+            Log($"Generating Static Field: {fi.DeclaringType.FullName}.{fi.Name}({pName})");
+            string str = $"m_StaticProperties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[fi.FieldType].GetWrapperCode($"{fi.DeclaringType.FullName}.{fi.Name}")}, {setter});";
 
             return str;
         }
@@ -253,9 +253,9 @@ public static class WrapperGenerator
             string setter = "null";
             string pName = name ?? pi.Name;
             if (pi.CanWrite && pi.SetMethod.IsPublic)
-                setter = $"x=> m_InternalObject.{pi.Name} = WrapperHelper.UnwrapObject<{pi.PropertyType.Name}>(x)";
+                setter = $"x=> m_InternalObject.{pi.Name} = WrapperHelper.UnwrapObject<{pi.PropertyType.FullName}>(x)";
 
-            Log($"Generating Property: {pi.DeclaringType.Name}.{pi.Name}({pName})");
+            Log($"Generating Property: {pi.DeclaringType.FullName}.{pi.Name}({pName})");
             string str = $"m_Properties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[pi.PropertyType].GetWrapperCode($"m_InternalObject.{pi.Name}")}, {setter});";
 
             return str;
@@ -269,10 +269,10 @@ public static class WrapperGenerator
             string setter = "null";
             string pName = name ?? pi.Name;
             if (pi.CanWrite && pi.SetMethod.IsPublic)
-                setter = $"x=> {pi.DeclaringType.Name}.{pi.Name} = WrapperHelper.UnwrapObject<{pi.PropertyType.Name}>(x)";
-            Log($"Generating Static Property: {pi.DeclaringType.Name}.{pi.Name}({pName})");
+                setter = $"x=> {pi.DeclaringType.FullName}.{pi.Name} = WrapperHelper.UnwrapObject<{pi.PropertyType.FullName}>(x)";
+            Log($"Generating Static Property: {pi.DeclaringType.FullName}.{pi.Name}({pName})");
 
-            string str = $"m_StaticProperties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[pi.PropertyType].GetWrapperCode($"{pi.DeclaringType.Name}.{pi.Name}")}, {setter});";
+            string str = $"m_StaticProperties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[pi.PropertyType].GetWrapperCode($"{pi.DeclaringType.FullName}.{pi.Name}")}, {setter});";
 
             return str;
         }
@@ -282,14 +282,14 @@ public static class WrapperGenerator
             string usings = "";
             List<string> ns = new List<string>();
 
-            foreach (Type type in ts)
-            {
-                if (ns.Contains(type.Namespace))
-                    continue;
+            //foreach (Type type in ts)
+            //{
+            //    if (ns.Contains(type.Namespace))
+            //        continue;
 
-                ns.Add(type.Namespace);
-                usings += $"using {type.Namespace};\n";
-            }
+            //    ns.Add(type.Namespace);
+            //    usings += $"using {type.Namespace};\n";
+            //}
 
             return usings;
         }
@@ -345,7 +345,7 @@ public static class WrapperGenerator
             if (ignoreT != null)
             {
                 Log(
-                    $"Skipping Type: {t.Name}  because it is marked with {nameof(BSWIgnoreAttribute)}");
+                    $"Skipping Type: {t.FullName}  because it is marked with {nameof(BSWIgnoreAttribute)}");
 
                 return ("", "");
             }
@@ -353,7 +353,7 @@ public static class WrapperGenerator
             {
                 Log(
                     "Skipping Type: " +
-                    t.Name +
+                    t.FullName +
                     $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
 
                 return ("", "");
@@ -366,30 +366,31 @@ public static class WrapperGenerator
 
             if (t.GenericTypeArguments.Length != 0 || t.IsGenericType || t.IsGenericParameter || t.IsGenericTypeDefinition || t.IsConstructedGenericType)
             {
-                Log($"Generic Type '{t.Name}' is not Supported.");
+                Log($"Generic Type '{t.FullName}' is not Supported.");
                 return ("", "");
             }
-            else if (t.Name.Contains("+") || t.Name.Contains("&") || t.Name.Contains("*"))
+            else if (t.FullName.Contains("+") || t.FullName.Contains("&") || t.FullName.Contains("*") || t.FullName.Contains("<") || t.FullName.Contains(">") || t.FullName.Contains("`"))
             {
-                Log($"Detected unsupported character in type '{t.Name}'.");
+                Log($"Detected unsupported character in type '{t.FullName}'.");
 
                 return ("", "");
             }
             else if (wrappers.ContainsKey(t))
             {
-                Log($"Already Existing Type: {t.Name}");
+                Log($"Already Existing Type: {t.FullName}");
 
                 return ("", "");
             }
             else
             {
-                Log("Generating Type Wrapper: " + t.Name);
+                Log("Generating Type Wrapper: " + t.FullName);
             }
 
+            string MakeValidType( string n ) => n.Replace( ".", "_" );
 
-            string className = $"BSWrapperObject_{t.Name}";
-            string baseClassName = $"BSWrapperObject<{t.Name}>";
-            string sclassName = $"BSStaticWrapperObject_{t.Name}";
+            string className = $"BSWrapperObject_{MakeValidType(t.FullName)}";
+            string baseClassName = $"BSWrapperObject<{t.FullName}>";
+            string sclassName = $"BSStaticWrapperObject_{MakeValidType(t.FullName)}";
             string sbaseClassName = $"BSStaticWrapperObject";
             wrappers.Add(t, new WrapperTypeInfo("", "", "", className));
 
@@ -708,11 +709,11 @@ public static class WrapperGenerator
             }
 
             string classHeader = $"public class {className} : {baseClassName}\n";
-            string classCtor = $"public {className}({t.Name} obj) : base(obj)";
+            string classCtor = $"public {className}({t.FullName} obj) : base(obj)";
             string ret = classHeader + "\n{\n" + classCtor + "\n{\n" + sb + "\n}\n}\n";
 
             string sclassHeader = $"public class {sclassName} : {sbaseClassName}\n";
-            string sclassCtor = $"public {sclassName}() : base(typeof({t.Name}))";
+            string sclassCtor = $"public {sclassName}() : base(typeof({t.FullName}))";
             string sret = sclassHeader + "\n{\n" + sclassCtor + "\n{\n" + ssb + "\n}\n}\n";
 
             wrappers[t] = new WrapperTypeInfo(ret, sret, className, sclassName, t.GetCustomAttributes<BSWConstructorCreatorAttribute>().ToArray());
