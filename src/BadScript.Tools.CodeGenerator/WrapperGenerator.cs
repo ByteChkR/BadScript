@@ -654,6 +654,11 @@ public static class WrapperGenerator
                         $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
                     continue;
                 }
+                if (methodInfo.GetParameters().Any(x => x.IsOut))
+                {
+                    Log($"Skipping Method '{methodInfo.Name}' because it has an out Parameter");
+                    continue;
+                }
                 if (methodInfo.Name.StartsWith("op_"))
                 {
                     Log(
