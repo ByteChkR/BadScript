@@ -437,7 +437,7 @@ public static class WrapperGenerator
                 if (!wrappers.ContainsKey(propType))
                 {
                     (string src, string name) = Generate(propType, wrappers);
-                    isValid = src != "";
+                    isValid = name != "";
                 }
                 else
                 {
@@ -481,7 +481,7 @@ public static class WrapperGenerator
                 if (!wrappers.ContainsKey(propType))
                 {
                     (string src, string name) = Generate(propType, wrappers);
-                    isValid = src != "";
+                    isValid = name != "";
                 }
                 else
                 {
@@ -525,7 +525,7 @@ public static class WrapperGenerator
                 if (!wrappers.ContainsKey(fieldType))
                 {
                     (string src, string name) = Generate(fieldType, wrappers);
-                    isValid = src != "";
+                    isValid = name != "";
                 }
                 else
                 {
@@ -565,7 +565,7 @@ public static class WrapperGenerator
                 if (!wrappers.ContainsKey(fieldType))
                 {
                     (string src, string name) = Generate(fieldType, wrappers);
-                    isValid = src != "";
+                    isValid = name != "";
                 }
                 else
                 {
@@ -624,7 +624,7 @@ public static class WrapperGenerator
                 if (!wrappers.ContainsKey(retType))
                 {
                     (string src, string name) = Generate(retType, wrappers);
-                    isValid = src != "";
+                    isValid = name != "";
                 }
                 else
                 {
@@ -644,7 +644,7 @@ public static class WrapperGenerator
                     if (!wrappers.ContainsKey(pType))
                     {
                         (string src, string name) = Generate(pType, wrappers);
-                        isValidFuncParam = src != "";
+                        isValidFuncParam = name != "";
                     }
                     else
                     {
@@ -730,7 +730,7 @@ public static class WrapperGenerator
                     if (!wrappers.ContainsKey(pType))
                     {
                         (string src, string name) = Generate(pType, wrappers);
-                        isValidFuncParam = src != "";
+                        isValidFuncParam = name != "";
                     }
                     else
                     {
