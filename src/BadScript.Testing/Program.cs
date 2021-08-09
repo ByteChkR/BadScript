@@ -15,6 +15,10 @@ using BadScript.Utils.Reflection;
 namespace BadScript.Testing
 {
 
+    public static class StaticTest
+    {
+        public static Test TEST;
+    }
     public class SubTest
     {
         public string Name;
@@ -63,7 +67,7 @@ namespace BadScript.Testing
 
         private static void Main( string[] args )
         {
-            string str = WrapperGenerator.Generate < Test >( null, null, "DB" , "SDB");
+            string str = WrapperGenerator.Generate(typeof(StaticTest), null, null, "DB" , "SDB");
             //DB db = new DB();
             //SDB sdb = new SDB();
             //ABSObject t = db.Get<Test>(new object[0]);
@@ -87,45 +91,25 @@ namespace BadScript.Testing
         #endregion
     }
 
+    public class BSStaticWrapperObject_BadScript_Testing_StaticTest : BSStaticWrapperObject
 
+    {
+        public BSStaticWrapperObject_BadScript_Testing_StaticTest() : base(typeof(BadScript.Testing.StaticTest))
+        {
+            m_StaticProperties["TEST"] = new BSReflectionReference(() => new BSWrapperObject_BadScript_Testing_Test(BadScript.Testing.StaticTest.TEST), x => BadScript.Testing.StaticTest.TEST = WrapperHelper.UnwrapObject<BadScript.Testing.Test>(x));
 
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-public class BSWrapperObject_BadScript_Testing_Test : BSWrapperObject<BadScript.Testing.Test>
+    public class BSWrapperObject_BadScript_Testing_Test : BSWrapperObject<BadScript.Testing.Test>
 
     {
         public BSWrapperObject_BadScript_Testing_Test(BadScript.Testing.Test obj) : base(obj)
         {
-            m_Properties["MyValue"] = new BSReflectionReference(() => new BSObject((decimal)m_InternalObject.MyValue), x => m_InternalObject.MyValue = WrapperHelper.UnwrapObject<Single>(x));
-            m_Properties["MyBool"] = new BSReflectionReference(() => m_InternalObject.MyBool ? BSObject.One : BSObject.Zero, x => m_InternalObject.MyBool = WrapperHelper.UnwrapObject<Boolean>(x));
-            m_Properties["Sub"] = new BSReflectionReference(() => new BSWrapperObject_BadScript_Testing_SubTest(m_InternalObject.Sub), x => m_InternalObject.Sub = WrapperHelper.UnwrapObject<SubTest>(x));
-            m_Properties["YEET"] = new BSReflectionReference(() => new BSWrapperObject_BadScript_Testing_SubTest(m_InternalObject.RenamedSub), x => m_InternalObject.RenamedSub = WrapperHelper.UnwrapObject<SubTest>(x));
+            m_Properties["MyValue"] = new BSReflectionReference(() => new BSObject((decimal)m_InternalObject.MyValue), x => m_InternalObject.MyValue = WrapperHelper.UnwrapObject<System.Single>(x));
+            m_Properties["MyBool"] = new BSReflectionReference(() => m_InternalObject.MyBool ? BSObject.One : BSObject.Zero, x => m_InternalObject.MyBool = WrapperHelper.UnwrapObject<System.Boolean>(x));
+            m_Properties["Sub"] = new BSReflectionReference(() => new BSWrapperObject_BadScript_Testing_SubTest(m_InternalObject.Sub), x => m_InternalObject.Sub = WrapperHelper.UnwrapObject<BadScript.Testing.SubTest>(x));
+            m_Properties["YEET"] = new BSReflectionReference(() => new BSWrapperObject_BadScript_Testing_SubTest(m_InternalObject.RenamedSub), x => m_InternalObject.RenamedSub = WrapperHelper.UnwrapObject<BadScript.Testing.SubTest>(x));
             m_Properties["Equals"] = new BSFunctionReference(new BSFunction("function Equals(obj)", a => m_InternalObject.Equals(WrapperHelper.UnwrapObject<System.Object>(a[0])) ? BSObject.One : BSObject.Zero, 1));
 
         }
@@ -149,7 +133,7 @@ public class BSWrapperObject_BadScript_Testing_Test : BSWrapperObject<BadScript.
     {
         public BSWrapperObject_BadScript_Testing_SubTest(BadScript.Testing.SubTest obj) : base(obj)
         {
-            m_Properties["Name"] = new BSReflectionReference(() => new BSObject(m_InternalObject.Name), x => m_InternalObject.Name = WrapperHelper.UnwrapObject<String>(x));
+            m_Properties["Name"] = new BSReflectionReference(() => new BSObject(m_InternalObject.Name), x => m_InternalObject.Name = WrapperHelper.UnwrapObject<System.String>(x));
             m_Properties["Equals"] = new BSFunctionReference(new BSFunction("function Equals(obj)", a => m_InternalObject.Equals(WrapperHelper.UnwrapObject<System.Object>(a[0])) ? BSObject.One : BSObject.Zero, 1));
 
         }
@@ -194,9 +178,9 @@ public class BSWrapperObject_BadScript_Testing_Test : BSWrapperObject<BadScript.
             m_Creators = new Dictionary<Type, (IWrapperObjectCreator[], Func<object[], object>)>
             {
 {typeof(BadScript.Testing.Test), (new IWrapperObjectCreator[] {new TestConstructor()
-}, a => new BSWrapperObject_BadScript_Testing_Test((Test)m_Creators[typeof(Test)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
-{typeof(BadScript.Testing.SubTest), (new IWrapperObjectCreator[] {}, a => new BSWrapperObject_BadScript_Testing_SubTest((SubTest)m_Creators[typeof(SubTest)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
-{typeof(System.Object), (new IWrapperObjectCreator[] {}, a => new BSWrapperObject_System_Object((Object)m_Creators[typeof(Object)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
+}, a => new BSWrapperObject_BadScript_Testing_Test((BadScript.Testing.Test)m_Creators[typeof(BadScript.Testing.Test)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
+{typeof(BadScript.Testing.SubTest), (new IWrapperObjectCreator[] {}, a => new BSWrapperObject_BadScript_Testing_SubTest((BadScript.Testing.SubTest)m_Creators[typeof(BadScript.Testing.SubTest)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
+{typeof(System.Object), (new IWrapperObjectCreator[] {}, a => new BSWrapperObject_System_Object((System.Object)m_Creators[typeof(System.Object)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
 
             };
         }
@@ -217,12 +201,12 @@ public class BSWrapperObject_BadScript_Testing_Test : BSWrapperObject<BadScript.
     {
         public SDB()
         {
+            StaticTypes[typeof(BadScript.Testing.StaticTest)] = new BSStaticWrapperObject_BadScript_Testing_StaticTest();
             StaticTypes[typeof(BadScript.Testing.Test)] = new BSStaticWrapperObject_BadScript_Testing_Test();
             StaticTypes[typeof(BadScript.Testing.SubTest)] = new BSStaticWrapperObject_BadScript_Testing_SubTest();
             StaticTypes[typeof(System.Object)] = new BSStaticWrapperObject_System_Object();
 
         }
     }
-
 
 }

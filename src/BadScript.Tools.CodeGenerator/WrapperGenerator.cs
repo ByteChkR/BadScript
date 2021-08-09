@@ -89,7 +89,8 @@ public static class WrapperGenerator
                 if (wrapperTypeInfo.Value.GeneratedClass.StartsWith("#") ||
                      wrapperTypeInfo.Value.GeneratedClass.StartsWith("@") ||
                      wrapperTypeInfo.Value.GeneratedClass == "BSObject" ||
-                     wrapperTypeInfo.Value.GeneratedClass == "")
+                     wrapperTypeInfo.Value.GeneratedClass == "" ||
+                     wrapperTypeInfo.Key.IsAbstract && wrapperTypeInfo.Key.IsSealed) //No Static Classes
                 {
                     continue;
                 }
@@ -315,7 +316,7 @@ public static class WrapperGenerator
             (string src, string name) = Generate(t, wrappers);
 
             string usings = MakeUsings(wrappers.Keys.ToList()) +
-                            "\nusing System.Collections.Generic;\nusing System.Linq;\nusing BadScript.Tools.CodeGenerator.Runtime;\r\nusing BadScript.Common.Types;\r\nusing BadScript.Common.Types.Implementations;\r\nusing BadScript.Utils.Reflection;\n\n";
+                            "\nusing System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing BadScript.Tools.CodeGenerator.Runtime;\r\nusing BadScript.Common.Types;\r\nusing BadScript.Common.Types.Implementations;\r\nusing BadScript.Utils.Reflection;\n\n";
 
             if (dbName != null)
                 src += "\n" + GenerateConstructorDataBase(dbName, wrappers);
@@ -720,6 +721,9 @@ public static class WrapperGenerator
             string classHeader = $"public class {className} : {baseClassName}\n";
             string classCtor = $"public {className}({t.FullName} obj) : base(obj)";
             string ret = classHeader + "\n{\n" + classCtor + "\n{\n" + sb + "\n}\n}\n";
+
+            if ( t.IsAbstract && t.IsSealed )
+                ret = "";
 
             string sclassHeader = $"public class {sclassName} : {sbaseClassName}\n";
             string sclassCtor = $"public {sclassName}() : base(typeof({t.FullName}))";
