@@ -641,16 +641,20 @@ public static class WrapperGenerator
 
 
                     bool isValidFuncParam = true;
+                    string dd = "";
                     if (!wrappers.ContainsKey(pType))
                     {
                         (string src, string name) = Generate(pType, wrappers);
                         isValidFuncParam = name != "";
+                        dd = src;
                     }
                     else
                     {
                         isValidFuncParam = wrappers[pType].GeneratedClass != "";
+                        dd = wrappers[pType].Source;
                     }
-                    if (!isValidFuncParam) throw new Exception("Invalid Function Parameter Type: " + pType);
+                    if (!isValidFuncParam) 
+                        throw new Exception($"Invalid Function Parameter Type: {pType}({dd})");
 
 
                 }
@@ -727,16 +731,21 @@ public static class WrapperGenerator
                     Type pType = parameterInfo.ParameterType;
 
                     bool isValidFuncParam = true;
+                    string dd = "";
                     if (!wrappers.ContainsKey(pType))
                     {
                         (string src, string name) = Generate(pType, wrappers);
                         isValidFuncParam = name != "";
+                        dd = src;
                     }
                     else
                     {
                         isValidFuncParam = wrappers[pType].GeneratedClass != "";
+                        dd = wrappers[pType].Source;
                     }
-                    if (!isValidFuncParam) throw new Exception("Invalid Static Function Parameter Type: " + pType);
+
+                    if (!isValidFuncParam)
+                        throw new Exception($"Invalid Function Parameter Type: {pType}({dd})");
 
 
                 }
