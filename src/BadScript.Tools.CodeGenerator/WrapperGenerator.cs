@@ -428,7 +428,8 @@ public static class WrapperGenerator
                     continue;
                 }
                 Type propType = propertyInfo.PropertyType;
-
+                if(string.IsNullOrEmpty( propType.FullName ))continue;
+                
                 bool isValid = true;
                 if (!wrappers.ContainsKey(propType))
                 {
@@ -472,6 +473,7 @@ public static class WrapperGenerator
                 }
                 Type propType = propertyInfo.PropertyType;
 
+                if (string.IsNullOrEmpty(propType.FullName)) continue;
                 bool isValid = true;
                 if (!wrappers.ContainsKey(propType))
                 {
@@ -514,6 +516,7 @@ public static class WrapperGenerator
                     continue;
                 }
                 Type fieldType = fieldInfo.FieldType;
+                if (string.IsNullOrEmpty(fieldType.FullName)) continue;
 
                 bool isValid = true;
                 if (!wrappers.ContainsKey(fieldType))
@@ -553,6 +556,8 @@ public static class WrapperGenerator
                 }
                 Type fieldType = fieldInfo.FieldType;
 
+                if (string.IsNullOrEmpty(fieldType.FullName)) continue;
+
                 bool isValid = true;
                 if (!wrappers.ContainsKey(fieldType))
                 {
@@ -589,7 +594,7 @@ public static class WrapperGenerator
                         $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
                     continue;
                 }
-                if(methodInfo.GetParameters().Any(x=> x.IsOut))
+                if(methodInfo.GetParameters().Any(x=> x.IsOut ||string.IsNullOrEmpty(x.ParameterType.FullName)))
                 {
                     Log( $"Skipping Method '{methodInfo.Name}' because it has an out Parameter" );
                     continue;
@@ -598,6 +603,8 @@ public static class WrapperGenerator
                 if (invalidFuncs.Contains(methodInfo.Name))
                     continue;
                 Type retType = methodInfo.ReturnType;
+
+                if (string.IsNullOrEmpty(retType.FullName)) continue;
 
                 bool isValid = true;
                 if (!wrappers.ContainsKey(retType))
@@ -617,6 +624,7 @@ public static class WrapperGenerator
                 foreach (ParameterInfo parameterInfo in paramis)
                 {
                     Type pType = parameterInfo.ParameterType;
+
 
                     bool isValidFuncParam = true;
                     if (!wrappers.ContainsKey(pType))
@@ -655,7 +663,7 @@ public static class WrapperGenerator
                         $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
                     continue;
                 }
-                if (methodInfo.GetParameters().Any(x => x.IsOut))
+                if (methodInfo.GetParameters().Any(x => x.IsOut || string.IsNullOrEmpty(x.ParameterType.FullName)))
                 {
                     Log($"Skipping Static Method '{methodInfo.Name}' because it has an out Parameter");
                     continue;
@@ -671,6 +679,7 @@ public static class WrapperGenerator
                 if (invalidFuncs.Contains(methodInfo.Name))
                     continue;
                 Type retType = methodInfo.ReturnType;
+                if(string.IsNullOrEmpty(retType.FullName))continue;
 
                 bool isValid = true;
                 if (!wrappers.ContainsKey(retType))
