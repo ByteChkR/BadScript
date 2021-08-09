@@ -369,7 +369,7 @@ public static class WrapperGenerator
                 Log($"Generic Type '{t.Name}' is not Supported.");
                 return ("", "");
             }
-            else if (t.Name.Contains("+") || t.Name.Contains("&"))
+            else if (t.Name.Contains("+") || t.Name.Contains("&") || t.Name.Contains("*"))
             {
                 Log($"Detected unsupported character in type '{t.Name}'.");
 
@@ -656,7 +656,7 @@ public static class WrapperGenerator
                 }
                 if (methodInfo.GetParameters().Any(x => x.IsOut))
                 {
-                    Log($"Skipping Method '{methodInfo.Name}' because it has an out Parameter");
+                    Log($"Skipping Static Method '{methodInfo.Name}' because it has an out Parameter");
                     continue;
                 }
                 if (methodInfo.Name.StartsWith("op_"))
