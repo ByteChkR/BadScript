@@ -74,7 +74,19 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                                                         Where(x => !string.IsNullOrEmpty(x)).
                                                         ToList();
 
-                List<string> valueLines = bsRuntimeObject.Value.ResolveReference().SafeToString(doneList).
+                List < string > valueLines = new List < string >();
+
+                if(WrapperHelper.AllowRecurseToString)
+                {
+                    ABSObject resolvedValue = bsRuntimeObject.Value.ResolveReference();
+                    
+                    if ( resolvedValue is IBSWrappedObject wo )
+                    {
+                        valueLines = wo.GetInternalObject().ToString().Split('\n').ToList();
+                    }
+                    else
+                    {
+                        valueLines = resolvedValue.SafeToString(doneList).
                                                           Split(
                                                               new[] { '\n' },
                                                               StringSplitOptions.RemoveEmptyEntries
@@ -82,6 +94,8 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                                                           Select(x => x.Trim()).
                                                           Where(x => !string.IsNullOrEmpty(x)).
                                                           ToList();
+                    }
+                }
 
                 tw.Indent = 1;
 
