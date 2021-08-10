@@ -23,6 +23,8 @@ namespace BadScript.Testing
     public class SubTest
     {
         public string Name;
+
+        public SubTest Sub => new ();
     }
 
     public class TestConstructor : WrapperObjectCreator < Test >
@@ -69,23 +71,24 @@ namespace BadScript.Testing
         private static void Main( string[] args )
         {
             string str = WrapperGenerator.Generate(typeof(StaticTest), null, null, "DB" , "SDB");
-            //DB db = new DB();
-            //SDB sdb = new SDB();
-            //ABSObject t = db.Get<Test>(new object[0]);
+            
 
             ConsoleApi cout = new ConsoleApi();
             BadScriptCoreApi core = new BadScriptCoreApi();
 
-            //BSEngine e = new BSEngine(
-            //    BSParserSettings.Default,
-            //    new Dictionary<string, ABSObject>(),
-            //    new List<ABSScriptInterface> { cout, core, sdb.CreateInterface("test"), db.CreateInterface("test") });
+            DB db = new DB();
+            SDB sdb = new SDB();
+            ABSObject t = db.Get<Test>(new object[0]);
+            BSEngine e = new BSEngine(
+                BSParserSettings.Default,
+                new Dictionary<string, ABSObject>(),
+                new List<ABSScriptInterface> { cout, core, sdb.CreateInterface("test"), db.CreateInterface("test") });
 
-            //e.LoadInterface("console");
-            //e.LoadInterface("core");
-            //ABSTable t1 = e.LoadInterface("test");
+            e.LoadInterface("console");
+            e.LoadInterface("core");
+            ABSTable t1 = e.LoadInterface("test");
 
-            //e.LoadString(false, "args[0].MyBool = 1\nconsole.print(core.debug(args[0].MyBool))\nconsole.print(core.debug(args[0]))\nconsole.print(core.debug(test))\n", new ABSObject[] { t });
+            e.LoadString(false, "args[0].MyBool = 1\nconsole.print(core.debug(args[0].MyBool))\nconsole.print(core.debug(args[0]))\nconsole.print(core.debug(test))\n", new ABSObject[] { t });
 
         }
 
@@ -133,6 +136,7 @@ namespace BadScript.Testing
     {
         public BSWrapperObject_BadScript_Testing_SubTest(BadScript.Testing.SubTest obj) : base(obj)
         {
+            m_Properties["Sub"] = new BSReflectionReference(() => new BSWrapperObject_BadScript_Testing_SubTest(m_InternalObject.Sub), null);
             m_Properties["Name"] = new BSReflectionReference(() => new BSObject(m_InternalObject.Name), x => m_InternalObject.Name = WrapperHelper.UnwrapObject<System.String>(x));
             m_Properties["Equals"] = new BSFunctionReference(new BSFunction("function Equals(obj)", a => m_InternalObject.Equals(WrapperHelper.UnwrapObject<System.Object>(a[0])) ? BSObject.One : BSObject.Zero, 1));
 

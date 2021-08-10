@@ -46,7 +46,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override ABSReference GetProperty(string propertyName)
         {
-            if (m_Properties.ContainsKey(propertyName))
+            if (!IsNull && m_Properties.ContainsKey(propertyName))
             {
                 return m_Properties[propertyName];
             }
@@ -56,6 +56,8 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override bool HasProperty(string propertyName)
         {
+            if ( IsNull )
+                return false;
             return m_Properties.ContainsKey(propertyName);
         }
 
@@ -73,7 +75,10 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
             doneList[this] = "{}";
 
-            StringWriter sw = new StringWriter();
+            if ( IsNull )
+                return "NULL";
+
+              StringWriter sw = new StringWriter();
             IndentedTextWriter tw = new IndentedTextWriter(sw);
             tw.WriteLine('{');
 
