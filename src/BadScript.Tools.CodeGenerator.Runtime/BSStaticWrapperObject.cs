@@ -1,10 +1,12 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
+using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -12,7 +14,7 @@ using BadScript.Common.Types.References;
 namespace BadScript.Tools.CodeGenerator.Runtime
 {
 
-    public class BSStaticWrapperObject : ABSObject
+    public class BSStaticWrapperObject : ABSObject, IEnumerable <IForEachIteration>
     {
         protected Dictionary < string, ABSReference > m_StaticProperties;
 
@@ -163,7 +165,21 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
             return true;
         }
-        
+
+
+
+        public IEnumerator<IForEachIteration> GetEnumerator()
+        {
+            foreach (KeyValuePair<string, ABSReference> keyValuePair in m_StaticProperties)
+            {
+                yield return new ForEachIteration(new ABSObject[] { new BSObject(keyValuePair.Key) });
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
 }
