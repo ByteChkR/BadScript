@@ -13,6 +13,8 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
     public static class WrapperHelper
     {
+        public static bool AllowRecurseToString = true;
+
         private static readonly List < IWrapperConstructorDataBase > s_DataBases =
             new List < IWrapperConstructorDataBase >();
 
