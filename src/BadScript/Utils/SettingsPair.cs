@@ -1,12 +1,41 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace BadScript.Utils
 {
 
     public class SettingsPair
     {
+        public event Action<SettingsPair> OnValueChanged;
+        public event Action<SettingsPair> OnPersistenceChanged;
         public readonly string Name;
-        public string Value;
+        private string m_Value;
+        private bool m_IsPersistent = true;
+        public string Value
+        {
+            get => m_Value;
+            set
+            {
+                bool changed = m_Value != value;
+                m_Value = value;
+                if (changed )
+                {
+                    OnValueChanged?.Invoke( this );
+                }
+            }
+        }
+        public bool IsPersistent
+        {
+            get => m_IsPersistent;
+            set
+            {
+                bool changed = m_IsPersistent != value;
+                m_IsPersistent = value;
+
+                if ( changed )
+                    OnPersistenceChanged?.Invoke( this );
+            }
+        }
 
         #region Public
 
@@ -14,6 +43,11 @@ namespace BadScript.Utils
         {
             Name = name;
             Value = value;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}(Persistent: {IsPersistent}): {Value}";
         }
 
         public static implicit operator bool(SettingsPair p) => bool.Parse(p.Value);

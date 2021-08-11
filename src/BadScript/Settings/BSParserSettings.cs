@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BadScript.Utils;
 
 namespace BadScript.Settings
@@ -11,7 +13,7 @@ namespace BadScript.Settings
 
         static BSSettings()
         {
-            BsRoot = SettingsRoot.Root.AddCategory( "bs" );
+            BsRoot = SettingsCategory.CreateRoot( "bs" );// SettingsRoot.Root.AddCategory( "bs" );
             ParserCategory = BsRoot.AddCategory("parser");
             RuntimeCategory = BsRoot.AddCategory("runtime");
         }
@@ -27,6 +29,7 @@ namespace BadScript.Settings
 
             foreach ( SettingsCategory sub in cat )
             {
+                if (!sub.IsPersistent) continue;
                 string p = Path.Combine( directory, sub.Name );
                 Directory.CreateDirectory( p );
                 sub.SaveToDirectory(p);
@@ -34,6 +37,7 @@ namespace BadScript.Settings
 
             foreach ( SettingsPair pair in (IEnumerable < SettingsPair > )cat )
             {
+                if(!pair.IsPersistent)continue;
                 string p = Path.Combine( directory, pair.Name+".setting" );
                 File.WriteAllText( p, pair.Value );
             }
@@ -43,19 +47,20 @@ namespace BadScript.Settings
         {
             if ( !Directory.Exists( directory ) )
                 Directory.CreateDirectory( directory );
-            string[] subs = Directory.GetDirectories( directory, "*", SearchOption.TopDirectoryOnly );
-            string[] pairs = Directory.GetFiles( directory, "*.setting", SearchOption.TopDirectoryOnly );
+            string[] subs = Directory.GetDirectories( directory, "*", SearchOption.TopDirectoryOnly ).Select(Path.GetFileName).ToArray();
+            string[] pairs = Directory.GetFiles( directory, "*.setting", SearchOption.TopDirectoryOnly ).Select(Path.GetFileName).ToArray();
 
             foreach ( string sub in subs )
             {
                 string p = Path.Combine( directory, sub );
-                LoadFromDirectory(cat.AddCategory(sub), p);
+                SettingsCategory scat = cat.AddCategory( sub );
+                LoadFromDirectory(scat, p);
             }
 
             foreach ( string pair in pairs )
             {
-                string p = Path.Combine(directory, pair+".setting");
-                cat.SetSetting( pair, File.ReadAllText( p ) );
+                string p = Path.Combine(directory, pair);
+                SettingsPair spair = cat.SetSetting( Path.GetFileNameWithoutExtension(pair), File.ReadAllText( p ) );
             }
         }
 
