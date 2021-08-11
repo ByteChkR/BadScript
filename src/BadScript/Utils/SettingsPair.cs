@@ -16,6 +16,9 @@ namespace BadScript.Utils
             Value = value;
         }
 
+        public static implicit operator bool(SettingsPair p) => bool.Parse(p.Value);
+        public static implicit operator decimal(SettingsPair p) => decimal.Parse(p.Value);
+
         public T ReadJson < T >()
         {
             return JsonConvert.DeserializeObject < T >( Value );

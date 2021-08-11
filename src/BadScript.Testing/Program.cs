@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -70,6 +71,7 @@ namespace BadScript.Testing
 
         private static void Main( string[] args )
         {
+            BSSettings.BsRoot.LoadFromDirectory( Path.GetFullPath( "./bs-data/settings" ) );
             string str = WrapperGenerator.Generate(typeof(StaticTest), null, null, "DB" , "SDB");
             
 
@@ -90,6 +92,7 @@ namespace BadScript.Testing
 
             e.LoadString(false, "args[0].MyBool = 1\nconsole.print(core.debug(args[0].MyBool))\nconsole.print(core.debug(args[0]))\nconsole.print(core.debug(test))\n", new ABSObject[] { t });
 
+            BSSettings.BsRoot.SaveToDirectory(Path.GetFullPath("./bs-data/settings"));
         }
 
         #endregion

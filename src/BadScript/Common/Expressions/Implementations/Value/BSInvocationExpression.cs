@@ -24,7 +24,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
         public override ABSObject Execute( BSScope scope )
         {
             ABSObject obj = Left.Execute( scope );
-
+            
             return obj.Invoke(
                 Parameters.Select( x => x.Execute( scope ) ).
                            ToArray()

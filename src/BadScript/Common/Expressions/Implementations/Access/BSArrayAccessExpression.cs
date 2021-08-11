@@ -24,7 +24,18 @@ namespace BadScript.Common.Expressions.Implementations.Access
         {
             ABSObject obj = Left.Execute( scope ).ResolveReference();
 
+
             ABSObject i = Right.Execute( scope ).ResolveReference();
+
+            if(BSOperatorImplementationResolver.AllowOperatorOverrides)
+            {
+                string fName = BSOperatorImplementationResolver.ResolveKey( "[]" );
+
+                if ( obj.HasProperty( fName ) )
+                {
+                    return obj.GetProperty( fName ).Invoke( new[] { i } );
+                }
+            }
 
             if ( obj is ABSTable t )
             {

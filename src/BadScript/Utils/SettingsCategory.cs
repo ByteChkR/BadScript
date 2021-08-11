@@ -5,7 +5,7 @@ using System.Linq;
 namespace BadScript.Utils
 {
 
-    public class SettingsCategory : IEnumerable < SettingsCategory >
+    public class SettingsCategory : IEnumerable < SettingsCategory >, IEnumerable <SettingsPair>
     {
         public readonly string Name;
         private readonly List < SettingsCategory > m_SubCategories;
@@ -18,17 +18,39 @@ namespace BadScript.Utils
             return new SettingsRoot();
         }
 
-        public void AddCategory( SettingsCategory c )
+
+
+        public void AddCategory(SettingsCategory c)
         {
-            if ( !m_SubCategories.Contains( c ) )
+            if (!m_SubCategories.Contains(c))
             {
-                m_SubCategories.Add( c );
+                m_SubCategories.Add(c);
             }
+        }
+
+        public SettingsCategory AddCategory(string c)
+        {
+            SettingsCategory r = null;
+            if (!HasCategory(c))
+            {
+                m_SubCategories.Add(r = new SettingsCategory(c));
+            }
+            else
+            {
+                r = GetCategory(c);
+            }
+
+            return r;
         }
 
         public SettingsCategory GetCategory( string name )
         {
             return m_SubCategories.First( x => x.Name == name );
+        }
+
+        IEnumerator < SettingsPair > IEnumerable < SettingsPair >.GetEnumerator()
+        {
+            return m_Settings.GetEnumerator();
         }
 
         public IEnumerator < SettingsCategory > GetEnumerator()

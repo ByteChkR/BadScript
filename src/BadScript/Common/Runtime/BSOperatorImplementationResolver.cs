@@ -16,7 +16,9 @@ namespace BadScript.Common.Runtime
 
     public static class BSOperatorImplementationResolver
     {
-        private static readonly Dictionary < string, string > s_KeyMapping = new Dictionary < string, string >
+        public static bool AllowOperatorOverrides = true;
+
+        private static readonly Dictionary<string, string> s_KeyMapping = new Dictionary<string, string>
         {
             { "++_Pre", "op_PreIncrement" },
             { "--_Pre", "op_PreDecrement" },
@@ -46,49 +48,54 @@ namespace BadScript.Common.Runtime
             { ">", "op_GreaterThan" },
             { "!", "op_Not" },
             { "??", "op_NullCheck" },
+            { "[]", "op_ArrayAccess" },
+            { ".", "op_PropertyAccess" },
+            { "()", "op_Invoke" },
         };
 
-        private static List < ABSOperatorImplementation > m_Implementations;
+        private static List<ABSOperatorImplementation> m_Implementations;
 
         #region Public
 
-        public static void AddImplementation( ABSOperatorImplementation o )
+        public static void AddImplementation(ABSOperatorImplementation o)
         {
-            m_Implementations.Add( o );
+            m_Implementations.Add(o);
         }
 
-        public static ABSOperatorImplementation ResolveImplementation( string key, ABSObject[] args )
+        public static ABSOperatorImplementation ResolveImplementation(string key, ABSObject[] args)
         {
-            for ( int i = 0; i < args.Length; i++ )
+            for (int i = 0; i < args.Length; i++)
             {
                 //args[i] = args[i].ResolveReference();
             }
 
             ABSObject firstO = args.First();
 
-            string opImplName = ResolveKey( key );
-
-            if ( firstO.HasProperty( opImplName ) )
+            if (AllowOperatorOverrides)
             {
-                ABSObject impl = firstO.GetProperty( opImplName ).ResolveReference();
-
-                if ( impl is BSFunction fnc )
+                string opImplName = ResolveKey(key);
+                if (firstO.HasProperty(opImplName))
                 {
-                    return new BSOperatorImplementation( key, fnc );
-                }
+                    ABSObject impl = firstO.GetProperty(opImplName).ResolveReference();
 
-                throw new BSRuntimeException( $"Operator Implementation: '{opImplName}' is not a valid function." );
+                    if (impl is BSFunction fnc)
+                    {
+                        return new BSOperatorImplementation(key, fnc);
+                    }
+
+                    throw new BSRuntimeException($"Operator Implementation: '{opImplName}' is not a valid function.");
+                }
             }
 
             ABSOperatorImplementation imp = m_Implementations.
-                LastOrDefault( x => x.OperatorKey == key && x.IsCorrectImplementation( args ) );
+                LastOrDefault(x => x.OperatorKey == key && x.IsCorrectImplementation(args));
 
-            if ( imp != null )
+            if (imp != null)
             {
                 return imp;
             }
 
-            throw new BSRuntimeException( $"Could not find operator({key}) implementation" );
+            throw new BSRuntimeException($"Could not find operator({key}) implementation");
         }
 
         #endregion
@@ -97,42 +104,42 @@ namespace BadScript.Common.Runtime
 
         static BSOperatorImplementationResolver()
         {
-            m_Implementations = new List < ABSOperatorImplementation >();
-            m_Implementations.Add( new BSAddOperatorImplementation() );
-            m_Implementations.Add( new BSAndOperatorImplementation() );
-            m_Implementations.Add( new BSDivideOperatorImplementation() );
-            m_Implementations.Add( new BSEqualityOperatorImplementation() );
-            m_Implementations.Add( new BSGreaterOrEqualOperatorImplementation() );
-            m_Implementations.Add( new BSGreaterThanOperatorImplementation() );
-            m_Implementations.Add( new BSInEqualityOperatorImplementation() );
-            m_Implementations.Add( new BSLessOrEqualOperatorImplementation() );
-            m_Implementations.Add( new BSLessThanOperatorImplementation() );
-            m_Implementations.Add( new BSMinusOperatorImplementation() );
-            m_Implementations.Add( new BSModuloOperatorImplementation() );
-            m_Implementations.Add( new BSMultiplyOperatorImplementation() );
-            m_Implementations.Add( new BSNotOperatorImplementation() );
-            m_Implementations.Add( new BSOrOperatorImplementation() );
-            m_Implementations.Add( new BSXOrOperatorImplementation() );
-            m_Implementations.Add( new BSNullTestOperatorImplementation() );
+            m_Implementations = new List<ABSOperatorImplementation>();
+            m_Implementations.Add(new BSAddOperatorImplementation());
+            m_Implementations.Add(new BSAndOperatorImplementation());
+            m_Implementations.Add(new BSDivideOperatorImplementation());
+            m_Implementations.Add(new BSEqualityOperatorImplementation());
+            m_Implementations.Add(new BSGreaterOrEqualOperatorImplementation());
+            m_Implementations.Add(new BSGreaterThanOperatorImplementation());
+            m_Implementations.Add(new BSInEqualityOperatorImplementation());
+            m_Implementations.Add(new BSLessOrEqualOperatorImplementation());
+            m_Implementations.Add(new BSLessThanOperatorImplementation());
+            m_Implementations.Add(new BSMinusOperatorImplementation());
+            m_Implementations.Add(new BSModuloOperatorImplementation());
+            m_Implementations.Add(new BSMultiplyOperatorImplementation());
+            m_Implementations.Add(new BSNotOperatorImplementation());
+            m_Implementations.Add(new BSOrOperatorImplementation());
+            m_Implementations.Add(new BSXOrOperatorImplementation());
+            m_Implementations.Add(new BSNullTestOperatorImplementation());
 
-            m_Implementations.Add( new BSSelfAddOperatorImplementation() );
-            m_Implementations.Add( new BSSelfMinusOperatorImplementation() );
-            m_Implementations.Add( new BSSelfDivideOperatorImplementation() );
-            m_Implementations.Add( new BSSelfMultiplyOperatorImplementation() );
-            m_Implementations.Add( new BSSelfModuloOperatorImplementation() );
+            m_Implementations.Add(new BSSelfAddOperatorImplementation());
+            m_Implementations.Add(new BSSelfMinusOperatorImplementation());
+            m_Implementations.Add(new BSSelfDivideOperatorImplementation());
+            m_Implementations.Add(new BSSelfMultiplyOperatorImplementation());
+            m_Implementations.Add(new BSSelfModuloOperatorImplementation());
 
-            m_Implementations.Add( new BSSelfAndOperatorImplementation() );
-            m_Implementations.Add( new BSSelfOrOperatorImplementation() );
-            m_Implementations.Add( new BSSelfXOrOperatorImplementation() );
+            m_Implementations.Add(new BSSelfAndOperatorImplementation());
+            m_Implementations.Add(new BSSelfOrOperatorImplementation());
+            m_Implementations.Add(new BSSelfXOrOperatorImplementation());
 
-            m_Implementations.Add( new BSPrefixIncrementOperatorImplementation() );
-            m_Implementations.Add( new BSPostfixIncrementOperatorImplementation() );
-            m_Implementations.Add( new BSPrefixDecrementOperatorImplementation() );
-            m_Implementations.Add( new BSPostfixDecrementOperatorImplementation() );
+            m_Implementations.Add(new BSPrefixIncrementOperatorImplementation());
+            m_Implementations.Add(new BSPostfixIncrementOperatorImplementation());
+            m_Implementations.Add(new BSPrefixDecrementOperatorImplementation());
+            m_Implementations.Add(new BSPostfixDecrementOperatorImplementation());
 
         }
 
-        private static string ResolveKey( string key )
+        public static string ResolveKey(string key)
         {
             return s_KeyMapping[key];
         }

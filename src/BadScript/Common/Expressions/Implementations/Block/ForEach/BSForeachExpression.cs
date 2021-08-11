@@ -29,6 +29,78 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             Block = block;
         }
 
+        private void Enumerate(BSScope scope, BSScope foreachScope, IEnumerable<IForEachIteration> forEach)
+        {
+            foreach (IForEachIteration iter in forEach)
+            {
+                ABSObject[] objs = iter.GetObjects();
+
+                for (int i = 0; i < m_Vars.Length; i++)
+                {
+                    foreachScope.AddLocalVar(m_Vars[i], objs.Length > i ? objs[i] : BSObject.Null);
+                }
+
+                ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
+                    foreachScope,
+                    Block,
+                    new string[0],
+                    new ABSObject[0]
+                );
+
+                if (foreachScope.Flags == BSScopeFlags.Continue)
+                {
+                    scope.SetFlag(BSScopeFlags.None);
+                }
+
+                if (ret != null)
+                {
+                    scope.SetFlag(BSScopeFlags.Return, ret);
+
+                    break;
+                }
+                else if (foreachScope.BreakExecution)
+                {
+                    break;
+                }
+            }
+        }
+
+        private void Enumerate(BSScope scope, BSScope foreachScope, IEnumerable<ABSObject> forEach)
+        {
+            foreach (ABSObject iter in forEach)
+            {
+
+                for (int i = 0; i < m_Vars.Length; i++)
+                {
+                    foreachScope.AddLocalVar(m_Vars[i], 0 == i ? iter : BSObject.Null);
+                }
+
+                ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
+                    foreachScope,
+                    Block,
+                    new string[0],
+                    new ABSObject[0]
+                );
+
+                if (foreachScope.Flags == BSScopeFlags.Continue)
+                {
+                    scope.SetFlag(BSScopeFlags.None);
+                }
+
+                if (ret != null)
+                {
+                    scope.SetFlag(BSScopeFlags.Return, ret);
+
+                    break;
+                }
+                else if (foreachScope.BreakExecution)
+                {
+                    break;
+                }
+            }
+        }
+
+
         public override ABSObject Execute( BSScope scope )
         {
             BSScope foreachScope = new BSScope( BSScopeFlags.Loop, scope );
@@ -36,38 +108,11 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
             if ( eObj is IEnumerable < IForEachIteration > forEach )
             {
-                foreach ( IForEachIteration iter in forEach )
-                {
-                    ABSObject[] objs = iter.GetObjects();
-
-                    for ( int i = 0; i < m_Vars.Length; i++ )
-                    {
-                        foreachScope.AddLocalVar( m_Vars[i], objs.Length > i ? objs[i] : BSObject.Null );
-                    }
-
-                    ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                        foreachScope,
-                        Block,
-                        new string[0],
-                        new ABSObject[0]
-                    );
-
-                    if ( foreachScope.Flags == BSScopeFlags.Continue )
-                    {
-                        scope.SetFlag( BSScopeFlags.None );
-                    }
-
-                    if ( ret != null )
-                    {
-                        scope.SetFlag( BSScopeFlags.Return, ret );
-
-                        break;
-                    }
-                    else if ( foreachScope.BreakExecution )
-                    {
-                        break;
-                    }
-                }
+                Enumerate( scope, foreachScope, forEach );
+            }
+            else if(eObj is IEnumerable <ABSObject> sForEach)
+            {
+                Enumerate( scope, foreachScope, sForEach );
             }
             else
             {
