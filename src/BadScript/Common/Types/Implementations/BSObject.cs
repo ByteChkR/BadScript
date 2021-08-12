@@ -6,10 +6,6 @@ using BadScript.Common.Types.References;
 namespace BadScript.Common.Types.Implementations
 {
 
-    public interface IBSWrappedObject
-    {
-        object GetInternalObject();
-    }
     public class BSObject : ABSObject, IBSWrappedObject
     {
         public static readonly BSObject Null = new BSObject( null );

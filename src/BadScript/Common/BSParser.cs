@@ -269,6 +269,65 @@ namespace BadScript.Common
             return expr;
         }
 
+        public BSExpression ParseEnumerableFunction(bool isGlobal)
+        {
+            StringBuilder sb = new StringBuilder();
+            ReadWhitespaceAndNewLine();
+
+            string funcName;
+            int pos = m_CurrentPosition;
+
+            if (IsWordStart())
+            {
+
+                sb.Append(m_OriginalSource[m_CurrentPosition]);
+                m_CurrentPosition++;
+
+                while (IsWordMiddle())
+                {
+                    sb.Append(m_OriginalSource[m_CurrentPosition]);
+                    m_CurrentPosition++;
+                }
+
+                funcName = sb.ToString();
+            }
+            else
+            {
+                funcName = "";
+
+                if (isGlobal)
+                {
+                    throw new BSParserException("A global anonymous function is not allowed.", this);
+                }
+            }
+
+            ReadWhitespaceAndNewLine();
+            (bool, string)[] args = ParseArgumentList();
+
+            ReadWhitespaceAndNewLine();
+
+            if (Is('=') && Is(1, '>'))
+            {
+                m_CurrentPosition += 2;
+                ReadWhitespaceAndNewLine();
+
+                return new BSEnumerableFunctionDefinitionExpression(
+                    CreateSourcePosition( pos ),
+                    funcName,
+                    isGlobal,
+                    args,
+                    new[] { Parse( int.MaxValue ) } );
+            }
+
+            string block = ParseBlock();
+
+            BSParser p = new BSParser(block);
+
+            BSExpression[] b = p.ParseToEnd();
+
+            return new BSEnumerableFunctionDefinitionExpression(CreateSourcePosition(pos), funcName, isGlobal, args, b);
+        }
+
         public BSExpression ParseFunction( bool isGlobal )
         {
             StringBuilder sb = new StringBuilder();
@@ -640,22 +699,24 @@ namespace BadScript.Common
             int pos = m_CurrentPosition;
             string wordName = GetNextWord();
 
-            bool isGlobal = false;
-
-            if ( wordName == "function" || ( isGlobal = wordName == "global" ) )
+            bool isGlobal = wordName == "global";
+            if(isGlobal)
             {
-                if ( isGlobal )
-                {
-                    ReadWhitespaceAndNewLine();
-                    wordName = GetNextWord();
+                ReadWhitespaceAndNewLine();
+                wordName = GetNextWord();
+            }
 
-                    if ( wordName != "function" )
-                    {
-                        throw new BSParserException( "Expected 'function' after 'global'", this );
-                    }
-                }
-
-                return ParseFunction( isGlobal );
+            if (wordName == "function")
+            {
+                return ParseFunction(isGlobal);
+            }
+            if (wordName == "enumerable")
+            {
+                return ParseEnumerableFunction(isGlobal);
+            }
+            if (isGlobal)
+            {
+                throw new BSParserException("Expected 'function' or 'enumerable' after 'global'", this);
             }
 
             if ( wordName == "return" )

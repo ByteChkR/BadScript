@@ -116,10 +116,6 @@ namespace BadScript.Common.Types
 
         public override ABSReference GetProperty( string propertyName )
         {
-            if ( propertyName == "hook" )
-            {
-
-            }
 
             throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
