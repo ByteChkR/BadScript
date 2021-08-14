@@ -110,7 +110,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override void InsertElement( int i, ABSObject o )
         {
-            m_InnerArray.Insert( i, o );
+            m_InnerArray.Insert( i, o.ResolveReference() );
         }
 
         public override ABSObject Invoke( ABSObject[] args )
@@ -233,7 +233,7 @@ namespace BadScript.Common.Types.Implementations
                 "function add(obj0, obj1, obj2, ...)",
                 objects =>
                 {
-                    m_InnerArray.AddRange( objects );
+                    m_InnerArray.AddRange( objects.Select(x=>x.ResolveReference()) );
 
                     return BSObject.Null;
                 },

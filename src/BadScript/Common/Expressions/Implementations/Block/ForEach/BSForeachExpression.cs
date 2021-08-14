@@ -143,20 +143,21 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             BSScope foreachScope = new BSScope( BSScopeFlags.Loop, scope );
             ABSObject eObj = Enumerator.Execute( foreachScope ).ResolveReference();
 
-            if ( eObj is IEnumerable < IForEachIteration > forEach )
+
+            if (eObj.HasProperty("MoveNext") && eObj.HasProperty("GetCurrent"))
+            {
+                ABSObject mnext = eObj.GetProperty("MoveNext");
+                ABSObject gcurr = eObj.GetProperty("GetCurrent");
+
+                Enumerate(scope, foreachScope, mnext, gcurr);
+            }
+            else if ( eObj is IEnumerable < IForEachIteration > forEach )
             {
                 Enumerate( scope, foreachScope, forEach );
             }
             else if(eObj is IEnumerable <ABSObject> sForEach)
             {
                 Enumerate( scope, foreachScope, sForEach );
-            }
-            else if(eObj.HasProperty("MoveNext") && eObj.HasProperty("GetCurrent"))
-            {
-                ABSObject mnext = eObj.GetProperty( "MoveNext" );
-                ABSObject gcurr = eObj.GetProperty( "GetCurrent" );
-
-                Enumerate( scope, foreachScope, mnext, gcurr );
             }
             else
             {

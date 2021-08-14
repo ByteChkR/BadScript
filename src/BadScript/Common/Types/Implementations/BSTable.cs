@@ -115,7 +115,7 @@ namespace BadScript.Common.Types.Implementations
         public override void InsertElement( ABSObject k, ABSObject o )
         {
             ABSObject key = m_InnerTable.Keys.FirstOrDefault( x => x.Equals( k ) ) ?? k;
-            m_InnerTable[key] = o;
+            m_InnerTable[key] = o.ResolveReference();
         }
 
         public override ABSObject Invoke( ABSObject[] args )
