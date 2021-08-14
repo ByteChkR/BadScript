@@ -1,0 +1,199 @@
+environment.loadInterface("math")
+
+class VectorEnumerator
+{
+	target = null
+	current = -1
+	function VectorEnumerator(v)
+	{
+		self.target = v
+	}
+
+	function GetCurrent()
+	{
+		return self.target[self.current]
+	}
+
+	function MoveNext()
+	{
+		self.current += 1
+		if(self.current == 4)
+		{
+			return 0
+		}
+		return 1
+	}
+
+}
+
+class Vector2
+{
+	function Vector2(x, y)
+	{
+		return Vector4(x, y, 0, 0)
+	}
+}
+class Vector3
+{
+	function Vector3(x, y, z)
+	{
+		return Vector4(x, y, z, 0)
+	}
+}
+class Vector4
+{
+	X = 0
+	Y = 0
+	Z = 0
+	W = 0
+	function Vector4(x, y, z, w)
+	{
+		self.X = x
+		self.Y = y
+		self.Z = z
+		self.W = w
+	}
+
+	function Add(other)
+	{
+		return Vector4(
+			self.X + other.X,
+			self.Y + other.Y,
+			self.Z + other.Z,
+			self.W + other.W)
+	}
+
+	function Sub(other)
+	{
+		return Vector4(
+			self.X - other.X,
+			self.Y - other.Y,
+			self.Z - other.Z,
+			self.W - other.W)
+	}
+
+	function Scale(scalar)
+	{
+		return Vector4(
+			self.X * scalar,
+			self.Y * scalar,
+			self.Z * scalar,
+			self.W * scalar)
+	}
+
+	function SqrMagnitude()
+	{
+		return self.X + self.Y + self.Z + self.W
+	}
+
+	function Magnitude()
+	{
+		return math.sqrt(self.SqrMagnitude())
+	}
+
+	function Normalized()
+	{
+		return self.Scale(1 / self.Magnitude())
+	}
+
+	function op_Plus(other)
+	{
+		if(isTable(other))
+		{
+			return self.Add(other)
+		}
+		else
+		{
+			error("Can only Add a Vector with a Vector.")
+		}
+	}
+
+	function op_Minus(other)
+	{
+		if(isTable(other))
+		{
+			return self.Sub(other)
+		}
+		else
+		{
+			error("Can only Add a Vector with a Vector.")
+		}
+	}
+
+	function op_Multiply(other)
+	{
+		if(isTable(other))
+		{
+			error("Can not Multiply Two Vectors. Right side has to be scalar")
+		}
+		else
+		{
+			return self.Scale(other)
+		}
+	}
+
+	function op_Equals(other)
+	{
+		if(isTable(other))
+		{
+			return	self.X == other.X &&
+					self.Y == other.Y &&
+					self.Z == other.Z &&
+					self.W == other.W
+		}
+		return 0
+	}
+
+	function op_InEqual(other)
+	{
+		return self.op_Equals(other) == 0
+	}
+
+	function op_ArrayAccess(i)
+	{
+		if(i == 0 || i == "A")
+		{
+			i = "X"
+		}
+		else if(i == 1 || i == "R")
+		{
+			i = "Y"
+		}
+		else if(i == 2 || i == "G")
+		{
+			i = "Z"
+		}
+		else if(i == 3 || i == "B")
+		{
+			i = "W"
+		}
+		return environment.defaultOp("[]", self, i)
+	}
+
+	function op_PropertyAccess(i)
+	{
+		if(i == "A")
+		{
+			i = "X"
+		}
+		else if(i == "R")
+		{
+			i = "Y"
+		}
+		else if(i == "G")
+		{
+			i = "Z"
+		}
+		else if(i == "B")
+		{
+			i = "W"
+		}
+		return environment.defaultOp(".", self, i)
+	}
+
+
+	function GetEnumerator()
+	{
+		return VectorEnumerator(self)
+	}
+}
