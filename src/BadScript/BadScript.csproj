@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <Version>2021.8.14.1</Version>
+    <Version>2021.8.14.2</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="BSParser.cs~RF136c763.TMP" />
