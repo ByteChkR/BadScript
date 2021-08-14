@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using BadScript.Common.Expressions.Implementations.Unary;
+using BadScript.Common.OperatorImplementations;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 
@@ -24,11 +25,11 @@ namespace BadScript.Common.Expressions.Implementations.Value
         public override ABSObject Execute( BSScope scope )
         {
             ABSObject obj = Left.Execute( scope );
+            ABSObject[] args = new [] { obj }.Concat( Parameters.Select( x => x.Execute( scope ) ) ).ToArray();
+            ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation("()", args, true);
             
-            return obj.Invoke(
-                Parameters.Select( x => x.Execute( scope ) ).
-                           ToArray()
-            );
+            
+            return impl.ExecuteOperator(args);
         }
 
         #endregion

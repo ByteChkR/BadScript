@@ -18,7 +18,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
         public override ABSObject Execute( BSScope scope )
         {
-            ABSObject o = Left.Execute( scope ).ResolveReference();
+            ABSObject o = Left.Execute( scope );
 
             scope.SetFlag( BSScopeFlags.Return, o );
 

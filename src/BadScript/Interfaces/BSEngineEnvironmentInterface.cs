@@ -1,4 +1,8 @@
-﻿using BadScript.Common.Types;
+﻿using System;
+using System.Linq;
+using BadScript.Common.OperatorImplementations;
+using BadScript.Common.Runtime;
+using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
 namespace BadScript.Interfaces
@@ -17,6 +21,9 @@ namespace BadScript.Interfaces
 
         public override void AddApi( ABSTable env )
         {
+            env.InsertElement(
+                new BSObject( "defaultOp" ),
+                new BSFunction( "function defaultOp(opKey, args..)", ExecuteDefaultOperator, 1, int.MaxValue ) );
             env.InsertElement(
                 new BSObject( "createScope" ),
                 new BSFunction( "function createScope()/createScope(parentScope)", m_Instance.CreateScope, 0, 1 ) );
@@ -70,6 +77,17 @@ namespace BadScript.Interfaces
                 new BSObject( "hasInterface" ),
                 new BSFunction( "function hasInterface(interfaceName)", m_Instance.HasInterfaceName, 1 )
             );
+        }
+
+        private ABSObject ExecuteDefaultOperator( ABSObject[] arg )
+        {
+            ABSObject[] a = arg.Skip( 1 ).ToArray();
+            ABSOperatorImplementation impl =  BSOperatorImplementationResolver.ResolveImplementation(
+                arg[0].ConvertString(),
+                a,
+                false );
+
+            return impl.ExecuteOperator( a );
         }
 
         #endregion

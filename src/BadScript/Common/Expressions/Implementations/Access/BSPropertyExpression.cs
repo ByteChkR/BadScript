@@ -1,4 +1,5 @@
-﻿using BadScript.Common.Runtime;
+﻿using BadScript.Common.OperatorImplementations;
+using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -26,18 +27,8 @@ namespace BadScript.Common.Expressions.Implementations.Access
             if ( Left != null )
             {
                 ABSObject l = Left.Execute( scope );
-
-                if(BSOperatorImplementationResolver.AllowOperatorOverrides)
-                {
-                    string pStr = BSOperatorImplementationResolver.ResolveKey( "." );
-
-                    if ( l.HasProperty( pStr ) )
-                    {
-                        return l.GetProperty( pStr ).Invoke( new ABSObject[] { new BSObject( Right ) } );
-                    }
-                }
-
-                return l.GetProperty( Right );
+                ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation(".", new[] { l, new BSObject(Right) }, true);
+                return impl.ExecuteOperator(new[] { l, new BSObject(Right) });
             }
 
             return scope.ResolveName( Right );

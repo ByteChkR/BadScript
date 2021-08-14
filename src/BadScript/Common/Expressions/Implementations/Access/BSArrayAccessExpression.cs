@@ -1,5 +1,6 @@
 ﻿using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions.Implementations.Binary;
+using BadScript.Common.OperatorImplementations;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.References;
@@ -27,28 +28,19 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
             ABSObject i = Right.Execute( scope ).ResolveReference();
 
-            if(BSOperatorImplementationResolver.AllowOperatorOverrides)
-            {
-                string fName = BSOperatorImplementationResolver.ResolveKey( "[]" );
+            //if(BSOperatorImplementationResolver.AllowOperatorOverrides)
+            //{
+            //    string fName = BSOperatorImplementationResolver.ResolveKey( "[]" );
 
-                if ( obj.HasProperty( fName ) )
-                {
-                    return obj.GetProperty( fName ).Invoke( new[] { i } );
-                }
-            }
+            //    if ( obj.HasProperty( fName ) )
+            //    {
+            //        return obj.GetProperty( fName ).Invoke( new[] { i } );
+            //    }
+            //}
 
-            if ( obj is ABSTable t )
-            {
-                return t.GetElement( i );
-            }
-
-            if ( obj is ABSArray a )
-            {
-                if ( i.TryConvertDecimal( out decimal d ) )
-                {
-                    return a.GetElement( ( int ) d );
-                }
-            }
+           ABSOperatorImplementation impl= BSOperatorImplementationResolver.ResolveImplementation( "[]", new[] { obj, i }, true );
+           return impl.ExecuteOperator( new[] { obj, i } );
+            
 
             throw new BSInvalidTypeException(
                 m_Position,

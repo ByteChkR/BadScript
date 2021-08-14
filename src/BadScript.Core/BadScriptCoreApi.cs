@@ -23,7 +23,6 @@ namespace BadScript.Core
 
         public override void AddApi( ABSTable root )
         {
-
             root.InsertElement(
                 new BSObject( "size" ),
                 new BSFunction(

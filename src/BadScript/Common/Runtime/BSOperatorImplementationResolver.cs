@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BadScript.Common.Exceptions;
+using BadScript.Common.Expressions.Implementations.Access;
+using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.OperatorImplementations;
 using BadScript.Common.OperatorImplementations.Implementations;
 using BadScript.Common.OperatorImplementations.Implementations.Logic;
@@ -62,16 +64,11 @@ namespace BadScript.Common.Runtime
             m_Implementations.Add(o);
         }
 
-        public static ABSOperatorImplementation ResolveImplementation(string key, ABSObject[] args)
+        public static ABSOperatorImplementation ResolveImplementation(string key, ABSObject[] args, bool allowOverrides = true)
         {
-            for (int i = 0; i < args.Length; i++)
-            {
-                //args[i] = args[i].ResolveReference();
-            }
-
             ABSObject firstO = args.First();
 
-            if (AllowOperatorOverrides)
+            if (allowOverrides && AllowOperatorOverrides)
             {
                 string opImplName = ResolveKey(key);
                 if (firstO.HasProperty(opImplName))
@@ -136,6 +133,10 @@ namespace BadScript.Common.Runtime
             m_Implementations.Add(new BSPostfixIncrementOperatorImplementation());
             m_Implementations.Add(new BSPrefixDecrementOperatorImplementation());
             m_Implementations.Add(new BSPostfixDecrementOperatorImplementation());
+
+            m_Implementations.Add(new BSArrayAccessOperatorImplementation());
+            m_Implementations.Add(new BSPropertyExpressionImplementation());
+            m_Implementations.Add( new BSInvocationExpressionOperatorImplementation() );
 
         }
 
