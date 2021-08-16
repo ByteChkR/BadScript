@@ -431,6 +431,8 @@ namespace BadScript.Tools.CodeGenerator
                 BSWNameAttribute nameAttrib = propertyInfo.GetCustomAttribute<BSWNameAttribute>();
                 BSWIgnoreAttribute ignoreAttrib = propertyInfo.GetCustomAttribute<BSWIgnoreAttribute>();
 
+                invalidStaticFuncs.Add($"set_{propertyInfo.Name}");
+                invalidStaticFuncs.Add($"get_{propertyInfo.Name}");
                 if (ignoreAttrib != null)
                 {
                     Log(
@@ -460,8 +462,6 @@ namespace BadScript.Tools.CodeGenerator
                 }
 
 
-                invalidStaticFuncs.Add($"set_{propertyInfo.Name}");
-                invalidStaticFuncs.Add($"get_{propertyInfo.Name}");
 
 
 
@@ -474,6 +474,8 @@ namespace BadScript.Tools.CodeGenerator
                 BSWNameAttribute nameAttrib = propertyInfo.GetCustomAttribute<BSWNameAttribute>();
                 BSWIgnoreAttribute ignoreAttrib = propertyInfo.GetCustomAttribute<BSWIgnoreAttribute>();
 
+                invalidFuncs.Add($"set_{propertyInfo.Name}");
+                invalidFuncs.Add($"get_{propertyInfo.Name}");
                 if (ignoreAttrib != null)
                 {
                     Log(
@@ -503,8 +505,6 @@ namespace BadScript.Tools.CodeGenerator
                 }
 
 
-                invalidFuncs.Add($"set_{propertyInfo.Name}");
-                invalidFuncs.Add($"get_{propertyInfo.Name}");
 
 
 
