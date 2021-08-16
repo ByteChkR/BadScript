@@ -713,7 +713,7 @@ namespace BadScript.Tools.CodeGenerator
                     }
                 }
 
-                if (invalidFuncs.Contains(methodInfo.Name))
+                if (invalidStaticFuncs.Contains(methodInfo.Name))
                 {
                     Log( $"Skipping Invalid Function: {methodInfo.Name}" );
                     continue;
