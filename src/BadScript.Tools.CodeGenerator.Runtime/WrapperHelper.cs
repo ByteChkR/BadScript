@@ -78,9 +78,12 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public static object UnwrapObject( Type t, ABSObject o )
         {
+            o = o.ResolveReference();
             if ( o is IBSWrappedObject obj )
             {
                 object oi = obj.GetInternalObject();
+                if (t.IsInstanceOfType(oi))
+                    return oi;
 
                 if ( t == typeof( bool ) )
                 {
@@ -98,7 +101,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                 return Convert.ChangeType( oi, t );
             }
 
-            throw new BSRuntimeException( "Can not Unwrap Object" );
+            throw new BSRuntimeException( $"Can not Unwrap Object: {o}" );
         }
 
         public static T UnwrapObject < T >( ABSObject o )
