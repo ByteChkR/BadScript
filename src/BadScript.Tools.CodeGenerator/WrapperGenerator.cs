@@ -8,10 +8,10 @@ using BadScript.Tools.CodeGenerator.Runtime.Attributes;
 
 namespace BadScript.Tools.CodeGenerator
 {
-    
-public static class WrapperGenerator
-{
-    private const string DB_STATIC_TEMPLATE = @"
+
+    public static class WrapperGenerator
+    {
+        private const string DB_STATIC_TEMPLATE = @"
     public class #DBNAME# : WrapperStaticDataBase
     {
         public #DBNAME#()
@@ -226,7 +226,7 @@ public static class WrapperGenerator
                 setter = $"x=> m_InternalObject.{fi.Name} = WrapperHelper.UnwrapObject<{fi.FieldType.FullName}>(x)";
             }
 
-            Log( $"Generating Field: {fi.DeclaringType.FullName}.{fi.Name}({pName})" );
+            Log($"Generating Field: {fi.DeclaringType.FullName}.{fi.Name}({pName})");
 
             string str = $"m_Properties[\"{pName}\"] = new BSReflectionReference(() => {wrapper[fi.FieldType].GetWrapperCode($"m_InternalObject.{fi.Name}")}, {setter});";
 
@@ -264,8 +264,8 @@ public static class WrapperGenerator
 
         private static string GenerateStaticProperty(
             PropertyInfo pi,
-            Dictionary < Type, WrapperTypeInfo > wrapper,
-            string name = null )
+            Dictionary<Type, WrapperTypeInfo> wrapper,
+            string name = null)
         {
             string setter = "null";
             string pName = name ?? pi.Name;
@@ -278,7 +278,7 @@ public static class WrapperGenerator
             return str;
         }
 
-        private static bool IsValidType( Type t, Dictionary < Type, WrapperTypeInfo > wrappers )
+        private static bool IsValidType(Type t, Dictionary<Type, WrapperTypeInfo> wrappers)
         {
             if (!wrappers.ContainsKey(t))
             {
@@ -312,23 +312,23 @@ public static class WrapperGenerator
         {
             wrappers ??= new Dictionary<Type, WrapperTypeInfo>();
             wrappers[typeof(string)] = new WrapperTypeInfo("", "", "BSObject", "");
-            wrappers[typeof(decimal)] = new WrapperTypeInfo("", "","BSObject", "");
+            wrappers[typeof(decimal)] = new WrapperTypeInfo("", "", "BSObject", "");
             wrappers[typeof(sbyte)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
             wrappers[typeof(byte)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
-            wrappers[typeof(short)] = new WrapperTypeInfo("", "",  "#decimal;BSObject", "");
-            wrappers[typeof(ushort)] = new WrapperTypeInfo("", "","#decimal;BSObject", "");
+            wrappers[typeof(short)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
+            wrappers[typeof(ushort)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
             wrappers[typeof(int)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
             wrappers[typeof(uint)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
             wrappers[typeof(long)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
             wrappers[typeof(ulong)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
-            wrappers[typeof(float)] = new WrapperTypeInfo("", "",  "#decimal;BSObject", "");
-            wrappers[typeof(double)] = new WrapperTypeInfo("", "",  "#decimal;BSObject", "");
+            wrappers[typeof(float)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
+            wrappers[typeof(double)] = new WrapperTypeInfo("", "", "#decimal;BSObject", "");
             wrappers[typeof(bool)] = new WrapperTypeInfo("", "", "@{0} ? BSObject.One : BSObject.Zero", "");
             wrappers[typeof(void)] = new WrapperTypeInfo("", "", "", "");
             wrappers[typeof(Type)] = new WrapperTypeInfo("", "", "", "");
             (string tsrc, string name) = Generate(t, wrappers);
 
-            string src = GenerateSource( wrappers );
+            string src = GenerateSource(wrappers);
 
             string usings = MakeUsings(wrappers.Keys.ToList()) +
                             "\nusing System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing BadScript.Tools.CodeGenerator.Runtime;\r\nusing BadScript.Common.Types;\r\nusing BadScript.Common.Types.Implementations;\r\nusing BadScript.Utils.Reflection;\n\n";
@@ -336,8 +336,8 @@ public static class WrapperGenerator
             if (dbName != null)
                 src += "\n" + GenerateConstructorDataBase(dbName, wrappers);
 
-            if ( dbStaticName != null )
-                src += "\n" + GenerateStaticDataBase( dbStaticName, wrappers );
+            if (dbStaticName != null)
+                src += "\n" + GenerateStaticDataBase(dbStaticName, wrappers);
 
             if (nameSpace == null)
             {
@@ -402,7 +402,7 @@ public static class WrapperGenerator
                 Log("Generating Type Wrapper: " + t.FullName);
             }
 
-            string MakeValidType( string n ) => n.Replace( ".", "_" );
+            string MakeValidType(string n) => n.Replace(".", "_");
 
             string className = $"BSWrapperObject_{MakeValidType(t.FullName)}";
             string baseClassName = $"BSWrapperObject<{t.FullName}>";
@@ -444,8 +444,8 @@ public static class WrapperGenerator
                     continue;
                 }
                 Type propType = propertyInfo.PropertyType;
-                if(string.IsNullOrEmpty( propType.FullName ))continue;
-                
+                if (string.IsNullOrEmpty(propType.FullName)) continue;
+
                 if (!IsValidType(propType, wrappers)) continue;
 
 
@@ -573,21 +573,25 @@ public static class WrapperGenerator
                         $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
                     continue;
                 }
-                if(methodInfo.GetParameters().Any(x=> x.IsOut ||string.IsNullOrEmpty(x.ParameterType.FullName)))
+                if (methodInfo.GetParameters().Any(x => x.IsOut || string.IsNullOrEmpty(x.ParameterType.FullName)))
                 {
-                    Log( $"Skipping Method '{methodInfo.Name}' because it has an out Parameter" );
+                    Log($"Skipping Method '{methodInfo.Name}' because it has an out Parameter");
                     continue;
                 }
-                if (methodInfo.GetParameters().Select(x => x.ParameterType).
-                               All(
-                                   t => t.GenericTypeArguments.Length != 0 ||
-                                        t.IsGenericType ||
-                                        t.IsGenericParameter ||
-                                        t.IsGenericTypeDefinition ||
-                                        t.IsConstructedGenericType))
+                IEnumerable<Type> ptypes = methodInfo.GetParameters().Select(x => x.ParameterType);
+
+                foreach (Type ptype in ptypes)
                 {
-                    Log("Generic Type Not Supported");
-                    continue;
+                    if (ptype.GenericTypeArguments.Length != 0 ||
+                        ptype.IsGenericType ||
+                        ptype.IsGenericParameter ||
+                        ptype.IsGenericTypeDefinition ||
+                        ptype.IsConstructedGenericType)
+                    {
+
+                        Log($"Generic Type '{ptype}' Not Supported in function '{methodInfo}'");
+                        continue;
+                    }
                 }
 
                 if (invalidFuncs.Contains(methodInfo.Name))
@@ -597,9 +601,9 @@ public static class WrapperGenerator
                 if (string.IsNullOrEmpty(retType.FullName)) continue;
 
 
-                if (!IsValidType(retType, wrappers) || methodInfo.GetParameters().Any(x=>!IsValidType(x.ParameterType, wrappers))) continue;
+                if (!IsValidType(retType, wrappers) || methodInfo.GetParameters().Any(x => !IsValidType(x.ParameterType, wrappers))) continue;
 
-                
+
                 sb.AppendLine(GenerateMethod(methodInfo, wrappers, nameAttrib?.Name));
             }
 
@@ -637,21 +641,26 @@ public static class WrapperGenerator
                     continue;
                 }
 
-                if ( methodInfo.GetParameters().Select(x=>x.ParameterType).
-                                All(
-                                    t => t.GenericTypeArguments.Length != 0 ||
-                                         t.IsGenericType ||
-                                         t.IsGenericParameter ||
-                                         t.IsGenericTypeDefinition ||
-                                         t.IsConstructedGenericType ) )
+                IEnumerable<Type> ptypes = methodInfo.GetParameters().Select(x => x.ParameterType);
+
+                foreach (Type ptype in ptypes)
                 {
-                    Log( "Generic Type Not Supported" );
-                    continue;
+                    if (ptype.GenericTypeArguments.Length != 0 ||
+                       ptype.IsGenericType ||
+                       ptype.IsGenericParameter ||
+                       ptype.IsGenericTypeDefinition ||
+                       ptype.IsConstructedGenericType)
+                    {
+
+                        Log($"Generic Type '{ptype}' Not Supported in function '{methodInfo}'");
+                        continue;
+                    }
                 }
+
                 if (invalidFuncs.Contains(methodInfo.Name))
                     continue;
                 Type retType = methodInfo.ReturnType;
-                if(string.IsNullOrEmpty(retType.FullName))continue;
+                if (string.IsNullOrEmpty(retType.FullName)) continue;
 
                 if (!IsValidType(retType, wrappers) || methodInfo.GetParameters().Any(x => !IsValidType(x.ParameterType, wrappers))) continue;
 
@@ -664,7 +673,7 @@ public static class WrapperGenerator
             string classCtor = $"public {className}({t.FullName} obj) : base(obj)";
             string ret = classHeader + "\n{\n" + classCtor + "\n{\n" + sb + "\n}\n}\n";
 
-            if ( t.IsAbstract && t.IsSealed )
+            if (t.IsAbstract && t.IsSealed)
                 ret = "";
 
             string sclassHeader = $"public class {sclassName} : {sbaseClassName}\n";
@@ -679,13 +688,13 @@ public static class WrapperGenerator
             foreach (KeyValuePair<Type, WrapperTypeInfo> keyValuePair in wrappers)
             {
                 retB.AppendLine(keyValuePair.Value.Source);
-                retB.AppendLine( keyValuePair.Value.StaticSource );
+                retB.AppendLine(keyValuePair.Value.StaticSource);
             }
 
             return (ret, className);
         }
 
-        public static string GenerateSource( Dictionary < Type, WrapperTypeInfo > wrappers )
+        public static string GenerateSource(Dictionary<Type, WrapperTypeInfo> wrappers)
         {
             StringBuilder retB = new StringBuilder();
             foreach (KeyValuePair<Type, WrapperTypeInfo> keyValuePair in wrappers)
