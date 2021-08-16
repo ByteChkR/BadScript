@@ -444,9 +444,18 @@ namespace BadScript.Tools.CodeGenerator
                     continue;
                 }
                 Type propType = propertyInfo.PropertyType;
-                if (string.IsNullOrEmpty(propType.FullName)) continue;
 
-                if (!IsValidType(propType, wrappers)) continue;
+                if (string.IsNullOrEmpty(propType.FullName))
+                {
+                    Log( $"Invalid Empty Type: {propType} in property {propertyInfo}" );
+
+                    continue;
+                }
+                if (!IsValidType(propType, wrappers))
+                {
+                    Log($"Property Type '{propType}' is not a Valid Type in property {propertyInfo}");
+                    continue;
+                }
 
 
                 invalidStaticFuncs.Add($"set_{propertyInfo.Name}");
@@ -479,9 +488,17 @@ namespace BadScript.Tools.CodeGenerator
                 }
                 Type propType = propertyInfo.PropertyType;
 
-                if (string.IsNullOrEmpty(propType.FullName)) continue;
+                if (string.IsNullOrEmpty(propType.FullName))
+                {
+                    Log( $"Invalid Empty Type: {propType} in property {propertyInfo}" );
 
-                if (!IsValidType(propType, wrappers)) continue;
+                    continue;
+                }
+                if (!IsValidType(propType, wrappers))
+                {
+                    Log($"Property Type '{propType}' is not a Valid Type in property {propertyInfo}");
+                    continue;
+                }
 
 
                 invalidFuncs.Add($"set_{propertyInfo.Name}");
@@ -513,10 +530,18 @@ namespace BadScript.Tools.CodeGenerator
                     continue;
                 }
                 Type fieldType = fieldInfo.FieldType;
-                if (string.IsNullOrEmpty(fieldType.FullName)) continue;
 
+                if (string.IsNullOrEmpty(fieldType.FullName))
+                {
+                    Log( $"Invalid Empty Type: {fieldType} in field {fieldInfo}" );
 
-                if (!IsValidType(fieldType, wrappers)) continue;
+                    continue;
+                }
+                if (!IsValidType(fieldType, wrappers))
+                {
+                    Log($"Return Type '{fieldType}' is not a Valid Type in field {fieldInfo}");
+                    continue;
+                }
 
 
                 sb.AppendLine(GenerateField(fieldInfo, wrappers, nameAttrib?.Name));
@@ -544,10 +569,17 @@ namespace BadScript.Tools.CodeGenerator
                 }
                 Type fieldType = fieldInfo.FieldType;
 
-                if (string.IsNullOrEmpty(fieldType.FullName)) continue;
+                if (string.IsNullOrEmpty(fieldType.FullName))
+                {
+                    Log( $"Invalid Empty Type: {fieldType} in field {fieldInfo}" );
 
-
-                if (!IsValidType(fieldType, wrappers)) continue;
+                    continue;
+                }
+                if (!IsValidType(fieldType, wrappers))
+                {
+                    Log($"Return Type '{fieldType}' is not a Valid Type in field {fieldInfo}");
+                    continue;
+                }
 
 
                 ssb.AppendLine(GenerateStaticField(fieldInfo, wrappers, nameAttrib?.Name));
@@ -595,15 +627,37 @@ namespace BadScript.Tools.CodeGenerator
                 }
 
                 if (invalidFuncs.Contains(methodInfo.Name))
+                {
+                    Log($"Skipping Invalid Function: {methodInfo.Name}");
                     continue;
+                }
                 Type retType = methodInfo.ReturnType;
 
-                if (string.IsNullOrEmpty(retType.FullName)) continue;
+                if (string.IsNullOrEmpty(retType.FullName))
+                {
+                    Log( $"Invalid Empty Type: {retType} in method {methodInfo}" );
+
+                    continue;
+                }
 
 
-                if (!IsValidType(retType, wrappers) || methodInfo.GetParameters().Any(x => !IsValidType(x.ParameterType, wrappers))) continue;
+                if (!IsValidType(retType, wrappers))
+                {
+                    Log($"Return Type '{retType}' is not a Valid Type in method '{methodInfo}'");
+                    continue;
+                }
 
-
+                bool cont = false;
+                foreach (ParameterInfo miPi in methodInfo.GetParameters())
+                {
+                    if (!IsValidType(miPi.ParameterType, wrappers))
+                    {
+                        Log($"Parameter Type '{retType}' is not a Valid Type in function '{methodInfo}'");
+                        cont = true;
+                        
+                    }
+                }
+                if(cont) continue;
                 sb.AppendLine(GenerateMethod(methodInfo, wrappers, nameAttrib?.Name));
             }
 
@@ -658,13 +712,35 @@ namespace BadScript.Tools.CodeGenerator
                 }
 
                 if (invalidFuncs.Contains(methodInfo.Name))
+                {
+                    Log( $"Skipping Invalid Function: {methodInfo.Name}" );
                     continue;
+                }
                 Type retType = methodInfo.ReturnType;
-                if (string.IsNullOrEmpty(retType.FullName)) continue;
+                if (string.IsNullOrEmpty(retType.FullName))
+                {
+                    Log( $"Invalid Empty Type: {retType} in method {methodInfo}" );
+                    continue;
+                }
 
-                if (!IsValidType(retType, wrappers) || methodInfo.GetParameters().Any(x => !IsValidType(x.ParameterType, wrappers))) continue;
+                if (!IsValidType(retType, wrappers))
+                {
+                    Log( $"Return Type '{retType}' is not a Valid Type in function '{methodInfo}'" );
+                    continue;
+                }
+
+                bool cont = false;
+                foreach ( ParameterInfo miPi in methodInfo.GetParameters() )
+                {
+                    if ( !IsValidType( miPi.ParameterType, wrappers ) )
+                    {
+                        Log($"Parameter Type '{retType}' is not a Valid Type in function '{methodInfo}'");
+                        cont = true;
+                    }
+                }
 
 
+                if (cont) continue;
 
                 ssb.AppendLine(GenerateStaticMethod(methodInfo, wrappers, nameAttrib?.Name));
             }
