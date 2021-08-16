@@ -280,6 +280,8 @@ namespace BadScript.Tools.CodeGenerator
 
         private static bool IsValidType(Type t, Dictionary<Type, WrapperTypeInfo> wrappers)
         {
+            if ( t == typeof( void ) )
+                return true;
             if (!wrappers.ContainsKey(t))
             {
                 (string src, string name) = Generate(t, wrappers);
