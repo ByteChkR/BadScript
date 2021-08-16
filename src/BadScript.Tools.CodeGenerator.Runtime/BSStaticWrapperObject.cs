@@ -112,7 +112,14 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                     }
                     else
                     {
-                        tw.Write(keyLine + " = ");
+                        if(valueLines.Count != 0)
+                        {
+                            tw.Write(keyLine + " = ");
+                        }
+                        else
+                        {
+                            tw.WriteLine(keyLine + " = ");
+                        }
                     }
                 }
 
