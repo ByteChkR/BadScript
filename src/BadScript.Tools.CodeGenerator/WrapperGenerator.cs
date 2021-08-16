@@ -447,6 +447,7 @@ namespace BadScript.Tools.CodeGenerator
                         $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
                     continue;
                 }
+
                 Type propType = propertyInfo.PropertyType;
 
                 if (string.IsNullOrEmpty(propType.FullName))
@@ -490,6 +491,12 @@ namespace BadScript.Tools.CodeGenerator
                         $" because it is marked with {nameof(ObsoleteAttribute)} and does not compile(IsError is true)");
                     continue;
                 }
+                if (propertyInfo.Name == "Item" && propertyInfo.GetIndexParameters().Length != 0)
+                {
+                    Log($"Found Index Accessor in Type: {t}. Skipping..");
+                    continue;
+                }
+
                 Type propType = propertyInfo.PropertyType;
 
                 if (string.IsNullOrEmpty(propType.FullName))
