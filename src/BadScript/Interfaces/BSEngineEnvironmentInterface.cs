@@ -4,9 +4,13 @@ using BadScript.Common.OperatorImplementations;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Interfaces.Settings;
+using BadScript.Settings;
 
 namespace BadScript.Interfaces
 {
+
+
 
     public class BSEngineEnvironmentInterface : ABSScriptInterface
     {
@@ -77,6 +81,8 @@ namespace BadScript.Interfaces
                 new BSObject( "hasInterface" ),
                 new BSFunction( "function hasInterface(interfaceName)", m_Instance.HasInterfaceName, 1 )
             );
+
+            env.InsertElement( new BSObject( "settings" ), new SettingsCategoryWrapper(BSSettings.BsRoot) );
         }
 
         private ABSObject ExecuteDefaultOperator( ABSObject[] arg )
