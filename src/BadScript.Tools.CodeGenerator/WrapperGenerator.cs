@@ -561,7 +561,33 @@ namespace BadScript.Tools.CodeGenerator
                 }
                 if (propertyInfo.Name == "Item" && propertyInfo.GetIndexParameters().Length != 0)
                 {
-                    Log($"Found Index Accessor in Type: {t}. Skipping..");
+                    Log($"Found Index Accessor in Type: {t}.");
+
+                    if (!IsValidType(propertyInfo.PropertyType, wrappers))
+                    {
+                        Log($"Property Type '{propertyInfo.PropertyType}' is not a Valid Type in property {propertyInfo}");
+                        continue;
+                    }
+
+                    IEnumerable < Type > ptypes = propertyInfo.GetIndexParameters().Select(x=>x.ParameterType);
+
+                    bool valid = true;
+                    foreach (Type ptype in ptypes)
+                    {
+                        if (ptype.GenericTypeArguments.Length != 0 ||
+                            ptype.IsGenericType ||
+                            ptype.IsGenericParameter ||
+                            ptype.IsGenericTypeDefinition ||
+                            ptype.IsConstructedGenericType)
+                        {
+                            valid = false;
+                            Log($"Generic Type '{ptype}' Not Supported in Property '{propertyInfo}'");
+                            continue;
+                        }
+                    }
+
+                    if ( valid )
+                        continue;
                     string s = GenerateArrayAccessor( propertyInfo, wrappers, nameAttrib?.Name );
                     sb.AppendLine( s);
 
