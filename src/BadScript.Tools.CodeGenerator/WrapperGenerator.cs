@@ -266,7 +266,7 @@ namespace BadScript.Tools.CodeGenerator
         {
             string pName = name ?? mi.Name;
             string str = GenerateArrayAccessorGetMethod( mi.GetMethod, wrapper, "get_"+ pName);
-
+            if (mi.SetMethod == null) return str;
             return str + "\n" + GenerateArrayAccessorSetMethod( mi.SetMethod, mi.PropertyType, wrapper, "set_" + pName);
         }
 
