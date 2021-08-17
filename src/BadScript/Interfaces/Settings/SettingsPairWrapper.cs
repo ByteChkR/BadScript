@@ -19,10 +19,10 @@ namespace BadScript.Interfaces.Settings
         public SettingsPairWrapper( SettingsPair pair) : base( SourcePosition.Unknown )
         {
             m_Pair = pair;
-            m_Properties = new Dictionary < string, ABSReference >
+            m_Properties = new Dictionary<string, ABSReference>
             {
                 {"Name", new BSReflectionReference(() => new BSObject(m_Pair.Name), null )},
-                {"Value", new BSReflectionReference(() => new BSObject(m_Pair.Value), null) },
+                {"Value", new BSReflectionReference(() => new BSObject(m_Pair.Value), x=> m_Pair.Value=x.ConvertString()) },
                 {"IsPersistent", new BSReflectionReference(() => new BSObject(m_Pair.IsPersistent), x => m_Pair.IsPersistent= x.ConvertBool()) },
             };
         }
