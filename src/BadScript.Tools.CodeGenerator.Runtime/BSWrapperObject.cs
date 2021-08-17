@@ -38,11 +38,15 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override bool Equals(ABSObject other)
         {
+            if ( other == null )
+                return false;
+            if (IsNull) return other.IsNull;
             if (other is BSWrapperObject<T> o)
             {
-                return ReferenceEquals( m_InternalObject, o.m_InternalObject );
+                return m_InternalObject.Equals( o.m_InternalObject );
+                //return m_InternalObject == o.m_InternalObject;
+                //return ReferenceEquals( m_InternalObject, o.m_InternalObject );
             }
-
             return false;
         }
 
