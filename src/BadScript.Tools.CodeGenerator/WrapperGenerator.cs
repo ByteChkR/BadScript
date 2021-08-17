@@ -262,6 +262,74 @@ namespace BadScript.Tools.CodeGenerator
             return str;
         }
 
+        private static string GenerateArrayAccessor(PropertyInfo mi, Dictionary<Type, WrapperTypeInfo> wrapper, string name = null)
+        {
+            string pName = name ?? mi.Name;
+            string str = GenerateArrayAccessorGetMethod( mi.GetMethod, wrapper, "get_"+ pName);
+
+            return str + "\n" + GenerateArrayAccessorSetMethod( mi.SetMethod, mi.PropertyType, wrapper, "set_" + pName);
+        }
+
+        private static string GenerateArrayAccessorGetMethod(MethodInfo mi, Dictionary<Type, WrapperTypeInfo> wrapper, string name = null)
+        {
+            string sig = "";
+            string dbgSig = "";
+            for (int i = 0; i < mi.GetParameters().Length; i++)
+            {
+                ParameterInfo parameterInfo = mi.GetParameters()[i];
+
+                if (i != 0)
+                {
+                    dbgSig += ", ";
+                    sig += ", ";
+                }
+
+                dbgSig += $"{parameterInfo.Name ?? $"_{i}"}";
+                sig += $"WrapperHelper.UnwrapObject<{parameterInfo.ParameterType.FullName}>(a[{i}])";
+            }
+
+            string invocation = $"m_InternalObject[{sig}]";
+            string retCreator = wrapper[mi.ReturnType].GetWrapperCode(invocation);
+            if (mi.ReturnType == typeof(void))
+            {
+                retCreator = $"{{\n{invocation};\nreturn new BSObject(null);\n}}";
+            }
+
+            Log($"Generating Array Access Method: {mi.DeclaringType.FullName}.{name}({sig})");
+            string str = $"m_Properties[\"{name}\"] = new BSFunctionReference(new BSFunction(\"function {name}({dbgSig})\", a => {retCreator}, {mi.GetParameters().Length}));";
+
+            return str;
+        }
+
+        private static string GenerateArrayAccessorSetMethod(MethodInfo mi, Type pType, Dictionary<Type, WrapperTypeInfo> wrapper, string name = null)
+        {
+            string sig = "";
+            string dbgSig = "";
+            for (int i = 0; i < mi.GetParameters().Length; i++)
+            {
+                ParameterInfo parameterInfo = mi.GetParameters()[i];
+
+                if (i != 0)
+                {
+                    dbgSig += ", ";
+                    if(i != mi.GetParameters().Length - 1)
+                        sig += ", ";
+                }
+
+                dbgSig += $"{parameterInfo.Name ?? $"_{i}"}";
+                if(i != mi.GetParameters().Length-1)
+                    sig += $"WrapperHelper.UnwrapObject<{parameterInfo.ParameterType.FullName}>(a[{i}])";
+            }
+
+
+            string setter = $"\na=> {{\n m_InternalObject[{sig}] = WrapperHelper.UnwrapObject<{pType.FullName}>(a[{mi.GetParameters().Length-1}]);\nreturn new BSObject(null);\n}}\n";
+
+            Log($"Generating Array Access Method: {mi.DeclaringType.FullName}.{name}({sig})");
+            string str = $"m_Properties[\"{name}\"] = new BSFunctionReference(new BSFunction(\"function {name}({dbgSig})\", {setter}, {mi.GetParameters().Length}));";
+
+            return str;
+        }
+
         private static string GenerateStaticProperty(
             PropertyInfo pi,
             Dictionary<Type, WrapperTypeInfo> wrapper,
@@ -494,6 +562,9 @@ namespace BadScript.Tools.CodeGenerator
                 if (propertyInfo.Name == "Item" && propertyInfo.GetIndexParameters().Length != 0)
                 {
                     Log($"Found Index Accessor in Type: {t}. Skipping..");
+                    string s = GenerateArrayAccessor( propertyInfo, wrappers, nameAttrib?.Name );
+                    sb.AppendLine( s);
+
                     continue;
                 }
 

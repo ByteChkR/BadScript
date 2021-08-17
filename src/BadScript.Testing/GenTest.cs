@@ -10,7 +10,18 @@ namespace BadScript.Testing
 {
     public class SubGenTest : GenTest
     {
-
+        public string[] strings = { "abc", "def", "ghi", "jkl" };
+        public string this[int Index]
+        {
+            get
+            {
+                return strings[Index];
+            }
+            set
+            {
+                strings[Index] = value;
+            }
+        }
     }
 
     public class GenTest
@@ -36,6 +47,7 @@ namespace BadScript.Testing
             string src = WrapperGenerator.Generate < GenTest >();
         }
     }
+
 
 
 
@@ -98,6 +110,13 @@ namespace BadScript.Testing
     {
         public BSWrapperObject_BadScript_Testing_SubGenTest(BadScript.Testing.SubGenTest obj) : base(obj)
         {
+            m_Properties["get_Item"] = new BSFunctionReference(new BSFunction("function get_Item(Index)", a => new BSObject(m_InternalObject[WrapperHelper.UnwrapObject<System.Int32>(a[0])]), 1));
+            m_Properties["set_Item"] = new BSFunctionReference(new BSFunction("function set_Item(Index, value)",
+            a => {
+                m_InternalObject[WrapperHelper.UnwrapObject<System.Int32>(a[0])] = WrapperHelper.UnwrapObject<System.String>(a[1]);
+                return new BSObject(null);
+            }
+            , 2));
             m_Properties["ToString"] = new BSFunctionReference(new BSFunction("function ToString()", a => new BSObject(m_InternalObject.ToString()), 0));
             m_Properties["Equals"] = new BSFunctionReference(new BSFunction("function Equals(obj)", a => m_InternalObject.Equals(WrapperHelper.UnwrapObject<System.Object>(a[0])) ? BSObject.One : BSObject.Zero, 1));
             m_Properties["GetHashCode"] = new BSFunctionReference(new BSFunction("function GetHashCode()", a => new BSObject((decimal)m_InternalObject.GetHashCode()), 0));
@@ -113,5 +132,6 @@ namespace BadScript.Testing
 
         }
     }
+
 
 }
