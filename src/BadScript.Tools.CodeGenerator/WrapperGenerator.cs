@@ -33,9 +33,9 @@ namespace BadScript.Tools.CodeGenerator
 #CREATORDATA#
             };
         }
-        public bool HasType<T>()
+        public bool HasType(Type t)
         {
-            return m_Creators.ContainsKey(typeof(T));
+            return m_Creators.ContainsKey(t);
         }
 
         public ABSObject Get(Type t, object[] args)
@@ -858,9 +858,10 @@ namespace BadScript.Tools.CodeGenerator
             if (t.IsAbstract && t.IsSealed)
                 ret = "";
 
+            string classStaticCtor = $"static {sclassName}()\n{{\nWrapperHelper.AddRecastWrapper<{t.FullName}>(o => new {className}(o));\n}}\n";
             string sclassHeader = $"public class {sclassName} : {sbaseClassName}\n";
             string sclassCtor = $"public {sclassName}() : base(typeof({t.FullName}))";
-            string sret = sclassHeader + "\n{\n" + sclassCtor + "\n{\n" + ssb + "\n}\n}\n";
+            string sret = sclassHeader + "\n{\n" + sclassCtor + "\n{\n" + ssb + "\n}\n" + classStaticCtor + "\n}\n";
 
             wrappers[t] = new WrapperTypeInfo(ret, sret, className, sclassName, t.GetCustomAttributes<BSWConstructorCreatorAttribute>().ToArray());
 

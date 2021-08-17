@@ -15,8 +15,36 @@ namespace BadScript.Tools.CodeGenerator.Runtime
     {
         public static bool AllowRecurseToString = true;
 
-        private static readonly List < IWrapperConstructorDataBase > s_DataBases =
-            new List < IWrapperConstructorDataBase >();
+
+        private static readonly Dictionary < Type, Func < object, ABSObject > > s_WrapperMap =
+            new Dictionary < Type, Func < object, ABSObject > >();
+
+        public static void AddRecastWrapper( Type t, Func < object, ABSObject > f ) => s_WrapperMap[t] = f;
+        public static void AddRecastWrapper<T>(Func<T, ABSObject> f) =>
+            AddRecastWrapper(typeof(T), x => f((T)x));
+        
+        public static ABSObject RecastWrapper(ABSObject o)
+        {
+            if ( o is IBSWrappedObject wo )
+            {
+                object oInstance = wo.GetInternalObject();
+
+                if ( oInstance == null )
+                    throw new BSRuntimeException( "Can not Recast Object that is NULL" );
+                Type t = oInstance.GetType();
+
+                if (s_WrapperMap.ContainsKey(t))
+                {
+                    return s_WrapperMap[t](oInstance);
+                }
+                else
+                {
+                    return o;
+                }
+            }
+
+            throw new BSRuntimeException( "Invalid Type. Expected Wrapper Object for Recast" );
+        }
 
         #region Public
         

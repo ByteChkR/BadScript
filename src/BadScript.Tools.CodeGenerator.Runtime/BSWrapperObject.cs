@@ -13,11 +13,12 @@ using BadScript.Common.Types.References;
 
 namespace BadScript.Tools.CodeGenerator.Runtime
 {
-
+    
     public class BSWrapperObject<T> : ABSObject, IBSWrappedObject, IEnumerable<IForEachIteration>
     {
 
         protected T m_InternalObject;
+        
 
         public T GetInternalObject() => m_InternalObject;
         protected Dictionary<string, ABSReference> m_Properties = new Dictionary < string, ABSReference >();

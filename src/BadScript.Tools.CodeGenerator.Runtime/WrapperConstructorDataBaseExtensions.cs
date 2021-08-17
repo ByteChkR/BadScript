@@ -9,6 +9,8 @@ namespace BadScript.Tools.CodeGenerator.Runtime
         {
             return db.Get( typeof( T ), args );
         }
+
+        public static bool HasType < T >( this IWrapperConstructorDataBase db ) => db.HasType( typeof( T ) );
     }
 
 }

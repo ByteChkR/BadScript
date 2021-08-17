@@ -8,8 +8,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
     {
         Type[] Types { get; }
 
-        bool HasType < T >();
-
+        bool HasType(Type t);
 
         ABSObject Get(Type t, object[] args);
 

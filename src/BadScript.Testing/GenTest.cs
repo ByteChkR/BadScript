@@ -39,12 +39,14 @@ namespace BadScript.Testing
         }
         public static void Main()
         {
-            BSWrapperObject_BadScript_Testing_SubGenTest t =
-                new BSWrapperObject_BadScript_Testing_SubGenTest( new SubGenTest() );
+            SDB sdb = new SDB();
+            BSWrapperObject_BadScript_Testing_GenTest t =
+                new BSWrapperObject_BadScript_Testing_GenTest(new SubGenTest());
 
             GenTest test = WrapperHelper.UnwrapObject<GenTest>(t);
+            ABSObject recast = WrapperHelper.RecastWrapper(t);
 
-            string src = WrapperGenerator.Generate < GenTest >();
+            string src = WrapperGenerator.Generate < GenTest >(null, null, "DB", "SDB");
         }
     }
 
@@ -80,6 +82,11 @@ namespace BadScript.Testing
             }, 0));
 
         }
+        static BSStaticWrapperObject_BadScript_Testing_GenTest()
+        {
+            WrapperHelper.AddRecastWrapper<BadScript.Testing.GenTest>(o => new BSWrapperObject_BadScript_Testing_GenTest(o));
+        }
+
     }
 
     public class BSWrapperObject_System_Object : BSWrapperObject<System.Object>
@@ -103,6 +110,11 @@ namespace BadScript.Testing
             m_StaticProperties["ReferenceEquals"] = new BSFunctionReference(new BSFunction("function ReferenceEquals(objA, objB)", a => System.Object.ReferenceEquals(WrapperHelper.UnwrapObject<System.Object>(a[0]), WrapperHelper.UnwrapObject<System.Object>(a[1])) ? BSObject.One : BSObject.Zero, 2));
 
         }
+        static BSStaticWrapperObject_System_Object()
+        {
+            WrapperHelper.AddRecastWrapper<System.Object>(o => new BSWrapperObject_System_Object(o));
+        }
+
     }
 
     public class BSWrapperObject_BadScript_Testing_SubGenTest : BSWrapperObject<BadScript.Testing.SubGenTest>
@@ -129,6 +141,52 @@ namespace BadScript.Testing
     {
         public BSStaticWrapperObject_BadScript_Testing_SubGenTest() : base(typeof(BadScript.Testing.SubGenTest))
         {
+
+        }
+        static BSStaticWrapperObject_BadScript_Testing_SubGenTest()
+        {
+            WrapperHelper.AddRecastWrapper<BadScript.Testing.SubGenTest>(o => new BSWrapperObject_BadScript_Testing_SubGenTest(o));
+        }
+
+    }
+
+
+
+    public class DB : IWrapperConstructorDataBase
+    {
+        private readonly Dictionary<Type, (IWrapperObjectCreator[], Func<object[], object>)> m_Creators;
+        public Type[] Types => m_Creators.Keys.ToArray();
+
+        public DB()
+        {
+            m_Creators = new Dictionary<Type, (IWrapperObjectCreator[], Func<object[], object>)>
+            {
+{typeof(BadScript.Testing.GenTest), (new IWrapperObjectCreator[] {}, a => new BSWrapperObject_BadScript_Testing_GenTest((BadScript.Testing.GenTest)m_Creators[typeof(BadScript.Testing.GenTest)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
+{typeof(System.Object), (new IWrapperObjectCreator[] {}, a => new BSWrapperObject_System_Object((System.Object)m_Creators[typeof(System.Object)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
+{typeof(BadScript.Testing.SubGenTest), (new IWrapperObjectCreator[] {}, a => new BSWrapperObject_BadScript_Testing_SubGenTest((BadScript.Testing.SubGenTest)m_Creators[typeof(BadScript.Testing.SubGenTest)].Item1.First(x=>x.ArgCount == a.Length).Create(a)))},
+
+            };
+        }
+        public bool HasType(Type t)
+        {
+            return m_Creators.ContainsKey(t);
+        }
+
+        public ABSObject Get(Type t, object[] args)
+        {
+            return (ABSObject)m_Creators[t].Item2(args);
+        }
+    }
+
+
+
+    public class SDB : WrapperStaticDataBase
+    {
+        public SDB()
+        {
+            StaticTypes[typeof(BadScript.Testing.GenTest)] = new BSStaticWrapperObject_BadScript_Testing_GenTest();
+            StaticTypes[typeof(System.Object)] = new BSStaticWrapperObject_System_Object();
+            StaticTypes[typeof(BadScript.Testing.SubGenTest)] = new BSStaticWrapperObject_BadScript_Testing_SubGenTest();
 
         }
     }
