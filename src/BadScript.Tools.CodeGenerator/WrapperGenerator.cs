@@ -586,7 +586,7 @@ namespace BadScript.Tools.CodeGenerator
                         }
                     }
 
-                    if ( valid )
+                    if ( !valid )
                         continue;
                     string s = GenerateArrayAccessor( propertyInfo, wrappers, nameAttrib?.Name );
                     sb.AppendLine( s);
