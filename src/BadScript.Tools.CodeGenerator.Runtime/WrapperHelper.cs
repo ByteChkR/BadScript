@@ -23,7 +23,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
         public static void AddRecastWrapper<T>(Func<T, ABSObject> f) =>
             AddRecastWrapper(typeof(T), x => f((T)x));
         
-        public static ABSObject RecastWrapper(ABSObject o)
+        public static ABSObject RecastWrapper(ABSObject o, bool findBase = false)
         {
             if ( o is IBSWrappedObject wo )
             {
@@ -37,10 +37,19 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                 {
                     return s_WrapperMap[t](oInstance);
                 }
-                else
-                {
+                if (!findBase)
                     return o;
+                Type cur = t.BaseType;
+
+                while (cur != null)
+                {
+                    if (s_WrapperMap.ContainsKey(cur))
+                    {
+                        return s_WrapperMap[cur](oInstance);
+                    }
+                    cur = cur.BaseType;
                 }
+                return o;
             }
 
             throw new BSRuntimeException( "Invalid Type. Expected Wrapper Object for Recast" );
