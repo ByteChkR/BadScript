@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <Version>2021.8.14.2</Version>
+    <Version>2021.8.17.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\BadScript.Tools.CodeGenerator.Runtime\BadScript.Tools.CodeGenerator.Runtime.csproj" />
