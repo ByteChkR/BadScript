@@ -865,7 +865,13 @@ namespace BadScript.Tools.CodeGenerator
 
             wrappers[t] = new WrapperTypeInfo(ret, sret, className, sclassName, t.GetCustomAttributes<BSWConstructorCreatorAttribute>().ToArray());
 
+            Type baseType = t.BaseType;
 
+            while ( baseType != null )
+            {
+                Generate( baseType, wrappers );
+                baseType = baseType.BaseType;
+            }
 
             StringBuilder retB = new StringBuilder();
             foreach (KeyValuePair<Type, WrapperTypeInfo> keyValuePair in wrappers)
