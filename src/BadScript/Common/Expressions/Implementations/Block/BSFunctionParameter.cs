@@ -7,12 +7,16 @@
         public bool IsOptional;
         public bool NotNull;
 
+        #region Public
+
         public BSFunctionParameter( string name, bool notNull, bool optional )
         {
             Name = name;
             NotNull = notNull;
             IsOptional = optional;
         }
+
+        #endregion
     }
 
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BadScript.Utils
+﻿namespace BadScript.Utils
 {
 
     //public class SettingsRoot : SettingsCategory

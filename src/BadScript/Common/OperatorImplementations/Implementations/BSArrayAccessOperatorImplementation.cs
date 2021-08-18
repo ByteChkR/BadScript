@@ -6,8 +6,10 @@ using BadScript.Common.Types.References;
 namespace BadScript.Common.OperatorImplementations.Implementations
 {
 
-    public class BSArrayAccessOperatorImplementation:ABSOperatorImplementation
+    public class BSArrayAccessOperatorImplementation : ABSOperatorImplementation
     {
+        #region Public
+
         public BSArrayAccessOperatorImplementation() : base( "[]" )
         {
 
@@ -18,30 +20,37 @@ namespace BadScript.Common.OperatorImplementations.Implementations
             return true;
         }
 
+        #endregion
+
+        #region Protected
+
         protected override ABSObject Execute( ABSObject[] args )
         {
             ABSObject obj = args[0].ResolveReference();
             ABSObject i = args[1];
-            if (obj is ABSTable t)
+
+            if ( obj is ABSTable t )
             {
-                return t.GetElement(i);
+                return t.GetElement( i );
             }
 
-            if (obj is ABSArray a)
+            if ( obj is ABSArray a )
             {
-                if (i.TryConvertDecimal(out decimal d))
+                if ( i.TryConvertDecimal( out decimal d ) )
                 {
-                    return a.GetElement((int)d);
+                    return a.GetElement( ( int ) d );
                 }
             }
 
             throw new BSInvalidTypeException(
-                SourcePosition.Unknown, 
+                SourcePosition.Unknown,
                 "Expected Array",
                 obj,
                 "Table"
             );
         }
+
+        #endregion
     }
 
 }

@@ -219,6 +219,70 @@ namespace BadScript.Common
             throw new BSParserException( "Expected '('", this );
         }
 
+        public BSExpression ParseEnumerableFunction( bool isGlobal )
+        {
+            StringBuilder sb = new StringBuilder();
+            ReadWhitespaceAndNewLine();
+
+            string funcName;
+            int pos = m_CurrentPosition;
+
+            if ( IsWordStart() )
+            {
+
+                sb.Append( m_OriginalSource[m_CurrentPosition] );
+                m_CurrentPosition++;
+
+                while ( IsWordMiddle() )
+                {
+                    sb.Append( m_OriginalSource[m_CurrentPosition] );
+                    m_CurrentPosition++;
+                }
+
+                funcName = sb.ToString();
+            }
+            else
+            {
+                funcName = "";
+
+                if ( isGlobal )
+                {
+                    throw new BSParserException( "A global anonymous function is not allowed.", this );
+                }
+            }
+
+            ReadWhitespaceAndNewLine();
+            BSFunctionParameter[] args = ParseArgumentList();
+
+            ReadWhitespaceAndNewLine();
+
+            if ( Is( '=' ) && Is( 1, '>' ) )
+            {
+                m_CurrentPosition += 2;
+                ReadWhitespaceAndNewLine();
+
+                return new BSEnumerableFunctionDefinitionExpression(
+                    CreateSourcePosition( pos ),
+                    funcName,
+                    isGlobal,
+                    args,
+                    new[] { Parse( int.MaxValue ) } );
+            }
+
+            string block = ParseBlock();
+
+            BSParser p = new BSParser( block );
+
+            BSExpression[] b = p.ParseToEnd();
+
+            return new BSEnumerableFunctionDefinitionExpression(
+                CreateSourcePosition( pos ),
+                funcName,
+                isGlobal,
+                args,
+                b );
+        }
+
         public BSExpression ParseExpression( int start )
         {
             BSExpression expr = ParseValue();
@@ -267,65 +331,6 @@ namespace BadScript.Common
             }
 
             return expr;
-        }
-
-        public BSExpression ParseEnumerableFunction(bool isGlobal)
-        {
-            StringBuilder sb = new StringBuilder();
-            ReadWhitespaceAndNewLine();
-
-            string funcName;
-            int pos = m_CurrentPosition;
-
-            if (IsWordStart())
-            {
-
-                sb.Append(m_OriginalSource[m_CurrentPosition]);
-                m_CurrentPosition++;
-
-                while (IsWordMiddle())
-                {
-                    sb.Append(m_OriginalSource[m_CurrentPosition]);
-                    m_CurrentPosition++;
-                }
-
-                funcName = sb.ToString();
-            }
-            else
-            {
-                funcName = "";
-
-                if (isGlobal)
-                {
-                    throw new BSParserException("A global anonymous function is not allowed.", this);
-                }
-            }
-
-            ReadWhitespaceAndNewLine();
-            BSFunctionParameter[] args = ParseArgumentList();
-
-            ReadWhitespaceAndNewLine();
-
-            if (Is('=') && Is(1, '>'))
-            {
-                m_CurrentPosition += 2;
-                ReadWhitespaceAndNewLine();
-
-                return new BSEnumerableFunctionDefinitionExpression(
-                    CreateSourcePosition( pos ),
-                    funcName,
-                    isGlobal,
-                    args,
-                    new[] { Parse( int.MaxValue ) } );
-            }
-
-            string block = ParseBlock();
-
-            BSParser p = new BSParser(block);
-
-            BSExpression[] b = p.ParseToEnd();
-
-            return new BSEnumerableFunctionDefinitionExpression(CreateSourcePosition(pos), funcName, isGlobal, args, b);
         }
 
         public BSExpression ParseFunction( bool isGlobal )
@@ -700,23 +705,26 @@ namespace BadScript.Common
             string wordName = GetNextWord();
 
             bool isGlobal = wordName == "global";
-            if(isGlobal)
+
+            if ( isGlobal )
             {
                 ReadWhitespaceAndNewLine();
                 wordName = GetNextWord();
             }
 
-            if (wordName == "function")
+            if ( wordName == "function" )
             {
-                return ParseFunction(isGlobal);
+                return ParseFunction( isGlobal );
             }
-            if (wordName == "enumerable")
+
+            if ( wordName == "enumerable" )
             {
-                return ParseEnumerableFunction(isGlobal);
+                return ParseEnumerableFunction( isGlobal );
             }
-            if (isGlobal)
+
+            if ( isGlobal )
             {
-                throw new BSParserException("Expected 'function' or 'enumerable' after 'global'", this);
+                throw new BSParserException( "Expected 'function' or 'enumerable' after 'global'", this );
             }
 
             if ( wordName == "return" )
@@ -1115,12 +1123,14 @@ namespace BadScript.Common
 
             m_CurrentPosition++;
 
-            List <BSFunctionParameter> args = new List <BSFunctionParameter>();
+            List < BSFunctionParameter > args = new List < BSFunctionParameter >();
             bool needsToBeOptional = false;
+
             if ( !Is( ')' ) )
             {
                 bool notNull = false;
                 bool optional = false;
+
                 if ( Is( '!' ) )
                 {
                     m_CurrentPosition++;
@@ -1147,9 +1157,12 @@ namespace BadScript.Common
                 }
 
                 if ( needsToBeOptional && !optional )
+                {
                     throw new BSRuntimeException(
                         "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters." );
-                args.Add(new BSFunctionParameter(ParseArgumentName(), notNull, optional ));
+                }
+
+                args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional ) );
                 ReadWhitespaceAndNewLine();
 
                 while ( Is( ',' ) )
@@ -1159,35 +1172,38 @@ namespace BadScript.Common
                     optional = false;
                     ReadWhitespaceAndNewLine();
 
-                    if (Is('!'))
+                    if ( Is( '!' ) )
                     {
                         m_CurrentPosition++;
                         notNull = true;
 
-                        if (Is('?'))
+                        if ( Is( '?' ) )
                         {
                             m_CurrentPosition++;
                             optional = true;
                             needsToBeOptional = true;
                         }
                     }
-                    else if (Is("?"))
+                    else if ( Is( "?" ) )
                     {
                         m_CurrentPosition++;
                         optional = true;
                         needsToBeOptional = true;
 
-                        if (Is('!'))
+                        if ( Is( '!' ) )
                         {
                             m_CurrentPosition++;
                             notNull = true;
                         }
                     }
 
-                    if (needsToBeOptional && !optional)
+                    if ( needsToBeOptional && !optional )
+                    {
                         throw new BSRuntimeException(
-                            "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters.");
-                    args.Add( new BSFunctionParameter(ParseArgumentName(), notNull, optional));
+                            "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters." );
+                    }
+
+                    args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional ) );
                     ReadWhitespaceAndNewLine();
                 }
 

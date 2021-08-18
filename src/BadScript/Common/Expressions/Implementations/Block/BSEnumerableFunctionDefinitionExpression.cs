@@ -11,7 +11,17 @@ namespace BadScript.Common.Expressions.Implementations.Block
         public bool Global;
         public BSFunctionParameter[] ArgNames;
         public BSExpression[] Block;
-        public BSEnumerableFunctionDefinitionExpression( SourcePosition pos, string name, bool isGlobal, BSFunctionParameter[] argName, BSExpression[] block ) : base( pos )
+
+        public override bool IsConstant => false;
+
+        #region Public
+
+        public BSEnumerableFunctionDefinitionExpression(
+            SourcePosition pos,
+            string name,
+            bool isGlobal,
+            BSFunctionParameter[] argName,
+            BSExpression[] block ) : base( pos )
         {
             Name = name;
             Global = isGlobal;
@@ -19,8 +29,39 @@ namespace BadScript.Common.Expressions.Implementations.Block
             Block = block;
         }
 
-        public override bool IsConstant => false;
-        private  (string, ABSObject)[] CreateArgs(ABSObject[] o)
+        public override ABSObject Execute( BSScope scope )
+        {
+            BSScope funcScope = new BSScope( BSScopeFlags.Function, scope );
+
+            BSFunction f = new BSFunction(
+                m_Position,
+                GetHeader(),
+                x =>
+                    new BSFunctionEnumeratorObject( m_Position, GetHeader(), Block, CreateArgs( x ), funcScope ),
+                ArgNames.Length );
+
+            if ( string.IsNullOrEmpty( Name ) )
+            {
+                return f;
+            }
+
+            if ( Global )
+            {
+                scope.AddGlobalVar( Name, f );
+            }
+            else
+            {
+                scope.AddLocalVar( Name, f );
+            }
+
+            return f;
+        }
+
+        #endregion
+
+        #region Private
+
+        private (string, ABSObject)[] CreateArgs( ABSObject[] o )
         {
             (string, ABSObject)[] r = new (string, ABSObject)[o.Length];
 
@@ -32,64 +73,41 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
             return r;
         }
-        public override ABSObject Execute( BSScope scope )
-        {
-            BSScope funcScope = new BSScope(BSScopeFlags.Function, scope);
-
-            BSFunction f= new BSFunction(
-                m_Position,
-                GetHeader(),
-                x => 
-                    new BSFunctionEnumeratorObject( m_Position, GetHeader(), Block, CreateArgs( x ), funcScope ),
-                ArgNames.Length );
-
-            if (string.IsNullOrEmpty(Name))
-            {
-                return f;
-            }
-
-            if (Global)
-            {
-                scope.AddGlobalVar(Name, f);
-            }
-            else
-            {
-                scope.AddLocalVar(Name, f);
-            }
-
-            return f;
-        }
 
         private string GetHeader()
         {
-            StringBuilder sb = new StringBuilder($"enumerable {Name}(");
+            StringBuilder sb = new StringBuilder( $"enumerable {Name}(" );
 
-            for (int i = 0; i < ArgNames.Length; i++)
+            for ( int i = 0; i < ArgNames.Length; i++ )
             {
                 string argName = ArgNames[i].Name;
 
-                if (ArgNames[i].NotNull)
+                if ( ArgNames[i].NotNull )
                 {
                     argName = "!" + argName;
                 }
 
                 if ( ArgNames[i].IsOptional )
-                    argName = "?" + argName;
-
-                if (i == 0)
                 {
-                    sb.Append(argName);
+                    argName = "?" + argName;
+                }
+
+                if ( i == 0 )
+                {
+                    sb.Append( argName );
                 }
                 else
                 {
-                    sb.Append(", " + argName);
+                    sb.Append( ", " + argName );
                 }
             }
 
-            sb.Append(")");
+            sb.Append( ")" );
 
             return sb.ToString();
         }
+
+        #endregion
     }
 
 }

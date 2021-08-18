@@ -233,7 +233,7 @@ namespace BadScript.Common.Types.Implementations
                 "function add(obj0, obj1, obj2, ...)",
                 objects =>
                 {
-                    m_InnerArray.AddRange( objects.Select(x=>x.ResolveReference()) );
+                    m_InnerArray.AddRange( objects.Select( x => x.ResolveReference() ) );
 
                     return BSObject.Null;
                 },

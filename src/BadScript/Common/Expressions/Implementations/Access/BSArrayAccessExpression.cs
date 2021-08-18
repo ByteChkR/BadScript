@@ -25,7 +25,6 @@ namespace BadScript.Common.Expressions.Implementations.Access
         {
             ABSObject obj = Left.Execute( scope ).ResolveReference();
 
-
             ABSObject i = Right.Execute( scope ).ResolveReference();
 
             //if(BSOperatorImplementationResolver.AllowOperatorOverrides)
@@ -38,9 +37,10 @@ namespace BadScript.Common.Expressions.Implementations.Access
             //    }
             //}
 
-           ABSOperatorImplementation impl= BSOperatorImplementationResolver.ResolveImplementation( "[]", new[] { obj, i }, true );
-           return impl.ExecuteOperator( new[] { obj, i } );
-            
+            ABSOperatorImplementation impl =
+                BSOperatorImplementationResolver.ResolveImplementation( "[]", new[] { obj, i }, true );
+
+            return impl.ExecuteOperator( new[] { obj, i } );
 
             throw new BSInvalidTypeException(
                 m_Position,

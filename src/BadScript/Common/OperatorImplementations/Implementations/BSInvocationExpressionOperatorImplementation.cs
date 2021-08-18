@@ -4,8 +4,10 @@ using BadScript.Common.Types;
 namespace BadScript.Common.OperatorImplementations.Implementations
 {
 
-    public class BSInvocationExpressionOperatorImplementation:ABSOperatorImplementation
+    public class BSInvocationExpressionOperatorImplementation : ABSOperatorImplementation
     {
+        #region Public
+
         public BSInvocationExpressionOperatorImplementation() : base( "()" )
         {
         }
@@ -15,6 +17,10 @@ namespace BadScript.Common.OperatorImplementations.Implementations
             return true;
         }
 
+        #endregion
+
+        #region Protected
+
         protected override ABSObject Execute( ABSObject[] args )
         {
             ABSObject obj = args[0];
@@ -22,6 +28,8 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
             return obj.Invoke( parameters );
         }
+
+        #endregion
     }
 
 }

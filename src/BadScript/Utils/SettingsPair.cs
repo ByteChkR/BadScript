@@ -6,11 +6,14 @@ namespace BadScript.Utils
 
     public class SettingsPair
     {
-        public event Action<SettingsPair> OnValueChanged;
-        public event Action<SettingsPair> OnPersistenceChanged;
         public readonly string Name;
         private string m_Value;
         private bool m_IsPersistent = true;
+
+        public event Action < SettingsPair > OnValueChanged;
+
+        public event Action < SettingsPair > OnPersistenceChanged;
+
         public string Value
         {
             get => m_Value;
@@ -18,7 +21,8 @@ namespace BadScript.Utils
             {
                 bool changed = m_Value != value;
                 m_Value = value;
-                if (changed )
+
+                if ( changed )
                 {
                     OnValueChanged?.Invoke( this );
                 }
@@ -33,8 +37,20 @@ namespace BadScript.Utils
                 m_IsPersistent = value;
 
                 if ( changed )
+                {
                     OnPersistenceChanged?.Invoke( this );
+                }
             }
+        }
+
+        public static implicit operator bool( SettingsPair p )
+        {
+            return bool.Parse( p.Value );
+        }
+
+        public static implicit operator decimal( SettingsPair p )
+        {
+            return decimal.Parse( p.Value );
         }
 
         #region Public
@@ -45,17 +61,14 @@ namespace BadScript.Utils
             Value = value;
         }
 
-        public override string ToString()
-        {
-            return $"{Name}(Persistent: {IsPersistent}): {Value}";
-        }
-
-        public static implicit operator bool(SettingsPair p) => bool.Parse(p.Value);
-        public static implicit operator decimal(SettingsPair p) => decimal.Parse(p.Value);
-
         public T ReadJson < T >()
         {
             return JsonConvert.DeserializeObject < T >( Value );
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}(Persistent: {IsPersistent}): {Value}";
         }
 
         public void WriteJson( object obj )

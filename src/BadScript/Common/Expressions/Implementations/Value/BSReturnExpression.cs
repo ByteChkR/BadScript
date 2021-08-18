@@ -1,7 +1,6 @@
 ﻿using BadScript.Common.Expressions.Implementations.Unary;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
-using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Expressions.Implementations.Value
 {

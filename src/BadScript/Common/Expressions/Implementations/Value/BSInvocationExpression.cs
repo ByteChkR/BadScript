@@ -25,11 +25,10 @@ namespace BadScript.Common.Expressions.Implementations.Value
         public override ABSObject Execute( BSScope scope )
         {
             ABSObject obj = Left.Execute( scope );
-            ABSObject[] args = new [] { obj }.Concat( Parameters.Select( x => x.Execute( scope ) ) ).ToArray();
-            ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation("()", args, true);
-            
-            
-            return impl.ExecuteOperator(args);
+            ABSObject[] args = new[] { obj }.Concat( Parameters.Select( x => x.Execute( scope ) ) ).ToArray();
+            ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation( "()", args, true );
+
+            return impl.ExecuteOperator( args );
         }
 
         #endregion

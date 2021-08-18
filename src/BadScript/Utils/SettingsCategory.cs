@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using System.Text;
 
 namespace BadScript.Utils
 {
 
-    public class SettingsCategory : IEnumerable < SettingsCategory >, IEnumerable <SettingsPair>
+    public class SettingsCategory : IEnumerable < SettingsCategory >, IEnumerable < SettingsPair >
     {
-        public static event Action<SettingsCategory, SettingsPair> OnSettingsChanged;
-        public static event Action<SettingsCategory, SettingsPair> OnSettingsAdd;
-        public static event Action<SettingsCategory, SettingsCategory> OnCategoryAdd;
-
         public readonly string Name;
         public bool IsPersistent = true;
 
@@ -21,38 +15,42 @@ namespace BadScript.Utils
         private readonly List < SettingsCategory > m_SubCategories;
         private readonly List < SettingsPair > m_Settings;
 
-        #region Public
+        public static event Action < SettingsCategory, SettingsPair > OnSettingsChanged;
+
+        public static event Action < SettingsCategory, SettingsPair > OnSettingsAdd;
+
+        public static event Action < SettingsCategory, SettingsCategory > OnCategoryAdd;
 
         public string FullName => m_Parent == null ? Name : m_Parent.FullName + "." + Name;
 
-        public override string ToString()
+        #region Public
+
+        public static SettingsCategory CreateRoot( string name )
         {
-            return FullName;
+            return new SettingsCategory( name, null );
         }
 
-
-        public static SettingsCategory CreateRoot( string name ) => new SettingsCategory( name, null );
-
-        public void AddCategory(SettingsCategory c)
+        public void AddCategory( SettingsCategory c )
         {
-            if (!m_SubCategories.Contains(c))
+            if ( !m_SubCategories.Contains( c ) )
             {
                 OnCategoryAdd?.Invoke( this, c );
-                m_SubCategories.Add(c);
+                m_SubCategories.Add( c );
             }
         }
 
-        public SettingsCategory AddCategory(string c)
+        public SettingsCategory AddCategory( string c )
         {
             SettingsCategory r = null;
-            if (!HasCategory(c))
+
+            if ( !HasCategory( c ) )
             {
                 r = new SettingsCategory( c, this );
                 AddCategory( r );
             }
             else
             {
-                r = GetCategory(c);
+                r = GetCategory( c );
             }
 
             return r;
@@ -63,23 +61,21 @@ namespace BadScript.Utils
             return m_SubCategories.First( x => x.Name == name );
         }
 
-        IEnumerator < SettingsPair > IEnumerable < SettingsPair >.GetEnumerator()
-        {
-            return m_Settings.GetEnumerator();
-        }
-
         public IEnumerator < SettingsCategory > GetEnumerator()
         {
             return m_SubCategories.GetEnumerator();
         }
 
-        public SettingsPair GetSetting(string name, string defaultValue)
+        public SettingsPair GetSetting( string name, string defaultValue )
         {
             if ( HasSetting( name ) )
+            {
                 return GetSetting( name );
+            }
 
             return SetSetting( name, defaultValue );
         }
+
         public SettingsPair GetSetting( string name )
         {
             return m_Settings.First( x => x.Name == name );
@@ -98,6 +94,7 @@ namespace BadScript.Utils
         public SettingsPair SetSetting( string name, string value )
         {
             SettingsPair s = null;
+
             if ( HasSetting( name ) )
             {
                 s = GetSetting( name );
@@ -107,13 +104,18 @@ namespace BadScript.Utils
             {
                 s = new SettingsPair( name, value );
 
-                m_Settings.Add( s);
-                OnSettingsAdd?.Invoke(this, s);
+                m_Settings.Add( s );
+                OnSettingsAdd?.Invoke( this, s );
             }
 
             OnSettingsChanged?.Invoke( this, s );
 
             return s;
+        }
+
+        public override string ToString()
+        {
+            return FullName;
         }
 
         #endregion
@@ -131,6 +133,11 @@ namespace BadScript.Utils
         #endregion
 
         #region Private
+
+        IEnumerator < SettingsPair > IEnumerable < SettingsPair >.GetEnumerator()
+        {
+            return m_Settings.GetEnumerator();
+        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {

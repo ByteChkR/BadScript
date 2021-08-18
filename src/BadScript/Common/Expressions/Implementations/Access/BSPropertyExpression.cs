@@ -27,8 +27,13 @@ namespace BadScript.Common.Expressions.Implementations.Access
             if ( Left != null )
             {
                 ABSObject l = Left.Execute( scope );
-                ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation(".", new[] { l, new BSObject(Right) }, true);
-                return impl.ExecuteOperator(new[] { l, new BSObject(Right) });
+
+                ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation(
+                    ".",
+                    new[] { l, new BSObject( Right ) },
+                    true );
+
+                return impl.ExecuteOperator( new[] { l, new BSObject( Right ) } );
             }
 
             return scope.ResolveName( Right );

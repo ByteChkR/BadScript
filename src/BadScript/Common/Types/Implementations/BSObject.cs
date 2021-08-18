@@ -29,12 +29,19 @@ namespace BadScript.Common.Types.Implementations
 
         public override bool Equals( ABSObject other )
         {
-            if (other == null)
-                return false;
-            if (IsNull) return other.IsNull;
-            if (other is BSObject oN)
+            if ( other == null )
             {
-                return m_InternalObject.Equals(oN.m_InternalObject);
+                return false;
+            }
+
+            if ( IsNull )
+            {
+                return other.IsNull;
+            }
+
+            if ( other is BSObject oN )
+            {
+                return m_InternalObject.Equals( oN.m_InternalObject );
             }
 
             return false;

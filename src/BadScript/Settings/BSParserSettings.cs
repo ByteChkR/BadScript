@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BadScript.Settings
+﻿namespace BadScript.Settings
 {
 
     public class BSParserSettings

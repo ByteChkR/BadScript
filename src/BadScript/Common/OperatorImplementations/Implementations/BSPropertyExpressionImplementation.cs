@@ -3,9 +3,11 @@
 namespace BadScript.Common.OperatorImplementations.Implementations
 {
 
-    public class BSPropertyExpressionImplementation:ABSOperatorImplementation
+    public class BSPropertyExpressionImplementation : ABSOperatorImplementation
     {
-        public BSPropertyExpressionImplementation( ) : base( "." )
+        #region Public
+
+        public BSPropertyExpressionImplementation() : base( "." )
         {
         }
 
@@ -14,11 +16,17 @@ namespace BadScript.Common.OperatorImplementations.Implementations
             return true;
         }
 
+        #endregion
+
+        #region Protected
+
         protected override ABSObject Execute( ABSObject[] args )
         {
 
-            return args[0].GetProperty(args[1].ConvertString());
+            return args[0].GetProperty( args[1].ConvertString() );
         }
+
+        #endregion
     }
 
 }

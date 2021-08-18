@@ -71,7 +71,6 @@ namespace BadScript
                 m_GlobalTable = new BSTable( SourcePosition.Unknown, globalTable );
             }
 
-            
             m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
         }
 
@@ -90,19 +89,20 @@ namespace BadScript
             return m_Interfaces.Any( x => x.Name == key );
         }
 
-        public ABSObject LoadFile(bool isBenchmark, string file, string[] args)
+        public ABSObject LoadFile( bool isBenchmark, string file, string[] args )
         {
-            return LoadString(isBenchmark, File.ReadAllText(file), args);
-        }
-        public ABSObject LoadFile(bool isBenchmark, string file, ABSObject[] args)
-        {
-            return LoadString(isBenchmark, File.ReadAllText(file), args);
-        }
-        public ABSObject LoadFile(bool isBenchmark, string file)
-        {
-            return LoadFile(isBenchmark, file, new string[0]);
+            return LoadString( isBenchmark, File.ReadAllText( file ), args );
         }
 
+        public ABSObject LoadFile( bool isBenchmark, string file, ABSObject[] args )
+        {
+            return LoadString( isBenchmark, File.ReadAllText( file ), args );
+        }
+
+        public ABSObject LoadFile( bool isBenchmark, string file )
+        {
+            return LoadFile( isBenchmark, file, new string[0] );
+        }
 
         public ABSTable LoadInterface( string key, ABSTable t = null )
         {
@@ -128,15 +128,16 @@ namespace BadScript
             return table;
         }
 
-        public ABSObject LoadString(bool isBenchmark, string script, string[] args)
+        public ABSObject LoadString( bool isBenchmark, string script, string[] args )
         {
             return LoadString(
                 isBenchmark,
                 script,
-                args?.Select(x => (ABSObject)new BSObject(x)).ToArray()
+                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray()
             );
         }
-        public ABSObject LoadString(bool isBenchmark, string script)
+
+        public ABSObject LoadString( bool isBenchmark, string script )
         {
             return LoadString(
                 isBenchmark,
@@ -145,16 +146,17 @@ namespace BadScript
             );
         }
 
-        public ABSObject LoadString(bool isBenchmark, BSScope scope, string script, string[] args)
+        public ABSObject LoadString( bool isBenchmark, BSScope scope, string script, string[] args )
         {
             return LoadString(
                 isBenchmark,
                 scope,
                 script,
-                args?.Select(x => (ABSObject)new BSObject(x)).ToArray()
+                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray()
             );
         }
-        public ABSObject LoadString(bool isBenchmark, BSScope scope, string script)
+
+        public ABSObject LoadString( bool isBenchmark, BSScope scope, string script )
         {
             return LoadString(
                 isBenchmark,
@@ -207,9 +209,9 @@ namespace BadScript
             return scope.Return ?? scope.GetLocals();
         }
 
-        public ABSObject LoadString(bool isBenchmark, string script, ABSObject[] args)
+        public ABSObject LoadString( bool isBenchmark, string script, ABSObject[] args )
         {
-            return LoadString(isBenchmark, new BSScope(this), script, args);
+            return LoadString( isBenchmark, new BSScope( this ), script, args );
         }
 
         internal ABSObject AddPreprocessorApi( ABSObject[] arg )
