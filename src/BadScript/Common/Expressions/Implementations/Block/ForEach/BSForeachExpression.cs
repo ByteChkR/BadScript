@@ -12,7 +12,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
     {
         public BSExpression[] Block;
         public BSExpression Enumerator;
-        private string[] m_Vars;
+        public string[] Vars;
 
         public override bool IsConstant => false;
 
@@ -24,7 +24,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             BSExpression enumExpr,
             BSExpression[] block ) : base( srcPos )
         {
-            m_Vars = vars;
+            Vars = vars;
             Enumerator = enumExpr;
             Block = block;
         }
@@ -73,9 +73,9 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             {
                 ABSObject[] objs = iter.GetObjects();
 
-                for ( int i = 0; i < m_Vars.Length; i++ )
+                for ( int i = 0; i < Vars.Length; i++ )
                 {
-                    foreachScope.AddLocalVar( m_Vars[i], objs.Length > i ? objs[i] : BSObject.Null );
+                    foreachScope.AddLocalVar( Vars[i], objs.Length > i ? objs[i] : BSObject.Null );
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
@@ -109,9 +109,9 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             {
                 ABSObject[] objs = { getCurrent.Invoke( new ABSObject[0] ) };
 
-                for ( int i = 0; i < m_Vars.Length; i++ )
+                for ( int i = 0; i < Vars.Length; i++ )
                 {
-                    foreachScope.AddLocalVar( m_Vars[i], objs.Length > i ? objs[i] : BSObject.Null );
+                    foreachScope.AddLocalVar( Vars[i], objs.Length > i ? objs[i] : BSObject.Null );
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
@@ -144,9 +144,9 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             foreach ( ABSObject iter in forEach )
             {
 
-                for ( int i = 0; i < m_Vars.Length; i++ )
+                for ( int i = 0; i < Vars.Length; i++ )
                 {
-                    foreachScope.AddLocalVar( m_Vars[i], 0 == i ? iter : BSObject.Null );
+                    foreachScope.AddLocalVar( Vars[i], 0 == i ? iter : BSObject.Null );
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(

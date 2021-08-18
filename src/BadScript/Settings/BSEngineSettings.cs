@@ -112,7 +112,7 @@ namespace BadScript.Settings
         {
             foreach ( string file in Directory.GetFiles( dir, "*.bs", SearchOption.TopDirectoryOnly ) )
             {
-                instance.LoadFile( false, file, new[] { dir } );
+                instance.LoadFile( file, new[] { dir }, false);
             }
         }
 

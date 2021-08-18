@@ -11,7 +11,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
     {
         public BSExpression[] TryBlock;
         public BSExpression[] CatchBlock;
-        private string m_CapturedVar;
+        public readonly string CapturedVar;
 
         public override bool IsConstant => TryBlock.All( x => x.IsConstant ) && CatchBlock.All( x => x.IsConstant );
 
@@ -25,7 +25,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         {
             TryBlock = tryBlock;
             CatchBlock = catchBlock;
-            m_CapturedVar = capturedVar;
+            CapturedVar = capturedVar;
         }
 
         public override ABSObject Execute( BSScope scope )
@@ -59,9 +59,9 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 BSFunction.RestoreStack( stackTop );
                 BSScope catchScope = new BSScope( BSScopeFlags.None, scope );
 
-                if ( !string.IsNullOrEmpty( m_CapturedVar ) )
+                if ( !string.IsNullOrEmpty( CapturedVar ) )
                 {
-                    catchScope.AddLocalVar( m_CapturedVar, MakeExceptionTable( trace, m_Position, e ) );
+                    catchScope.AddLocalVar( CapturedVar, MakeExceptionTable( trace, m_Position, e ) );
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(

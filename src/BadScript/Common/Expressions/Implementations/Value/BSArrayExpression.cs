@@ -8,20 +8,20 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSArrayExpression : BSExpression
     {
-        private readonly BSExpression[] m_InitExpressions;
+        public readonly BSExpression[] InitExpressions;
 
-        public override bool IsConstant => m_InitExpressions.All( x => x.IsConstant );
+        public override bool IsConstant => InitExpressions.All( x => x.IsConstant );
 
         #region Public
 
         public BSArrayExpression( SourcePosition pos, BSExpression[] initExprs = null ) : base( pos )
         {
-            m_InitExpressions = initExprs ?? new BSExpression[0];
+            InitExpressions = initExprs ?? new BSExpression[0];
         }
 
         public override ABSObject Execute( BSScope scope )
         {
-            return new BSArray( m_InitExpressions.Select( x => x.Execute( scope ) ) );
+            return new BSArray( InitExpressions.Select( x => x.Execute( scope ) ) );
         }
 
         #endregion

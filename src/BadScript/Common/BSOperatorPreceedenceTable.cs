@@ -17,167 +17,92 @@ namespace BadScript.Common
                 new BSBinaryOperator(
                     6,
                     "+",
-                    new BSFunction(
-                        "function +(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "+", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     6,
                     "-",
-                    new BSFunction(
-                        "function -(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "-", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     5,
                     "*",
-                    new BSFunction(
-                        "function *(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "*", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     5,
                     "/",
-                    new BSFunction(
-                        "function /(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "/", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     5,
                     "%",
-                    new BSFunction(
-                        "function %(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "%", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     15,
                     "??",
-                    new BSFunction(
-                        "function ??(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "??", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     9,
                     "==",
-                    new BSFunction(
-                        "function ==(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "==", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     9,
                     "!=",
-                    new BSFunction(
-                        "function !=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "!=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     13,
                     "&&",
-                    new BSFunction(
-                        "function &&(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "&&", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     14,
                     "||",
-                    new BSFunction(
-                        "function ||(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "||", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     11,
                     "^",
-                    new BSFunction(
-                        "function ^(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "^", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     8,
                     "<",
-                    new BSFunction(
-                        "function <(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "<", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     8,
                     ">",
-                    new BSFunction(
-                        "function >(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( ">", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     8,
                     "<=",
-                    new BSFunction(
-                        "function <=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "<=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     8,
                     ">=",
-                    new BSFunction(
-                        "function >=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( ">=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSAssignmentOperator(),
                 new BSMemberAccessOperator(),
@@ -185,90 +110,50 @@ namespace BadScript.Common
                 new BSBinaryOperator(
                     6,
                     "+=",
-                    new BSFunction(
-                        "function +=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "+=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     6,
                     "-=",
-                    new BSFunction(
-                        "function -=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "-=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     5,
                     "*=",
-                    new BSFunction(
-                        "function *=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "*=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     5,
                     "/=",
-                    new BSFunction(
-                        "function /=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "/=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     5,
                     "%=",
-                    new BSFunction(
-                        "function %=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "%=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     13,
                     "&=",
-                    new BSFunction(
-                        "function &=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "&=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     14,
                     "|=",
-                    new BSFunction(
-                        "function |=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "|=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 ),
                 new BSBinaryOperator(
                     11,
                     "^=",
-                    new BSFunction(
-                        "function ^=(a, b)",
-                        objects => BSOperatorImplementationResolver.
-                                   ResolveImplementation( "^=", objects ).
-                                   ExecuteOperator( objects ),
-                        2
-                    )
+                    "a,b",
+                    2
                 )
             };
 
@@ -276,25 +161,15 @@ namespace BadScript.Common
         {
             new BSUnaryOperator(
                 "++",
-                new BSFunction(
-                    "function ++(a)",
-                    objects =>
-                        BSOperatorImplementationResolver.
-                            ResolveImplementation( "++_Post", objects ).
-                            ExecuteOperator( objects ),
-                    1
-                )
+                "++_Post",
+                "a",
+                1
             ),
             new BSUnaryOperator(
                 "--",
-                new BSFunction(
-                    "function --(a)",
-                    objects =>
-                        BSOperatorImplementationResolver.
-                            ResolveImplementation( "--_Post", objects ).
-                            ExecuteOperator( objects ),
-                    1
-                )
+                "--_Post",
+                "a",
+                1
             )
         };
 
@@ -303,36 +178,21 @@ namespace BadScript.Common
             {
                 new BSUnaryOperator(
                     "!",
-                    new BSFunction(
-                        "function !(a)",
-                        objects =>
-                            BSOperatorImplementationResolver.
-                                ResolveImplementation( "!", objects ).
-                                ExecuteOperator( objects ),
-                        1
-                    )
+                    "!",
+                    "a",
+                    1
                 ),
                 new BSUnaryOperator(
                     "++",
-                    new BSFunction(
-                        "function ++(a)",
-                        objects =>
-                            BSOperatorImplementationResolver.
-                                ResolveImplementation( "++_Pre", objects ).
-                                ExecuteOperator( objects ),
-                        1
-                    )
+                    "++_Pre",
+                    "a",
+                    1
                 ),
                 new BSUnaryOperator(
                     "--",
-                    new BSFunction(
-                        "function --(a)",
-                        objects =>
-                            BSOperatorImplementationResolver.
-                                ResolveImplementation( "--_Pre", objects ).
-                                ExecuteOperator( objects ),
-                        1
-                    )
+                    "--_Pre",
+                    "a",
+                    1
                 )
             };
 
