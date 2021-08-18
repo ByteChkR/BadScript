@@ -58,7 +58,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
             }
 
             return f;
-            //return new BSFunctionEnumeratorObject(m_Position, GetHeader(), Block, );
         }
 
         private string GetHeader()
@@ -73,6 +72,9 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 {
                     argName = "!" + argName;
                 }
+
+                if ( ArgNames[i].IsOptional )
+                    argName = "?" + argName;
 
                 if (i == 0)
                 {
