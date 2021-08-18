@@ -43,7 +43,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     forScope,
                     Block,
-                    new string[0],
+                    new BSFunctionParameter[0],
                     new ABSObject[0]
                 );
 

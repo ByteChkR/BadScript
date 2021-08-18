@@ -40,7 +40,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
                     ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                         funcScope,
                         keyValuePair.Value,
-                        new string[0],
+                        new BSFunctionParameter[0],
                         new ABSObject[0]
                     );
 
@@ -65,7 +65,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 ABSObject elseR = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     elseScope,
                     ElseBlock,
-                    new string[0],
+                    new BSFunctionParameter[0],
                     new ABSObject[0]
                 );
 

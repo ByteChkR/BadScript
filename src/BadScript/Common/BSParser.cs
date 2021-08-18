@@ -302,7 +302,7 @@ namespace BadScript.Common
             }
 
             ReadWhitespaceAndNewLine();
-            (bool, string)[] args = ParseArgumentList();
+            BSFunctionParameter[] args = ParseArgumentList();
 
             ReadWhitespaceAndNewLine();
 
@@ -361,7 +361,7 @@ namespace BadScript.Common
             }
 
             ReadWhitespaceAndNewLine();
-            (bool, string)[] args = ParseArgumentList();
+            BSFunctionParameter[] args = ParseArgumentList();
 
             ReadWhitespaceAndNewLine();
 
@@ -851,7 +851,7 @@ namespace BadScript.Common
 
                 if ( Is( '(' ) )
                 {
-                    vars = ParseArgumentList().Select( x => x.Item2 ).ToArray();
+                    vars = ParseArgumentList().Select( x => x.Name ).ToArray();
                 }
                 else
                 {
@@ -1106,7 +1106,7 @@ namespace BadScript.Common
                      m_OriginalSource[m_CurrentPosition] == '_' );
         }
 
-        private (bool, string)[] ParseArgumentList()
+        private BSFunctionParameter[] ParseArgumentList()
         {
             if ( !Is( '(' ) )
             {
@@ -1115,34 +1115,79 @@ namespace BadScript.Common
 
             m_CurrentPosition++;
 
-            List < (bool, string) > args = new List < (bool, string) >();
-
+            List <BSFunctionParameter> args = new List <BSFunctionParameter>();
+            bool needsToBeOptional = false;
             if ( !Is( ')' ) )
             {
-                bool allowNull = true;
-
+                bool notNull = false;
+                bool optional = false;
                 if ( Is( '!' ) )
                 {
                     m_CurrentPosition++;
-                    allowNull = false;
+                    notNull = true;
+
+                    if ( Is( '?' ) )
+                    {
+                        m_CurrentPosition++;
+                        optional = true;
+                        needsToBeOptional = true;
+                    }
+                }
+                else if ( Is( "?" ) )
+                {
+                    m_CurrentPosition++;
+                    optional = true;
+                    needsToBeOptional = true;
+
+                    if ( Is( '!' ) )
+                    {
+                        m_CurrentPosition++;
+                        notNull = true;
+                    }
                 }
 
-                args.Add( ( allowNull, ParseArgumentName() ) );
+                if ( needsToBeOptional && !optional )
+                    throw new BSRuntimeException(
+                        "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters." );
+                args.Add(new BSFunctionParameter(ParseArgumentName(), notNull, optional ));
                 ReadWhitespaceAndNewLine();
 
                 while ( Is( ',' ) )
                 {
                     m_CurrentPosition++;
-                    allowNull = true;
+                    notNull = false;
+                    optional = false;
                     ReadWhitespaceAndNewLine();
 
-                    if ( Is( '!' ) )
+                    if (Is('!'))
                     {
                         m_CurrentPosition++;
-                        allowNull = false;
+                        notNull = true;
+
+                        if (Is('?'))
+                        {
+                            m_CurrentPosition++;
+                            optional = true;
+                            needsToBeOptional = true;
+                        }
+                    }
+                    else if (Is("?"))
+                    {
+                        m_CurrentPosition++;
+                        optional = true;
+                        needsToBeOptional = true;
+
+                        if (Is('!'))
+                        {
+                            m_CurrentPosition++;
+                            notNull = true;
+                        }
                     }
 
-                    args.Add( ( allowNull, ParseArgumentName() ) );
+                    if (needsToBeOptional && !optional)
+                        throw new BSRuntimeException(
+                            "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters.");
+                    args.Add( new BSFunctionParameter(ParseArgumentName(), notNull, optional));
                     ReadWhitespaceAndNewLine();
                 }
 

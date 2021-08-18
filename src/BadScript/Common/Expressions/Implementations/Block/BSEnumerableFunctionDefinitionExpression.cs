@@ -9,9 +9,9 @@ namespace BadScript.Common.Expressions.Implementations.Block
     {
         public string Name;
         public bool Global;
-        public (bool, string)[] ArgNames;
+        public BSFunctionParameter[] ArgNames;
         public BSExpression[] Block;
-        public BSEnumerableFunctionDefinitionExpression( SourcePosition pos, string name, bool isGlobal, (bool, string)[] argName, BSExpression[] block ) : base( pos )
+        public BSEnumerableFunctionDefinitionExpression( SourcePosition pos, string name, bool isGlobal, BSFunctionParameter[] argName, BSExpression[] block ) : base( pos )
         {
             Name = name;
             Global = isGlobal;
@@ -26,8 +26,8 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
             for ( int i = 0; i < ArgNames.Length; i++ )
             {
-                (bool, string) valueTuple = ArgNames[i];
-                r[i] = ( valueTuple.Item2, o[i] );
+                BSFunctionParameter valueTuple = ArgNames[i];
+                r[i] = ( valueTuple.Name, o[i] );
             }
 
             return r;
@@ -67,9 +67,9 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
             for (int i = 0; i < ArgNames.Length; i++)
             {
-                string argName = ArgNames[i].Item2;
+                string argName = ArgNames[i].Name;
 
-                if (!ArgNames[i].Item1)
+                if (ArgNames[i].NotNull)
                 {
                     argName = "!" + argName;
                 }

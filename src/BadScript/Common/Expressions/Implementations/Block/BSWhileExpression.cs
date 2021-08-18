@@ -32,7 +32,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                     funcScope,
                     Block,
-                    new string[0],
+                    new BSFunctionParameter[0],
                     new ABSObject[0]
                 );
 

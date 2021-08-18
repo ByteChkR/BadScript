@@ -8,11 +8,24 @@ using BadScript.Common.Types.Implementations;
 namespace BadScript.Common.Expressions.Implementations.Block
 {
 
+    public class BSFunctionParameter
+    {
+        public string Name;
+        public bool IsOptional;
+        public bool NotNull;
+
+        public BSFunctionParameter( string name, bool notNull, bool optional )
+        {
+            Name = name;
+            NotNull = notNull;
+            IsOptional = optional;
+        }
+    }
     public class BSFunctionDefinitionExpression : BSExpression
     {
         public string Name;
         public bool Global;
-        public (bool, string)[] ArgNames;
+        public BSFunctionParameter[] ArgNames;
         public BSExpression[] Block;
 
         public override bool IsConstant => false;
@@ -22,7 +35,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         public BSFunctionDefinitionExpression(
             SourcePosition srcPos,
             string name,
-            (bool, string)[] args,
+            BSFunctionParameter[] args,
             BSExpression[] block,
             bool addGlobal ) : base( srcPos )
         {
@@ -32,44 +45,41 @@ namespace BadScript.Common.Expressions.Implementations.Block
             Global = addGlobal;
         }
 
-        public BSFunctionDefinitionExpression(
-            SourcePosition srcPos,
-            string name,
-            string[] args,
-            BSExpression[] block,
-            bool addGlobal ) : base( srcPos )
-        {
-            Name = name;
-            ArgNames = args.Select( x => ( true, x ) ).ToArray();
-            Block = block;
-            Global = addGlobal;
-        }
+        //public BSFunctionDefinitionExpression(
+        //    SourcePosition srcPos,
+        //    string name,
+        //    string[] args,
+        //    BSExpression[] block,
+        //    bool addGlobal ) : base( srcPos )
+        //{
+        //    Name = name;
+        //    ArgNames = args.Select( x => ( true, x ) ).ToArray();
+        //    Block = block;
+        //    Global = addGlobal;
+        //}
+
+        
 
         public static ABSObject InvokeBlockFunction(
             BSScope scope,
             BSExpression[] block,
-            string[] argNames,
+            BSFunctionParameter[] argNames,
             ABSObject[] arg )
         {
-            return InvokeBlockFunction( scope, block, argNames.Select( x => ( true, x ) ).ToArray(), arg );
-        }
-
-        public static ABSObject InvokeBlockFunction(
-            BSScope scope,
-            BSExpression[] block,
-            (bool, string)[] argNames,
-            ABSObject[] arg )
-        {
-            for ( int i = 0; i < arg.Length; i++ )
+            for ( int i = 0; i < argNames.Length; i++ )
             {
-                ( bool allowNull, string name ) = argNames[i];
-
-                if ( !allowNull && arg[i].IsNull )
+                BSFunctionParameter p = argNames[i];
+                if ( arg.Length <= i && !p.IsOptional)
                 {
-                    throw new BSRuntimeException( arg[i].Position, $"Parameter '{name}' can not be null" );
+                    throw new BSRuntimeException("Missing Argument: " + p.Name);
+                }
+                
+                if ( p.NotNull && (arg.Length<=i || arg[i].IsNull) )
+                {
+                    throw new BSRuntimeException( arg[i].Position, $"Parameter '{p.Name}' can not be null or is missing" );
                 }
 
-                scope.AddLocalVar( name, arg[i] );
+                scope.AddLocalVar( p.Name, arg.Length <= i?BSObject.Null : arg[i] );
             }
 
             foreach ( BSExpression buildScriptExpression in block )
@@ -87,8 +97,9 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         public override ABSObject Execute( BSScope scope )
         {
+            
             BSFunction f =
-                new BSFunction( GetHeader(), x => InvokeBlockFunction( scope, x ), ArgNames.Length );
+                new BSFunction( GetHeader(), x => InvokeBlockFunction( scope, x ), ArgNames.Count(x=>!x.IsOptional), ArgNames.Length );
 
             if ( string.IsNullOrEmpty( Name ) )
             {
@@ -117,9 +128,9 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
             for ( int i = 0; i < ArgNames.Length; i++ )
             {
-                string argName = ArgNames[i].Item2;
+                string argName = ArgNames[i].Name;
 
-                if ( !ArgNames[i].Item1 )
+                if ( ArgNames[i].NotNull )
                 {
                     argName = "!" + argName;
                 }
