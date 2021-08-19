@@ -8,14 +8,16 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSAssignExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSAssignExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.AssignExpr;
+        }
+
+        public override bool CanSerialize( BSExpression expr )
+        {
+            return expr is BSAssignExpression;
         }
 
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
@@ -25,16 +27,18 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSAssignExpression( SourcePosition.Unknown, l, s.DeserializeExpression() );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSAssignExpression expr = (BSAssignExpression)e;
-            List<byte> ret = new List<byte>();
-            ret.SerializeOpCode(BSCompiledExpressionCode.AssignExpr);
-            ret.SerializeExpression(expr.Left);
-            ret.SerializeExpression(expr.Right);
+            BSAssignExpression expr = ( BSAssignExpression ) e;
+            List < byte > ret = new List < byte >();
+            ret.SerializeOpCode( BSCompiledExpressionCode.AssignExpr );
+            ret.SerializeExpression( expr.Left );
+            ret.SerializeExpression( expr.Right );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }

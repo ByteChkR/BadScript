@@ -8,25 +8,29 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSContinueExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSContinueExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.ContinueExpr;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override bool CanSerialize( BSExpression expr )
         {
-            return new BSContinueExpression(SourcePosition.Unknown);
+            return expr is BSContinueExpression;
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
         {
-            return BitConverter.GetBytes((byte)BSCompiledExpressionCode.ContinueExpr);
+            return new BSContinueExpression( SourcePosition.Unknown );
         }
+
+        public override byte[] Serialize( BSExpression e )
+        {
+            return BitConverter.GetBytes( ( byte ) BSCompiledExpressionCode.ContinueExpr );
+        }
+
+        #endregion
     }
 
 }

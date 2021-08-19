@@ -8,33 +8,38 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSNullCheckPropertyExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSNullCheckPropertyExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.NullCheckPropertyAccessExpr;
         }
 
+        public override bool CanSerialize( BSExpression expr )
+        {
+            return expr is BSNullCheckPropertyExpression;
+        }
+
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
         {
             BSExpression e = s.DeserializeExpression();
-            return new BSNullCheckPropertyExpression(SourcePosition.Unknown, e, s.DeserializeString());
+
+            return new BSNullCheckPropertyExpression( SourcePosition.Unknown, e, s.DeserializeString() );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSNullCheckPropertyExpression expr = (BSNullCheckPropertyExpression)e;
-            List<byte> ret = new List<byte>();
+            BSNullCheckPropertyExpression expr = ( BSNullCheckPropertyExpression ) e;
+            List < byte > ret = new List < byte >();
 
-            ret.SerializeOpCode(BSCompiledExpressionCode.NullCheckPropertyAccessExpr);
+            ret.SerializeOpCode( BSCompiledExpressionCode.NullCheckPropertyAccessExpr );
             ret.SerializeExpression( expr.Left );
-            ret.SerializeString(expr.Right);
+            ret.SerializeString( expr.Right );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }

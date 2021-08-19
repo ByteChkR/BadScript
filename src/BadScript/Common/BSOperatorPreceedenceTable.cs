@@ -3,8 +3,6 @@ using System.Linq;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Operators;
 using BadScript.Common.Operators.Implementations;
-using BadScript.Common.Runtime;
-using BadScript.Common.Types;
 
 namespace BadScript.Common
 {

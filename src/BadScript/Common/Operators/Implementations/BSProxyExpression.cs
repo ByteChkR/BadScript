@@ -14,7 +14,7 @@ namespace BadScript.Common.Operators.Implementations
 
         #region Public
 
-        public BSProxyExpression( SourcePosition pos, ABSObject obj, object proxyMetaData=null ) : base( pos )
+        public BSProxyExpression( SourcePosition pos, ABSObject obj, object proxyMetaData = null ) : base( pos )
         {
             Object = obj;
             ProxyMetaData = proxyMetaData;

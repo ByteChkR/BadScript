@@ -17,7 +17,7 @@ namespace BadScript.Common.Operators.Implementations
 
         #region Public
 
-        public BSBinaryOperator( int start, string key, string sig, int argC)
+        public BSBinaryOperator( int start, string key, string sig, int argC )
         {
             OperatorKey = key;
             m_Meta = new BSBinaryOperatorMetaData( key, sig, argC );
@@ -29,6 +29,7 @@ namespace BadScript.Common.Operators.Implementations
                            ExecuteOperator( objects ),
                 argC
             );
+
             Preceedence = start;
         }
 

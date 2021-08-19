@@ -8,14 +8,16 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSForExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSForExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.ForExpr;
+        }
+
+        public override bool CanSerialize( BSExpression expr )
+        {
+            return expr is BSForExpression;
         }
 
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
@@ -24,21 +26,24 @@ namespace BadScript.Utils.Optimization.Compilation
             BSExpression cCond = s.DeserializeExpression();
             BSExpression cInc = s.DeserializeExpression();
             BSExpression[] block = s.DeserializeBlock();
-            return new BSForExpression(SourcePosition.Unknown, cDef, cCond, cInc, block);
+
+            return new BSForExpression( SourcePosition.Unknown, cDef, cCond, cInc, block );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSForExpression expr = (BSForExpression)e;
-            List<byte> ret = new List<byte>();
-            ret.SerializeOpCode(BSCompiledExpressionCode.ForExpr);
-            ret.SerializeExpression(expr.CounterDefinition);
-            ret.SerializeExpression(expr.CounterCondition);
-            ret.SerializeExpression(expr.CounterIncrement);
+            BSForExpression expr = ( BSForExpression ) e;
+            List < byte > ret = new List < byte >();
+            ret.SerializeOpCode( BSCompiledExpressionCode.ForExpr );
+            ret.SerializeExpression( expr.CounterDefinition );
+            ret.SerializeExpression( expr.CounterCondition );
+            ret.SerializeExpression( expr.CounterIncrement );
             ret.SerializeBlock( expr.Block );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }

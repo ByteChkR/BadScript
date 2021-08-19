@@ -11,7 +11,9 @@ namespace BadScript.Common.Operators.Implementations
         public string Signature;
         public int ArgumentCount;
 
-        public BSUnaryOperatorMetaData(string op, string implKey, string sig, int argc)
+        #region Public
+
+        public BSUnaryOperatorMetaData( string op, string implKey, string sig, int argc )
         {
             OperatorKey = op;
             ImplementationOperatorKey = implKey;
@@ -25,11 +27,13 @@ namespace BadScript.Common.Operators.Implementations
                 $"function {OperatorKey}({Signature})",
                 objects =>
                     BSOperatorImplementationResolver.
-                        ResolveImplementation(ImplementationOperatorKey, objects).
-                        ExecuteOperator(objects),
+                        ResolveImplementation( ImplementationOperatorKey, objects ).
+                        ExecuteOperator( objects ),
                 ArgumentCount
             );
         }
+
+        #endregion
     }
 
 }

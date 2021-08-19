@@ -1,7 +1,7 @@
 ﻿namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public enum BSCompiledExpressionCode:byte
+    public enum BSCompiledExpressionCode : byte
     {
         Unknown,
         ValueNull,

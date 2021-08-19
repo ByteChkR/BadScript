@@ -6,11 +6,17 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public abstract class BSExpressionCompiler
     {
-        public abstract bool CanSerialize(BSExpression expr);
-        public abstract byte[] Serialize(BSExpression expr);
+        #region Public
 
-        public abstract bool CanDeserialize(BSCompiledExpressionCode code);
-        public abstract BSExpression Deserialize(BSCompiledExpressionCode code, Stream s );
+        public abstract bool CanDeserialize( BSCompiledExpressionCode code );
+
+        public abstract bool CanSerialize( BSExpression expr );
+
+        public abstract BSExpression Deserialize( BSCompiledExpressionCode code, Stream s );
+
+        public abstract byte[] Serialize( BSExpression expr );
+
+        #endregion
     }
 
 }

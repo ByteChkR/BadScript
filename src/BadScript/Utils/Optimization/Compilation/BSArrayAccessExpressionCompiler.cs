@@ -8,14 +8,16 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSArrayAccessExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSArrayAccessExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.ArrayAccessExpr;
+        }
+
+        public override bool CanSerialize( BSExpression expr )
+        {
+            return expr is BSArrayAccessExpression;
         }
 
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
@@ -25,17 +27,19 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSArrayAccessExpression( SourcePosition.Unknown, l, s.DeserializeExpression() );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSArrayAccessExpression expr = (BSArrayAccessExpression)e;
-            List<byte> ret = new List<byte>();
+            BSArrayAccessExpression expr = ( BSArrayAccessExpression ) e;
+            List < byte > ret = new List < byte >();
 
-            ret.SerializeOpCode(BSCompiledExpressionCode.ArrayAccessExpr);
-            ret.SerializeExpression(expr.Left);
-            ret.SerializeExpression(expr.Right);
+            ret.SerializeOpCode( BSCompiledExpressionCode.ArrayAccessExpr );
+            ret.SerializeExpression( expr.Left );
+            ret.SerializeExpression( expr.Right );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }

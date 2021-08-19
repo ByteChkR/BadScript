@@ -91,6 +91,81 @@ namespace BadScript
             return m_Interfaces.Any( x => x.Name == key );
         }
 
+        public ABSObject LoadBinary( byte[] bin, BSScope scope, ABSObject[] args, bool isBenchmark = false )
+        {
+            return LoadScript( ParseBinary( bin ), scope, args, isBenchmark );
+        }
+
+        public ABSObject LoadBinary( byte[] bin, ABSObject[] args, bool isBenchmark = false )
+        {
+            return LoadScript( ParseBinary( bin ), args, isBenchmark );
+        }
+
+        public ABSObject LoadBinary( byte[] bin, BSScope scope, string[] args, bool isBenchmark = false )
+        {
+            return LoadScript( ParseBinary( bin ), scope, args, isBenchmark );
+        }
+
+        public ABSObject LoadBinary( byte[] bin, string[] args, bool isBenchmark = false )
+        {
+            return LoadScript( ParseBinary( bin ), args, isBenchmark );
+        }
+
+        public ABSObject LoadBinary( byte[] bin, bool isBenchmark = false )
+        {
+            return LoadScript( ParseBinary( bin ), isBenchmark );
+        }
+
+        public ABSObject LoadFile( string path, BSScope scope, ABSObject[] args, bool isBenchmark = false )
+        {
+            if ( IsBinary( path ) )
+            {
+                return LoadScript( ParseBinary( path ), scope, args, isBenchmark );
+            }
+
+            return LoadSource( File.ReadAllText( path ), scope, args, isBenchmark );
+        }
+
+        public ABSObject LoadFile( string path, ABSObject[] args, bool isBenchmark = false )
+        {
+            if ( IsBinary( path ) )
+            {
+                return LoadScript( ParseBinary( path ), args, isBenchmark );
+            }
+
+            return LoadSource( File.ReadAllText( path ), args, isBenchmark );
+        }
+
+        public ABSObject LoadFile( string path, BSScope scope, string[] args, bool isBenchmark = false )
+        {
+            if ( IsBinary( path ) )
+            {
+                return LoadScript( ParseBinary( path ), scope, args, isBenchmark );
+            }
+
+            return LoadSource( File.ReadAllText( path ), scope, args, isBenchmark );
+        }
+
+        public ABSObject LoadFile( string path, string[] args, bool isBenchmark = false )
+        {
+            if ( IsBinary( path ) )
+            {
+                return LoadScript( ParseBinary( path ), args, isBenchmark );
+            }
+
+            return LoadSource( File.ReadAllText( path ), args, isBenchmark );
+        }
+
+        public ABSObject LoadFile( string path, bool isBenchmark = false )
+        {
+            if ( IsBinary( path ) )
+            {
+                return LoadScript( ParseBinary( path ), isBenchmark );
+            }
+
+            return LoadSource( File.ReadAllText( path ), isBenchmark );
+        }
+
         //public ABSObject LoadFile( bool isBenchmark, string file, string[] args )
         //{
         //    return LoadString( isBenchmark, File.ReadAllText( file ), args );
@@ -128,6 +203,99 @@ namespace BadScript
             i.ForEach( x => x.AddApi( table ) );
 
             return table;
+        }
+
+        public ABSObject LoadScript( BSExpression[] exprs, bool isBenchmark = false )
+        {
+            return LoadScript( exprs, new ABSObject[0], isBenchmark );
+        }
+
+        public ABSObject LoadScript( BSExpression[] exprs, string[] args, bool isBenchmark = false )
+        {
+            return LoadScript(
+                exprs,
+                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray() ?? new ABSObject[0],
+                isBenchmark );
+        }
+
+        public ABSObject LoadScript( BSExpression[] exprs, ABSObject[] args, bool isBenchmark = false )
+        {
+            return LoadScript( exprs, new BSScope( this ), args, isBenchmark );
+        }
+
+        public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, string[] args, bool isBenchmark = false )
+        {
+            return LoadScript(
+                exprs,
+                scope,
+                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray() ?? new ABSObject[0],
+                isBenchmark );
+        }
+
+        public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, ABSObject[] args, bool isBenchmark = false )
+        {
+
+            if ( ParserSettings.AllowOptimization )
+            {
+                BSExpressionOptimizer.Optimize( exprs );
+            }
+
+            scope.AddLocalVar(
+                "args",
+                args == null
+                    ? ( ABSObject ) BSObject.Null
+                    : new BSArray( args )
+            );
+
+            Stopwatch sw = null;
+
+            if ( isBenchmark )
+            {
+                sw = Stopwatch.StartNew();
+            }
+
+            foreach ( BSExpression buildScriptExpression in exprs )
+            {
+                buildScriptExpression.Execute( scope );
+
+                if ( scope.BreakExecution )
+                {
+                    break;
+                }
+            }
+
+            if ( isBenchmark )
+            {
+                sw.Stop();
+                Console.WriteLine( $"[BS Benchmark] Execution took: {sw.ElapsedMilliseconds}ms ({sw.Elapsed})" );
+            }
+
+            return scope.Return ?? scope.GetLocals();
+        }
+
+        public ABSObject LoadSource( string src, BSScope scope, ABSObject[] args, bool isBenchmark = false )
+        {
+            return LoadScript( ParseString( src ), scope, args, isBenchmark );
+        }
+
+        public ABSObject LoadSource( string src, BSScope scope, string[] args, bool isBenchmark = false )
+        {
+            return LoadScript( ParseString( src ), scope, args, isBenchmark );
+        }
+
+        public ABSObject LoadSource( string src, string[] args, bool isBenchmark = false )
+        {
+            return LoadScript( ParseString( src ), args, isBenchmark );
+        }
+
+        public ABSObject LoadSource( string src, ABSObject[] args, bool isBenchmark = false )
+        {
+            return LoadScript( ParseString( src ), args, isBenchmark );
+        }
+
+        public ABSObject LoadSource( string src, bool isBenchmark = false )
+        {
+            return LoadScript( ParseString( src ), isBenchmark );
         }
 
         //public ABSObject LoadString( bool isBenchmark, string script, string[] args )
@@ -168,210 +336,29 @@ namespace BadScript
         //    );
         //}
 
-
         public BSExpression[] ParseBinary( byte[] bin )
         {
             using ( Stream ms = new MemoryStream( bin ) )
             {
                 using ( Stream s = new GZipStream( ms, CompressionMode.Decompress ) )
                 {
-                    return BSCompiler.Deserialize(s);
+                    return BSCompiler.Deserialize( s );
                 }
             }
         }
+
         public BSExpression[] ParseBinary( string file )
         {
             return ParseBinary( File.ReadAllBytes( file ) );
         }
 
-        public BSExpression[] ParseString(string script)
+        public BSExpression[] ParseString( string script )
         {
-            BSParser parser = new BSParser(Preprocess(script));
+            BSParser parser = new BSParser( Preprocess( script ) );
             BSExpression[] exprs = parser.ParseToEnd();
 
             return exprs;
         }
-
-        #region LoadScript
-
-        
-        public ABSObject LoadScript( BSExpression[] exprs, bool isBenchmark = false )
-        {
-            return LoadScript( exprs, new ABSObject[0], isBenchmark );
-        }
-
-        public ABSObject LoadScript( BSExpression[] exprs, string[] args, bool isBenchmark = false )
-        {
-            return LoadScript(
-                exprs,
-                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray() ?? new ABSObject[0], 
-                isBenchmark);
-        }
-        public ABSObject LoadScript(BSExpression[] exprs, ABSObject[] args, bool isBenchmark = false)
-        {
-            return LoadScript(exprs, new BSScope(this), args, isBenchmark);
-        }
-
-        public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, string[] args, bool isBenchmark = false )
-        {
-            return LoadScript(
-                exprs,
-                scope,
-                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray() ?? new ABSObject[0],
-                isBenchmark );
-        }
-
-        public ABSObject LoadScript(BSExpression[] exprs, BSScope scope, ABSObject[] args, bool isBenchmark = false)
-        {
-
-            if (ParserSettings.AllowOptimization)
-            {
-                BSExpressionOptimizer.Optimize(exprs);
-            }
-
-            scope.AddLocalVar(
-                "args",
-                args == null
-                    ? (ABSObject)BSObject.Null
-                    : new BSArray(args)
-            );
-
-            Stopwatch sw = null;
-
-            if (isBenchmark)
-            {
-                sw = Stopwatch.StartNew();
-            }
-
-            foreach (BSExpression buildScriptExpression in exprs)
-            {
-                buildScriptExpression.Execute(scope);
-
-                if (scope.BreakExecution)
-                {
-                    break;
-                }
-            }
-
-            if (isBenchmark)
-            {
-                sw.Stop();
-                Console.WriteLine($"[BS Benchmark] Execution took: {sw.ElapsedMilliseconds}ms ({sw.Elapsed})");
-            }
-
-            return scope.Return ?? scope.GetLocals();
-        }
-
-
-        #endregion
-
-        #region LoadSource
-
-        public ABSObject LoadSource(string src, BSScope scope, ABSObject[] args, bool isBenchmark = false)
-        {
-            return LoadScript(ParseString(src), scope, args, isBenchmark);
-        }
-
-        public ABSObject LoadSource(string src, BSScope scope, string[] args, bool isBenchmark = false)
-        {
-            return LoadScript(ParseString(src), scope, args, isBenchmark);
-        }
-
-        public ABSObject LoadSource(string src, string[] args, bool isBenchmark = false)
-        {
-            return LoadScript(ParseString(src), args, isBenchmark);
-        }
-
-        public ABSObject LoadSource(string src, ABSObject[] args, bool isBenchmark = false)
-        {
-            return LoadScript(ParseString(src), args, isBenchmark);
-        }
-        public ABSObject LoadSource(string src, bool isBenchmark = false)
-        {
-            return LoadScript(ParseString(src), isBenchmark);
-        }
-        #endregion
-
-        #region LoadBinary
-
-
-        public ABSObject LoadBinary(byte[] bin, BSScope scope, ABSObject[] args, bool isBenchmark = false)
-        {
-            return LoadScript(ParseBinary(bin), scope, args, isBenchmark);
-        }
-
-        public ABSObject LoadBinary(byte[] bin, ABSObject[] args, bool isBenchmark = false)
-        {
-            return LoadScript(ParseBinary(bin), args, isBenchmark);
-        }
-
-        public ABSObject LoadBinary(byte[] bin, BSScope scope, string[] args, bool isBenchmark = false)
-        {
-            return LoadScript(ParseBinary(bin), scope, args, isBenchmark);
-        }
-
-        public ABSObject LoadBinary(byte[] bin, string[] args, bool isBenchmark = false)
-        {
-            return LoadScript(ParseBinary(bin), args, isBenchmark);
-        }
-
-        public ABSObject LoadBinary(byte[] bin,  bool isBenchmark = false)
-        {
-            return LoadScript(ParseBinary(bin), isBenchmark);
-        }
-
-
-        #endregion
-
-        #region LoadFile
-
-        public ABSObject LoadFile(string path, BSScope scope, ABSObject[] args, bool isBenchmark = false)
-        {
-            if (IsBinary(path))
-                return LoadScript(ParseBinary(path), scope, args, isBenchmark);
-
-            return LoadSource(File.ReadAllText(path), scope, args, isBenchmark);
-        }
-
-        public ABSObject LoadFile(string path, ABSObject[] args, bool isBenchmark = false)
-        {
-            if (IsBinary(path))
-                return LoadScript(ParseBinary(path), args, isBenchmark);
-
-            return LoadSource(File.ReadAllText(path), args, isBenchmark);
-        }
-
-        public ABSObject LoadFile(string path, BSScope scope, string[] args, bool isBenchmark = false)
-        {
-            if (IsBinary(path))
-                return LoadScript(ParseBinary(path),scope, args, isBenchmark);
-
-            return LoadSource(File.ReadAllText(path),scope, args, isBenchmark);
-        }
-
-        public ABSObject LoadFile(string path, string[] args, bool isBenchmark = false)
-        {
-            if (IsBinary(path))
-                return LoadScript(ParseBinary(path),args, isBenchmark);
-
-            return LoadSource(File.ReadAllText(path), args, isBenchmark);
-        }
-
-        public ABSObject LoadFile(string path, bool isBenchmark = false)
-        {
-            if ( IsBinary( path ) )
-                return LoadScript( ParseBinary( path ), isBenchmark );
-
-            return LoadSource( File.ReadAllText( path ), isBenchmark );
-        }
-
-        private bool IsBinary(string p)
-        {
-            return Path.GetExtension( p ) == ".cbs";
-        }
-
-
-        #endregion
 
         internal ABSObject AddPreprocessorApi( ABSObject[] arg )
         {
@@ -462,7 +449,7 @@ namespace BadScript
             if ( o.TryConvertString( out string src ) )
             {
 
-                ABSObject ret = LoadSource(src, arg.Skip( 1 ).ToArray() );
+                ABSObject ret = LoadSource( src, arg.Skip( 1 ).ToArray() );
 
                 return ret;
             }
@@ -486,8 +473,11 @@ namespace BadScript
                 if ( scope is BSObject obj )
                 {
                     BSScope sc = ( BSScope ) obj.GetInternalObject();
+
                     ABSObject ret = LoadScript(
-                        ParseString(path), sc, arg.Skip( 2 ).ToArray());
+                        ParseString( path ),
+                        sc,
+                        arg.Skip( 2 ).ToArray() );
 
                     return ret;
                 }
@@ -517,8 +507,12 @@ namespace BadScript
                 if ( scope is BSObject obj )
                 {
                     BSScope sc = ( BSScope ) obj.GetInternalObject();
+
                     ABSObject ret = LoadScript(
-                        ParseString(path),  sc, arg.Skip( 2 ).ToArray(), true);
+                        ParseString( path ),
+                        sc,
+                        arg.Skip( 2 ).ToArray(),
+                        true );
 
                     return ret;
                 }
@@ -541,13 +535,18 @@ namespace BadScript
 
         #region Private
 
+        private bool IsBinary( string p )
+        {
+            return Path.GetExtension( p ) == ".cbs";
+        }
+
         private ABSObject LoadStringBenchmarkApi( ABSObject[] arg )
         {
             ABSObject o = arg[0].ResolveReference();
 
             if ( o.TryConvertString( out string path ) )
             {
-                ABSObject ret = LoadSource( path, arg.Skip( 1 ).ToArray(), true);
+                ABSObject ret = LoadSource( path, arg.Skip( 1 ).ToArray(), true );
 
                 return ret;
             }

@@ -32,14 +32,12 @@ namespace BadScript.Interfaces.Settings
                 { "Name", new BSReflectionReference( () => new BSObject( m_Category.Name ), null ) },
                 { "FullName", new BSReflectionReference( () => new BSObject( m_Category.FullName ), null ) },
                 {
-                    "IsPersistent",
-                    new BSReflectionReference(
+                    "IsPersistent", new BSReflectionReference(
                         () => new BSObject( m_Category.IsPersistent ? BSObject.One : BSObject.Zero ),
                         x => x.ConvertBool() )
                 },
                 {
-                    "HasSetting",
-                    new BSFunctionReference(
+                    "HasSetting", new BSFunctionReference(
                         new BSFunction(
                             "function HasSetting(name)",
                             objects => new BSObject(
@@ -47,8 +45,7 @@ namespace BadScript.Interfaces.Settings
                             1 ) )
                 },
                 {
-                    "HasCategory",
-                    new BSFunctionReference(
+                    "HasCategory", new BSFunctionReference(
                         new BSFunction(
                             "function HasCategory(name)",
                             objects => new BSObject(
@@ -56,16 +53,14 @@ namespace BadScript.Interfaces.Settings
                             1 ) )
                 },
                 {
-                    "GetSetting",
-                    new BSFunctionReference(
+                    "GetSetting", new BSFunctionReference(
                         new BSFunction(
                             "function GetSetting(name)",
                             objects => new SettingsPairWrapper( m_Category.GetSetting( objects[0].ConvertString() ) ),
                             1 ) )
                 },
                 {
-                    "AddSetting",
-                    new BSFunctionReference(
+                    "AddSetting", new BSFunctionReference(
                         new BSFunction(
                             "function AddSetting(name, value)",
                             objects => new SettingsPairWrapper(
@@ -73,8 +68,7 @@ namespace BadScript.Interfaces.Settings
                             2 ) )
                 },
                 {
-                    "AddCategory",
-                    new BSFunctionReference(
+                    "AddCategory", new BSFunctionReference(
                         new BSFunction(
                             "function AddCategory(name)",
                             objects => new SettingsCategoryWrapper(
@@ -82,8 +76,7 @@ namespace BadScript.Interfaces.Settings
                             1 ) )
                 },
                 {
-                    "GetCategory",
-                    new BSFunctionReference(
+                    "GetCategory", new BSFunctionReference(
                         new BSFunction(
                             "function GetCategory(name)",
                             objects => new SettingsCategoryWrapper(

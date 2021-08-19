@@ -8,14 +8,16 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSEnumerableFunctionDefinitionExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSEnumerableFunctionDefinitionExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.FunctionEnumerableDefinitionExpr;
+        }
+
+        public override bool CanSerialize( BSExpression expr )
+        {
+            return expr is BSEnumerableFunctionDefinitionExpression;
         }
 
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
@@ -28,18 +30,20 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSEnumerableFunctionDefinitionExpression( SourcePosition.Unknown, n, g, p, b );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSEnumerableFunctionDefinitionExpression expr = (BSEnumerableFunctionDefinitionExpression)e;
-            List<byte> ret = new List<byte>();
-            ret.SerializeOpCode(BSCompiledExpressionCode.FunctionEnumerableDefinitionExpr);
-            ret.SerializeString(expr.Name);
+            BSEnumerableFunctionDefinitionExpression expr = ( BSEnumerableFunctionDefinitionExpression ) e;
+            List < byte > ret = new List < byte >();
+            ret.SerializeOpCode( BSCompiledExpressionCode.FunctionEnumerableDefinitionExpr );
+            ret.SerializeString( expr.Name );
             ret.SerializeBool( expr.Global );
             ret.SerializeFunctionParameters( expr.ArgNames );
             ret.SerializeBlock( expr.Block );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }

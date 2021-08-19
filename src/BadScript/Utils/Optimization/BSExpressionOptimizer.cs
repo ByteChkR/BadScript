@@ -8,6 +8,7 @@ using BadScript.Common.Expressions.Implementations.Unary;
 using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.Operators.Implementations;
 using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
 
 namespace BadScript.Utils.Optimization
 {
@@ -46,6 +47,12 @@ namespace BadScript.Utils.Optimization
                 if ( bin.IsConstant )
                 {
                     ABSObject o = bin.Execute( null );
+                    BSExpressionOptimizerMetaData md = null;
+
+                    if ( o is IBSWrappedObject wo )
+                    {
+                        md = new BSExpressionOptimizerMetaData( wo.GetInternalObject() );
+                    }
 
                     if ( WriteLogs )
                     {
@@ -53,7 +60,7 @@ namespace BadScript.Utils.Optimization
                             $"[Expression Optimizer] Optimizing {bin.GetType().Name}: " + o.SafeToString() );
                     }
 
-                    return new BSProxyExpression( SourcePosition.Unknown, o );
+                    return new BSProxyExpression( SourcePosition.Unknown, o, md );
                 }
                 else
                 {
@@ -73,6 +80,12 @@ namespace BadScript.Utils.Optimization
                 if ( invoc.IsConstant )
                 {
                     ABSObject o = invoc.Execute( null );
+                    BSExpressionOptimizerMetaData md = null;
+
+                    if ( o is IBSWrappedObject wo )
+                    {
+                        md = new BSExpressionOptimizerMetaData( wo.GetInternalObject() );
+                    }
 
                     if ( WriteLogs )
                     {
@@ -80,7 +93,7 @@ namespace BadScript.Utils.Optimization
                             $"[Expression Optimizer] Optimizing {invoc.GetType().Name}: " + o.SafeToString() );
                     }
 
-                    return new BSProxyExpression( SourcePosition.Unknown, o );
+                    return new BSProxyExpression( SourcePosition.Unknown, o, md );
                 }
 
                 for ( int i = 0; i < invoc.Parameters.Length; i++ )
@@ -94,6 +107,12 @@ namespace BadScript.Utils.Optimization
                      !( unary is BSReturnExpression ) )
                 {
                     ABSObject o = unary.Execute( null );
+                    BSExpressionOptimizerMetaData md = null;
+
+                    if ( o is IBSWrappedObject wo )
+                    {
+                        md = new BSExpressionOptimizerMetaData( wo.GetInternalObject() );
+                    }
 
                     if ( WriteLogs )
                     {
@@ -101,7 +120,7 @@ namespace BadScript.Utils.Optimization
                             $"[Expression Optimizer] Optimizing {unary.GetType().Name}: " + o.SafeToString() );
                     }
 
-                    return new BSProxyExpression( SourcePosition.Unknown, o );
+                    return new BSProxyExpression( SourcePosition.Unknown, o, md );
                 }
                 else
                 {

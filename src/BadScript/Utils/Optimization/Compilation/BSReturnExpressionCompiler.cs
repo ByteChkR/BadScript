@@ -8,30 +8,34 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSReturnExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSReturnExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.ReturnExpr;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override bool CanSerialize( BSExpression expr )
         {
-            return new BSReturnExpression(SourcePosition.Unknown, s.DeserializeExpression());
+            return expr is BSReturnExpression;
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
         {
-            BSReturnExpression expr = (BSReturnExpression)e;
-            List<byte> ret = new List<byte>();
-            ret.SerializeOpCode(BSCompiledExpressionCode.ReturnExpr);
+            return new BSReturnExpression( SourcePosition.Unknown, s.DeserializeExpression() );
+        }
+
+        public override byte[] Serialize( BSExpression e )
+        {
+            BSReturnExpression expr = ( BSReturnExpression ) e;
+            List < byte > ret = new List < byte >();
+            ret.SerializeOpCode( BSCompiledExpressionCode.ReturnExpr );
             ret.SerializeExpression( expr.Left );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }

@@ -8,14 +8,16 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSTryExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSTryExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.TryExpr;
+        }
+
+        public override bool CanSerialize( BSExpression expr )
+        {
+            return expr is BSTryExpression;
         }
 
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
@@ -27,17 +29,19 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSTryExpression( SourcePosition.Unknown, tryBlock, catchBlock, cVar );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSTryExpression expr = (BSTryExpression)e;
-            List<byte> ret = new List<byte>();
-            ret.SerializeOpCode(BSCompiledExpressionCode.TryExpr);
+            BSTryExpression expr = ( BSTryExpression ) e;
+            List < byte > ret = new List < byte >();
+            ret.SerializeOpCode( BSCompiledExpressionCode.TryExpr );
             ret.SerializeBlock( expr.TryBlock );
-            ret.SerializeString(expr.CapturedVar);
+            ret.SerializeString( expr.CapturedVar );
             ret.SerializeBlock( expr.CatchBlock );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }

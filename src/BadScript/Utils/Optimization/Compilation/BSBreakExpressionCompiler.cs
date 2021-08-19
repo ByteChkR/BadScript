@@ -8,25 +8,29 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSBreakExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSBreakExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.BreakExpr;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override bool CanSerialize( BSExpression expr )
         {
-            return new BSBreakExpression(SourcePosition.Unknown);
+            return expr is BSBreakExpression;
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
         {
-            return BitConverter.GetBytes((byte)BSCompiledExpressionCode.BreakExpr);
+            return new BSBreakExpression( SourcePosition.Unknown );
         }
+
+        public override byte[] Serialize( BSExpression e )
+        {
+            return BitConverter.GetBytes( ( byte ) BSCompiledExpressionCode.BreakExpr );
+        }
+
+        #endregion
     }
 
 }

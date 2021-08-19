@@ -8,20 +8,23 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSPropertyExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSPropertyExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.PropertyAccessExpr;
         }
 
+        public override bool CanSerialize( BSExpression expr )
+        {
+            return expr is BSPropertyExpression;
+        }
+
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
         {
             bool hasVal = s.DeserializeBool();
             BSExpression expr = null;
+
             if ( hasVal )
             {
                 expr = s.DeserializeExpression();
@@ -32,19 +35,25 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSPropertyExpression( SourcePosition.Unknown, expr, r );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSPropertyExpression expr = (BSPropertyExpression)e;
-            List<byte> ret = new List<byte>();
+            BSPropertyExpression expr = ( BSPropertyExpression ) e;
+            List < byte > ret = new List < byte >();
 
-            ret.SerializeOpCode(BSCompiledExpressionCode.PropertyAccessExpr);
+            ret.SerializeOpCode( BSCompiledExpressionCode.PropertyAccessExpr );
             ret.SerializeBool( expr.Left != null );
+
             if ( expr.Left != null )
+            {
                 ret.SerializeExpression( expr.Left );
-            ret.SerializeString(expr.Right);
+            }
+
+            ret.SerializeString( expr.Right );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }

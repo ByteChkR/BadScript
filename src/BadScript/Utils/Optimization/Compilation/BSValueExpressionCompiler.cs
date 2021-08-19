@@ -9,10 +9,7 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSValueExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSValueExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
@@ -21,47 +18,56 @@ namespace BadScript.Utils.Optimization.Compilation
                    code == BSCompiledExpressionCode.ValueNull;
         }
 
-        public override BSExpression Deserialize(BSCompiledExpressionCode code, Stream s )
+        public override bool CanSerialize( BSExpression expr )
         {
+            return expr is BSValueExpression;
+        }
 
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        {
 
             if ( code == BSCompiledExpressionCode.ValueNull )
             {
                 return new BSValueExpression( SourcePosition.Unknown, null );
             }
-            else if(code == BSCompiledExpressionCode.ValueDecimal)
+            else if ( code == BSCompiledExpressionCode.ValueDecimal )
             {
-                return new BSValueExpression( SourcePosition.Unknown, s.DeserializeDecimal());
+                return new BSValueExpression( SourcePosition.Unknown, s.DeserializeDecimal() );
             }
             else if ( code == BSCompiledExpressionCode.ValueString )
             {
-                return new BSValueExpression(SourcePosition.Unknown, s.DeserializeString());
+                return new BSValueExpression( SourcePosition.Unknown, s.DeserializeString() );
             }
 
-            throw new BSInvalidOperationException( SourcePosition.Unknown, "Can not DeserializeExpression Expression: " + code );
+            throw new BSInvalidOperationException(
+                SourcePosition.Unknown,
+                "Can not DeserializeExpression Expression: " + code );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSValueExpression expr = (BSValueExpression)e;
-            List<byte> b = new List<byte>();
-            if (expr.SourceValue is string s)
+            BSValueExpression expr = ( BSValueExpression ) e;
+            List < byte > b = new List < byte >();
+
+            if ( expr.SourceValue is string s )
             {
-                b.SerializeOpCode(BSCompiledExpressionCode.ValueString);
-                b.SerializeString(s);
+                b.SerializeOpCode( BSCompiledExpressionCode.ValueString );
+                b.SerializeString( s );
             }
-            else if (expr.SourceValue is decimal d)
+            else if ( expr.SourceValue is decimal d )
             {
-                b.SerializeOpCode(BSCompiledExpressionCode.ValueDecimal);
+                b.SerializeOpCode( BSCompiledExpressionCode.ValueDecimal );
                 b.SerializeDecimal( d );
             }
-            else if (expr.SourceValue == null)
+            else if ( expr.SourceValue == null )
             {
-                b.SerializeOpCode(BSCompiledExpressionCode.ValueNull);
+                b.SerializeOpCode( BSCompiledExpressionCode.ValueNull );
             }
 
             return b.ToArray();
         }
+
+        #endregion
     }
 
 }

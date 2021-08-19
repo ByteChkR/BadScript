@@ -983,7 +983,8 @@ namespace BadScript.Common
                                     objects => BSOperatorImplementationResolver.
                                                ResolveImplementation( "+", objects ).
                                                ExecuteOperator( objects ),
-                                    2 ), new BSBinaryOperatorMetaData("+", "a, b", 2)),
+                                    2 ),
+                                new BSBinaryOperatorMetaData( "+", "a, b", 2 ) ),
                             new BSExpression[]
                             {
                                 cProp, new BSValueExpression( CreateSourcePosition( pos ), ( decimal ) 1 )

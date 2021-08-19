@@ -11,7 +11,7 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public static class BSCompiler
     {
-        private static readonly List<BSExpressionCompiler> s_Compilers = new List<BSExpressionCompiler>
+        private static readonly List < BSExpressionCompiler > s_Compilers = new List < BSExpressionCompiler >
         {
             new BSArrayAccessExpressionCompiler(),
             new BSArrayExpressionCompiler(),
@@ -34,122 +34,62 @@ namespace BadScript.Utils.Optimization.Compilation
             new BSProxyExpressionCompiler()
         };
 
-        internal static void SerializeOpCode(this List<byte> l, BSCompiledExpressionCode code)
+        #region Public
+
+        public static BSExpression[] Deserialize( Stream s )
         {
-            l.Add((byte)code);
+            return s.DeserializeBlock();
         }
 
-        internal static void SerializeMap(this List<byte> l, Dictionary<BSExpression, BSExpression[]> map)
+        public static byte[] Serialize( BSExpression[] src )
         {
-            l.SerializeInt32(map.Count);
 
-            foreach (KeyValuePair<BSExpression, BSExpression[]> keyValuePair in map)
-            {
-                l.SerializeExpression(keyValuePair.Key);
-                l.SerializeBlock(keyValuePair.Value);
-            }
+            List < byte > ret = new List < byte >();
+            ret.SerializeBlock( src );
+
+            return ret.ToArray();
         }
 
-        internal static Dictionary<BSExpression, BSExpression[]> DeserializeMap(this Stream s)
+        internal static BSExpression[] DeserializeBlock( this Stream s )
         {
-            int c = s.DeserializeInt32();
+            int blockSize = s.DeserializeInt32();
+            List < BSExpression > exprs = new List < BSExpression >();
 
-            Dictionary<BSExpression, BSExpression[]> map = new Dictionary<BSExpression, BSExpression[]>();
-            for (int i = 0; i < c; i++)
+            for ( int i = 0; i < blockSize; i++ )
             {
-                BSExpression k = s.DeserializeExpression();
-                map[k] = s.DeserializeBlock();
-            }
-
-            return map;
-        }
-
-        internal static void SerializeNameMap(this List<byte> l, Dictionary<string, BSExpression> map)
-        {
-            l.SerializeInt32(map.Count);
-
-            foreach (KeyValuePair<string, BSExpression> keyValuePair in map)
-            {
-                l.SerializeString(keyValuePair.Key);
-                l.SerializeExpression(keyValuePair.Value);
-            }
-        }
-
-        internal static Dictionary<string, BSExpression> DeserializeNameMap(this Stream s)
-        {
-            int c = s.DeserializeInt32();
-
-            Dictionary<string, BSExpression> map = new Dictionary<string, BSExpression>();
-            for (int i = 0; i < c; i++)
-            {
-                string k = s.DeserializeString();
-                map[k] = s.DeserializeExpression();
+                exprs.Add( DeserializeExpression( s ) );
             }
 
-            return map;
+            return exprs.ToArray();
         }
 
-        internal static BSCompiledExpressionCode DeserializeOpCode(this Stream s)
+        internal static bool DeserializeBool( this Stream s )
         {
-            return ( BSCompiledExpressionCode ) s.ReadByte();
+            byte[] cBuf = new byte[sizeof( bool )];
+            s.Read( cBuf, 0, cBuf.Length );
+
+            return BitConverter.ToBoolean( cBuf, 0 );
         }
 
-        internal static void SerializeDecimal( this List < byte > l, decimal n )
-        {
-            l.AddRange( BitConverter.GetBytes( ( double ) n ) );
-        }
-        internal static decimal DeserializeDecimal(this Stream s)
+        internal static decimal DeserializeDecimal( this Stream s )
         {
             byte[] b = new byte[sizeof( double )];
             s.Read( b, 0, b.Length );
 
-            return ( decimal ) BitConverter.ToDouble( b ,0);
+            return ( decimal ) BitConverter.ToDouble( b, 0 );
         }
 
-        internal static void SerializeInt32( this List < byte > l, int n )
+        internal static BSExpression DeserializeExpression( this Stream s )
         {
-            l.AddRange( BitConverter.GetBytes( n ) );
-        }
-        internal static int DeserializeInt32(this Stream s)
-        {
-            byte[] cBuf = new byte[sizeof(int)];
-            s.Read(cBuf, 0, cBuf.Length);
-            return BitConverter.ToInt32(cBuf, 0);
-        }
+            List < byte > ret = new List < byte >();
 
-        internal static void SerializeBool( this List < byte > l, bool b )
-        {
-            l.AddRange( BitConverter.GetBytes( b ) );
+            BSCompiledExpressionCode code = s.DeserializeOpCode();
+            BSExpressionCompiler c = s_Compilers.First( x => x.CanDeserialize( code ) );
+
+            return c.Deserialize( code, s );
         }
 
-        internal static bool DeserializeBool(this Stream s)
-        {
-            byte[] cBuf = new byte[sizeof(bool)];
-            s.Read(cBuf, 0, cBuf.Length);
-            return BitConverter.ToBoolean(cBuf, 0);
-        }
-
-        internal static string DeserializeString(this Stream s)
-        {
-            int c = s.DeserializeInt32();
-            byte[] sBuf = new byte[c];
-            s.Read( sBuf, 0, sBuf.Length );
-
-            return Encoding.UTF8.GetString( sBuf );
-        }
-
-        internal static void SerializeFunctionParameters(this List <byte> l, BSFunctionParameter[] args)
-        {
-            l.SerializeInt32( args.Length );
-            foreach (BSFunctionParameter bsFunctionParameter in args)
-            {
-                l.SerializeString(bsFunctionParameter.Name);
-                l.SerializeBool(bsFunctionParameter.NotNull);
-                l.SerializeBool(bsFunctionParameter.IsOptional);
-            }
-        }
-
-        internal static BSFunctionParameter[] DeserializeFunctionParameters(this Stream s)
+        internal static BSFunctionParameter[] DeserializeFunctionParameters( this Stream s )
         {
             int c = s.DeserializeInt32();
             BSFunctionParameter[] ret = new BSFunctionParameter[c];
@@ -162,71 +102,142 @@ namespace BadScript.Utils.Optimization.Compilation
             return ret;
         }
 
-        internal static void SerializeString(this List<byte> l, string str)
+        internal static int DeserializeInt32( this Stream s )
         {
-            byte[] b = Encoding.UTF8.GetBytes(str);
-            l.AddRange(BitConverter.GetBytes(b.Length));
-            l.AddRange(b);
+            byte[] cBuf = new byte[sizeof( int )];
+            s.Read( cBuf, 0, cBuf.Length );
+
+            return BitConverter.ToInt32( cBuf, 0 );
         }
 
-        internal static BSExpression DeserializeExpression(this Stream s)
+        internal static Dictionary < BSExpression, BSExpression[] > DeserializeMap( this Stream s )
         {
-            List<byte> ret = new List<byte>();
+            int c = s.DeserializeInt32();
 
-            BSCompiledExpressionCode code = s.DeserializeOpCode();
-            BSExpressionCompiler c = s_Compilers.First(x => x.CanDeserialize(code));
+            Dictionary < BSExpression, BSExpression[] > map = new Dictionary < BSExpression, BSExpression[] >();
 
-            return c.Deserialize(code, s);
-        }
-
-        internal static void SerializeExpression(this List <byte> l, BSExpression expr)
-        {
-            l.AddRange( expr.SerializeExpression( ) );
-        }
-        internal static byte[] SerializeExpression(this BSExpression expr)
-        {
-            BSExpressionCompiler c = s_Compilers.First(x => x.CanSerialize(expr));
-
-            return c.Serialize(expr);
-        }
-
-
-
-        internal static BSExpression[] DeserializeBlock(this Stream s)
-        {
-            int blockSize = s.DeserializeInt32();
-            List<BSExpression> exprs = new List<BSExpression>();
-            for (int i = 0; i < blockSize; i++)
+            for ( int i = 0; i < c; i++ )
             {
-                exprs.Add(DeserializeExpression(s));
+                BSExpression k = s.DeserializeExpression();
+                map[k] = s.DeserializeBlock();
             }
 
-            return exprs.ToArray();
+            return map;
         }
 
+        internal static Dictionary < string, BSExpression > DeserializeNameMap( this Stream s )
+        {
+            int c = s.DeserializeInt32();
+
+            Dictionary < string, BSExpression > map = new Dictionary < string, BSExpression >();
+
+            for ( int i = 0; i < c; i++ )
+            {
+                string k = s.DeserializeString();
+                map[k] = s.DeserializeExpression();
+            }
+
+            return map;
+        }
+
+        internal static BSCompiledExpressionCode DeserializeOpCode( this Stream s )
+        {
+            return ( BSCompiledExpressionCode ) s.ReadByte();
+        }
+
+        internal static string DeserializeString( this Stream s )
+        {
+            int c = s.DeserializeInt32();
+            byte[] sBuf = new byte[c];
+            s.Read( sBuf, 0, sBuf.Length );
+
+            return Encoding.UTF8.GetString( sBuf );
+        }
 
         internal static void SerializeBlock( this List < byte > l, BSExpression[] src )
         {
-            l.SerializeInt32(src.Length);
-            foreach (BSExpression bsExpression in src)
+            l.SerializeInt32( src.Length );
+
+            foreach ( BSExpression bsExpression in src )
             {
-                l.SerializeExpression(bsExpression);
+                l.SerializeExpression( bsExpression );
             }
         }
 
-        public static byte[] Serialize(BSExpression[] src)
+        internal static void SerializeBool( this List < byte > l, bool b )
         {
-
-            List<byte> ret = new List<byte>();
-            ret.SerializeBlock( src );
-            return ret.ToArray();
+            l.AddRange( BitConverter.GetBytes( b ) );
         }
 
-        public static BSExpression[] Deserialize(Stream s)
+        internal static void SerializeDecimal( this List < byte > l, decimal n )
         {
-            return s.DeserializeBlock();
+            l.AddRange( BitConverter.GetBytes( ( double ) n ) );
         }
 
+        internal static void SerializeExpression( this List < byte > l, BSExpression expr )
+        {
+            l.AddRange( expr.SerializeExpression() );
+        }
+
+        internal static byte[] SerializeExpression( this BSExpression expr )
+        {
+            BSExpressionCompiler c = s_Compilers.First( x => x.CanSerialize( expr ) );
+
+            return c.Serialize( expr );
+        }
+
+        internal static void SerializeFunctionParameters( this List < byte > l, BSFunctionParameter[] args )
+        {
+            l.SerializeInt32( args.Length );
+
+            foreach ( BSFunctionParameter bsFunctionParameter in args )
+            {
+                l.SerializeString( bsFunctionParameter.Name );
+                l.SerializeBool( bsFunctionParameter.NotNull );
+                l.SerializeBool( bsFunctionParameter.IsOptional );
+            }
+        }
+
+        internal static void SerializeInt32( this List < byte > l, int n )
+        {
+            l.AddRange( BitConverter.GetBytes( n ) );
+        }
+
+        internal static void SerializeMap( this List < byte > l, Dictionary < BSExpression, BSExpression[] > map )
+        {
+            l.SerializeInt32( map.Count );
+
+            foreach ( KeyValuePair < BSExpression, BSExpression[] > keyValuePair in map )
+            {
+                l.SerializeExpression( keyValuePair.Key );
+                l.SerializeBlock( keyValuePair.Value );
+            }
+        }
+
+        internal static void SerializeNameMap( this List < byte > l, Dictionary < string, BSExpression > map )
+        {
+            l.SerializeInt32( map.Count );
+
+            foreach ( KeyValuePair < string, BSExpression > keyValuePair in map )
+            {
+                l.SerializeString( keyValuePair.Key );
+                l.SerializeExpression( keyValuePair.Value );
+            }
+        }
+
+        internal static void SerializeOpCode( this List < byte > l, BSCompiledExpressionCode code )
+        {
+            l.Add( ( byte ) code );
+        }
+
+        internal static void SerializeString( this List < byte > l, string str )
+        {
+            byte[] b = Encoding.UTF8.GetBytes( str );
+            l.AddRange( BitConverter.GetBytes( b.Length ) );
+            l.AddRange( b );
+        }
+
+        #endregion
     }
 
 }

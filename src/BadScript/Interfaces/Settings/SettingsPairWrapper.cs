@@ -27,14 +27,12 @@ namespace BadScript.Interfaces.Settings
             {
                 { "Name", new BSReflectionReference( () => new BSObject( m_Pair.Name ), null ) },
                 {
-                    "Value",
-                    new BSReflectionReference(
+                    "Value", new BSReflectionReference(
                         () => new BSObject( m_Pair.Value ),
                         x => m_Pair.Value = x.ConvertString() )
                 },
                 {
-                    "IsPersistent",
-                    new BSReflectionReference(
+                    "IsPersistent", new BSReflectionReference(
                         () => new BSObject( m_Pair.IsPersistent ),
                         x => m_Pair.IsPersistent = x.ConvertBool() )
                 },

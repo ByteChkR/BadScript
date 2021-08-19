@@ -8,7 +8,9 @@ namespace BadScript.Common.Expressions.Implementations.Value
     public class BSValueExpression : BSExpression
     {
         private readonly BSObject m_Value;
+
         public object SourceValue { get; }
+
         public override bool IsConstant => true;
 
         #region Public

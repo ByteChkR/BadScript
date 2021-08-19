@@ -8,14 +8,16 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSInvocationExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSInvocationExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.InvocationExpr;
+        }
+
+        public override bool CanSerialize( BSExpression expr )
+        {
+            return expr is BSInvocationExpression;
         }
 
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
@@ -25,17 +27,19 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSInvocationExpression( SourcePosition.Unknown, l, s.DeserializeBlock() );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSInvocationExpression expr = (BSInvocationExpression)e;
-            List<byte> ret = new List<byte>();
+            BSInvocationExpression expr = ( BSInvocationExpression ) e;
+            List < byte > ret = new List < byte >();
 
-            ret.SerializeOpCode(BSCompiledExpressionCode.InvocationExpr);
+            ret.SerializeOpCode( BSCompiledExpressionCode.InvocationExpr );
             ret.SerializeExpression( expr.Left );
             ret.SerializeBlock( expr.Parameters );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }

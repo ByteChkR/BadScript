@@ -9,14 +9,16 @@ namespace BadScript.Utils.Optimization.Compilation
 
     public class BSFunctionDefinitionExpressionCompiler : BSExpressionCompiler
     {
-        public override bool CanSerialize(BSExpression expr)
-        {
-            return expr is BSFunctionDefinitionExpression;
-        }
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.FunctionDefinitionExpr;
+        }
+
+        public override bool CanSerialize( BSExpression expr )
+        {
+            return expr is BSFunctionDefinitionExpression;
         }
 
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
@@ -26,6 +28,7 @@ namespace BadScript.Utils.Optimization.Compilation
             BSFunctionParameter[] args = s.DeserializeFunctionParameters();
 
             BSExpression[] exprs = s.DeserializeBlock();
+
             return new BSFunctionDefinitionExpression(
                 SourcePosition.Unknown,
                 name,
@@ -34,19 +37,21 @@ namespace BadScript.Utils.Optimization.Compilation
                 global );
         }
 
-        public override byte[] Serialize(BSExpression e)
+        public override byte[] Serialize( BSExpression e )
         {
-            BSFunctionDefinitionExpression expr = (BSFunctionDefinitionExpression)e;
-            List<byte> ret = new List<byte>();
-            ret.SerializeOpCode(BSCompiledExpressionCode.FunctionDefinitionExpr);
-            ret.SerializeString(expr.Name);
+            BSFunctionDefinitionExpression expr = ( BSFunctionDefinitionExpression ) e;
+            List < byte > ret = new List < byte >();
+            ret.SerializeOpCode( BSCompiledExpressionCode.FunctionDefinitionExpr );
+            ret.SerializeString( expr.Name );
             ret.SerializeBool( expr.Global );
             ret.SerializeFunctionParameters( expr.ArgNames );
-            
+
             ret.SerializeBlock( expr.Block );
 
             return ret.ToArray();
         }
+
+        #endregion
     }
 
 }
