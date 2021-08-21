@@ -336,18 +336,15 @@ namespace BadScript
         //    );
         //}
 
-        public BSExpression[] ParseBinary( byte[] bin )
+        public static BSExpression[] ParseBinary( byte[] bin )
         {
             using ( Stream ms = new MemoryStream( bin ) )
             {
-                using ( Stream s = new GZipStream( ms, CompressionMode.Decompress ) )
-                {
-                    return BSCompiler.Deserialize( s );
-                }
+                return BSCompiler.Deserialize(ms);
             }
         }
 
-        public BSExpression[] ParseBinary( string file )
+        public static BSExpression[] ParseBinary( string file )
         {
             return ParseBinary( File.ReadAllBytes( file ) );
         }

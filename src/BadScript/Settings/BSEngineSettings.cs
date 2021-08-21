@@ -46,7 +46,7 @@ namespace BadScript.Settings
             return s;
         }
 
-        public BSEngine Build()
+        public BSEngine Build(bool addEnvironmentApi = true)
         {
             BSEngine instance = new BSEngine(
                 ParserSettings,
@@ -54,6 +54,11 @@ namespace BadScript.Settings
                 Interfaces );
 
             AddGlobalInterfaces( instance, ActiveGlobalInterfaces );
+            if (addEnvironmentApi)
+            {
+                instance.AddInterface(new BSEngineEnvironmentInterface(instance));
+                instance.LoadInterface("environment");
+            }
 
             foreach ( string includeDir in IncludeDirectories )
             {
