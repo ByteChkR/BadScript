@@ -1,5 +1,4 @@
 # Bad Script Engine
-- [First Steps/Setup](./Setup.md)
 - [The BadScript.Console Documentation](https://bytechkr.github.io/BadScript.Console/)
 
 ## Bad Script Language Definition
