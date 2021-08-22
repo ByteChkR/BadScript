@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2021.8.19.1</Version>
+    <Version>2021.8.22.1</Version>
     <FileUpgradeFlags>40</FileUpgradeFlags>
     <UpgradeBackupLocation>D:\Users\Tim\Documents\BadScript\src\Backup\</UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
