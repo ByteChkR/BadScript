@@ -33,7 +33,7 @@ namespace BadScript.Common.Expressions
             int lineCount = 0;
             int lastNewLine = 0;
 
-            for ( int i = 0; i < text.Length; i++ )
+            for ( int i = 0; i < pos; i++ )
             {
                 if ( text[i] == '\n' )
                 {
@@ -49,6 +49,7 @@ namespace BadScript.Common.Expressions
             {
                 nextNewLine = src.Length - textStart;
             }
+            
 
             string r = src.Substring( textStart, Math.Min( nextNewLine, src.Length - textStart ) );
 

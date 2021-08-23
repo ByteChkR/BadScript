@@ -34,10 +34,9 @@ namespace BadScript.Common.Types
             if (s_Stacks.ContainsKey(Thread.CurrentThread))
                 return s_Stacks[Thread.CurrentThread].Peek();
 
-            throw new BSRuntimeException("Can not Peek a function off an empty stack.");
+            throw new BSRuntimeException("Can not Peek a function from an empty stack.");
         }
-
-        //private static readonly Stack < BSFunction > s_StackTrace = new Stack < BSFunction >();
+        
 
         private readonly (int min, int max)? m_ParameterCount;
         private readonly string m_DebugData = null;
@@ -47,7 +46,15 @@ namespace BadScript.Common.Types
         private Func < ABSObject[],
             ABSObject > m_Func;
 
-        public static string[] StackTrace => s_Stacks[Thread.CurrentThread].Select( x => x.m_DebugData ).ToArray();
+        public static string[] StackTrace
+        {
+            get
+            {
+                if ( !s_Stacks.ContainsKey( Thread.CurrentThread ) )
+                    return new string[0];
+                return s_Stacks[Thread.CurrentThread].Select(x => x.m_DebugData).ToArray();
+            }
+        }
 
         public static string FlatTrace
         {

@@ -21,6 +21,8 @@ namespace BadScript.Common
     {
         private readonly string m_OriginalSource;
         private int m_CurrentPosition;
+        private readonly int m_SourcePositionOffset;
+        private readonly string m_OffsetSource;
         private char Current =>
             m_CurrentPosition < m_OriginalSource.Length ? m_OriginalSource[m_CurrentPosition] : '\0';
 
@@ -28,16 +30,18 @@ namespace BadScript.Common
 
         #region Public
 
-        public BSParser( string script )
+        public BSParser( string script, string originalSource = null, int srcPosOffset = 0 )
         {
             m_OriginalSource = script;
+            m_SourcePositionOffset = srcPosOffset;
+            m_OffsetSource = originalSource ?? script;
 
             m_CurrentPosition = 0;
         }
 
         public SourcePosition CreateSourcePosition()
         {
-            return CreateSourcePosition( m_CurrentPosition );
+            return CreateSourcePosition( m_CurrentPosition + m_SourcePositionOffset);
         }
 
         public int FindClosing( string open, string close )
@@ -339,8 +343,9 @@ namespace BadScript.Common
             StringBuilder sb = new StringBuilder();
             ReadWhitespaceAndNewLine();
 
-            string funcName;
             int pos = m_CurrentPosition;
+
+            string funcName;
 
             if ( IsWordStart() )
             {
@@ -383,10 +388,10 @@ namespace BadScript.Common
                     new[] { Parse( int.MaxValue ) },
                     isGlobal );
             }
-
+            
             string block = ParseBlock();
 
-            BSParser p = new BSParser( block );
+            BSParser p = new BSParser( block, m_OffsetSource, m_SourcePositionOffset +  pos);
 
             BSExpression[] b = p.ParseToEnd();
 
@@ -1062,7 +1067,7 @@ namespace BadScript.Common
 
         private SourcePosition CreateSourcePosition( int pos )
         {
-            return SourcePosition.GetCurrentLineInfo( m_OriginalSource, pos );
+            return SourcePosition.GetCurrentLineInfo( m_OffsetSource, pos );
         }
 
         private bool Is( string s )
