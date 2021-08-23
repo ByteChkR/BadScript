@@ -1,4 +1,4 @@
-$preBuildDir = "$pwd/tools/"
+$preBuildDir = "$pwd/tools/*"
 $solutionRoot = "$pwd/../src/"
 $consoleProjectPath = "$pwd/../../BadScript.Console/src/BadScript.Console.Desktop/BadScript.Console.Desktop.csproj"
 
