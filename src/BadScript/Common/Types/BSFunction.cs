@@ -12,7 +12,7 @@ namespace BadScript.Common.Types
 
     public class BSFunction : ABSObject
     {
-        private static readonly Dictionary < Thread, Stack < BSFunction > > s_Stacks;
+        private static readonly Dictionary < Thread, Stack < BSFunction > > s_Stacks = new Dictionary < Thread, Stack < BSFunction > >();
         private static void PushStack(BSFunction f)
         {
             if ( s_Stacks.ContainsKey( Thread.CurrentThread ) )
@@ -21,7 +21,7 @@ namespace BadScript.Common.Types
                 s_Stacks[Thread.CurrentThread] = new Stack < BSFunction >( new[] { f } );
         }
 
-        private static int StackCount() => s_Stacks[Thread.CurrentThread].Count;
+        private static int StackCount => s_Stacks[Thread.CurrentThread].Count;
         private static BSFunction PopStack()
         {
             if (s_Stacks.ContainsKey(Thread.CurrentThread))
@@ -109,7 +109,7 @@ namespace BadScript.Common.Types
 
         public static BSFunction GetTopStack()
         {
-            return s_StackTrace.Count == 0 ? null : PeekStack();
+            return StackCount == 0 ? null : PeekStack();
         }
 
         public static void RestoreStack( BSFunction top )
@@ -119,9 +119,9 @@ namespace BadScript.Common.Types
                 return;
             }
 
-            while ( s_StackTrace.Peek() != top )
+            while ( PeekStack() != top )
             {
-                s_StackTrace.Pop();
+               PopStack();
             }
         }
 
@@ -153,7 +153,7 @@ namespace BadScript.Common.Types
 
         public override ABSObject Invoke( ABSObject[] args )
         {
-            s_StackTrace.Push( this );
+            PushStack( this );
 
             foreach ( BSFunction bsFunction in m_Hooks )
             {
@@ -161,7 +161,7 @@ namespace BadScript.Common.Types
 
                 if ( !o.IsNull )
                 {
-                    s_StackTrace.Pop();
+                    PopStack();
 
                     return o;
                 }
@@ -170,7 +170,7 @@ namespace BadScript.Common.Types
             if ( m_ParameterCount == null )
             {
                 ABSObject o = m_Func( args );
-                s_StackTrace.Pop();
+               PopStack();
 
                 return o;
             }
@@ -185,7 +185,7 @@ namespace BadScript.Common.Types
             }
 
             ABSObject or = m_Func( args );
-            s_StackTrace.Pop();
+            PopStack();
 
             return or;
         }
