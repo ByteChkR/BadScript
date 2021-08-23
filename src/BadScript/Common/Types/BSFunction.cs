@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types.References;
@@ -11,7 +12,32 @@ namespace BadScript.Common.Types
 
     public class BSFunction : ABSObject
     {
-        private static readonly Stack < BSFunction > s_StackTrace = new Stack < BSFunction >();
+        private static readonly Dictionary < Thread, Stack < BSFunction > > s_Stacks;
+        private static void PushStack(BSFunction f)
+        {
+            if ( s_Stacks.ContainsKey( Thread.CurrentThread ) )
+                s_Stacks[Thread.CurrentThread].Push( f );
+            else
+                s_Stacks[Thread.CurrentThread] = new Stack < BSFunction >( new[] { f } );
+        }
+
+        private static int StackCount() => s_Stacks[Thread.CurrentThread].Count;
+        private static BSFunction PopStack()
+        {
+            if (s_Stacks.ContainsKey(Thread.CurrentThread))
+                return s_Stacks[Thread.CurrentThread].Pop();
+
+            throw new BSRuntimeException("Can not Pop a function off an empty stack.");
+        }
+        private static BSFunction PeekStack()
+        {
+            if (s_Stacks.ContainsKey(Thread.CurrentThread))
+                return s_Stacks[Thread.CurrentThread].Peek();
+
+            throw new BSRuntimeException("Can not Peek a function off an empty stack.");
+        }
+
+        //private static readonly Stack < BSFunction > s_StackTrace = new Stack < BSFunction >();
 
         private readonly (int min, int max)? m_ParameterCount;
         private readonly string m_DebugData = null;
@@ -21,7 +47,7 @@ namespace BadScript.Common.Types
         private Func < ABSObject[],
             ABSObject > m_Func;
 
-        public static string[] StackTrace => s_StackTrace.Select( x => x.m_DebugData ).ToArray();
+        public static string[] StackTrace => s_Stacks[Thread.CurrentThread].Select( x => x.m_DebugData ).ToArray();
 
         public static string FlatTrace
         {
@@ -83,7 +109,7 @@ namespace BadScript.Common.Types
 
         public static BSFunction GetTopStack()
         {
-            return s_StackTrace.Count == 0 ? null : s_StackTrace.Peek();
+            return s_StackTrace.Count == 0 ? null : PeekStack();
         }
 
         public static void RestoreStack( BSFunction top )
