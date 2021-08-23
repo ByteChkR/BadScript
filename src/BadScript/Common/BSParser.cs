@@ -95,7 +95,8 @@ namespace BadScript.Common
 
         public BSExpression Parse( int start )
         {
-            BSExpression expr = ParseWord();
+            //BSExpression expr = ParseWord();
+            BSExpression expr = ParseValue();
 
             return Parse( expr, start );
         }
