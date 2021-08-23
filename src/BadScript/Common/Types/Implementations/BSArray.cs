@@ -267,6 +267,32 @@ namespace BadScript.Common.Types.Implementations
                 },
                 1,
                 int.MaxValue );
+
+            m_Functions["swap"] = new BSFunction(
+                "function swap(idx1, idx2)",
+                objects =>
+                {
+                    int i0 = (int)objects[0].ConvertDecimal();
+                    int i1 = (int)objects[1].ConvertDecimal();
+                    ABSObject o0 = m_InnerArray[i0];
+
+                    m_InnerArray[i0] =
+                        m_InnerArray[i1];
+
+                    m_InnerArray[i1] = o0;
+
+                    return BSObject.Null;
+                },
+                2);
+            m_Functions["reverse"] = new BSFunction(
+                "function reverse()",
+                objects =>
+                {
+                    m_InnerArray.Reverse();
+
+                    return BSObject.Null;
+                },
+                0);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
