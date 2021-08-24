@@ -12,6 +12,7 @@ namespace BadScript.Common.Expressions
 
         #region Public
 
+
         public abstract ABSObject Execute( BSScope scope );
 
         #endregion

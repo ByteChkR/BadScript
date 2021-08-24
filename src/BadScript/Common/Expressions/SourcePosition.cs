@@ -56,7 +56,7 @@ namespace BadScript.Common.Expressions
             return new SourcePosition
             {
                 Source = src,
-                LineStr = r,
+                LineStr = r.Trim(),
                 Line = lineCount,
                 Collumn = pos - lastNewLine,
                 Position = pos

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,6 +20,7 @@ namespace BadScript.Common
 
     public class BSParser
     {
+       
         private readonly string m_OriginalSource;
         private int m_CurrentPosition;
         private readonly int m_SourcePositionOffset;
@@ -50,7 +52,7 @@ namespace BadScript.Common
 
             while ( true )
             {
-                if ( Is( '\0' ) )
+                if ( m_CurrentPosition >= m_OriginalSource.Length || Is( '\0' ) )
                 {
                     throw new BSParserException( $"Expected '{close}'", this );
                 }
@@ -561,22 +563,42 @@ namespace BadScript.Common
             return new BSValueExpression( CreateSourcePosition( pos ), str );
         }
 
-        public BSExpression[] ParseToEnd()
+#if !DEBUG
+        private class ParserException : Exception
         {
-            ReadWhitespaceAndNewLine();
-            List < BSExpression > ret = new List < BSExpression >();
+            public ParserException( Exception inner ) : base( inner.Message ){}
 
-            while ( m_CurrentPosition < m_OriginalSource.Length )
+            public override string StackTrace => "";
+
+    }
+#endif
+    public BSExpression[] ParseToEnd()
+        {
+            try
             {
                 ReadWhitespaceAndNewLine();
+                List<BSExpression> ret = new List<BSExpression>();
 
-                if ( m_CurrentPosition < m_OriginalSource.Length )
+                while (m_CurrentPosition < m_OriginalSource.Length)
                 {
-                    ret.Add( Parse( int.MaxValue ) );
-                }
-            }
+                    ReadWhitespaceAndNewLine();
 
-            return ret.ToArray();
+                    if (m_CurrentPosition < m_OriginalSource.Length)
+                    {
+                        ret.Add(Parse(int.MaxValue));
+                    }
+                }
+
+                return ret.ToArray();
+            }
+            catch ( Exception e )
+            {
+                throw
+#if !DEBUG
+                    new ParserException(e)
+#endif
+                    ;
+            }
         }
 
         public BSExpression ParseValue()
@@ -1061,9 +1083,9 @@ namespace BadScript.Common
             return r;
         }
 
-        #endregion
+#endregion
 
-        #region Private
+#region Private
 
         private SourcePosition CreateSourcePosition( int pos )
         {
@@ -1296,7 +1318,7 @@ namespace BadScript.Common
             return true;
         }
 
-        #endregion
+#endregion
     }
 
 }

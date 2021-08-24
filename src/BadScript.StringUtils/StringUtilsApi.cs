@@ -178,8 +178,6 @@ namespace BadScript.StringUtils
 
         private static ABSObject IndexOf( ABSObject[] arg )
         {
-            string test = "HELLO WORLD\r\nHELLO WORLD\r\n";
-            int testI = test.IndexOf( "\n" );
             string str = arg[0].ConvertString();
             string searchStr = arg[1].ConvertString();
             int idx = str.IndexOf( searchStr );

@@ -83,6 +83,22 @@ namespace BadScript.Interfaces.Settings
                                 m_Category.GetCategory( objects[0].ConvertString() ) ),
                             1 ) )
                 },
+                {
+                    "FindCategory", new BSFunctionReference(
+                        new BSFunction(
+                            "function FindCategory(name)",
+                            objects => new SettingsCategoryWrapper(
+                                m_Category.FindCategory( objects[0].ConvertString() ) ),
+                            1 ) )
+                },
+                {
+                    "FindSetting", new BSFunctionReference(
+                        new BSFunction(
+                            "function FindSetting(name)",
+                            objects => new SettingsPairWrapper(
+                                m_Category.FindSetting( objects[0].ConvertString() ) ),
+                            1 ) )
+                },
                 { "Pairs", new BSReflectionReference( () => m_PairEnumerator, null ) },
                 { "Categories", new BSReflectionReference( () => m_CategoryEnumerator, null ) },
             };
