@@ -16,6 +16,10 @@ namespace BadScript.Common.Types.Implementations
 
         public override bool IsNull => m_InternalObject == null;
 
+        public bool IsLiteral => IsNull ||
+                                 m_InternalObject is decimal ||
+                                 m_InternalObject is string;
+
         #region Public
 
         public BSObject( object instance ) : this( SourcePosition.Unknown, instance )

@@ -382,7 +382,7 @@ namespace BadScript
 
             if ( args.Length == 1 )
             {
-                scope = new BSScope( BSScopeFlags.None, ( BSScope ) ( args[0] as BSObject ).GetInternalObject() );
+                scope = new BSScope( BSScopeFlags.None, ( BSScope ) ( args[0].ResolveReference() as BSObject ).GetInternalObject() );
             }
             else
             {

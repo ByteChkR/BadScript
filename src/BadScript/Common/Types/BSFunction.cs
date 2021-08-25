@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
+using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types
@@ -158,43 +159,56 @@ namespace BadScript.Common.Types
             return false;
         }
 
-        public override ABSObject Invoke( ABSObject[] args )
+        public ABSObject Invoke(ABSObject[] args, bool executeHooks)
         {
-            PushStack( this );
+            PushStack(this);
 
-            foreach ( BSFunction bsFunction in m_Hooks )
+            ABSObject[] arr = null;
+
+            if ( executeHooks )
             {
-                ABSObject o = bsFunction.Invoke( args );
-
-                if ( !o.IsNull )
+                if (m_Hooks.Count != 0)
                 {
-                    PopStack();
+                    arr = new ABSObject[] { this, new BSArray(args) };
+                }
+                foreach (BSFunction bsFunction in m_Hooks)
+                {
+                    ABSObject o = bsFunction.Invoke(arr);
 
-                    return o;
+                    if (!o.IsNull)
+                    {
+                        PopStack();
+
+                        return o;
+                    }
                 }
             }
 
-            if ( m_ParameterCount == null )
+            if (m_ParameterCount == null)
             {
-                ABSObject o = m_Func( args );
-               PopStack();
+                ABSObject o = m_Func(args);
+                PopStack();
 
                 return o;
             }
 
-            ( int min, int max ) = m_ParameterCount.Value;
+            (int min, int max) = m_ParameterCount.Value;
 
-            if ( args.Length < min || args.Length > max )
+            if (args.Length < min || args.Length > max)
             {
                 throw new BSRuntimeException(
                     Position,
-                    $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}" );
+                    $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}");
             }
 
-            ABSObject or = m_Func( args );
+            ABSObject or = m_Func(args);
             PopStack();
 
             return or;
+        }
+        public override ABSObject Invoke( ABSObject[] args )
+        {
+            return Invoke( args, true );
         }
 
         public void RemoveHook( BSFunction func )

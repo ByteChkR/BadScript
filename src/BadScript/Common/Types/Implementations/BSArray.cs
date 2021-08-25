@@ -20,6 +20,8 @@ namespace BadScript.Common.Types.Implementations
 
         private readonly List < ABSObject > m_InnerArray;
 
+        public ABSObject[] Elements => m_InnerArray.ToArray();
+
         public override bool IsNull => false;
 
         #region Public

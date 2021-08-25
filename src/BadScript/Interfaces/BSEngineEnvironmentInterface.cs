@@ -3,6 +3,7 @@ using BadScript.Common.OperatorImplementations;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 using BadScript.Interfaces.Settings;
 using BadScript.Settings;
 
@@ -81,6 +82,37 @@ namespace BadScript.Interfaces
             );
 
             env.InsertElement( new BSObject( "settings" ), new SettingsCategoryWrapper( BSSettings.BsRoot ) );
+
+            env.InsertElement(
+                new BSObject("invoke"),
+                new BSFunction("function invoke(target, args)",
+                               x =>
+                               {
+                                   if ( x.Length == 2 )
+                                       return x[0].Invoke( ( x[1].ResolveReference() as BSArray ).Elements );
+
+                                   return ( x[0].ResolveReference() as BSFunction ).Invoke(
+                                       ( x[1].ResolveReference() as BSArray ).Elements,
+                                       false );
+                               }, 2,3)
+            );
+
+            env.InsertElement(
+                new BSObject("isLiteral"),
+                new BSFunction(
+                    "function isLiteral(v)",
+                    objects =>
+                    {
+                        ABSObject o = objects[0].ResolveReference();
+
+                        if ( o is BSObject bso )
+                        {
+                            return bso.IsLiteral ? BSObject.One : BSObject.Zero;
+                        }
+
+                        return BSObject.Zero;
+                    },
+                    1 ) );
         }
 
         #endregion
