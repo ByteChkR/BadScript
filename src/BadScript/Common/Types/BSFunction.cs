@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using BadScript.Common.Exceptions;
@@ -171,6 +172,7 @@ namespace BadScript.Common.Types
             return m_Properties.ContainsKey(propertyName);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject Invoke(ABSObject[] args, bool executeHooks)
         {
             PushStack(this);
@@ -181,7 +183,7 @@ namespace BadScript.Common.Types
             {
                 if (m_Hooks.Count != 0)
                 {
-                    arr = new ABSObject[] { this, new BSArray(args) };
+                    arr = new ABSObject[] { this, new BSArray(args.Select(x => x.ResolveReference())) };
                 }
                 foreach (BSFunction bsFunction in m_Hooks)
                 {
@@ -218,11 +220,13 @@ namespace BadScript.Common.Types
 
             return or;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override ABSObject Invoke( ABSObject[] args )
         {
             return Invoke( args, true );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void RemoveHook( BSFunction func )
         {
             m_Hooks.Remove( func );

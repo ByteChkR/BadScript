@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using BadScript.Common;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
@@ -91,31 +92,37 @@ namespace BadScript
             return m_Interfaces.Any( x => x.Name == key );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadBinary( byte[] bin, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), scope, args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadBinary( byte[] bin, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadBinary( byte[] bin, BSScope scope, string[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), scope, args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadBinary( byte[] bin, string[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadBinary( byte[] bin, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadFile( string path, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
             if ( IsBinary( path ) )
@@ -126,6 +133,7 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), scope, args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadFile( string path, ABSObject[] args, bool isBenchmark = false )
         {
             if ( IsBinary( path ) )
@@ -136,6 +144,7 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadFile( string path, BSScope scope, string[] args, bool isBenchmark = false )
         {
             if ( IsBinary( path ) )
@@ -146,6 +155,7 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), scope, args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadFile( string path, string[] args, bool isBenchmark = false )
         {
             if ( IsBinary( path ) )
@@ -156,6 +166,7 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadFile( string path, bool isBenchmark = false )
         {
             if ( IsBinary( path ) )
@@ -181,6 +192,7 @@ namespace BadScript
         //    return LoadFile( isBenchmark, file, new string[0] );
         //}
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSTable LoadInterface( string key, ABSTable t = null )
         {
             if ( !HasInterface( key ) )
@@ -205,11 +217,13 @@ namespace BadScript
             return table;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadScript( BSExpression[] exprs, bool isBenchmark = false )
         {
             return LoadScript( exprs, new ABSObject[0], isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadScript( BSExpression[] exprs, string[] args, bool isBenchmark = false )
         {
             return LoadScript(
@@ -218,11 +232,13 @@ namespace BadScript
                 isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadScript( BSExpression[] exprs, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( exprs, new BSScope( this ), args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, string[] args, bool isBenchmark = false )
         {
             return LoadScript(
@@ -232,6 +248,7 @@ namespace BadScript
                 isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
 
@@ -273,26 +290,31 @@ namespace BadScript
             return scope.Return ?? scope.GetLocals();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadSource( string src, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), scope, args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadSource( string src, BSScope scope, string[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), scope, args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadSource( string src, string[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadSource( string src, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), args, isBenchmark );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ABSObject LoadSource( string src, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), isBenchmark );
@@ -336,6 +358,7 @@ namespace BadScript
         //    );
         //}
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static BSExpression[] ParseBinary( byte[] bin )
         {
             using ( Stream ms = new MemoryStream( bin ) )
@@ -344,11 +367,13 @@ namespace BadScript
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static BSExpression[] ParseBinary( string file )
         {
             return ParseBinary( File.ReadAllBytes( file ) );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BSExpression[] ParseString( string script )
         {
             BSParser parser = new BSParser( Preprocess( script ) );
@@ -412,6 +437,7 @@ namespace BadScript
             return new BSArray( InterfaceNames.Select( x => new BSObject( x ) ) );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal bool HasElement( ABSObject name )
         {
             return m_GlobalTable.HasElement( name ) || m_StaticData.HasElement( name );
@@ -422,6 +448,7 @@ namespace BadScript
             return InterfaceNames.Contains( arg[0].ConvertString() ) ? BSObject.One : BSObject.Zero;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void InsertElement( ABSObject k, ABSObject v )
         {
             m_GlobalTable.InsertElement( k, v );
