@@ -1,5 +1,6 @@
 ﻿using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 
 namespace BadScript.Common.OperatorImplementations.Implementations.Relational
 {
@@ -23,7 +24,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Relational
 
         protected override ABSObject Execute( ABSObject[] arg )
         {
-            return arg[0].Equals( arg[1] ) ? BSObject.One : BSObject.Zero;
+            return arg[0].ResolveReference().Equals( arg[1].ResolveReference() ) ? BSObject.One : BSObject.Zero;
         }
 
         #endregion

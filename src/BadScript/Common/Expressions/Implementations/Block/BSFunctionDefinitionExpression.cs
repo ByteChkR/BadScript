@@ -30,6 +30,12 @@ namespace BadScript.Common.Expressions.Implementations.Block
             ArgNames = args;
             Block = block;
             Global = addGlobal;
+
+            if ( args.Length > 1 && args[0].IsArgArray )
+            {
+                throw new BSParserException(
+                    $"Invalid Arguments for function {name}. Can not have a * argument besides other arguments" );
+            }
         }
 
         //public BSFunctionDefinitionExpression(
@@ -54,6 +60,14 @@ namespace BadScript.Common.Expressions.Implementations.Block
             for ( int i = 0; i < argNames.Length; i++ )
             {
                 BSFunctionParameter p = argNames[i];
+
+                if (p.IsArgArray)
+                {
+                    BSArray a = new BSArray(arg);
+                    scope.AddLocalVar(p.Name, a);
+
+                    break;
+                }
 
                 if ( arg.Length <= i && !p.IsOptional )
                 {
@@ -85,13 +99,21 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         public override ABSObject Execute( BSScope scope )
         {
+            
+            int min = ArgNames.Count(x => !x.IsOptional);
+            int max = ArgNames.Length;
 
+            if ( ArgNames.Length == 1 && ArgNames[0].IsArgArray )
+            {
+                min = 0;
+                max = int.MaxValue;
+            }
             BSFunction f =
                 new BSFunction(
                     GetHeader(),
                     x => InvokeBlockFunction( scope, x ),
-                    ArgNames.Count( x => !x.IsOptional ),
-                    ArgNames.Length );
+                    min,
+                    max);
 
             if ( string.IsNullOrEmpty( Name ) )
             {
@@ -121,6 +143,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
             for ( int i = 0; i < ArgNames.Length; i++ )
             {
                 string argName = ArgNames[i].Name;
+
+                if ( ArgNames[i].IsArgArray )
+                {
+                    argName = "*" + argName;
+                }
 
                 if ( ArgNames[i].NotNull )
                 {

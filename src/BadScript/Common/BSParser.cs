@@ -1159,8 +1159,14 @@ namespace BadScript.Common
             {
                 bool notNull = false;
                 bool optional = false;
+                bool isArgArray = false;
 
-                if ( Is( '!' ) )
+                if ( Is( '*' ) )
+                {
+                    m_CurrentPosition++;
+                    isArgArray = true;
+                }
+                else if ( Is( '!' ) )
                 {
                     m_CurrentPosition++;
                     notNull = true;
@@ -1191,7 +1197,7 @@ namespace BadScript.Common
                         "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters." );
                 }
 
-                args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional ) );
+                args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional, isArgArray ) );
                 ReadWhitespaceAndNewLine();
 
                 while ( Is( ',' ) )
@@ -1232,7 +1238,7 @@ namespace BadScript.Common
                             "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters." );
                     }
 
-                    args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional ) );
+                    args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional ,false) );
                     ReadWhitespaceAndNewLine();
                 }
 

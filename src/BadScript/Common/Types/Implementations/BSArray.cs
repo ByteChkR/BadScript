@@ -249,7 +249,7 @@ namespace BadScript.Common.Types.Implementations
                 {
                     foreach ( ABSObject absObject in objects )
                     {
-                        m_InnerArray.Remove( absObject );
+                        m_InnerArray.Remove( absObject.ResolveReference() );
                     }
 
                     return BSObject.Null;

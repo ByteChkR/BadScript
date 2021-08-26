@@ -96,7 +96,7 @@ namespace BadScript.Utils.Optimization.Compilation
 
             for ( int i = 0; i < c; i++ )
             {
-                ret[i] = new BSFunctionParameter( s.DeserializeString(), s.DeserializeBool(), s.DeserializeBool() );
+                ret[i] = new BSFunctionParameter( s.DeserializeString(), s.DeserializeBool(), s.DeserializeBool(), s.DeserializeBool() );
             }
 
             return ret;
@@ -194,7 +194,8 @@ namespace BadScript.Utils.Optimization.Compilation
             {
                 l.SerializeString( bsFunctionParameter.Name );
                 l.SerializeBool( bsFunctionParameter.NotNull );
-                l.SerializeBool( bsFunctionParameter.IsOptional );
+                l.SerializeBool(bsFunctionParameter.IsOptional);
+                l.SerializeBool(bsFunctionParameter.IsArgArray);
             }
         }
 

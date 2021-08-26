@@ -6,14 +6,16 @@
         public string Name;
         public bool IsOptional;
         public bool NotNull;
+        public bool IsArgArray;
 
         #region Public
 
-        public BSFunctionParameter( string name, bool notNull, bool optional )
+        public BSFunctionParameter( string name, bool notNull, bool optional, bool isArgArray )
         {
             Name = name;
             NotNull = notNull;
             IsOptional = optional;
+            IsArgArray = isArgArray;
         }
 
         #endregion
