@@ -136,15 +136,36 @@ namespace BadScript.Core
             );
 
             root.InsertElement(
-                new BSObject( "isArray" ),
+                new BSObject("isArray"),
                 new BSFunction(
                     "function isArray(obj)",
-                    ( args ) =>
+                    (args) =>
                     {
 
                         ABSObject arg = args[0].ResolveReference();
 
-                        if ( arg is ABSArray )
+                        if (arg is ABSArray)
+                        {
+                            return BSObject.One;
+                        }
+
+                        return BSObject.Zero;
+
+                    },
+                    1
+                )
+            );
+
+            root.InsertElement(
+                new BSObject("isFunction"),
+                new BSFunction(
+                    "function isFunction(obj)",
+                    (args) =>
+                    {
+
+                        ABSObject arg = args[0].ResolveReference();
+
+                        if (arg is BSFunction)
                         {
                             return BSObject.One;
                         }
@@ -258,18 +279,6 @@ namespace BadScript.Core
                     1
                 )
             );
-
-            root.InsertElement(
-                new BSObject( "hook" ),
-                new BSFunction( "function hook(target, hook)", HookFunction, 2 ) );
-
-            root.InsertElement(
-                new BSObject( "releaseHook" ),
-                new BSFunction( "function releaseHook(target, hook)", ReleaseHookFunction, 2 ) );
-
-            root.InsertElement(
-                new BSObject( "releaseHooks" ),
-                new BSFunction( "function releaseHooks(target)", ReleaseHooksFunction, 1 ) );
         }
 
         #endregion
@@ -291,69 +300,6 @@ namespace BadScript.Core
             return new BSArray( data.Select( x => new BSObject( ( decimal ) x ) ) );
         }
 
-        private ABSObject HookFunction( ABSObject[] arg )
-        {
-            if ( arg[0].ResolveReference() is BSFunction target )
-            {
-                if ( arg[1].ResolveReference() is BSFunction hook )
-                {
-                    target.AddHook( hook );
-
-                    return BSObject.Null;
-                }
-
-                throw new BSInvalidTypeException(
-                    SourcePosition.Unknown,
-                    "Expected Function as argument.",
-                    arg[1],
-                    "BSFunction" );
-            }
-
-            throw new BSInvalidTypeException(
-                SourcePosition.Unknown,
-                "Expected Function as argument.",
-                arg[0],
-                "BSFunction" );
-        }
-
-        private ABSObject ReleaseHookFunction( ABSObject[] arg )
-        {
-            if ( arg[0].ResolveReference() is BSFunction target )
-            {
-                if ( arg[1].ResolveReference() is BSFunction hook )
-                {
-                    target.RemoveHook( hook );
-
-                    return BSObject.Null;
-                }
-
-                throw new BSInvalidTypeException(
-                    SourcePosition.Unknown,
-                    "Expected Function as argument.",
-                    arg[1],
-                    "BSFunction" );
-            }
-
-            throw new BSInvalidTypeException(
-                SourcePosition.Unknown,
-                "Expected Function as argument.",
-                arg[0],
-                "BSFunction" );
-        }
-
-        private ABSObject ReleaseHooksFunction( ABSObject[] arg )
-        {
-            if ( arg[0].ResolveReference() is BSFunction target )
-            {
-                target.ClearHooks();
-            }
-
-            throw new BSInvalidTypeException(
-                SourcePosition.Unknown,
-                "Expected Function as argument.",
-                arg[0],
-                "BSFunction" );
-        }
 
         private ABSObject ToBase64( ABSObject[] arg )
         {

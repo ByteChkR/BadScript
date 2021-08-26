@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BadScript.Common.OperatorImplementations;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -83,19 +84,7 @@ namespace BadScript.Interfaces
 
             env.InsertElement( new BSObject( "settings" ), new SettingsCategoryWrapper( BSSettings.BsRoot ) );
 
-            env.InsertElement(
-                new BSObject("invoke"),
-                new BSFunction("function invoke(target, args)",
-                               x =>
-                               {
-                                   if ( x.Length == 2 )
-                                       return x[0].Invoke( ( x[1].ResolveReference() as BSArray ).Elements );
-
-                                   return ( x[0].ResolveReference() as BSFunction ).Invoke(
-                                       ( x[1].ResolveReference() as BSArray ).Elements,
-                                       false );
-                               }, 2,3)
-            );
+            
 
             env.InsertElement(
                 new BSObject("isLiteral"),

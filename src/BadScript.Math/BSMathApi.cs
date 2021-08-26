@@ -423,6 +423,21 @@ namespace BadScript.Math
                     1
                 )
             );
+
+            ret.InsertElement( new BSObject( "isPrime" ), new BSFunction( "function isPrime(num)", PrimeTest, 1 ) );
+        }
+
+        private static ABSObject PrimeTest( ABSObject[] arg )
+        {
+            int n = ( int ) arg[0].ConvertDecimal();
+            if (n <= 1)
+                return BSObject.Zero;
+            
+            for (int i = 2; i <= System.Math.Sqrt(n); i++)
+                if (n % i == 0)
+                    return BSObject.Zero;
+
+            return BSObject.One;
         }
 
         #endregion

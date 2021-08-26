@@ -13,6 +13,17 @@ namespace BadScript.Common.Types
 
     public class BSFunction : ABSObject
     {
+        private class BSCachedFunction
+        {
+            private ABSReference m_Reference;
+            private readonly Func <ABSReference> m_Creator;
+            public ABSReference Reference=> m_Reference ??= m_Creator();
+            public BSCachedFunction(Func <ABSReference> fnc)
+            {
+                m_Creator = fnc;
+            }
+        }
+
         private static readonly Dictionary < Thread, Stack < BSFunction > > s_Stacks = new Dictionary < Thread, Stack < BSFunction > >();
         private static void PushStack(BSFunction f)
         {
@@ -43,7 +54,7 @@ namespace BadScript.Common.Types
         private readonly string m_DebugData = null;
 
         private readonly List < BSFunction > m_Hooks = new List < BSFunction >();
-
+        private readonly Dictionary < string, BSCachedFunction> m_Properties;
         private Func < ABSObject[],
             ABSObject > m_Func;
 
@@ -150,13 +161,14 @@ namespace BadScript.Common.Types
 
         public override ABSReference GetProperty( string propertyName )
         {
-
+            if ( m_Properties.ContainsKey( propertyName ) )
+                return m_Properties[propertyName].Reference;
             throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override bool HasProperty( string propertyName )
         {
-            return false;
+            return m_Properties.ContainsKey(propertyName);
         }
 
         public ABSObject Invoke(ABSObject[] args, bool executeHooks)
@@ -260,9 +272,86 @@ namespace BadScript.Common.Types
         {
             m_DebugData = debugData;
             m_Func = func;
+            m_Properties = new();
+
+            m_Properties["invoke"] = new BSCachedFunction(
+                () => new BSFunctionReference(
+
+                    new BSFunction(
+                        "function invoke(args)/invoke(args, execHooks)",
+                        x =>
+                        {
+                            if ( x.Length == 1 )
+                                return Invoke( ( x[0].ResolveReference() as BSArray ).Elements );
+
+                            return Invoke(
+                                ( x[0].ResolveReference() as BSArray ).Elements,
+                                x[1].ConvertBool() );
+                        },
+                        1,
+                        2 )
+                )
+            );
+
+            m_Properties["hook"] =
+                new BSCachedFunction(
+                    () => new BSFunctionReference( new BSFunction( "function hook(hookFunc)", HookFunction, 1 ) ) );
+
+            m_Properties["releaseHook"] =
+                new BSCachedFunction(
+                    () => new BSFunctionReference(
+                        new BSFunction( "function releaseHook(hookFunc)", ReleaseHookFunction, 1 ) ) );
+
+            m_Properties["releaseHooks"] = new BSCachedFunction(
+                () => new BSFunctionReference( new BSFunction( "function releaseHook()", ReleaseHooksFunction, 0 ) ) );
         }
+
+
+        private ABSObject HookFunction(ABSObject[] arg)
+        {
+            
+                if (arg[0].ResolveReference() is BSFunction hook)
+                {
+                    AddHook(hook);
+
+                    return BSObject.Null;
+                }
+
+                throw new BSInvalidTypeException(
+                    SourcePosition.Unknown,
+                    "Expected Function as argument.",
+                    arg[0],
+                    "BSFunction");
+                
+        }
+
+        private ABSObject ReleaseHooksFunction(ABSObject[] arg)
+        {
+            ClearHooks();
+
+            return BSObject.Null;
+        }
+        private ABSObject ReleaseHookFunction(ABSObject[] arg)
+        {
+            
+                if (arg[0].ResolveReference() is BSFunction hook)
+                {
+                    RemoveHook(hook);
+
+                    return BSObject.Null;
+                }
+
+                throw new BSInvalidTypeException(
+                    SourcePosition.Unknown,
+                    "Expected Function as argument.",
+                    arg[0],
+                    "BSFunction");
+            }
+        
+        }
+
 
         #endregion
     }
 
-}
+
