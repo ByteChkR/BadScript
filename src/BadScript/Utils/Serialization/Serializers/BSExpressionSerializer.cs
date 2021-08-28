@@ -4,7 +4,7 @@ using BadScript.Common.Expressions;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public abstract class BSExpressionCompiler
+    public abstract class BSExpressionSerializer
     {
         #region Public
 
@@ -14,7 +14,7 @@ namespace BadScript.Utils.Optimization.Compilation
 
         public abstract BSExpression Deserialize( BSCompiledExpressionCode code, Stream s );
 
-        public abstract byte[] Serialize( BSExpression expr );
+        public abstract void Serialize( BSExpression expr, Stream s );
 
         #endregion
     }

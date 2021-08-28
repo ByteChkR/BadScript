@@ -6,7 +6,7 @@ using BadScript.Common.Expressions.Implementations.Value;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public class BSContinueExpressionCompiler : BSExpressionCompiler
+    public class BsContinueExpressionSerializer : BSExpressionSerializer
     {
         #region Public
 
@@ -25,9 +25,11 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSContinueExpression( SourcePosition.Unknown );
         }
 
-        public override byte[] Serialize( BSExpression e )
+        public override void Serialize(BSExpression e, Stream ret)
         {
-            return BitConverter.GetBytes( ( byte ) BSCompiledExpressionCode.ContinueExpr );
+
+            byte[] b= BitConverter.GetBytes( ( byte ) BSCompiledExpressionCode.ContinueExpr );
+            ret.Write( b, 0, b.Length );
         }
 
         #endregion

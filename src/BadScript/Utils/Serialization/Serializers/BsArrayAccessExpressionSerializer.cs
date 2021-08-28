@@ -6,7 +6,7 @@ using BadScript.Common.Expressions.Implementations.Access;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public class BSArrayAccessExpressionCompiler : BSExpressionCompiler
+    public class BsArrayAccessExpressionSerializer : BSExpressionSerializer
     {
         #region Public
 
@@ -27,16 +27,13 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSArrayAccessExpression( SourcePosition.Unknown, l, s.DeserializeExpression() );
         }
 
-        public override byte[] Serialize( BSExpression e )
+        public override void Serialize( BSExpression e, Stream s )
         {
             BSArrayAccessExpression expr = ( BSArrayAccessExpression ) e;
-            List < byte > ret = new List < byte >();
 
-            ret.SerializeOpCode( BSCompiledExpressionCode.ArrayAccessExpr );
-            ret.SerializeExpression( expr.Left );
-            ret.SerializeExpression( expr.Right );
-
-            return ret.ToArray();
+            s.SerializeOpCode( BSCompiledExpressionCode.ArrayAccessExpr );
+            s.SerializeExpression( expr.Left );
+            s.SerializeExpression( expr.Right );
         }
 
         #endregion

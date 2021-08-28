@@ -7,7 +7,7 @@ using BadScript.Common.Expressions.Implementations.Block;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public class BSFunctionDefinitionExpressionCompiler : BSExpressionCompiler
+    public class BsFunctionDefinitionExpressionSerializer : BSExpressionSerializer
     {
         #region Public
 
@@ -37,18 +37,16 @@ namespace BadScript.Utils.Optimization.Compilation
                 global );
         }
 
-        public override byte[] Serialize( BSExpression e )
+        public override void Serialize(BSExpression e, Stream ret)
         {
             BSFunctionDefinitionExpression expr = ( BSFunctionDefinitionExpression ) e;
-            List < byte > ret = new List < byte >();
             ret.SerializeOpCode( BSCompiledExpressionCode.FunctionDefinitionExpr );
             ret.SerializeString( expr.Name );
             ret.SerializeBool( expr.Global );
             ret.SerializeFunctionParameters( expr.ArgNames );
 
             ret.SerializeBlock( expr.Block );
-
-            return ret.ToArray();
+            
         }
 
         #endregion

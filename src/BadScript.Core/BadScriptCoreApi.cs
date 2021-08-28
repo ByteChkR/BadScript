@@ -29,19 +29,7 @@ namespace BadScript.Core
                     "function size(table/array)",
                     ( args ) =>
                     {
-                        ABSObject arg = args[0];
-
-                        if ( arg is BSArrayReference
-                            arRef )
-                        {
-                            arg = arRef.Get();
-                        }
-
-                        if ( arg is BSTableReference
-                            tRef )
-                        {
-                            arg = tRef.Get();
-                        }
+                        ABSObject arg = args[0].ResolveReference();
 
                         if ( arg is ABSArray ar )
                         {
@@ -71,15 +59,16 @@ namespace BadScript.Core
                     "function keys(table)",
                     objects =>
                     {
-                        if ( objects[0] is ABSTable t )
+                        ABSObject a = objects[0].ResolveReference();
+                        if ( a is ABSTable t )
                         {
                             return t.Keys;
                         }
 
                         throw new BSInvalidTypeException(
-                            objects[0].Position,
+                            a.Position,
                             "Object is not a table",
-                            objects[0],
+                            a,
                             "Table"
                         );
                     },
@@ -91,15 +80,16 @@ namespace BadScript.Core
                     "function values(table)",
                     objects =>
                     {
-                        if ( objects[0] is ABSTable t )
+                        ABSObject a = objects[0].ResolveReference();
+                        if ( a is ABSTable t )
                         {
                             return t.Keys;
                         }
 
                         throw new BSInvalidTypeException(
-                            objects[0].Position,
+                            a.Position,
                             "Object is not a table",
-                            objects[0],
+                            a,
                             "Table"
                         );
                     },

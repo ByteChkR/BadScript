@@ -7,7 +7,7 @@ using BadScript.Common.Operators.Implementations;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public class BSProxyExpressionCompiler : BSExpressionCompiler
+    public class BsProxyExpressionSerializer : BSExpressionSerializer
     {
         #region Public
 
@@ -49,7 +49,7 @@ namespace BadScript.Utils.Optimization.Compilation
                 "Can not DeserializeExpression Expression: " + code );
         }
 
-        public override byte[] Serialize( BSExpression e )
+        public override void Serialize(BSExpression e, Stream ret)
         {
             BSProxyExpression expr = ( BSProxyExpression ) e;
 
@@ -59,8 +59,7 @@ namespace BadScript.Utils.Optimization.Compilation
                     expr.Object.Position,
                     "Can not Serialize Proxy Expression. No meta data provided" );
             }
-
-            List < byte > ret = new List < byte >();
+            
 
             if ( expr.ProxyMetaData is BSBinaryOperatorMetaData bm )
             {
@@ -96,8 +95,6 @@ namespace BadScript.Utils.Optimization.Compilation
                     expr.Object.Position,
                     "Can not Serialize Proxy Expression. Invalid meta data provided" );
             }
-
-            return ret.ToArray();
         }
 
         #endregion

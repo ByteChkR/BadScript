@@ -363,7 +363,7 @@ namespace BadScript
         {
             using ( Stream ms = new MemoryStream( bin ) )
             {
-                return BSCompiler.Deserialize(ms);
+                return BSSerializer.Deserialize(ms);
             }
         }
 

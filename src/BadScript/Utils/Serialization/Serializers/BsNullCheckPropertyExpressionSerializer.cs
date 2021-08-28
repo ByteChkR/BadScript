@@ -6,7 +6,7 @@ using BadScript.Common.Expressions.Implementations.Access;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public class BSNullCheckPropertyExpressionCompiler : BSExpressionCompiler
+    public class BsNullCheckPropertyExpressionSerializer : BSExpressionSerializer
     {
         #region Public
 
@@ -27,16 +27,14 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSNullCheckPropertyExpression( SourcePosition.Unknown, e, s.DeserializeString() );
         }
 
-        public override byte[] Serialize( BSExpression e )
+        public override void Serialize(BSExpression e, Stream ret)
         {
             BSNullCheckPropertyExpression expr = ( BSNullCheckPropertyExpression ) e;
-            List < byte > ret = new List < byte >();
 
             ret.SerializeOpCode( BSCompiledExpressionCode.NullCheckPropertyAccessExpr );
             ret.SerializeExpression( expr.Left );
             ret.SerializeString( expr.Right );
-
-            return ret.ToArray();
+            
         }
 
         #endregion

@@ -6,7 +6,7 @@ using BadScript.Common.Expressions.Implementations.Value;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public class BSInvocationExpressionCompiler : BSExpressionCompiler
+    public class BsInvocationExpressionSerializer : BSExpressionSerializer
     {
         #region Public
 
@@ -27,16 +27,14 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSInvocationExpression( SourcePosition.Unknown, l, s.DeserializeBlock() );
         }
 
-        public override byte[] Serialize( BSExpression e )
+        public override void Serialize(BSExpression e, Stream ret)
         {
             BSInvocationExpression expr = ( BSInvocationExpression ) e;
-            List < byte > ret = new List < byte >();
 
             ret.SerializeOpCode( BSCompiledExpressionCode.InvocationExpr );
             ret.SerializeExpression( expr.Left );
             ret.SerializeBlock( expr.Parameters );
-
-            return ret.ToArray();
+            
         }
 
         #endregion

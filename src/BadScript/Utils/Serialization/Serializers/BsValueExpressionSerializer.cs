@@ -7,7 +7,7 @@ using BadScript.Common.Expressions.Implementations.Value;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public class BSValueExpressionCompiler : BSExpressionCompiler
+    public class BsValueExpressionSerializer : BSExpressionSerializer
     {
         #region Public
 
@@ -44,10 +44,9 @@ namespace BadScript.Utils.Optimization.Compilation
                 "Can not DeserializeExpression Expression: " + code );
         }
 
-        public override byte[] Serialize( BSExpression e )
+        public override void Serialize(BSExpression e, Stream b)
         {
             BSValueExpression expr = ( BSValueExpression ) e;
-            List < byte > b = new List < byte >();
 
             if ( expr.SourceValue is string s )
             {
@@ -63,8 +62,7 @@ namespace BadScript.Utils.Optimization.Compilation
             {
                 b.SerializeOpCode( BSCompiledExpressionCode.ValueNull );
             }
-
-            return b.ToArray();
+            
         }
 
         #endregion

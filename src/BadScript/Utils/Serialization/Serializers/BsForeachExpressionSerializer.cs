@@ -6,7 +6,7 @@ using BadScript.Common.Expressions.Implementations.Block.ForEach;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public class BSForeachExpressionCompiler : BSExpressionCompiler
+    public class BsForeachExpressionSerializer : BSExpressionSerializer
     {
         #region Public
 
@@ -36,10 +36,9 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSForeachExpression( SourcePosition.Unknown, vars, enumerator, block );
         }
 
-        public override byte[] Serialize( BSExpression e )
+        public override void Serialize(BSExpression e, Stream ret)
         {
             BSForeachExpression expr = ( BSForeachExpression ) e;
-            List < byte > ret = new List < byte >();
             ret.SerializeOpCode( BSCompiledExpressionCode.ForEachExpr );
             ret.SerializeInt32( expr.Vars.Length );
 
@@ -50,8 +49,7 @@ namespace BadScript.Utils.Optimization.Compilation
 
             ret.SerializeExpression( expr.Enumerator );
             ret.SerializeBlock( expr.Block );
-
-            return ret.ToArray();
+            
         }
 
         #endregion

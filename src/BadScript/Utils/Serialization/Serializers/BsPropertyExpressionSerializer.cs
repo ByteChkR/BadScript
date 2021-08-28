@@ -6,7 +6,7 @@ using BadScript.Common.Expressions.Implementations.Access;
 namespace BadScript.Utils.Optimization.Compilation
 {
 
-    public class BSPropertyExpressionCompiler : BSExpressionCompiler
+    public class BsPropertyExpressionSerializer : BSExpressionSerializer
     {
         #region Public
 
@@ -35,10 +35,9 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSPropertyExpression( SourcePosition.Unknown, expr, r );
         }
 
-        public override byte[] Serialize( BSExpression e )
+        public override void Serialize(BSExpression e, Stream ret)
         {
             BSPropertyExpression expr = ( BSPropertyExpression ) e;
-            List < byte > ret = new List < byte >();
 
             ret.SerializeOpCode( BSCompiledExpressionCode.PropertyAccessExpr );
             ret.SerializeBool( expr.Left != null );
@@ -49,8 +48,7 @@ namespace BadScript.Utils.Optimization.Compilation
             }
 
             ret.SerializeString( expr.Right );
-
-            return ret.ToArray();
+            
         }
 
         #endregion
