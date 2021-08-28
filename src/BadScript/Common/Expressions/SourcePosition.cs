@@ -49,7 +49,6 @@ namespace BadScript.Common.Expressions
             {
                 nextNewLine = src.Length - textStart;
             }
-            
 
             string r = src.Substring( textStart, Math.Min( nextNewLine, src.Length - textStart ) );
 

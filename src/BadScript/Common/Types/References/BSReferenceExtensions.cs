@@ -7,7 +7,7 @@ namespace BadScript.Common.Types.References
     {
         #region Public
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static ABSObject ResolveReference( this ABSObject o )
         {
             while ( o is ABSReference r )

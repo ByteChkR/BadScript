@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization
 {
 
     [Flags]
-    public enum BSSerializerHints:byte
+    public enum BSSerializerHints : byte
     {
         Default,
         Compressed = 1

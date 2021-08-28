@@ -212,7 +212,7 @@ namespace BadScript.Common.Types.Implementations
 
         private BSArray( SourcePosition pos, List < ABSObject > o ) : base( pos )
         {
-            
+
             m_InnerArray = o;
 
             m_Functions = new Dictionary < string, BSFunction >();
@@ -275,8 +275,8 @@ namespace BadScript.Common.Types.Implementations
                 "function swap(idx1, idx2)",
                 objects =>
                 {
-                    int i0 = (int)objects[0].ConvertDecimal();
-                    int i1 = (int)objects[1].ConvertDecimal();
+                    int i0 = ( int ) objects[0].ConvertDecimal();
+                    int i1 = ( int ) objects[1].ConvertDecimal();
                     ABSObject o0 = m_InnerArray[i0];
 
                     m_InnerArray[i0] =
@@ -286,7 +286,8 @@ namespace BadScript.Common.Types.Implementations
 
                     return BSObject.Null;
                 },
-                2);
+                2 );
+
             m_Functions["reverse"] = new BSFunction(
                 "function reverse()",
                 objects =>
@@ -295,21 +296,26 @@ namespace BadScript.Common.Types.Implementations
 
                     return BSObject.Null;
                 },
-                0);
+                0 );
 
             m_Functions["contentEquals"] = new BSFunction( "function contentEquals(array)", ArrayContentEquals, 1 );
         }
 
         private ABSObject ArrayContentEquals( ABSObject[] arg )
         {
-            BSArray a = (BSArray)arg[0].ResolveReference();
+            BSArray a = ( BSArray ) arg[0].ResolveReference();
 
             if ( a.m_InnerArray.Count != m_InnerArray.Count )
+            {
                 return BSObject.Zero;
+            }
+
             for ( int i = 0; i < m_InnerArray.Count; i++ )
             {
                 if ( m_InnerArray[i] != a.m_InnerArray[i] )
+                {
                     return BSObject.Zero;
+                }
             }
 
             return BSObject.One;

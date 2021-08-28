@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsValueExpressionSerializer : BSExpressionSerializer
@@ -44,7 +43,7 @@ namespace BadScript.Utils.Optimization.Compilation
                 "Can not DeserializeExpression Expression: " + code );
         }
 
-        public override void Serialize(BSExpression e, Stream b)
+        public override void Serialize( BSExpression e, Stream b )
         {
             BSValueExpression expr = ( BSValueExpression ) e;
 
@@ -62,7 +61,7 @@ namespace BadScript.Utils.Optimization.Compilation
             {
                 b.SerializeOpCode( BSCompiledExpressionCode.ValueNull );
             }
-            
+
         }
 
         #endregion

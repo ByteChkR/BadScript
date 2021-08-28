@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using BadScript.Common.Expressions;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public abstract class BSExpressionSerializer

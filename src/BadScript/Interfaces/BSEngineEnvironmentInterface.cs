@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BadScript.Common.OperatorImplementations;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -84,10 +83,8 @@ namespace BadScript.Interfaces
 
             env.InsertElement( new BSObject( "settings" ), new SettingsCategoryWrapper( BSSettings.BsRoot ) );
 
-            
-
             env.InsertElement(
-                new BSObject("isLiteral"),
+                new BSObject( "isLiteral" ),
                 new BSFunction(
                     "function isLiteral(v)",
                     objects =>

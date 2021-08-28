@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsEnumerableFunctionDefinitionExpressionSerializer : BSExpressionSerializer
@@ -30,7 +29,7 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSEnumerableFunctionDefinitionExpression( SourcePosition.Unknown, n, g, p, b );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
             BSEnumerableFunctionDefinitionExpression expr = ( BSEnumerableFunctionDefinitionExpression ) e;
             ret.SerializeOpCode( BSCompiledExpressionCode.FunctionEnumerableDefinitionExpr );
@@ -38,7 +37,7 @@ namespace BadScript.Utils.Optimization.Compilation
             ret.SerializeBool( expr.Global );
             ret.SerializeFunctionParameters( expr.ArgNames );
             ret.SerializeBlock( expr.Block );
-            
+
         }
 
         #endregion

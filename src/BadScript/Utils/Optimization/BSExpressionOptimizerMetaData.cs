@@ -1,6 +1,6 @@
 ﻿using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
-using BadScript.Utils.Optimization.Compilation;
+using BadScript.Utils.Serialization;
 
 namespace BadScript.Utils.Optimization
 {

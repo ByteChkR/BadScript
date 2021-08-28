@@ -56,6 +56,52 @@ namespace BadScript.Utils
             return r;
         }
 
+        public SettingsCategory FindCategory( string categoryName )
+        {
+            string[] parts = categoryName.Split( '.' );
+            SettingsCategory current = this;
+
+            for ( int i = 0; i < parts.Length; i++ )
+            {
+                if ( current.HasCategory( parts[i] ) )
+                {
+                    current = current.GetCategory( parts[i] );
+                }
+                else if ( i == 0 && parts[i] == current.Name )
+                {
+                }
+                else
+                {
+                    throw new Exception( "Can not Find Settings: " + categoryName );
+                }
+            }
+
+            return current;
+        }
+
+        public SettingsPair FindSetting( string settingName )
+        {
+            string[] parts = settingName.Split( '.' );
+            SettingsCategory current = this;
+
+            for ( int i = 0; i < parts.Length - 1; i++ )
+            {
+                if ( current.HasCategory( parts[i] ) )
+                {
+                    current = current.GetCategory( parts[i] );
+                }
+                else if ( i == 0 && parts[i] == current.Name )
+                {
+                }
+                else
+                {
+                    throw new Exception( "Can not Find Settings: " + settingName );
+                }
+            }
+
+            return current.GetSetting( parts[parts.Length - 1] );
+        }
+
         public SettingsCategory GetCategory( string name )
         {
             return m_SubCategories.First( x => x.Name == name );
@@ -144,54 +190,7 @@ namespace BadScript.Utils
             return ( ( IEnumerable ) m_SubCategories ).GetEnumerator();
         }
 
-
-
         #endregion
-
-        public SettingsPair FindSetting( string settingName )
-        {
-            string[] parts = settingName.Split('.');
-            SettingsCategory current = this;
-
-            for (int i = 0; i < parts.Length-1; i++)
-            {
-                if (current.HasCategory(parts[i]))
-                {
-                    current = current.GetCategory(parts[i]);
-                }
-                else if (i == 0 && parts[i] == current.Name)
-                { }
-                else
-                {
-                    throw new Exception("Can not Find Settings: " + settingName);
-                }
-            }
-
-            return current.GetSetting(parts[parts.Length-1]);
-        }
-        public SettingsCategory FindCategory(string categoryName)
-        {
-            string[] parts = categoryName.Split('.');
-            SettingsCategory current = this;
-
-            for (int i = 0; i < parts.Length; i++)
-            {
-                if (current.HasCategory(parts[i]))
-                {
-                    current = current.GetCategory(parts[i]);
-                }
-                else if ( i == 0 && parts[i] == current.Name )
-                { }
-                else
-                {
-                    throw new Exception("Can not Find Settings: " + categoryName);
-                }
-            }
-
-            return current;
-        }
     }
-
-
 
 }

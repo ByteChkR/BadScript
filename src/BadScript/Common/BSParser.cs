@@ -20,7 +20,6 @@ namespace BadScript.Common
 
     public class BSParser
     {
-       
         private readonly string m_OriginalSource;
         private int m_CurrentPosition;
         private readonly int m_SourcePositionOffset;
@@ -43,7 +42,7 @@ namespace BadScript.Common
 
         public SourcePosition CreateSourcePosition()
         {
-            return CreateSourcePosition( m_CurrentPosition + m_SourcePositionOffset);
+            return CreateSourcePosition( m_CurrentPosition + m_SourcePositionOffset );
         }
 
         public int FindClosing( string open, string close )
@@ -390,10 +389,10 @@ namespace BadScript.Common
                     new[] { Parse( int.MaxValue ) },
                     isGlobal );
             }
-            
+
             string block = ParseBlock();
 
-            BSParser p = new BSParser( block, m_OffsetSource, m_SourcePositionOffset +  pos);
+            BSParser p = new BSParser( block, m_OffsetSource, m_SourcePositionOffset + pos );
 
             BSExpression[] b = p.ParseToEnd();
 
@@ -572,20 +571,20 @@ namespace BadScript.Common
 
     }
 #endif
-    public BSExpression[] ParseToEnd()
+        public BSExpression[] ParseToEnd()
         {
             try
             {
                 ReadWhitespaceAndNewLine();
-                List<BSExpression> ret = new List<BSExpression>();
+                List < BSExpression > ret = new List < BSExpression >();
 
-                while (m_CurrentPosition < m_OriginalSource.Length)
+                while ( m_CurrentPosition < m_OriginalSource.Length )
                 {
                     ReadWhitespaceAndNewLine();
 
-                    if (m_CurrentPosition < m_OriginalSource.Length)
+                    if ( m_CurrentPosition < m_OriginalSource.Length )
                     {
-                        ret.Add(Parse(int.MaxValue));
+                        ret.Add( Parse( int.MaxValue ) );
                     }
                 }
 
@@ -1083,9 +1082,9 @@ namespace BadScript.Common
             return r;
         }
 
-#endregion
+        #endregion
 
-#region Private
+        #region Private
 
         private SourcePosition CreateSourcePosition( int pos )
         {
@@ -1238,7 +1237,7 @@ namespace BadScript.Common
                             "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters." );
                     }
 
-                    args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional ,false) );
+                    args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional, false ) );
                     ReadWhitespaceAndNewLine();
                 }
 
@@ -1324,7 +1323,7 @@ namespace BadScript.Common
             return true;
         }
 
-#endregion
+        #endregion
     }
 
 }

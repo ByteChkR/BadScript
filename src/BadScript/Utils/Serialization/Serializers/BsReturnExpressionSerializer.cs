@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsReturnExpressionSerializer : BSExpressionSerializer
@@ -25,12 +24,12 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSReturnExpression( SourcePosition.Unknown, s.DeserializeExpression() );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
             BSReturnExpression expr = ( BSReturnExpression ) e;
             ret.SerializeOpCode( BSCompiledExpressionCode.ReturnExpr );
             ret.SerializeExpression( expr.Left );
-            
+
         }
 
         #endregion

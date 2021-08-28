@@ -17,45 +17,28 @@ namespace BadScript.Common.Types
         private class BSCachedFunction
         {
             private ABSReference m_Reference;
-            private readonly Func <ABSReference> m_Creator;
-            public ABSReference Reference=> m_Reference ??= m_Creator();
-            public BSCachedFunction(Func <ABSReference> fnc)
+            private readonly Func < ABSReference > m_Creator;
+
+            public ABSReference Reference => m_Reference ??= m_Creator();
+
+            #region Public
+
+            public BSCachedFunction( Func < ABSReference > fnc )
             {
                 m_Creator = fnc;
             }
+
+            #endregion
         }
 
-        private static readonly Dictionary < Thread, Stack < BSFunction > > s_Stacks = new Dictionary < Thread, Stack < BSFunction > >();
-        private static void PushStack(BSFunction f)
-        {
-            if ( s_Stacks.ContainsKey( Thread.CurrentThread ) )
-                s_Stacks[Thread.CurrentThread].Push( f );
-            else
-                s_Stacks[Thread.CurrentThread] = new Stack < BSFunction >( new[] { f } );
-        }
-
-        private static int StackCount => s_Stacks[Thread.CurrentThread].Count;
-        private static BSFunction PopStack()
-        {
-            if (s_Stacks.ContainsKey(Thread.CurrentThread))
-                return s_Stacks[Thread.CurrentThread].Pop();
-
-            throw new BSRuntimeException("Can not Pop a function off an empty stack.");
-        }
-        private static BSFunction PeekStack()
-        {
-            if (s_Stacks.ContainsKey(Thread.CurrentThread))
-                return s_Stacks[Thread.CurrentThread].Peek();
-
-            throw new BSRuntimeException("Can not Peek a function from an empty stack.");
-        }
-        
+        private static readonly Dictionary < Thread, Stack < BSFunction > > s_Stacks =
+            new Dictionary < Thread, Stack < BSFunction > >();
 
         private readonly (int min, int max)? m_ParameterCount;
         private readonly string m_DebugData = null;
 
         private readonly List < BSFunction > m_Hooks = new List < BSFunction >();
-        private readonly Dictionary < string, BSCachedFunction> m_Properties;
+        private readonly Dictionary < string, BSCachedFunction > m_Properties;
         private Func < ABSObject[],
             ABSObject > m_Func;
 
@@ -64,8 +47,11 @@ namespace BadScript.Common.Types
             get
             {
                 if ( !s_Stacks.ContainsKey( Thread.CurrentThread ) )
+                {
                     return new string[0];
-                return s_Stacks[Thread.CurrentThread].Select(x => x.m_DebugData).ToArray();
+                }
+
+                return s_Stacks[Thread.CurrentThread].Select( x => x.m_DebugData ).ToArray();
             }
         }
 
@@ -85,6 +71,8 @@ namespace BadScript.Common.Types
         }
 
         public override bool IsNull => false;
+
+        private static int StackCount => s_Stacks[Thread.CurrentThread].Count;
 
         #region Public
 
@@ -141,7 +129,7 @@ namespace BadScript.Common.Types
 
             while ( PeekStack() != top )
             {
-               PopStack();
+                PopStack();
             }
         }
 
@@ -163,33 +151,37 @@ namespace BadScript.Common.Types
         public override ABSReference GetProperty( string propertyName )
         {
             if ( m_Properties.ContainsKey( propertyName ) )
+            {
                 return m_Properties[propertyName].Reference;
+            }
+
             throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override bool HasProperty( string propertyName )
         {
-            return m_Properties.ContainsKey(propertyName);
+            return m_Properties.ContainsKey( propertyName );
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ABSObject Invoke(ABSObject[] args, bool executeHooks)
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        public ABSObject Invoke( ABSObject[] args, bool executeHooks )
         {
-            PushStack(this);
+            PushStack( this );
 
             ABSObject[] arr = null;
 
             if ( executeHooks )
             {
-                if (m_Hooks.Count != 0)
+                if ( m_Hooks.Count != 0 )
                 {
-                    arr = new ABSObject[] { this, new BSArray(args.Select(x => x.ResolveReference())) };
+                    arr = new ABSObject[] { this, new BSArray( args.Select( x => x.ResolveReference() ) ) };
                 }
-                foreach (BSFunction bsFunction in m_Hooks)
-                {
-                    ABSObject o = bsFunction.Invoke(arr);
 
-                    if (!o.IsNull)
+                foreach ( BSFunction bsFunction in m_Hooks )
+                {
+                    ABSObject o = bsFunction.Invoke( arr );
+
+                    if ( !o.IsNull )
                     {
                         PopStack();
 
@@ -198,35 +190,36 @@ namespace BadScript.Common.Types
                 }
             }
 
-            if (m_ParameterCount == null)
+            if ( m_ParameterCount == null )
             {
-                ABSObject o = m_Func(args);
+                ABSObject o = m_Func( args );
                 PopStack();
 
                 return o;
             }
 
-            (int min, int max) = m_ParameterCount.Value;
+            ( int min, int max ) = m_ParameterCount.Value;
 
-            if (args.Length < min || args.Length > max)
+            if ( args.Length < min || args.Length > max )
             {
                 throw new BSRuntimeException(
                     Position,
-                    $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}");
+                    $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}" );
             }
 
-            ABSObject or = m_Func(args);
+            ABSObject or = m_Func( args );
             PopStack();
 
             return or;
         }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public override ABSObject Invoke( ABSObject[] args )
         {
             return Invoke( args, true );
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public void RemoveHook( BSFunction func )
         {
             m_Hooks.Remove( func );
@@ -280,13 +273,14 @@ namespace BadScript.Common.Types
 
             m_Properties["invoke"] = new BSCachedFunction(
                 () => new BSFunctionReference(
-
                     new BSFunction(
                         "function invoke(args)/invoke(args, execHooks)",
                         x =>
                         {
                             if ( x.Length == 1 )
+                            {
                                 return Invoke( ( x[0].ResolveReference() as BSArray ).Elements );
+                            }
 
                             return Invoke(
                                 ( x[0].ResolveReference() as BSArray ).Elements,
@@ -310,52 +304,83 @@ namespace BadScript.Common.Types
                 () => new BSFunctionReference( new BSFunction( "function releaseHook()", ReleaseHooksFunction, 0 ) ) );
         }
 
-
-        private ABSObject HookFunction(ABSObject[] arg)
+        private static BSFunction PeekStack()
         {
-            
-                if (arg[0].ResolveReference() is BSFunction hook)
-                {
-                    AddHook(hook);
+            if ( s_Stacks.ContainsKey( Thread.CurrentThread ) )
+            {
+                return s_Stacks[Thread.CurrentThread].Peek();
+            }
 
-                    return BSObject.Null;
-                }
-
-                throw new BSInvalidTypeException(
-                    SourcePosition.Unknown,
-                    "Expected Function as argument.",
-                    arg[0],
-                    "BSFunction");
-                
+            throw new BSRuntimeException( "Can not Peek a function from an empty stack." );
         }
 
-        private ABSObject ReleaseHooksFunction(ABSObject[] arg)
+        private static BSFunction PopStack()
+        {
+            if ( s_Stacks.ContainsKey( Thread.CurrentThread ) )
+            {
+                return s_Stacks[Thread.CurrentThread].Pop();
+            }
+
+            throw new BSRuntimeException( "Can not Pop a function off an empty stack." );
+        }
+
+        private static void PushStack( BSFunction f )
+        {
+            if ( s_Stacks.ContainsKey( Thread.CurrentThread ) )
+            {
+                s_Stacks[Thread.CurrentThread].Push( f );
+            }
+            else
+            {
+                s_Stacks[Thread.CurrentThread] = new Stack < BSFunction >( new[] { f } );
+            }
+        }
+
+        private ABSObject HookFunction( ABSObject[] arg )
+        {
+
+            if ( arg[0].ResolveReference() is BSFunction hook )
+            {
+                AddHook( hook );
+
+                return BSObject.Null;
+            }
+
+            throw new BSInvalidTypeException(
+                SourcePosition.Unknown,
+                "Expected Function as argument.",
+                arg[0],
+                "BSFunction" );
+
+        }
+
+        private ABSObject ReleaseHookFunction( ABSObject[] arg )
+        {
+
+            if ( arg[0].ResolveReference() is BSFunction hook )
+            {
+                RemoveHook( hook );
+
+                return BSObject.Null;
+            }
+
+            throw new BSInvalidTypeException(
+                SourcePosition.Unknown,
+                "Expected Function as argument.",
+                arg[0],
+                "BSFunction" );
+        }
+
+        private ABSObject ReleaseHooksFunction( ABSObject[] arg )
         {
             ClearHooks();
 
             return BSObject.Null;
         }
-        private ABSObject ReleaseHookFunction(ABSObject[] arg)
-        {
-            
-                if (arg[0].ResolveReference() is BSFunction hook)
-                {
-                    RemoveHook(hook);
-
-                    return BSObject.Null;
-                }
-
-                throw new BSInvalidTypeException(
-                    SourcePosition.Unknown,
-                    "Expected Function as argument.",
-                    arg[0],
-                    "BSFunction");
-            }
-        
-        }
-
 
         #endregion
     }
 
+    #endregion
 
+}

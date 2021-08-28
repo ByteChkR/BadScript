@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsTableExpressionSerializer : BSExpressionSerializer
@@ -30,7 +29,7 @@ namespace BadScript.Utils.Optimization.Compilation
             BSTableExpression expr = ( BSTableExpression ) e;
             ret.SerializeOpCode( BSCompiledExpressionCode.TableExpr );
             ret.SerializeNameMap( expr.InitExpressions );
-            
+
         }
 
         #endregion

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Operators.Implementations;
+using BadScript.Utils.Optimization;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsProxyExpressionSerializer : BSExpressionSerializer
@@ -49,7 +49,7 @@ namespace BadScript.Utils.Optimization.Compilation
                 "Can not DeserializeExpression Expression: " + code );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
             BSProxyExpression expr = ( BSProxyExpression ) e;
 
@@ -59,7 +59,6 @@ namespace BadScript.Utils.Optimization.Compilation
                     expr.Object.Position,
                     "Can not Serialize Proxy Expression. No meta data provided" );
             }
-            
 
             if ( expr.ProxyMetaData is BSBinaryOperatorMetaData bm )
             {

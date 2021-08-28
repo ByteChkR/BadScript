@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Binary;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsAssignExpressionSerializer : BSExpressionSerializer
@@ -27,7 +26,7 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSAssignExpression( SourcePosition.Unknown, l, s.DeserializeExpression() );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
             BSAssignExpression expr = ( BSAssignExpression ) e;
             ret.SerializeOpCode( BSCompiledExpressionCode.AssignExpr );

@@ -1,4 +1,4 @@
-﻿namespace BadScript.Utils.Optimization.Compilation
+﻿namespace BadScript.Utils.Serialization
 {
 
     public enum BSCompiledExpressionCode : byte

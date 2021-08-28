@@ -7,7 +7,6 @@ using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
-using BadScript.Common.Types.References.Implementations;
 using BadScript.Interfaces;
 
 namespace BadScript.Core
@@ -60,6 +59,7 @@ namespace BadScript.Core
                     objects =>
                     {
                         ABSObject a = objects[0].ResolveReference();
+
                         if ( a is ABSTable t )
                         {
                             return t.Keys;
@@ -81,6 +81,7 @@ namespace BadScript.Core
                     objects =>
                     {
                         ABSObject a = objects[0].ResolveReference();
+
                         if ( a is ABSTable t )
                         {
                             return t.Keys;
@@ -126,15 +127,15 @@ namespace BadScript.Core
             );
 
             root.InsertElement(
-                new BSObject("isArray"),
+                new BSObject( "isArray" ),
                 new BSFunction(
                     "function isArray(obj)",
-                    (args) =>
+                    ( args ) =>
                     {
 
                         ABSObject arg = args[0].ResolveReference();
 
-                        if (arg is ABSArray)
+                        if ( arg is ABSArray )
                         {
                             return BSObject.One;
                         }
@@ -147,15 +148,15 @@ namespace BadScript.Core
             );
 
             root.InsertElement(
-                new BSObject("isFunction"),
+                new BSObject( "isFunction" ),
                 new BSFunction(
                     "function isFunction(obj)",
-                    (args) =>
+                    ( args ) =>
                     {
 
                         ABSObject arg = args[0].ResolveReference();
 
-                        if (arg is BSFunction)
+                        if ( arg is BSFunction )
                         {
                             return BSObject.One;
                         }
@@ -289,7 +290,6 @@ namespace BadScript.Core
 
             return new BSArray( data.Select( x => new BSObject( ( decimal ) x ) ) );
         }
-
 
         private ABSObject ToBase64( ABSObject[] arg )
         {

@@ -3,7 +3,7 @@ using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsIfExpressionSerializer : BSExpressionSerializer
@@ -28,13 +28,13 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSIfExpression( SourcePosition.Unknown, map, elseBlock );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
             BSIfExpression expr = ( BSIfExpression ) e;
             ret.SerializeOpCode( BSCompiledExpressionCode.IfExpr );
             ret.SerializeMap( expr.ConditionMap );
             ret.SerializeBlock( expr.ElseBlock ?? new BSExpression[0] );
-            
+
         }
 
         #endregion

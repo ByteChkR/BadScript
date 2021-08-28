@@ -3,7 +3,7 @@ using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsBreakExpressionSerializer : BSExpressionSerializer
@@ -25,9 +25,9 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSBreakExpression( SourcePosition.Unknown );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
-            byte[] b= BitConverter.GetBytes( ( byte ) BSCompiledExpressionCode.BreakExpr );
+            byte[] b = BitConverter.GetBytes( ( byte ) BSCompiledExpressionCode.BreakExpr );
             ret.Write( b, 0, b.Length );
         }
 

@@ -7,8 +7,9 @@ using System.Text;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block;
+using BadScript.Utils.Serialization.Serializers;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization
 {
 
     public static class BSSerializer
@@ -38,54 +39,34 @@ namespace BadScript.Utils.Optimization.Compilation
 
         #region Public
 
-        private static void WriteHeader(Stream s, BSSerializerHints hints)
-        {
-            BSSerializedHeader header = BSSerializedHeader.CreateEmpty( hints );
-
-            s.Write( header.Magic, 0, header.Magic.Length );
-            s.SerializeSHint( header.SerializerHints );
-            s.SerializeString( header.BSSerializerFormatVersion );
-        }
-
-        private static BSSerializedHeader ReadHeader(Stream s)
-        {
-            BSSerializedHeader header = new BSSerializedHeader();
-            header.Magic = new byte[4];
-            s.Read( header.Magic, 0, 4 );
-
-            header.SerializerHints = s.DeserializeSHint();
-            header.BSSerializerFormatVersion = s.DeserializeString();
-            if(!header.IsValidHeader)
-            {
-                throw new BSRuntimeException( "Invalid Header for Serialized BS Expressions" );
-            }
-
-            return header;
-        }
-
-
         public static BSExpression[] Deserialize( Stream s )
         {
             BSSerializedHeader header = ReadHeader( s );
-            if ((header.SerializerHints & BSSerializerHints.Compressed) != 0)
+
+            if ( ( header.SerializerHints & BSSerializerHints.Compressed ) != 0 )
             {
-                s = new GZipStream(s, CompressionMode.Decompress);
+                s = new GZipStream( s, CompressionMode.Decompress );
             }
+
             return s.DeserializeBlock();
         }
-        
 
-        public static void Serialize(BSExpression[] src, Stream s, BSSerializerHints hints)
+        public static void Serialize( BSExpression[] src, Stream s, BSSerializerHints hints )
         {
             WriteHeader( s, hints );
+
             if ( ( hints & BSSerializerHints.Compressed ) != 0 )
             {
-                s = new GZipStream( s, CompressionLevel.Optimal);
+                s = new GZipStream( s, CompressionLevel.Optimal );
             }
-            s.SerializeBlock(src);
+
+            s.SerializeBlock( src );
         }
 
-        public static void Serialize( BSExpression[] src, Stream s ) => Serialize( src, s, BSSerializerHints.Default );
+        public static void Serialize( BSExpression[] src, Stream s )
+        {
+            Serialize( src, s, BSSerializerHints.Default );
+        }
 
         //public static byte[] Serialize( BSExpression[] src )
         //{
@@ -140,7 +121,11 @@ namespace BadScript.Utils.Optimization.Compilation
 
             for ( int i = 0; i < c; i++ )
             {
-                ret[i] = new BSFunctionParameter( s.DeserializeString(), s.DeserializeBool(), s.DeserializeBool(), s.DeserializeBool() );
+                ret[i] = new BSFunctionParameter(
+                    s.DeserializeString(),
+                    s.DeserializeBool(),
+                    s.DeserializeBool(),
+                    s.DeserializeBool() );
             }
 
             return ret;
@@ -184,14 +169,14 @@ namespace BadScript.Utils.Optimization.Compilation
             return map;
         }
 
-        internal static BSCompiledExpressionCode DeserializeOpCode(this Stream s)
+        internal static BSCompiledExpressionCode DeserializeOpCode( this Stream s )
         {
-            return (BSCompiledExpressionCode)s.ReadByte();
+            return ( BSCompiledExpressionCode ) s.ReadByte();
         }
 
-        internal static BSSerializerHints DeserializeSHint(this Stream s)
+        internal static BSSerializerHints DeserializeSHint( this Stream s )
         {
-            return (BSSerializerHints)s.ReadByte();
+            return ( BSSerializerHints ) s.ReadByte();
         }
 
         internal static string DeserializeString( this Stream s )
@@ -203,20 +188,19 @@ namespace BadScript.Utils.Optimization.Compilation
             return Encoding.UTF8.GetString( sBuf );
         }
 
-        internal static void SerializeBlock(this Stream l, BSExpression[] src)
+        internal static void SerializeBlock( this Stream l, BSExpression[] src )
         {
-            l.SerializeInt32(src.Length);
+            l.SerializeInt32( src.Length );
 
-            foreach (BSExpression bsExpression in src)
+            foreach ( BSExpression bsExpression in src )
             {
-                l.SerializeExpression(bsExpression);
+                l.SerializeExpression( bsExpression );
             }
         }
-        
 
         internal static void SerializeBool( this Stream l, bool b )
         {
-            l.Write( BitConverter.GetBytes( b ), 0, sizeof(bool) );
+            l.Write( BitConverter.GetBytes( b ), 0, sizeof( bool ) );
         }
 
         internal static void SerializeDecimal( this Stream l, decimal n )
@@ -227,11 +211,11 @@ namespace BadScript.Utils.Optimization.Compilation
 
         internal static void SerializeExpression( this Stream l, BSExpression expr )
         {
-            BSExpressionSerializer c = s_Compilers.First(x => x.CanSerialize(expr));
+            BSExpressionSerializer c = s_Compilers.First( x => x.CanSerialize( expr ) );
             c.Serialize( expr, l );
 
         }
-        
+
         internal static void SerializeFunctionParameters( this Stream l, BSFunctionParameter[] args )
         {
             l.SerializeInt32( args.Length );
@@ -240,8 +224,8 @@ namespace BadScript.Utils.Optimization.Compilation
             {
                 l.SerializeString( bsFunctionParameter.Name );
                 l.SerializeBool( bsFunctionParameter.NotNull );
-                l.SerializeBool(bsFunctionParameter.IsOptional);
-                l.SerializeBool(bsFunctionParameter.IsArgArray);
+                l.SerializeBool( bsFunctionParameter.IsOptional );
+                l.SerializeBool( bsFunctionParameter.IsArgArray );
             }
         }
 
@@ -273,21 +257,52 @@ namespace BadScript.Utils.Optimization.Compilation
             }
         }
 
-        internal static void SerializeOpCode(this Stream l, BSCompiledExpressionCode code)
+        internal static void SerializeOpCode( this Stream l, BSCompiledExpressionCode code )
         {
-            l.Write(new[] { (byte)code }, 0, 1);
+            l.Write( new[] { ( byte ) code }, 0, 1 );
         }
-        internal static void SerializeSHint(this Stream l, BSSerializerHints hint)
+
+        internal static void SerializeSHint( this Stream l, BSSerializerHints hint )
         {
-            l.Write(new[] { (byte)hint }, 0, 1);
+            l.Write( new[] { ( byte ) hint }, 0, 1 );
         }
 
         internal static void SerializeString( this Stream l, string str )
         {
             byte[] b = Encoding.UTF8.GetBytes( str );
             byte[] bl = BitConverter.GetBytes( b.Length );
-            l.Write( bl,0,bl.Length );
-            l.Write(b, 0, b.Length);
+            l.Write( bl, 0, bl.Length );
+            l.Write( b, 0, b.Length );
+        }
+
+        #endregion
+
+        #region Private
+
+        private static BSSerializedHeader ReadHeader( Stream s )
+        {
+            BSSerializedHeader header = new BSSerializedHeader();
+            header.Magic = new byte[4];
+            s.Read( header.Magic, 0, 4 );
+
+            header.SerializerHints = s.DeserializeSHint();
+            header.BSSerializerFormatVersion = s.DeserializeString();
+
+            if ( !header.IsValidHeader )
+            {
+                throw new BSRuntimeException( "Invalid Header for Serialized BS Expressions" );
+            }
+
+            return header;
+        }
+
+        private static void WriteHeader( Stream s, BSSerializerHints hints )
+        {
+            BSSerializedHeader header = BSSerializedHeader.CreateEmpty( hints );
+
+            s.Write( header.Magic, 0, header.Magic.Length );
+            s.SerializeSHint( header.SerializerHints );
+            s.SerializeString( header.BSSerializerFormatVersion );
         }
 
         #endregion

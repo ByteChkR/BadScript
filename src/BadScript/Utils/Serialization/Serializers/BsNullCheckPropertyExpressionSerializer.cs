@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Access;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsNullCheckPropertyExpressionSerializer : BSExpressionSerializer
@@ -27,14 +26,14 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSNullCheckPropertyExpression( SourcePosition.Unknown, e, s.DeserializeString() );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
             BSNullCheckPropertyExpression expr = ( BSNullCheckPropertyExpression ) e;
 
             ret.SerializeOpCode( BSCompiledExpressionCode.NullCheckPropertyAccessExpr );
             ret.SerializeExpression( expr.Left );
             ret.SerializeString( expr.Right );
-            
+
         }
 
         #endregion

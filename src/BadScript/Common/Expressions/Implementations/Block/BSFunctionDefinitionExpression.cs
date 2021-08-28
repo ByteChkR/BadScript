@@ -61,10 +61,10 @@ namespace BadScript.Common.Expressions.Implementations.Block
             {
                 BSFunctionParameter p = argNames[i];
 
-                if (p.IsArgArray)
+                if ( p.IsArgArray )
                 {
-                    BSArray a = new BSArray(arg);
-                    scope.AddLocalVar(p.Name, a);
+                    BSArray a = new BSArray( arg );
+                    scope.AddLocalVar( p.Name, a );
 
                     break;
                 }
@@ -99,8 +99,8 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         public override ABSObject Execute( BSScope scope )
         {
-            
-            int min = ArgNames.Count(x => !x.IsOptional);
+
+            int min = ArgNames.Count( x => !x.IsOptional );
             int max = ArgNames.Length;
 
             if ( ArgNames.Length == 1 && ArgNames[0].IsArgArray )
@@ -108,12 +108,13 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 min = 0;
                 max = int.MaxValue;
             }
+
             BSFunction f =
                 new BSFunction(
                     GetHeader(),
                     x => InvokeBlockFunction( scope, x ),
                     min,
-                    max);
+                    max );
 
             if ( string.IsNullOrEmpty( Name ) )
             {

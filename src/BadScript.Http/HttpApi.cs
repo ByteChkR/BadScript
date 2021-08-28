@@ -160,11 +160,12 @@ namespace BadScript.Http
                 new BSFunction( "function getAuthority()", objects => new BSObject( uri.Authority ), 0 ) );
 
             table.InsertElement(
-                new BSObject("getScheme"),
-                new BSFunction("function getScheme()", objects => new BSObject(uri.Scheme), 0));
+                new BSObject( "getScheme" ),
+                new BSFunction( "function getScheme()", objects => new BSObject( uri.Scheme ), 0 ) );
+
             table.InsertElement(
-                new BSObject("getUserInfo"),
-                new BSFunction("function getUserInfo()", objects => new BSObject(uri.UserInfo), 0));
+                new BSObject( "getUserInfo" ),
+                new BSFunction( "function getUserInfo()", objects => new BSObject( uri.UserInfo ), 0 ) );
 
             return table;
         }

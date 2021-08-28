@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization
 {
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout( LayoutKind.Sequential )]
     public struct BSSerializedHeader
     {
         public bool IsValidHeader => Magic[0] == 69 &&
@@ -15,7 +15,8 @@ namespace BadScript.Utils.Optimization.Compilation
         public byte[] Magic;
         public BSSerializerHints SerializerHints;
         public string BSSerializerFormatVersion;
-        public static BSSerializedHeader CreateEmpty(BSSerializerHints hints)
+
+        public static BSSerializedHeader CreateEmpty( BSSerializerHints hints )
         {
             return new BSSerializedHeader
             {

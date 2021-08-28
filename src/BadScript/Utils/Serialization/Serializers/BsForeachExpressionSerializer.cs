@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsForeachExpressionSerializer : BSExpressionSerializer
@@ -36,7 +35,7 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSForeachExpression( SourcePosition.Unknown, vars, enumerator, block );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
             BSForeachExpression expr = ( BSForeachExpression ) e;
             ret.SerializeOpCode( BSCompiledExpressionCode.ForEachExpr );
@@ -49,7 +48,7 @@ namespace BadScript.Utils.Optimization.Compilation
 
             ret.SerializeExpression( expr.Enumerator );
             ret.SerializeBlock( expr.Block );
-            
+
         }
 
         #endregion

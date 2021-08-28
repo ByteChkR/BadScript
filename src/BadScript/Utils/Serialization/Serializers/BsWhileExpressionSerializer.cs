@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsWhileExpressionSerializer : BSExpressionSerializer
@@ -27,13 +26,13 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSWhileExpression( SourcePosition.Unknown, cond, s.DeserializeBlock() );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
             BSWhileExpression expr = ( BSWhileExpression ) e;
             ret.SerializeOpCode( BSCompiledExpressionCode.WhileExpr );
             ret.SerializeExpression( expr.Condition );
             ret.SerializeBlock( expr.Block );
-            
+
         }
 
         #endregion

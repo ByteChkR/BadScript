@@ -95,7 +95,8 @@ namespace BadScript.Utils
             m_Properties.Add(
                 "toString",
                 new BSFunctionReference(
-                    new BSFunction( "function toString()", x => new BSObject( m_InternalObject.ToString() ) ,0)) );
+                    new BSFunction( "function toString()", x => new BSObject( m_InternalObject.ToString() ), 0 ) ) );
+
             m_Properties.Add(
                 "change",
                 new BSFunctionReference( new BSFunction( "function change(changeStr)", ChangeVersion, 1 ) ) );

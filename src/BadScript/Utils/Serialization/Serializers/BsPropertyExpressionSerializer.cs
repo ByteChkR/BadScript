@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Access;
 
-namespace BadScript.Utils.Optimization.Compilation
+namespace BadScript.Utils.Serialization.Serializers
 {
 
     public class BsPropertyExpressionSerializer : BSExpressionSerializer
@@ -35,7 +34,7 @@ namespace BadScript.Utils.Optimization.Compilation
             return new BSPropertyExpression( SourcePosition.Unknown, expr, r );
         }
 
-        public override void Serialize(BSExpression e, Stream ret)
+        public override void Serialize( BSExpression e, Stream ret )
         {
             BSPropertyExpression expr = ( BSPropertyExpression ) e;
 
@@ -48,7 +47,7 @@ namespace BadScript.Utils.Optimization.Compilation
             }
 
             ret.SerializeString( expr.Right );
-            
+
         }
 
         #endregion
