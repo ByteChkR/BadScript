@@ -6,6 +6,7 @@
 - [Available Operators](./language/operators.md)
 - [Loops](./language/loops.md)
 - [Functions](./language/functions.md)
+- [Operator Overrides](./language/operator-overrides.md)
 
 ## Interface Documentation
 - [Console](./interfaces/console.md)
