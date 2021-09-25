@@ -10,14 +10,16 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
     public class BSArrayAccessExpression : BSBinaryExpression
     {
+
         public override bool IsConstant => Left.IsConstant && Right.IsConstant;
 
         #region Public
 
         public BSArrayAccessExpression( SourcePosition srcPos, BSExpression left, BSExpression arg ) : base(
-            srcPos,
-            left,
-            arg )
+             srcPos,
+             left,
+             arg
+            )
         {
         }
 
@@ -27,31 +29,21 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
             ABSObject i = Right.Execute( scope ).ResolveReference();
 
-            //if(BSOperatorImplementationResolver.AllowOperatorOverrides)
-            //{
-            //    string fName = BSOperatorImplementationResolver.ResolveKey( "[]" );
-
-            //    if ( obj.HasProperty( fName ) )
-            //    {
-            //        return obj.GetProperty( fName ).Invoke( new[] { i } );
-            //    }
-            //}
-
             ABSOperatorImplementation impl =
                 BSOperatorImplementationResolver.ResolveImplementation( "[]", new[] { obj, i }, true );
 
             return impl.ExecuteOperator( new[] { obj, i } );
 
             throw new BSInvalidTypeException(
-                m_Position,
-                "Expected Array",
-                obj,
-                "Table"
-            );
-
+                                             m_Position,
+                                             "Expected Array",
+                                             obj,
+                                             "Table"
+                                            );
         }
 
         #endregion
+
     }
 
 }

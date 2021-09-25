@@ -1,4 +1,5 @@
 ﻿using System.IO;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Operators.Implementations;
@@ -9,6 +10,7 @@ namespace BadScript.Utils.Serialization.Serializers
 
     public class BsProxyExpressionSerializer : BSExpressionSerializer
     {
+
         #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
@@ -45,19 +47,21 @@ namespace BadScript.Utils.Serialization.Serializers
             }
 
             throw new BSInvalidOperationException(
-                SourcePosition.Unknown,
-                "Can not DeserializeExpression Expression: " + code );
+                                                  SourcePosition.Unknown,
+                                                  "Can not DeserializeExpression Expression: " + code
+                                                 );
         }
 
         public override void Serialize( BSExpression e, Stream ret )
         {
-            BSProxyExpression expr = ( BSProxyExpression ) e;
+            BSProxyExpression expr = ( BSProxyExpression )e;
 
             if ( expr.ProxyMetaData == null )
             {
                 throw new BSInvalidOperationException(
-                    expr.Object.Position,
-                    "Can not Serialize Proxy Expression. No meta data provided" );
+                                                      expr.Object.Position,
+                                                      "Can not Serialize Proxy Expression. No meta data provided"
+                                                     );
             }
 
             if ( expr.ProxyMetaData is BSBinaryOperatorMetaData bm )
@@ -81,22 +85,28 @@ namespace BadScript.Utils.Serialization.Serializers
 
                 if ( om.ExpressionCode == BSCompiledExpressionCode.ValueString )
                 {
-                    ret.SerializeString( ( string ) om.Value );
+                    ret.SerializeString( ( string )om.Value );
                 }
                 else if ( om.ExpressionCode == BSCompiledExpressionCode.ValueDecimal )
                 {
-                    ret.SerializeDecimal( ( decimal ) om.Value );
+                    ret.SerializeDecimal( ( decimal )om.Value );
+                }
+                else if ( om.ExpressionCode == BSCompiledExpressionCode.ValueBoolean )
+                {
+                    ret.SerializeBool( ( bool )om.Value );
                 }
             }
             else
             {
                 throw new BSInvalidOperationException(
-                    expr.Object.Position,
-                    "Can not Serialize Proxy Expression. Invalid meta data provided" );
+                                                      expr.Object.Position,
+                                                      "Can not Serialize Proxy Expression. Invalid meta data provided"
+                                                     );
             }
         }
 
         #endregion
+
     }
 
 }

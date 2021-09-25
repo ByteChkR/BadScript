@@ -1,4 +1,5 @@
-﻿using BadScript.Common.Types;
+﻿using BadScript.Common.Exceptions;
+using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
@@ -7,6 +8,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Logic
 
     public abstract class ABSLogicOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public abstract bool Execute( bool l, bool r );
@@ -16,7 +18,17 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Logic
             ABSObject lVal = arg[0];
             ABSObject rVal = arg[1];
 
-            return lVal.TryConvertBool( out bool _ ) && rVal.TryConvertBool( out bool _ );
+            if ( !lVal.TryConvertBool( out bool _ ) )
+            {
+                throw new BSRuntimeException( $"Can not convert object '{lVal}' to a boolean" );
+            }
+
+            if ( !rVal.TryConvertBool( out bool _ ) )
+            {
+                throw new BSRuntimeException( $"Can not convert object '{rVal}' to a boolean" );
+            }
+
+            return true;
         }
 
         #endregion
@@ -34,10 +46,11 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Logic
             bool lD = lVal.ConvertBool();
             bool rD = rVal.ConvertBool();
 
-            return Execute( lD, rD ) ? BSObject.One : BSObject.Zero;
+            return Execute( lD, rD ) ? BSObject.True : BSObject.False;
         }
 
         #endregion
+
     }
 
 }

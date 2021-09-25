@@ -1,4 +1,5 @@
-﻿using BadScript.Common.Types;
+﻿using BadScript.Common.Exceptions;
+using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 
@@ -7,6 +8,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Math
 
     public abstract class ABSMathOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public override bool IsCorrectImplementation( ABSObject[] arg )
@@ -14,7 +16,17 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Math
             ABSObject lVal = arg[0];
             ABSObject rVal = arg[1];
 
-            return lVal.TryConvertDecimal( out decimal _ ) && rVal.TryConvertDecimal( out decimal _ );
+            if ( !lVal.TryConvertDecimal( out decimal _ ) )
+            {
+                throw new BSRuntimeException( $"Can not convert object '{lVal}' to a decimal" );
+            }
+
+            if ( !rVal.TryConvertDecimal( out decimal _ ) )
+            {
+                throw new BSRuntimeException( $"Can not convert object '{rVal}' to a decimal" );
+            }
+
+            return true;
         }
 
         #endregion
@@ -35,10 +47,10 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Math
             decimal rD = rVal.ConvertDecimal();
 
             return new BSObject( Execute( lD, rD ) );
-
         }
 
         #endregion
+
     }
 
 }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using BadScript.Common;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
@@ -15,13 +16,19 @@ using BadScript.Interfaces;
 using BadScript.Settings;
 using BadScript.Utils.Optimization;
 using BadScript.Utils.Serialization;
+using BadScript.Validators;
 
 namespace BadScript
 {
 
     public class BSEngine
     {
+
         public readonly BSParserSettings ParserSettings;
+
+        private static readonly List < BSExpressionValidator > s_Validators =
+            new List < BSExpressionValidator > { new BSFunctionReturnExpressionValidator() };
+
         private readonly Dictionary < string, ABSObject > m_Preprocessors;
         private readonly ABSTable m_StaticData;
         private readonly ABSTable m_GlobalTable;
@@ -75,44 +82,6 @@ namespace BadScript
 
             m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
         }
-
-        //public ABSObject LoadString( bool isBenchmark, string script, string[] args )
-        //{
-        //    return LoadString(
-        //        isBenchmark,
-        //        script,
-        //        args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray()
-        //    );
-        //}
-
-        //public ABSObject LoadString( bool isBenchmark, string script )
-        //{
-        //    return LoadString(
-        //        isBenchmark,
-        //        script,
-        //        new ABSObject[0]
-        //    );
-        //}
-
-        //public ABSObject LoadString( bool isBenchmark, BSScope scope, string script, string[] args )
-        //{
-        //    return LoadScript(
-        //        ParseString( script ),
-        //        isBenchmark,
-        //        scope,
-        //        args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray()
-        //    );
-        //}
-
-        //public ABSObject LoadString( bool isBenchmark, BSScope scope, string script )
-        //{
-        //    return LoadScript(
-        //        ParseString(script),
-        //        isBenchmark,
-        //        scope,
-        //        new ABSObject[0]
-        //    );
-        //}
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static BSExpression[] ParseBinary( byte[] bin )
@@ -229,21 +198,6 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), isBenchmark );
         }
 
-        //public ABSObject LoadFile( bool isBenchmark, string file, string[] args )
-        //{
-        //    return LoadString( isBenchmark, File.ReadAllText( file ), args );
-        //}
-
-        //public ABSObject LoadFile( bool isBenchmark, string file, ABSObject[] args )
-        //{
-        //    return LoadString( isBenchmark, File.ReadAllText( file ), args );
-        //}
-
-        //public ABSObject LoadFile( bool isBenchmark, string file )
-        //{
-        //    return LoadFile( isBenchmark, file, new string[0] );
-        //}
-
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSTable LoadInterface( string key, ABSTable t = null )
         {
@@ -279,9 +233,10 @@ namespace BadScript
         public ABSObject LoadScript( BSExpression[] exprs, string[] args, bool isBenchmark = false )
         {
             return LoadScript(
-                exprs,
-                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray() ?? new ABSObject[0],
-                isBenchmark );
+                              exprs,
+                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ?? new ABSObject[0],
+                              isBenchmark
+                             );
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -294,27 +249,27 @@ namespace BadScript
         public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, string[] args, bool isBenchmark = false )
         {
             return LoadScript(
-                exprs,
-                scope,
-                args?.Select( x => ( ABSObject ) new BSObject( x ) ).ToArray() ?? new ABSObject[0],
-                isBenchmark );
+                              exprs,
+                              scope,
+                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ?? new ABSObject[0],
+                              isBenchmark
+                             );
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
-
             if ( ParserSettings.AllowOptimization )
             {
                 BSExpressionOptimizer.Optimize( exprs );
             }
 
             scope.AddLocalVar(
-                "args",
-                args == null
-                    ? ( ABSObject ) BSObject.Null
-                    : new BSArray( args )
-            );
+                              "args",
+                              args == null
+                                  ? ( ABSObject )BSObject.Null
+                                  : new BSArray( args )
+                             );
 
             Stopwatch sw = null;
 
@@ -378,6 +333,11 @@ namespace BadScript
             BSParser parser = new BSParser( Preprocess( script ) );
             BSExpression[] exprs = parser.ParseToEnd();
 
+            foreach ( BSExpressionValidator bsExpressionValidator in s_Validators )
+            {
+                bsExpressionValidator.Validate( exprs );
+            }
+
             return exprs;
         }
 
@@ -388,13 +348,13 @@ namespace BadScript
 
             if ( preprocessor.HasProperty( "preprocess" ) )
             {
-
                 m_Preprocessors[name] = preprocessor.GetProperty( "preprocess" ).ResolveReference();
             }
             else
             {
                 Console.WriteLine(
-                    $"PreProcessor '{name}' does not define function 'preprocess(src)'\nPassed Value: {preprocessor.SafeToString()}" );
+                                  $"PreProcessor '{name}' does not define function 'preprocess(src)'\nPassed Value: {preprocessor.SafeToString()}"
+                                 );
             }
 
             return BSObject.Null;
@@ -407,8 +367,9 @@ namespace BadScript
             if ( args.Length == 1 )
             {
                 scope = new BSScope(
-                    BSScopeFlags.None,
-                    ( BSScope ) ( args[0].ResolveReference() as BSObject ).GetInternalObject() );
+                                    BSScopeFlags.None,
+                                    ( BSScope )( args[0].ResolveReference() as BSObject ).GetInternalObject()
+                                   );
             }
             else
             {
@@ -446,7 +407,7 @@ namespace BadScript
 
         internal ABSObject HasInterfaceName( ABSObject[] arg )
         {
-            return InterfaceNames.Contains( arg[0].ConvertString() ) ? BSObject.One : BSObject.Zero;
+            return InterfaceNames.Contains( arg[0].ConvertString() ) ? BSObject.True : BSObject.False;
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -461,7 +422,7 @@ namespace BadScript
 
             if ( arg.Length == 2 )
             {
-                return LoadInterface( key, ( ABSTable ) arg[1] );
+                return LoadInterface( key, ( ABSTable )arg[1] );
             }
 
             return LoadInterface( key );
@@ -473,23 +434,21 @@ namespace BadScript
 
             if ( o.TryConvertString( out string src ) )
             {
-
                 ABSObject ret = LoadSource( src, arg.Skip( 1 ).ToArray() );
 
                 return ret;
             }
 
             throw new BSInvalidTypeException(
-                o.Position,
-                "Expected String",
-                o,
-                "string"
-            );
+                                             o.Position,
+                                             "Expected String",
+                                             o,
+                                             "string"
+                                            );
         }
 
         internal ABSObject LoadStringScopedApi( ABSObject[] arg )
         {
-
             ABSObject scope = arg[0].ResolveReference();
             ABSObject o = arg[1].ResolveReference();
 
@@ -497,33 +456,33 @@ namespace BadScript
             {
                 if ( scope is BSObject obj )
                 {
-                    BSScope sc = ( BSScope ) obj.GetInternalObject();
+                    BSScope sc = ( BSScope )obj.GetInternalObject();
 
                     ABSObject ret = LoadScript(
-                        ParseString( path ),
-                        sc,
-                        arg.Skip( 2 ).ToArray() );
+                                               ParseString( path ),
+                                               sc,
+                                               arg.Skip( 2 ).ToArray()
+                                              );
 
                     return ret;
                 }
 
                 throw new BSRuntimeException(
-                    o.Position,
-                    "'function loadScopedString(scope, script, args..)' requires a valid scope to be passed as first argument" );
-
+                                             o.Position,
+                                             "'function loadScopedString(scope, script, args..)' requires a valid scope to be passed as first argument"
+                                            );
             }
 
             throw new BSInvalidTypeException(
-                o.Position,
-                "Expected String",
-                o,
-                "string"
-            );
+                                             o.Position,
+                                             "Expected String",
+                                             o,
+                                             "string"
+                                            );
         }
 
         internal ABSObject LoadStringScopedBenchmarkApi( ABSObject[] arg )
         {
-
             ABSObject scope = arg[0].ResolveReference();
             ABSObject o = arg[1].ResolveReference();
 
@@ -531,29 +490,30 @@ namespace BadScript
             {
                 if ( scope is BSObject obj )
                 {
-                    BSScope sc = ( BSScope ) obj.GetInternalObject();
+                    BSScope sc = ( BSScope )obj.GetInternalObject();
 
                     ABSObject ret = LoadScript(
-                        ParseString( path ),
-                        sc,
-                        arg.Skip( 2 ).ToArray(),
-                        true );
+                                               ParseString( path ),
+                                               sc,
+                                               arg.Skip( 2 ).ToArray(),
+                                               true
+                                              );
 
                     return ret;
                 }
 
                 throw new BSRuntimeException(
-                    o.Position,
-                    "'function loadScopedString(scope, script, args..)' requires a valid scope to be passed as first argument" );
-
+                                             o.Position,
+                                             "'function loadScopedString(scope, script, args..)' requires a valid scope to be passed as first argument"
+                                            );
             }
 
             throw new BSInvalidTypeException(
-                o.Position,
-                "Expected String",
-                o,
-                "string"
-            );
+                                             o.Position,
+                                             "Expected String",
+                                             o,
+                                             "string"
+                                            );
         }
 
         #endregion
@@ -577,11 +537,11 @@ namespace BadScript
             }
 
             throw new BSInvalidTypeException(
-                o.Position,
-                "Expected String",
-                o,
-                "string"
-            );
+                                             o.Position,
+                                             "Expected String",
+                                             o,
+                                             "string"
+                                            );
         }
 
         private string Preprocess( string script )
@@ -597,6 +557,7 @@ namespace BadScript
         }
 
         #endregion
+
     }
 
 }

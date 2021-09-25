@@ -3,10 +3,12 @@
 
     public enum BSCompiledExpressionCode : byte
     {
+
         Unknown,
         ValueNull,
         ValueDecimal,
         ValueString,
+        ValueBoolean,
         ReturnExpr,
         ContinueExpr,
         BreakExpr,
@@ -26,6 +28,7 @@
         ForExpr,
         BinaryExpr,
         UnaryExpr,
+
     }
 
 }

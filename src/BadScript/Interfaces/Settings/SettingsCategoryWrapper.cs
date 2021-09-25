@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
@@ -12,6 +13,7 @@ namespace BadScript.Interfaces.Settings
 
     public class SettingsCategoryWrapper : ABSObject
     {
+
         private readonly SettingsCategory m_Category;
         private readonly SettingsPairEnumerator m_PairEnumerator;
         private readonly SettingsCategoryEnumerator m_CategoryEnumerator;
@@ -28,80 +30,135 @@ namespace BadScript.Interfaces.Settings
             m_CategoryEnumerator = new SettingsCategoryEnumerator( m_Category );
 
             m_Properties = new Dictionary < string, ABSReference >
-            {
-                { "Name", new BSReflectionReference( () => new BSObject( m_Category.Name ), null ) },
-                { "FullName", new BSReflectionReference( () => new BSObject( m_Category.FullName ), null ) },
-                {
-                    "IsPersistent", new BSReflectionReference(
-                        () => new BSObject( m_Category.IsPersistent ? BSObject.One : BSObject.Zero ),
-                        x => x.ConvertBool() )
-                },
-                {
-                    "HasSetting", new BSFunctionReference(
-                        new BSFunction(
-                            "function HasSetting(name)",
-                            objects => new BSObject(
-                                m_Category.HasSetting( objects[0].ConvertString() ) ? BSObject.One : BSObject.Zero ),
-                            1 ) )
-                },
-                {
-                    "HasCategory", new BSFunctionReference(
-                        new BSFunction(
-                            "function HasCategory(name)",
-                            objects => new BSObject(
-                                m_Category.HasCategory( objects[0].ConvertString() ) ? BSObject.One : BSObject.Zero ),
-                            1 ) )
-                },
-                {
-                    "GetSetting", new BSFunctionReference(
-                        new BSFunction(
-                            "function GetSetting(name)",
-                            objects => new SettingsPairWrapper( m_Category.GetSetting( objects[0].ConvertString() ) ),
-                            1 ) )
-                },
-                {
-                    "AddSetting", new BSFunctionReference(
-                        new BSFunction(
-                            "function AddSetting(name, value)",
-                            objects => new SettingsPairWrapper(
-                                m_Category.SetSetting( objects[0].ConvertString(), objects[1].ConvertString() ) ),
-                            2 ) )
-                },
-                {
-                    "AddCategory", new BSFunctionReference(
-                        new BSFunction(
-                            "function AddCategory(name)",
-                            objects => new SettingsCategoryWrapper(
-                                m_Category.AddCategory( objects[0].ConvertString() ) ),
-                            1 ) )
-                },
-                {
-                    "GetCategory", new BSFunctionReference(
-                        new BSFunction(
-                            "function GetCategory(name)",
-                            objects => new SettingsCategoryWrapper(
-                                m_Category.GetCategory( objects[0].ConvertString() ) ),
-                            1 ) )
-                },
-                {
-                    "FindCategory", new BSFunctionReference(
-                        new BSFunction(
-                            "function FindCategory(name)",
-                            objects => new SettingsCategoryWrapper(
-                                m_Category.FindCategory( objects[0].ConvertString() ) ),
-                            1 ) )
-                },
-                {
-                    "FindSetting", new BSFunctionReference(
-                        new BSFunction(
-                            "function FindSetting(name)",
-                            objects => new SettingsPairWrapper(
-                                m_Category.FindSetting( objects[0].ConvertString() ) ),
-                            1 ) )
-                },
-                { "Pairs", new BSReflectionReference( () => m_PairEnumerator, null ) },
-                { "Categories", new BSReflectionReference( () => m_CategoryEnumerator, null ) },
-            };
+                           {
+                               { "Name", new BSReflectionReference( () => new BSObject( m_Category.Name ), null ) },
+                               {
+                                   "FullName",
+                                   new BSReflectionReference( () => new BSObject( m_Category.FullName ), null )
+                               },
+                               {
+                                   "IsPersistent", new BSReflectionReference(
+                                                                             () => new BSObject(
+                                                                                  m_Category.IsPersistent
+                                                                                      ? BSObject.True
+                                                                                      : BSObject.False
+                                                                                 ),
+                                                                             x => x.ConvertBool()
+                                                                            )
+                               },
+                               {
+                                   "HasSetting", new BSFunctionReference(
+                                                                         new BSFunction(
+                                                                              "function HasSetting(name)",
+                                                                              objects => new BSObject(
+                                                                                   m_Category.HasSetting(
+                                                                                        objects[0].ConvertString()
+                                                                                       )
+                                                                                       ? BSObject.True
+                                                                                       : BSObject.False
+                                                                                  ),
+                                                                              1
+                                                                             )
+                                                                        )
+                               },
+                               {
+                                   "HasCategory", new BSFunctionReference(
+                                                                          new BSFunction(
+                                                                               "function HasCategory(name)",
+                                                                               objects => new BSObject(
+                                                                                    m_Category.HasCategory(
+                                                                                         objects[0].ConvertString()
+                                                                                        )
+                                                                                        ? BSObject.True
+                                                                                        : BSObject.False
+                                                                                   ),
+                                                                               1
+                                                                              )
+                                                                         )
+                               },
+                               {
+                                   "GetSetting", new BSFunctionReference(
+                                                                         new BSFunction(
+                                                                              "function GetSetting(name)",
+                                                                              objects =>
+                                                                                  new SettingsPairWrapper(
+                                                                                       m_Category.GetSetting(
+                                                                                            objects[0].ConvertString()
+                                                                                           )
+                                                                                      ),
+                                                                              1
+                                                                             )
+                                                                        )
+                               },
+                               {
+                                   "AddSetting", new BSFunctionReference(
+                                                                         new BSFunction(
+                                                                              "function AddSetting(name, value)",
+                                                                              objects => new SettingsPairWrapper(
+                                                                                   m_Category.SetSetting(
+                                                                                        objects[0].ConvertString(),
+                                                                                        objects[1].ConvertString()
+                                                                                       )
+                                                                                  ),
+                                                                              2
+                                                                             )
+                                                                        )
+                               },
+                               {
+                                   "AddCategory", new BSFunctionReference(
+                                                                          new BSFunction(
+                                                                               "function AddCategory(name)",
+                                                                               objects => new SettingsCategoryWrapper(
+                                                                                    m_Category.AddCategory(
+                                                                                         objects[0].ConvertString()
+                                                                                        )
+                                                                                   ),
+                                                                               1
+                                                                              )
+                                                                         )
+                               },
+                               {
+                                   "GetCategory", new BSFunctionReference(
+                                                                          new BSFunction(
+                                                                               "function GetCategory(name)",
+                                                                               objects => new SettingsCategoryWrapper(
+                                                                                    m_Category.GetCategory(
+                                                                                         objects[0].ConvertString()
+                                                                                        )
+                                                                                   ),
+                                                                               1
+                                                                              )
+                                                                         )
+                               },
+                               {
+                                   "FindCategory", new BSFunctionReference(
+                                                                           new BSFunction(
+                                                                                "function FindCategory(name)",
+                                                                                objects => new SettingsCategoryWrapper(
+                                                                                     m_Category.FindCategory(
+                                                                                          objects[0].ConvertString()
+                                                                                         )
+                                                                                    ),
+                                                                                1
+                                                                               )
+                                                                          )
+                               },
+                               {
+                                   "FindSetting", new BSFunctionReference(
+                                                                          new BSFunction(
+                                                                               "function FindSetting(name)",
+                                                                               objects => new SettingsPairWrapper(
+                                                                                    m_Category.FindSetting(
+                                                                                         objects[0].ConvertString()
+                                                                                        )
+                                                                                   ),
+                                                                               1
+                                                                              )
+                                                                         )
+                               },
+                               { "Pairs", new BSReflectionReference( () => m_PairEnumerator, null ) },
+                               { "Categories", new BSReflectionReference( () => m_CategoryEnumerator, null ) },
+                           };
         }
 
         public override bool Equals( ABSObject other )
@@ -156,6 +213,7 @@ namespace BadScript.Interfaces.Settings
         }
 
         #endregion
+
     }
 
 }

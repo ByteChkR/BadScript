@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Access;
@@ -14,16 +15,19 @@ using BadScript.Common.Operators;
 using BadScript.Common.Operators.Implementations;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
+using BadScript.Common.Types.Implementations;
 
 namespace BadScript.Common
 {
 
     public class BSParser
     {
+
         private readonly string m_OriginalSource;
         private int m_CurrentPosition;
         private readonly int m_SourcePositionOffset;
         private readonly string m_OffsetSource;
+
         private char Current =>
             m_CurrentPosition < m_OriginalSource.Length ? m_OriginalSource[m_CurrentPosition] : '\0';
 
@@ -235,7 +239,6 @@ namespace BadScript.Common
 
             if ( IsWordStart() )
             {
-
                 sb.Append( m_OriginalSource[m_CurrentPosition] );
                 m_CurrentPosition++;
 
@@ -268,11 +271,12 @@ namespace BadScript.Common
                 ReadWhitespaceAndNewLine();
 
                 return new BSEnumerableFunctionDefinitionExpression(
-                    CreateSourcePosition( pos ),
-                    funcName,
-                    isGlobal,
-                    args,
-                    new[] { Parse( int.MaxValue ) } );
+                                                                    CreateSourcePosition( pos ),
+                                                                    funcName,
+                                                                    isGlobal,
+                                                                    args,
+                                                                    new[] { Parse( int.MaxValue ) }
+                                                                   );
             }
 
             string block = ParseBlock();
@@ -282,11 +286,12 @@ namespace BadScript.Common
             BSExpression[] b = p.ParseToEnd();
 
             return new BSEnumerableFunctionDefinitionExpression(
-                CreateSourcePosition( pos ),
-                funcName,
-                isGlobal,
-                args,
-                b );
+                                                                CreateSourcePosition( pos ),
+                                                                funcName,
+                                                                isGlobal,
+                                                                args,
+                                                                b
+                                                               );
         }
 
         public BSExpression ParseExpression( int start )
@@ -299,7 +304,6 @@ namespace BadScript.Common
             {
                 expr = BSOperatorPreceedenceTable.GetPostfix( int.MaxValue, preop ).
                                                   Parse( expr, this );
-
             }
             else
             {
@@ -350,7 +354,6 @@ namespace BadScript.Common
 
             if ( IsWordStart() )
             {
-
                 sb.Append( m_OriginalSource[m_CurrentPosition] );
                 m_CurrentPosition++;
 
@@ -383,11 +386,12 @@ namespace BadScript.Common
                 ReadWhitespaceAndNewLine();
 
                 return new BSFunctionDefinitionExpression(
-                    CreateSourcePosition( pos ),
-                    funcName,
-                    args,
-                    new[] { Parse( int.MaxValue ) },
-                    isGlobal );
+                                                          CreateSourcePosition( pos ),
+                                                          funcName,
+                                                          args,
+                                                          new[] { Parse( int.MaxValue ) },
+                                                          isGlobal
+                                                         );
             }
 
             string block = ParseBlock();
@@ -644,7 +648,6 @@ namespace BadScript.Common
                         es.Add( ParseExpression( int.MaxValue ) );
                         ReadWhitespaceAndNewLine();
                     }
-
                 }
 
                 m_CurrentPosition += 1;
@@ -654,7 +657,6 @@ namespace BadScript.Common
 
             if ( Is( '{' ) )
             {
-
                 m_CurrentPosition += 1;
                 Dictionary < string, BSExpression > es = new Dictionary < string, BSExpression >();
                 ReadWhitespaceAndNewLine();
@@ -706,7 +708,6 @@ namespace BadScript.Common
             {
                 return BSOperatorPreceedenceTable.GetPrefix( int.MaxValue, k ).
                                                   Parse( ParseExpression( int.MaxValue ), this );
-
             }
 
             //if ( Is( '!' ) )
@@ -875,7 +876,6 @@ namespace BadScript.Common
                 ReadWhitespaceAndNewLine();
 
                 return new BSTryExpression( CreateSourcePosition( pos ), tryBlock, catchBlock, exVar );
-
             }
 
             if ( wordName == "foreach" )
@@ -922,8 +922,8 @@ namespace BadScript.Common
 
             if ( wordName == "for" )
             {
-                BSAssignExpression cDecl = ( BSAssignExpression ) ParseExpression( int.MaxValue );
-                BSPropertyExpression cProp = ( BSPropertyExpression ) cDecl.Left;
+                BSAssignExpression cDecl = ( BSAssignExpression )ParseExpression( int.MaxValue );
+                BSPropertyExpression cProp = ( BSPropertyExpression )cDecl.Left;
 
                 string untilWord = ParseKey();
 
@@ -998,32 +998,51 @@ namespace BadScript.Common
                     m_CurrentPosition -= step.Length;
 
                     cInc = new BSAssignExpression(
-                        CreateSourcePosition( pos ),
-                        cProp,
-                        new BSInvocationExpression(
-                            CreateSourcePosition( pos ),
-                            new BSProxyExpression(
-                                CreateSourcePosition( pos ),
-                                new BSFunction(
-                                    CreateSourcePosition( pos ),
-                                    "function +(a, b)",
-                                    objects => BSOperatorImplementationResolver.
-                                               ResolveImplementation( "+", objects ).
-                                               ExecuteOperator( objects ),
-                                    2 ),
-                                new BSBinaryOperatorMetaData( "+", "a, b", 2 ) ),
-                            new BSExpression[]
-                            {
-                                cProp, new BSValueExpression( CreateSourcePosition( pos ), ( decimal ) 1 )
-                            } ) );
+                                                  CreateSourcePosition( pos ),
+                                                  cProp,
+                                                  new BSInvocationExpression(
+                                                                             CreateSourcePosition( pos ),
+                                                                             new BSProxyExpression(
+                                                                                  CreateSourcePosition( pos ),
+                                                                                  new BSFunction(
+                                                                                       CreateSourcePosition( pos ),
+                                                                                       "function +(a, b)",
+                                                                                       objects =>
+                                                                                           BSOperatorImplementationResolver.
+                                                                                               ResolveImplementation(
+                                                                                                    "+",
+                                                                                                    objects
+                                                                                                   ).
+                                                                                               ExecuteOperator(
+                                                                                                    objects
+                                                                                                   ),
+                                                                                       2
+                                                                                      ),
+                                                                                  new BSBinaryOperatorMetaData(
+                                                                                       "+",
+                                                                                       "a, b",
+                                                                                       2
+                                                                                      )
+                                                                                 ),
+                                                                             new BSExpression[]
+                                                                             {
+                                                                                 cProp,
+                                                                                 new BSValueExpression(
+                                                                                      CreateSourcePosition( pos ),
+                                                                                      ( decimal )1
+                                                                                     )
+                                                                             }
+                                                                            )
+                                                 );
                 }
                 else
                 {
                     cInc = new BSAssignExpression(
-                        CreateSourcePosition( pos ),
-                        cProp,
-                        BSOperatorPreceedenceTable.Get( int.MaxValue, "+" ).
-                                                   Parse( cProp, this ) );
+                                                  CreateSourcePosition( pos ),
+                                                  cProp,
+                                                  BSOperatorPreceedenceTable.Get( int.MaxValue, "+" ).
+                                                                             Parse( cProp, this )
+                                                 );
                 }
 
                 ReadWhitespaceAndNewLine();
@@ -1034,7 +1053,6 @@ namespace BadScript.Common
                 BSExpression[] b = p.ParseToEnd();
 
                 return new BSForExpression( CreateSourcePosition( pos ), cDecl, cCond, cInc, b );
-
             }
 
             if ( wordName == "null" && left == null )
@@ -1042,27 +1060,18 @@ namespace BadScript.Common
                 return new BSValueExpression( CreateSourcePosition( pos ), null );
             }
 
+            if ( wordName == "true" && left == null )
+            {
+                return new BSValueExpression( CreateSourcePosition( pos ), BSObject.True );
+            }
+
+            if ( wordName == "false" && left == null )
+            {
+                return new BSValueExpression( CreateSourcePosition( pos ), BSObject.False );
+            }
+
             return new BSPropertyExpression( CreateSourcePosition( pos ), left, wordName );
         }
-
-        //public int ReadWhitespace()
-        //{
-        //    int r = m_CurrentPosition;
-
-        //    while ( m_OriginalSource.Length > m_CurrentPosition &&
-        //            m_OriginalSource[m_CurrentPosition] != '\n' &&
-        //            char.IsWhiteSpace( m_OriginalSource, m_CurrentPosition ) )
-        //    {
-        //        m_CurrentPosition++;
-        //    }
-
-        //    if ( ReadComment() )
-        //    {
-        //        ReadWhitespaceAndNewLine();
-        //    }
-
-        //    return r;
-        //}
 
         public int ReadWhitespaceAndNewLine()
         {
@@ -1193,7 +1202,8 @@ namespace BadScript.Common
                 if ( needsToBeOptional && !optional )
                 {
                     throw new BSRuntimeException(
-                        "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters." );
+                                                 "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters."
+                                                );
                 }
 
                 args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional, isArgArray ) );
@@ -1234,7 +1244,8 @@ namespace BadScript.Common
                     if ( needsToBeOptional && !optional )
                     {
                         throw new BSRuntimeException(
-                            "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters." );
+                                                     "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters."
+                                                    );
                     }
 
                     args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional, false ) );
@@ -1324,6 +1335,7 @@ namespace BadScript.Common
         }
 
         #endregion
+
     }
 
 }

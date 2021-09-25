@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -10,6 +11,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSFunctionDefinitionExpression : BSExpression
     {
+
         public string Name;
         public bool Global;
         public BSFunctionParameter[] ArgNames;
@@ -34,22 +36,10 @@ namespace BadScript.Common.Expressions.Implementations.Block
             if ( args.Length > 1 && args[0].IsArgArray )
             {
                 throw new BSParserException(
-                    $"Invalid Arguments for function {name}. Can not have a * argument besides other arguments" );
+                                            $"Invalid Arguments for function {name}. Can not have a * argument besides other arguments"
+                                           );
             }
         }
-
-        //public BSFunctionDefinitionExpression(
-        //    SourcePosition srcPos,
-        //    string name,
-        //    string[] args,
-        //    BSExpression[] block,
-        //    bool addGlobal ) : base( srcPos )
-        //{
-        //    Name = name;
-        //    ArgNames = args.Select( x => ( true, x ) ).ToArray();
-        //    Block = block;
-        //    Global = addGlobal;
-        //}
 
         public static ABSObject InvokeBlockFunction(
             BSScope scope,
@@ -77,8 +67,9 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 if ( p.NotNull && ( arg.Length <= i || arg[i].IsNull ) )
                 {
                     throw new BSRuntimeException(
-                        arg[i].Position,
-                        $"Parameter '{p.Name}' can not be null or is missing" );
+                                                 arg[i].Position,
+                                                 $"Parameter '{p.Name}' can not be null or is missing"
+                                                );
                 }
 
                 scope.AddLocalVar( p.Name, arg.Length <= i ? BSObject.Null : arg[i] );
@@ -99,7 +90,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         public override ABSObject Execute( BSScope scope )
         {
-
             int min = ArgNames.Count( x => !x.IsOptional );
             int max = ArgNames.Length;
 
@@ -111,10 +101,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
             BSFunction f =
                 new BSFunction(
-                    GetHeader(),
-                    x => InvokeBlockFunction( scope, x ),
-                    min,
-                    max );
+                               GetHeader(),
+                               x => InvokeBlockFunction( scope, x ),
+                               min,
+                               max
+                              );
 
             if ( string.IsNullOrEmpty( Name ) )
             {
@@ -131,6 +122,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
             }
 
             return f;
+        }
+
+        public override string ToString()
+        {
+            return GetHeader();
         }
 
         #endregion
@@ -183,6 +179,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         }
 
         #endregion
+
     }
 
 }

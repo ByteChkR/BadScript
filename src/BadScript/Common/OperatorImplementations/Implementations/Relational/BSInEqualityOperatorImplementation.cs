@@ -7,6 +7,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Relational
 
     public class BSInEqualityOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public BSInEqualityOperatorImplementation() : base( "!=" )
@@ -24,10 +25,11 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Relational
 
         protected override ABSObject Execute( ABSObject[] arg )
         {
-            return arg[0].ResolveReference().Equals( arg[1].ResolveReference() ) ? BSObject.Zero : BSObject.One;
+            return arg[0].ResolveReference().Equals( arg[1].ResolveReference() ) ? BSObject.False : BSObject.True;
         }
 
         #endregion
+
     }
 
 }

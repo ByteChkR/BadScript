@@ -6,6 +6,7 @@ namespace BadScript.Common.Exceptions
 
     public class BSInvalidTypeException : BSRuntimeException
     {
+
         #region Public
 
         public BSInvalidTypeException(
@@ -13,10 +14,10 @@ namespace BadScript.Common.Exceptions
             string msg,
             ABSObject o,
             params string[] acceptedTypes ) : base(
-            pos,
-            GenerateRuntimeMessage( msg, o, acceptedTypes ) )
+                                                   pos,
+                                                   GenerateRuntimeMessage( msg, o, acceptedTypes )
+                                                  )
         {
-
         }
 
         #endregion
@@ -36,6 +37,7 @@ namespace BadScript.Common.Exceptions
         }
 
         #endregion
+
     }
 
 }

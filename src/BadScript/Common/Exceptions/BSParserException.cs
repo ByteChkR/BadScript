@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BadScript.Common.Expressions;
 
 namespace BadScript.Common.Exceptions
@@ -6,6 +7,7 @@ namespace BadScript.Common.Exceptions
 
     public class BSParserException : Exception
     {
+
         #region Public
 
         public BSParserException( string msg ) : base( msg )
@@ -28,6 +30,7 @@ namespace BadScript.Common.Exceptions
         }
 
         #endregion
+
     }
 
 }

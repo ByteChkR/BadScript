@@ -9,6 +9,7 @@ namespace BadScript.Process
 
     public class ProcessApi : ABSScriptInterface
     {
+
         #region Public
 
         public ProcessApi() : base( "process" )
@@ -18,10 +19,9 @@ namespace BadScript.Process
         public override void AddApi( ABSTable proc )
         {
             proc.InsertElement(
-                new BSObject( "start" ),
-                new BSFunction( "function start(file, args)", StartProcess, 2 )
-            );
-
+                               new BSObject( "start" ),
+                               new BSFunction( "function start(file, args)", StartProcess, 2 )
+                              );
         }
 
         #endregion
@@ -37,12 +37,12 @@ namespace BadScript.Process
 
         private static ABSObject ProcExitCode( System.Diagnostics.Process p )
         {
-            return new BSObject( ( decimal ) p.ExitCode );
+            return new BSObject( ( decimal )p.ExitCode );
         }
 
         private static ABSObject ProcHasExited( System.Diagnostics.Process p )
         {
-            return p.HasExited ? BSObject.One : BSObject.Zero;
+            return p.HasExited ? BSObject.True : BSObject.False;
         }
 
         private static ABSObject ProcWaitForExit( System.Diagnostics.Process p, ABSObject time = null )
@@ -53,7 +53,7 @@ namespace BadScript.Process
             }
             else
             {
-                p.WaitForExit( ( int ) time.ResolveReference().ConvertDecimal() );
+                p.WaitForExit( ( int )time.ResolveReference().ConvertDecimal() );
             }
 
             return BSObject.Null;
@@ -67,45 +67,47 @@ namespace BadScript.Process
             System.Diagnostics.Process p = System.Diagnostics.Process.Start( start, procArgs );
 
             t.InsertElement(
-                new BSObject( "hasExited" ),
-                new BSFunction(
-                    "function hasExited()",
-                    x => ProcHasExited( p ),
-                    0
-                )
-            );
+                            new BSObject( "hasExited" ),
+                            new BSFunction(
+                                           "function hasExited()",
+                                           x => ProcHasExited( p ),
+                                           0
+                                          )
+                           );
 
             t.InsertElement(
-                new BSObject( "exitCode" ),
-                new BSFunction(
-                    "function exitCode()",
-                    x => ProcExitCode( p ),
-                    0
-                )
-            );
+                            new BSObject( "exitCode" ),
+                            new BSFunction(
+                                           "function exitCode()",
+                                           x => ProcExitCode( p ),
+                                           0
+                                          )
+                           );
 
             t.InsertElement(
-                new BSObject( "abort" ),
-                new BSFunction(
-                    "function abort()",
-                    x => ProcAbort( p ),
-                    0
-                )
-            );
+                            new BSObject( "abort" ),
+                            new BSFunction(
+                                           "function abort()",
+                                           x => ProcAbort( p ),
+                                           0
+                                          )
+                           );
 
             t.InsertElement(
-                new BSObject( "waitForExit" ),
-                new BSFunction(
-                    "function waitForExit()/function waitForExit(timeMS)",
-                    x => ProcWaitForExit( p, x.Length != 0 ? x[0] : null ),
-                    0,
-                    1 )
-            );
+                            new BSObject( "waitForExit" ),
+                            new BSFunction(
+                                           "function waitForExit()/function waitForExit(timeMS)",
+                                           x => ProcWaitForExit( p, x.Length != 0 ? x[0] : null ),
+                                           0,
+                                           1
+                                          )
+                           );
 
             return t;
         }
 
         #endregion
+
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -10,6 +11,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
     public class BSForeachExpression : BSExpression
     {
+
         public BSExpression[] Block;
         public BSExpression Enumerator;
         public string[] Vars;
@@ -52,12 +54,12 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
             else
             {
                 throw new BSInvalidTypeException(
-                    m_Position,
-                    "Expected Enumerable Object",
-                    eObj,
-                    "Table",
-                    "Array"
-                );
+                                                 m_Position,
+                                                 "Expected Enumerable Object",
+                                                 eObj,
+                                                 "Table",
+                                                 "Array"
+                                                );
             }
 
             return BSObject.Null;
@@ -79,11 +81,11 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                    foreachScope,
-                    Block,
-                    new BSFunctionParameter[0],
-                    new ABSObject[0]
-                );
+                     foreachScope,
+                     Block,
+                     new BSFunctionParameter[0],
+                     new ABSObject[0]
+                    );
 
                 if ( foreachScope.Flags == BSScopeFlags.Continue )
                 {
@@ -105,7 +107,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
         private void Enumerate( BSScope scope, BSScope foreachScope, ABSObject moveNext, ABSObject getCurrent )
         {
-            while ( moveNext.Invoke( new ABSObject[0] ) != BSObject.Zero )
+            while ( moveNext.Invoke( new ABSObject[0] ) != BSObject.False )
             {
                 ABSObject[] objs = { getCurrent.Invoke( new ABSObject[0] ) };
 
@@ -115,11 +117,11 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                    foreachScope,
-                    Block,
-                    new BSFunctionParameter[0],
-                    new ABSObject[0]
-                );
+                     foreachScope,
+                     Block,
+                     new BSFunctionParameter[0],
+                     new ABSObject[0]
+                    );
 
                 if ( foreachScope.Flags == BSScopeFlags.Continue )
                 {
@@ -143,18 +145,17 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
         {
             foreach ( ABSObject iter in forEach )
             {
-
                 for ( int i = 0; i < Vars.Length; i++ )
                 {
                     foreachScope.AddLocalVar( Vars[i], 0 == i ? iter : BSObject.Null );
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                    foreachScope,
-                    Block,
-                    new BSFunctionParameter[0],
-                    new ABSObject[0]
-                );
+                     foreachScope,
+                     Block,
+                     new BSFunctionParameter[0],
+                     new ABSObject[0]
+                    );
 
                 if ( foreachScope.Flags == BSScopeFlags.Continue )
                 {
@@ -175,6 +176,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
         }
 
         #endregion
+
     }
 
 }

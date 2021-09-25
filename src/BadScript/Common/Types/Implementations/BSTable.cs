@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
@@ -15,6 +16,7 @@ namespace BadScript.Common.Types.Implementations
 
     public class BSTable : ABSTable, IEnumerable < IForEachIteration >
     {
+
         private readonly Dictionary < ABSObject, ABSObject > m_InnerTable =
             new Dictionary < ABSObject, ABSObject >();
 
@@ -44,8 +46,8 @@ namespace BadScript.Common.Types.Implementations
 
             foreach ( string key in keys )
             {
-                int v = ( int ) Enum.Parse( typeof( T ), key );
-                t.InsertElement( new BSObject( key ), new BSObject( ( decimal ) v ) );
+                int v = ( int )Enum.Parse( typeof( T ), key );
+                t.InsertElement( new BSObject( key ), new BSObject( ( decimal )v ) );
             }
 
             return t;
@@ -151,18 +153,18 @@ namespace BadScript.Common.Types.Implementations
             {
                 List < string > keyLines = bsRuntimeObject.Key.SafeToString( doneList ).
                                                            Split(
-                                                               new[] { '\n' },
-                                                               StringSplitOptions.RemoveEmptyEntries
-                                                           ).
+                                                                 new[] { '\n' },
+                                                                 StringSplitOptions.RemoveEmptyEntries
+                                                                ).
                                                            Select( x => x.Trim() ).
                                                            Where( x => !string.IsNullOrEmpty( x ) ).
                                                            ToList();
 
                 List < string > valueLines = bsRuntimeObject.Value.SafeToString( doneList ).
                                                              Split(
-                                                                 new[] { '\n' },
-                                                                 StringSplitOptions.RemoveEmptyEntries
-                                                             ).
+                                                                   new[] { '\n' },
+                                                                   StringSplitOptions.RemoveEmptyEntries
+                                                                  ).
                                                              Select( x => x.Trim() ).
                                                              Where( x => !string.IsNullOrEmpty( x ) ).
                                                              ToList();
@@ -207,9 +209,9 @@ namespace BadScript.Common.Types.Implementations
 
         public override bool TryConvertBool( out bool v )
         {
-            v = true;
+            v = false;
 
-            return true;
+            return false;
         }
 
         public override bool TryConvertDecimal( out decimal d )
@@ -236,6 +238,7 @@ namespace BadScript.Common.Types.Implementations
         }
 
         #endregion
+
     }
 
 }

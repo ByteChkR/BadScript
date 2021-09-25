@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -11,21 +12,27 @@ namespace BadScript.Settings
 
     public class BSEngineSettings
     {
+
         public readonly BSParserSettings ParserSettings;
         public readonly List < ABSScriptInterface > Interfaces;
         public readonly List < string > ActiveInterfaces;
         public readonly List < string > IncludeDirectories;
 
-        public ABSScriptInterface[] ActiveGlobalInterfaces => FindInterfaces(
-                true,
-                Interfaces,
-                ParseInterfaceNames( ActiveInterfaces ) ).
-            ToArray();
-        public ABSScriptInterface[] ActiveLocalInterfaces => FindInterfaces(
-                false,
-                Interfaces,
-                ParseInterfaceNames( ActiveInterfaces ) ).
-            ToArray();
+        public ABSScriptInterface[] ActiveGlobalInterfaces =>
+            FindInterfaces(
+                           true,
+                           Interfaces,
+                           ParseInterfaceNames( ActiveInterfaces )
+                          ).
+                ToArray();
+
+        public ABSScriptInterface[] ActiveLocalInterfaces =>
+            FindInterfaces(
+                           false,
+                           Interfaces,
+                           ParseInterfaceNames( ActiveInterfaces )
+                          ).
+                ToArray();
 
         #region Public
 
@@ -37,9 +44,9 @@ namespace BadScript.Settings
             ParserSettings = parserSettings;
         }
 
-        public static BSEngineSettings MakeDefault( BSParserSettings parserSettings )
+        public static BSEngineSettings MakeDefault( BSParserSettings parserSettings = null )
         {
-            BSEngineSettings s = new BSEngineSettings( parserSettings );
+            BSEngineSettings s = new BSEngineSettings( parserSettings ?? BSParserSettings.Default );
             s.ActiveInterfaces.Add( "#core" );
             s.ActiveInterfaces.Add( "#console" );
 
@@ -49,9 +56,10 @@ namespace BadScript.Settings
         public BSEngine Build( bool addEnvironmentApi = true )
         {
             BSEngine instance = new BSEngine(
-                ParserSettings,
-                GetInterfaceData( ActiveLocalInterfaces ),
-                Interfaces );
+                                             ParserSettings,
+                                             GetInterfaceData( ActiveLocalInterfaces ),
+                                             Interfaces
+                                            );
 
             AddGlobalInterfaces( instance, ActiveGlobalInterfaces );
 
@@ -99,7 +107,6 @@ namespace BadScript.Settings
 
             foreach ( ABSScriptInterface bsScriptInterface in interfaces )
             {
-
                 ABSTable t;
 
                 if ( !o.TryGetValue( bsScriptInterface.Name, out t ) )
@@ -111,7 +118,7 @@ namespace BadScript.Settings
                 bsScriptInterface.AddApi( t );
             }
 
-            return o.ToDictionary( x => x.Key, x => ( ABSObject ) x.Value );
+            return o.ToDictionary( x => x.Key, x => ( ABSObject )x.Value );
         }
 
         private static void LoadDirectory( BSEngine instance, string dir )
@@ -143,6 +150,7 @@ namespace BadScript.Settings
         }
 
         #endregion
+
     }
 
 }

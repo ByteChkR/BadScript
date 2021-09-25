@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types.Implementations;
@@ -14,8 +15,10 @@ namespace BadScript.Common.Types
 
     public class BSFunction : ABSObject
     {
+
         private class BSCachedFunction
         {
+
             private ABSReference m_Reference;
             private readonly Func < ABSReference > m_Creator;
 
@@ -29,6 +32,7 @@ namespace BadScript.Common.Types
             }
 
             #endregion
+
         }
 
         private static readonly Dictionary < Thread, Stack < BSFunction > > s_Stacks =
@@ -39,6 +43,7 @@ namespace BadScript.Common.Types
 
         private readonly List < BSFunction > m_Hooks = new List < BSFunction >();
         private readonly Dictionary < string, BSCachedFunction > m_Properties;
+
         private Func < ABSObject[],
             ABSObject > m_Func;
 
@@ -203,8 +208,9 @@ namespace BadScript.Common.Types
             if ( args.Length < min || args.Length > max )
             {
                 throw new BSRuntimeException(
-                    Position,
-                    $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}" );
+                                             Position,
+                                             $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}"
+                                            );
             }
 
             ABSObject or = m_Func( args );
@@ -237,24 +243,23 @@ namespace BadScript.Common.Types
 
         public override bool TryConvertBool( out bool v )
         {
-            v = true;
+            v = false;
 
-            return true;
+            return false;
         }
 
         public override bool TryConvertDecimal( out decimal d )
         {
-            d = 1;
+            d = 0;
 
             return false;
         }
 
         public override bool TryConvertString( out string v )
         {
-            v = m_DebugData ?? m_Func.ToString();
-            ;
+            v = null;
 
-            return true;
+            return false;
         }
 
         #endregion
@@ -272,36 +277,63 @@ namespace BadScript.Common.Types
             m_Properties = new();
 
             m_Properties["invoke"] = new BSCachedFunction(
-                () => new BSFunctionReference(
-                    new BSFunction(
-                        "function invoke(args)/invoke(args, execHooks)",
-                        x =>
-                        {
-                            if ( x.Length == 1 )
-                            {
-                                return Invoke( ( x[0].ResolveReference() as BSArray ).Elements );
-                            }
+                                                          () => new BSFunctionReference(
+                                                               new BSFunction(
+                                                                              "function invoke(args)/invoke(args, execHooks)",
+                                                                              x =>
+                                                                              {
+                                                                                  if ( x.Length == 1 )
+                                                                                  {
+                                                                                      return Invoke(
+                                                                                           ( x[0].ResolveReference() as
+                                                                                                   BSArray ).
+                                                                                           Elements
+                                                                                          );
+                                                                                  }
 
-                            return Invoke(
-                                ( x[0].ResolveReference() as BSArray ).Elements,
-                                x[1].ConvertBool() );
-                        },
-                        1,
-                        2 )
-                )
-            );
+                                                                                  return Invoke(
+                                                                                       ( x[0].ResolveReference() as
+                                                                                               BSArray ).Elements,
+                                                                                       x[1].ConvertBool()
+                                                                                      );
+                                                                              },
+                                                                              1,
+                                                                              2
+                                                                             )
+                                                              )
+                                                         );
 
             m_Properties["hook"] =
                 new BSCachedFunction(
-                    () => new BSFunctionReference( new BSFunction( "function hook(hookFunc)", HookFunction, 1 ) ) );
+                                     () => new BSFunctionReference(
+                                                                   new BSFunction(
+                                                                        "function hook(hookFunc)",
+                                                                        HookFunction,
+                                                                        1
+                                                                       )
+                                                                  )
+                                    );
 
             m_Properties["releaseHook"] =
                 new BSCachedFunction(
-                    () => new BSFunctionReference(
-                        new BSFunction( "function releaseHook(hookFunc)", ReleaseHookFunction, 1 ) ) );
+                                     () => new BSFunctionReference(
+                                                                   new BSFunction(
+                                                                        "function releaseHook(hookFunc)",
+                                                                        ReleaseHookFunction,
+                                                                        1
+                                                                       )
+                                                                  )
+                                    );
 
             m_Properties["releaseHooks"] = new BSCachedFunction(
-                () => new BSFunctionReference( new BSFunction( "function releaseHook()", ReleaseHooksFunction, 0 ) ) );
+                                                                () => new BSFunctionReference(
+                                                                     new BSFunction(
+                                                                          "function releaseHook()",
+                                                                          ReleaseHooksFunction,
+                                                                          0
+                                                                         )
+                                                                    )
+                                                               );
         }
 
         private static BSFunction PeekStack()
@@ -338,7 +370,6 @@ namespace BadScript.Common.Types
 
         private ABSObject HookFunction( ABSObject[] arg )
         {
-
             if ( arg[0].ResolveReference() is BSFunction hook )
             {
                 AddHook( hook );
@@ -347,16 +378,15 @@ namespace BadScript.Common.Types
             }
 
             throw new BSInvalidTypeException(
-                SourcePosition.Unknown,
-                "Expected Function as argument.",
-                arg[0],
-                "BSFunction" );
-
+                                             SourcePosition.Unknown,
+                                             "Expected Function as argument.",
+                                             arg[0],
+                                             "BSFunction"
+                                            );
         }
 
         private ABSObject ReleaseHookFunction( ABSObject[] arg )
         {
-
             if ( arg[0].ResolveReference() is BSFunction hook )
             {
                 RemoveHook( hook );
@@ -365,10 +395,11 @@ namespace BadScript.Common.Types
             }
 
             throw new BSInvalidTypeException(
-                SourcePosition.Unknown,
-                "Expected Function as argument.",
-                arg[0],
-                "BSFunction" );
+                                             SourcePosition.Unknown,
+                                             "Expected Function as argument.",
+                                             arg[0],
+                                             "BSFunction"
+                                            );
         }
 
         private ABSObject ReleaseHooksFunction( ABSObject[] arg )
@@ -379,8 +410,7 @@ namespace BadScript.Common.Types
         }
 
         #endregion
-    }
 
-    #endregion
+    }
 
 }

@@ -7,6 +7,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Logic
 
     public class BSNotOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public BSNotOperatorImplementation() : base( "!" )
@@ -29,11 +30,11 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Logic
             ABSObject lVal = arg[0].ResolveReference();
             bool lD = lVal.ConvertBool();
 
-            return lD ? BSObject.One : BSObject.Zero;
-
+            return lD ? BSObject.False : BSObject.True;
         }
 
         #endregion
+
     }
 
 }

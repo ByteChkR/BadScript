@@ -1,4 +1,5 @@
 ﻿using System.Text;
+
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 
@@ -7,6 +8,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSEnumerableFunctionDefinitionExpression : BSExpression
     {
+
         public string Name;
         public bool Global;
         public BSFunctionParameter[] ArgNames;
@@ -34,11 +36,18 @@ namespace BadScript.Common.Expressions.Implementations.Block
             BSScope funcScope = new BSScope( BSScopeFlags.Function, scope );
 
             BSFunction f = new BSFunction(
-                m_Position,
-                GetHeader(),
-                x =>
-                    new BSFunctionEnumeratorObject( m_Position, GetHeader(), Block, CreateArgs( x ), funcScope ),
-                ArgNames.Length );
+                                          m_Position,
+                                          GetHeader(),
+                                          x =>
+                                              new BSFunctionEnumeratorObject(
+                                                                             m_Position,
+                                                                             GetHeader(),
+                                                                             Block,
+                                                                             CreateArgs( x ),
+                                                                             funcScope
+                                                                            ),
+                                          ArgNames.Length
+                                         );
 
             if ( string.IsNullOrEmpty( Name ) )
             {
@@ -55,6 +64,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
             }
 
             return f;
+        }
+
+        public override string ToString()
+        {
+            return GetHeader();
         }
 
         #endregion
@@ -108,6 +122,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         }
 
         #endregion
+
     }
 
 }

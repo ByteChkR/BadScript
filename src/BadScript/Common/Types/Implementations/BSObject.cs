@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types.References;
@@ -8,17 +9,23 @@ namespace BadScript.Common.Types.Implementations
 
     public class BSObject : ABSObject, IBSWrappedObject
     {
+
         public static readonly BSObject Null = new BSObject( null );
-        public static readonly BSObject One = new BSObject( ( decimal ) 1 );
-        public static readonly BSObject Zero = new BSObject( ( decimal ) 0 );
+
+        //public static readonly BSObject One = new BSObject((decimal)1);
+        //public static readonly BSObject Zero = new BSObject((decimal)0);
+        public static readonly BSObject True = new BSObject( true );
+        public static readonly BSObject False = new BSObject( false );
 
         protected readonly object m_InternalObject;
 
         public override bool IsNull => m_InternalObject == null;
 
-        public bool IsLiteral => IsNull ||
-                                 m_InternalObject is decimal ||
-                                 m_InternalObject is string;
+        public bool IsLiteral =>
+            IsNull ||
+            m_InternalObject is decimal ||
+            m_InternalObject is string ||
+            m_InternalObject is bool;
 
         #region Public
 
@@ -58,7 +65,6 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
-
             throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
@@ -96,18 +102,16 @@ namespace BadScript.Common.Types.Implementations
 
         public override bool TryConvertBool( out bool v )
         {
+            if ( m_InternalObject is bool b )
+            {
+                v = b;
+
+                return true;
+            }
+
             v = false;
 
-            if ( m_InternalObject is decimal d )
-            {
-                v = d != 0;
-            }
-            else if ( m_InternalObject != null )
-            {
-                v = true;
-            }
-
-            return true;
+            return false;
         }
 
         public override bool TryConvertDecimal( out decimal d )
@@ -117,23 +121,29 @@ namespace BadScript.Common.Types.Implementations
             if ( m_InternalObject is decimal dV )
             {
                 d = dV;
-            }
-            else if ( m_InternalObject != null )
-            {
-                d = 1;
+
+                return true;
             }
 
-            return !( m_InternalObject is string );
+            return false;
         }
 
         public override bool TryConvertString( out string v )
         {
-            v = m_InternalObject?.ToString() ?? "NULL";
+            if ( m_InternalObject is string s )
+            {
+                v = s;
 
-            return true;
+                return true;
+            }
+
+            v = null;
+
+            return false;
         }
 
         #endregion
+
     }
 
 }

@@ -8,6 +8,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Logic.Self
 
     public abstract class ABSSelfLogicOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public abstract bool Execute( bool l, bool r );
@@ -17,7 +18,17 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Logic.Self
             ABSObject lVal = arg[0];
             ABSObject rVal = arg[1];
 
-            return lVal.TryConvertBool( out bool _ ) && rVal.TryConvertBool( out bool _ );
+            if ( !lVal.TryConvertBool( out bool _ ) )
+            {
+                throw new BSRuntimeException( $"Can not convert object '{lVal}' to a boolean" );
+            }
+
+            if ( !rVal.TryConvertBool( out bool _ ) )
+            {
+                throw new BSRuntimeException( $"Can not convert object '{rVal}' to a boolean" );
+            }
+
+            return true;
         }
 
         #endregion
@@ -38,22 +49,23 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Logic.Self
                 bool lD = left.ConvertBool();
                 bool rD = right.ConvertBool();
 
-                lRef.Assign( Execute( lD, rD ) ? BSObject.One : BSObject.Zero );
+                lRef.Assign( Execute( lD, rD ) ? BSObject.True : BSObject.False );
 
                 return lRef;
             }
             else
             {
                 throw new BSInvalidTypeException(
-                    left.Position,
-                    "Expected Assignable Reference",
-                    left,
-                    "Reference"
-                );
+                                                 left.Position,
+                                                 "Expected Assignable Reference",
+                                                 left,
+                                                 "Reference"
+                                                );
             }
         }
 
         #endregion
+
     }
 
 }

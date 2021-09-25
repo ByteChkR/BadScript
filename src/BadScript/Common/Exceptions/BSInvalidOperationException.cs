@@ -6,11 +6,13 @@ namespace BadScript.Common.Exceptions
 
     public class BSInvalidOperationException : BSRuntimeException
     {
+
         #region Public
 
         public BSInvalidOperationException( SourcePosition pos, string op, params ABSObject[] o ) : base(
-            pos,
-            GenerateOperationErrorText( op, o ) )
+             pos,
+             GenerateOperationErrorText( op, o )
+            )
         {
         }
 
@@ -38,6 +40,7 @@ namespace BadScript.Common.Exceptions
         }
 
         #endregion
+
     }
 
 }

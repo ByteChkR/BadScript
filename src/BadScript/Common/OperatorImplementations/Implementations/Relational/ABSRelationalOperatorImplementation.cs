@@ -7,6 +7,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Relational
 
     public abstract class ABSRelationalOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public override bool IsCorrectImplementation( ABSObject[] arg )
@@ -34,10 +35,11 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Relational
             decimal lD = lVal.ConvertDecimal();
             decimal rD = rVal.ConvertDecimal();
 
-            return Execute( lD, rD ) ? BSObject.One : BSObject.Zero;
+            return Execute( lD, rD ) ? BSObject.True : BSObject.False;
         }
 
         #endregion
+
     }
 
 }

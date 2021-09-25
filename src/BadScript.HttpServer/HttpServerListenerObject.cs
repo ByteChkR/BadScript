@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
+
 using Ceen.Httpd;
 
 namespace BadScript.HttpServer
@@ -14,6 +16,7 @@ namespace BadScript.HttpServer
 
     public class HttpServerListenerObject : ABSObject
     {
+
         private BSTable m_InstanceFunctions;
         private Task m_Listener;
         private CancellationTokenSource m_TokenSource;
@@ -40,19 +43,28 @@ namespace BadScript.HttpServer
             m_UseSSL = useSsl;
 
             m_InstanceFunctions = new BSTable(
-                pos,
-                new Dictionary < ABSObject, ABSObject >
-                {
-                    { new BSObject( "stop" ), new BSFunction( "function stop()", StopListener, 0 ) },
-                    { new BSObject( "start" ), new BSFunction( "function start()", StartListener, 0 ) },
-                    {
-                        new BSObject( "isRunning" ), new BSFunction(
-                            "function isRunning()",
-                            objects => m_Listener == null ? BSObject.Zero : BSObject.One,
-                            0 )
-                    }
-                }
-            );
+                                              pos,
+                                              new Dictionary < ABSObject, ABSObject >
+                                              {
+                                                  {
+                                                      new BSObject( "stop" ),
+                                                      new BSFunction( "function stop()", StopListener, 0 )
+                                                  },
+                                                  {
+                                                      new BSObject( "start" ),
+                                                      new BSFunction( "function start()", StartListener, 0 )
+                                                  },
+                                                  {
+                                                      new BSObject( "isRunning" ), new BSFunction(
+                                                           "function isRunning()",
+                                                           objects => m_Listener == null
+                                                                          ? BSObject.False
+                                                                          : BSObject.True,
+                                                           0
+                                                          )
+                                                  }
+                                              }
+                                             );
         }
 
         public override bool Equals( ABSObject other )
@@ -141,6 +153,7 @@ namespace BadScript.HttpServer
         }
 
         #endregion
+
     }
 
 }

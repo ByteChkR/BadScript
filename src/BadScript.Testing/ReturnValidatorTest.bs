@@ -1,0 +1,299 @@
+function testDirect()
+{
+	return null
+}
+
+function testIf1()
+{
+	if(true)
+	{
+		return true
+	}
+	else
+	{
+		return false
+	}
+}
+
+function testIf2()
+{
+	if(true)
+	{
+		return true
+	}
+	else
+	{
+
+	}
+	return false
+}
+
+function testIf3()
+{
+	if(true)
+	{
+		return true
+	}
+	
+	return false
+}
+
+
+function testIf4()
+{
+	if(true)
+	{
+		
+	}
+	else
+	{
+
+	}
+	return false
+}
+
+function testIf5()
+{
+	if(true)
+	{
+		
+	}
+	else
+	{
+
+	}
+}
+
+
+function testInvalidIf1()
+{
+	if(true)
+	{
+		return false
+	}
+	else
+	{
+
+	}
+}
+
+function testInvalidIf2()
+{
+	if(true)
+	{
+		return false
+	}
+}
+
+function testInvalidIf3()
+{
+	if(true)
+	{
+
+	}
+	else
+	{
+		return false
+	}
+}
+
+function testInvalidFor1()
+{
+	for i = 0 while< 10
+	{
+		return null
+	}
+}
+
+
+function testFor1()
+{
+	for i = 0 while< 10
+	{
+		return null
+	}
+	return null
+}
+
+
+function testFor2()
+{
+	for i = 0 while< 10
+	{
+	}
+}
+function testFor3()
+{
+	for i = 0 while< 10
+	{
+	}
+	return null
+}
+
+function testInvalidWhile()
+{
+	while(false)
+	{
+		return null
+	}
+}
+
+function testWhile1()
+{
+	while(false)
+	{
+		return null
+	}
+	return null
+}
+
+function testWhile2()
+{
+	while(false)
+	{
+		
+	}
+}
+
+function testWhile3()
+{
+	while(false)
+	{
+		
+	}
+	return null
+}
+
+function testTry1()
+{
+	try
+	{
+		return null
+	}
+	catch (e)
+	{
+		return null
+	}
+}
+
+function testTry2()
+{
+	try
+	{
+	}
+	catch (e)
+	{
+	}
+	return null
+}
+
+
+
+function testInvalidTry1()
+{
+	try
+	{
+		return null
+	}
+	catch (e)
+	{
+	}
+}
+
+function testInvalidTry2()
+{
+	try
+	{
+	}
+	catch (e)
+	{
+		return null
+	}
+}
+
+
+function testForeach1()
+{
+	a = []
+	foreach i in a 
+	{
+		return null
+	}
+	return null
+}
+function testForeach2()
+{
+	a = []
+	foreach i in a 
+	{
+	}
+}
+function testForeach3()
+{
+	a = []
+	foreach i in a 
+	{
+	}
+	return null
+}
+function testInvalidForeach1()
+{
+	a = []
+	foreach i in a 
+	{
+		return null
+	}
+}
+
+
+function mixedInvalidTest1()
+{
+	while(false)
+	{
+		if(true)
+		{
+			return null
+		}
+		else
+		{
+			return null
+		}
+	}
+}
+
+function mixedInvalidTest2()
+{
+	while(false)
+	{
+		if(true)
+		{
+			return null
+		}
+		else
+		{
+		}
+		return null
+	}
+}
+
+
+function mixedTest1()
+{
+	while(false)
+	{
+		if(true)
+		{
+			return null
+		}
+	}
+	return null
+}
+function mixedTest2()
+{
+	while(false)
+	{
+		if(true)
+		{
+		}
+	}
+}

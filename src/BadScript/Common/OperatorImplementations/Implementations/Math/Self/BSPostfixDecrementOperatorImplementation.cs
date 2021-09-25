@@ -8,6 +8,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Math.Self
 
     public class BSPostfixDecrementOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public BSPostfixDecrementOperatorImplementation() : base( "--_Post" )
@@ -16,7 +17,14 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Math.Self
 
         public override bool IsCorrectImplementation( ABSObject[] args )
         {
-            return args[0].TryConvertDecimal( out decimal _ );
+            ABSObject lVal = args[0];
+
+            if ( !lVal.TryConvertDecimal( out decimal _ ) )
+            {
+                throw new BSRuntimeException( $"Can not convert object '{lVal}' to a decimal" );
+            }
+
+            return true;
         }
 
         #endregion
@@ -37,16 +45,16 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Math.Self
             else
             {
                 throw new BSInvalidTypeException(
-                    left.Position,
-                    "Expected Assignable Reference",
-                    left,
-                    "Reference"
-                );
+                                                 left.Position,
+                                                 "Expected Assignable Reference",
+                                                 left,
+                                                 "Reference"
+                                                );
             }
-
         }
 
         #endregion
+
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types.References;
@@ -10,6 +11,7 @@ namespace BadScript.Common.Types
 
     public abstract class ABSObject : IEquatable < ABSObject >
     {
+
         public readonly SourcePosition Position;
 
         public static bool operator ==( ABSObject left, ABSObject right )
@@ -105,6 +107,7 @@ namespace BadScript.Common.Types
         }
 
         #endregion
+
     }
 
 }

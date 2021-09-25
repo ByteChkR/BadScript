@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
@@ -12,6 +13,7 @@ namespace BadScript.Xml
 
     public class XmlNodeObject : ABSObject
     {
+
         protected XmlNode m_Node;
         protected Dictionary < string, ABSReference > m_Properties = new Dictionary < string, ABSReference >();
 
@@ -24,55 +26,70 @@ namespace BadScript.Xml
             m_Node = node;
 
             m_Properties.Add(
-                "parentNode",
-                new BSReflectionReference( () => new XmlNodeObject( m_Node.ParentNode ), null ) );
+                             "parentNode",
+                             new BSReflectionReference( () => new XmlNodeObject( m_Node.ParentNode ), null )
+                            );
 
             m_Properties.Add(
-                "firstChild",
-                new BSReflectionReference( () => new XmlNodeObject( m_Node.FirstChild ), null ) );
+                             "firstChild",
+                             new BSReflectionReference( () => new XmlNodeObject( m_Node.FirstChild ), null )
+                            );
 
             m_Properties.Add(
-                "findChild",
-                new BSFunctionReference( new BSFunction( "function findChild(name)", FindChildByName, 1 ) ) );
+                             "findChild",
+                             new BSFunctionReference( new BSFunction( "function findChild(name)", FindChildByName, 1 ) )
+                            );
 
             m_Properties.Add(
-                "lastChild",
-                new BSReflectionReference( () => new XmlNodeObject( m_Node.LastChild ), null ) );
+                             "lastChild",
+                             new BSReflectionReference( () => new XmlNodeObject( m_Node.LastChild ), null )
+                            );
 
             m_Properties.Add(
-                "nextSibling",
-                new BSReflectionReference( () => new XmlNodeObject( m_Node.NextSibling ), null ) );
+                             "nextSibling",
+                             new BSReflectionReference( () => new XmlNodeObject( m_Node.NextSibling ), null )
+                            );
 
             m_Properties.Add(
-                "previousSibling",
-                new BSReflectionReference( () => new XmlNodeObject( m_Node.PreviousSibling ), null ) );
+                             "previousSibling",
+                             new BSReflectionReference( () => new XmlNodeObject( m_Node.PreviousSibling ), null )
+                            );
 
             m_Properties.Add(
-                "childCount",
-                new BSReflectionReference( () => new BSObject( ( decimal ) m_Node.ChildNodes.Count ), null ) );
+                             "childCount",
+                             new BSReflectionReference( () => new BSObject( ( decimal )m_Node.ChildNodes.Count ), null )
+                            );
 
             m_Properties.Add(
-                "childAt",
-                new BSFunctionReference( new BSFunction( "function childAt(index)", ChildAt, 1 ) ) );
+                             "childAt",
+                             new BSFunctionReference( new BSFunction( "function childAt(index)", ChildAt, 1 ) )
+                            );
 
             m_Properties.Add(
-                "value",
-                new BSReflectionReference(
-                    () => new BSObject( m_Node.Value ),
-                    o => m_Node.Value = o.ConvertString() ) );
+                             "value",
+                             new BSReflectionReference(
+                                                       () => new BSObject( m_Node.Value ),
+                                                       o => m_Node.Value = o.ConvertString()
+                                                      )
+                            );
 
             m_Properties.Add(
-                "innerText",
-                new BSReflectionReference(
-                    () => new BSObject( m_Node.InnerText ),
-                    o => m_Node.InnerText = o.ConvertString() ) );
+                             "innerText",
+                             new BSReflectionReference(
+                                                       () => new BSObject( m_Node.InnerText ),
+                                                       o => m_Node.InnerText = o.ConvertString()
+                                                      )
+                            );
 
             m_Properties.Add( "name", new BSReflectionReference( () => new BSObject( m_Node.Name ), null ) );
 
             m_Properties.Add(
-                "hasChildNodes",
-                new BSReflectionReference( () => m_Node.HasChildNodes ? BSObject.One : BSObject.Zero, null ) );
-
+                             "hasChildNodes",
+                             new BSReflectionReference(
+                                                       () => m_Node.HasChildNodes ? BSObject.True : BSObject.False,
+                                                       null
+                                                      )
+                            );
         }
 
         public override bool Equals( ABSObject other )
@@ -132,7 +149,7 @@ namespace BadScript.Xml
 
         private ABSObject ChildAt( ABSObject[] arg )
         {
-            return new XmlNodeObject( m_Node.ChildNodes[( int ) arg[0].ConvertDecimal()] );
+            return new XmlNodeObject( m_Node.ChildNodes[( int )arg[0].ConvertDecimal()] );
         }
 
         private ABSObject FindChildByName( ABSObject[] arg )
@@ -151,6 +168,7 @@ namespace BadScript.Xml
         }
 
         #endregion
+
     }
 
 }

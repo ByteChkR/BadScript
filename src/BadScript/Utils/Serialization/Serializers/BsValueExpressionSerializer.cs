@@ -1,4 +1,5 @@
 ﻿using System.IO;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
@@ -8,12 +9,14 @@ namespace BadScript.Utils.Serialization.Serializers
 
     public class BsValueExpressionSerializer : BSExpressionSerializer
     {
+
         #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.ValueDecimal ||
                    code == BSCompiledExpressionCode.ValueString ||
+                   code == BSCompiledExpressionCode.ValueBoolean ||
                    code == BSCompiledExpressionCode.ValueNull;
         }
 
@@ -24,7 +27,6 @@ namespace BadScript.Utils.Serialization.Serializers
 
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
         {
-
             if ( code == BSCompiledExpressionCode.ValueNull )
             {
                 return new BSValueExpression( SourcePosition.Unknown, null );
@@ -37,15 +39,20 @@ namespace BadScript.Utils.Serialization.Serializers
             {
                 return new BSValueExpression( SourcePosition.Unknown, s.DeserializeString() );
             }
+            else if ( code == BSCompiledExpressionCode.ValueBoolean )
+            {
+                return new BSValueExpression( SourcePosition.Unknown, s.DeserializeBool() );
+            }
 
             throw new BSInvalidOperationException(
-                SourcePosition.Unknown,
-                "Can not DeserializeExpression Expression: " + code );
+                                                  SourcePosition.Unknown,
+                                                  "Can not DeserializeExpression Expression: " + code
+                                                 );
         }
 
         public override void Serialize( BSExpression e, Stream b )
         {
-            BSValueExpression expr = ( BSValueExpression ) e;
+            BSValueExpression expr = ( BSValueExpression )e;
 
             if ( expr.SourceValue is string s )
             {
@@ -57,14 +64,19 @@ namespace BadScript.Utils.Serialization.Serializers
                 b.SerializeOpCode( BSCompiledExpressionCode.ValueDecimal );
                 b.SerializeDecimal( d );
             }
+            else if ( expr.SourceValue is bool boo )
+            {
+                b.SerializeOpCode( BSCompiledExpressionCode.ValueBoolean );
+                b.SerializeBool( boo );
+            }
             else if ( expr.SourceValue == null )
             {
                 b.SerializeOpCode( BSCompiledExpressionCode.ValueNull );
             }
-
         }
 
         #endregion
+
     }
 
 }

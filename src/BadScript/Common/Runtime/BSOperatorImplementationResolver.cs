@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.OperatorImplementations;
 using BadScript.Common.OperatorImplementations.Implementations;
@@ -16,42 +17,43 @@ namespace BadScript.Common.Runtime
 
     public static class BSOperatorImplementationResolver
     {
+
         public static bool AllowOperatorOverrides = true;
 
         private static readonly Dictionary < string, string > s_KeyMapping = new Dictionary < string, string >
-        {
-            { "++_Pre", "op_PreIncrement" },
-            { "--_Pre", "op_PreDecrement" },
-            { "++_Post", "op_PostIncrement" },
-            { "--_Post", "op_PostDecrement" },
-            { "+", "op_Plus" },
-            { "-", "op_Minus" },
-            { "*", "op_Multiply" },
-            { "/", "op_Divide" },
-            { "%", "op_Modulus" },
-            { "+=", "op_SelfPlus" },
-            { "-=", "op_SelfMinus" },
-            { "*=", "op_SelfMultiply" },
-            { "/=", "op_SelfDivide" },
-            { "%=", "op_SelfModulus" },
-            { "&&", "op_And" },
-            { "||", "op_Or" },
-            { "^", "op_XOr" },
-            { "&=", "op_SelfAnd" },
-            { "|=", "op_SelfOr" },
-            { "^=", "op_SelfXOr" },
-            { "==", "op_Equals" },
-            { "!=", "op_InEqual" },
-            { "<=", "op_LessOrEqual" },
-            { ">=", "op_GreaterOrEqual" },
-            { "<", "op_LessThan" },
-            { ">", "op_GreaterThan" },
-            { "!", "op_Not" },
-            { "??", "op_NullCheck" },
-            { "[]", "op_ArrayAccess" },
-            { ".", "op_PropertyAccess" },
-            { "()", "op_Invoke" },
-        };
+                                                                             {
+                                                                                 { "++_Pre", "op_PreIncrement" },
+                                                                                 { "--_Pre", "op_PreDecrement" },
+                                                                                 { "++_Post", "op_PostIncrement" },
+                                                                                 { "--_Post", "op_PostDecrement" },
+                                                                                 { "+", "op_Plus" },
+                                                                                 { "-", "op_Minus" },
+                                                                                 { "*", "op_Multiply" },
+                                                                                 { "/", "op_Divide" },
+                                                                                 { "%", "op_Modulus" },
+                                                                                 { "+=", "op_SelfPlus" },
+                                                                                 { "-=", "op_SelfMinus" },
+                                                                                 { "*=", "op_SelfMultiply" },
+                                                                                 { "/=", "op_SelfDivide" },
+                                                                                 { "%=", "op_SelfModulus" },
+                                                                                 { "&&", "op_And" },
+                                                                                 { "||", "op_Or" },
+                                                                                 { "^", "op_XOr" },
+                                                                                 { "&=", "op_SelfAnd" },
+                                                                                 { "|=", "op_SelfOr" },
+                                                                                 { "^=", "op_SelfXOr" },
+                                                                                 { "==", "op_Equals" },
+                                                                                 { "!=", "op_InEqual" },
+                                                                                 { "<=", "op_LessOrEqual" },
+                                                                                 { ">=", "op_GreaterOrEqual" },
+                                                                                 { "<", "op_LessThan" },
+                                                                                 { ">", "op_GreaterThan" },
+                                                                                 { "!", "op_Not" },
+                                                                                 { "??", "op_NullCheck" },
+                                                                                 { "[]", "op_ArrayAccess" },
+                                                                                 { ".", "op_PropertyAccess" },
+                                                                                 { "()", "op_Invoke" },
+                                                                             };
 
         private static List < ABSOperatorImplementation > m_Implementations;
 
@@ -87,9 +89,9 @@ namespace BadScript.Common.Runtime
             }
 
             ABSOperatorImplementation imp = m_Implementations.
-                LastOrDefault( x => x.OperatorKey == key && x.IsCorrectImplementation( args ) );
+                LastOrDefault( x => x.OperatorKey == key );
 
-            if ( imp != null )
+            if ( imp != null && imp.IsCorrectImplementation( args ) )
             {
                 return imp;
             }
@@ -144,10 +146,10 @@ namespace BadScript.Common.Runtime
             m_Implementations.Add( new BSArrayAccessOperatorImplementation() );
             m_Implementations.Add( new BSPropertyExpressionImplementation() );
             m_Implementations.Add( new BSInvocationExpressionOperatorImplementation() );
-
         }
 
         #endregion
+
     }
 
 }

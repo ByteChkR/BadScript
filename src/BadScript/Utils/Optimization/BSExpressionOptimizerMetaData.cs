@@ -7,6 +7,7 @@ namespace BadScript.Utils.Optimization
 
     public class BSExpressionOptimizerMetaData
     {
+
         public BSCompiledExpressionCode ExpressionCode;
         public object Value;
 
@@ -28,15 +29,21 @@ namespace BadScript.Utils.Optimization
             {
                 ExpressionCode = BSCompiledExpressionCode.ValueDecimal;
             }
+            else if ( o is bool )
+            {
+                ExpressionCode = BSCompiledExpressionCode.ValueBoolean;
+            }
             else
             {
                 throw new BSInvalidOperationException(
-                    SourcePosition.Unknown,
-                    "Can not Create Meta Data for object: " + o );
+                                                      SourcePosition.Unknown,
+                                                      "Can not Create Meta Data for object: " + o
+                                                     );
             }
         }
 
         #endregion
+
     }
 
 }

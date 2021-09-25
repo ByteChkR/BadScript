@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
@@ -15,6 +16,7 @@ namespace BadScript.Common.Types.Implementations
 
     public class BSArray : ABSArray, IEnumerable < IForEachIteration >
     {
+
         private bool m_Locked = false;
         private readonly Dictionary < string, BSFunction > m_Functions;
 
@@ -187,9 +189,9 @@ namespace BadScript.Common.Types.Implementations
 
         public override bool TryConvertBool( out bool v )
         {
-            v = true;
+            v = false;
 
-            return true;
+            return false;
         }
 
         public override bool TryConvertDecimal( out decimal d )
@@ -212,113 +214,121 @@ namespace BadScript.Common.Types.Implementations
 
         private BSArray( SourcePosition pos, List < ABSObject > o ) : base( pos )
         {
-
             m_InnerArray = o;
 
             m_Functions = new Dictionary < string, BSFunction >();
 
             m_Functions["clear"] = new BSFunction(
-                "function clear()",
-                objects =>
-                {
-                    m_InnerArray.Clear();
+                                                  "function clear()",
+                                                  objects =>
+                                                  {
+                                                      m_InnerArray.Clear();
 
-                    return BSObject.Null;
-                },
-                0 );
+                                                      return BSObject.Null;
+                                                  },
+                                                  0
+                                                 );
 
             m_Functions["size"] = new BSFunction(
-                "function size()",
-                objects => new BSObject( ( decimal ) m_InnerArray.Count ),
-                0 );
+                                                 "function size()",
+                                                 objects => new BSObject( ( decimal )m_InnerArray.Count ),
+                                                 0
+                                                );
 
             m_Functions["add"] = new BSFunction(
-                "function add(obj0, obj1, obj2, ...)",
-                objects =>
-                {
-                    m_InnerArray.AddRange( objects.Select( x => x.ResolveReference() ) );
+                                                "function add(obj0, obj1, obj2, ...)",
+                                                objects =>
+                                                {
+                                                    m_InnerArray.AddRange(
+                                                                          objects.Select( x => x.ResolveReference() )
+                                                                         );
 
-                    return BSObject.Null;
-                },
-                1,
-                int.MaxValue );
+                                                    return BSObject.Null;
+                                                },
+                                                1,
+                                                int.MaxValue
+                                               );
 
             m_Functions["remove"] = new BSFunction(
-                "function remove(obj0, obj1, obj2, ...)",
-                objects =>
-                {
-                    foreach ( ABSObject absObject in objects )
-                    {
-                        m_InnerArray.Remove( absObject.ResolveReference() );
-                    }
+                                                   "function remove(obj0, obj1, obj2, ...)",
+                                                   objects =>
+                                                   {
+                                                       foreach ( ABSObject absObject in objects )
+                                                       {
+                                                           m_InnerArray.Remove( absObject.ResolveReference() );
+                                                       }
 
-                    return BSObject.Null;
-                },
-                1,
-                int.MaxValue );
+                                                       return BSObject.Null;
+                                                   },
+                                                   1,
+                                                   int.MaxValue
+                                                  );
 
             m_Functions["removeAt"] = new BSFunction(
-                "function removeAt(index0, index1, index2, ...)",
-                objects =>
-                {
-                    foreach ( ABSObject absObject in objects )
-                    {
-                        m_InnerArray.RemoveAt( ( int ) absObject.ConvertDecimal() );
-                    }
+                                                     "function removeAt(index0, index1, index2, ...)",
+                                                     objects =>
+                                                     {
+                                                         foreach ( ABSObject absObject in objects )
+                                                         {
+                                                             m_InnerArray.RemoveAt( ( int )absObject.ConvertDecimal() );
+                                                         }
 
-                    return BSObject.Null;
-                },
-                1,
-                int.MaxValue );
+                                                         return BSObject.Null;
+                                                     },
+                                                     1,
+                                                     int.MaxValue
+                                                    );
 
             m_Functions["swap"] = new BSFunction(
-                "function swap(idx1, idx2)",
-                objects =>
-                {
-                    int i0 = ( int ) objects[0].ConvertDecimal();
-                    int i1 = ( int ) objects[1].ConvertDecimal();
-                    ABSObject o0 = m_InnerArray[i0];
+                                                 "function swap(idx1, idx2)",
+                                                 objects =>
+                                                 {
+                                                     int i0 = ( int )objects[0].ConvertDecimal();
+                                                     int i1 = ( int )objects[1].ConvertDecimal();
+                                                     ABSObject o0 = m_InnerArray[i0];
 
-                    m_InnerArray[i0] =
-                        m_InnerArray[i1];
+                                                     m_InnerArray[i0] =
+                                                         m_InnerArray[i1];
 
-                    m_InnerArray[i1] = o0;
+                                                     m_InnerArray[i1] = o0;
 
-                    return BSObject.Null;
-                },
-                2 );
+                                                     return BSObject.Null;
+                                                 },
+                                                 2
+                                                );
 
             m_Functions["reverse"] = new BSFunction(
-                "function reverse()",
-                objects =>
-                {
-                    m_InnerArray.Reverse();
+                                                    "function reverse()",
+                                                    objects =>
+                                                    {
+                                                        m_InnerArray.Reverse();
 
-                    return BSObject.Null;
-                },
-                0 );
+                                                        return BSObject.Null;
+                                                    },
+                                                    0
+                                                   );
 
             m_Functions["contentEquals"] = new BSFunction( "function contentEquals(array)", ArrayContentEquals, 1 );
         }
 
         private ABSObject ArrayContentEquals( ABSObject[] arg )
         {
-            BSArray a = ( BSArray ) arg[0].ResolveReference();
+            BSArray a = ( BSArray )arg[0].ResolveReference();
 
             if ( a.m_InnerArray.Count != m_InnerArray.Count )
             {
-                return BSObject.Zero;
+                return BSObject.False;
             }
 
             for ( int i = 0; i < m_InnerArray.Count; i++ )
             {
                 if ( m_InnerArray[i] != a.m_InnerArray[i] )
                 {
-                    return BSObject.Zero;
+                    return BSObject.False;
                 }
             }
 
-            return BSObject.One;
+            return BSObject.True;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -327,6 +337,7 @@ namespace BadScript.Common.Types.Implementations
         }
 
         #endregion
+
     }
 
 }
