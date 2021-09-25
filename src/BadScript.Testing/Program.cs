@@ -1,4 +1,5 @@
-﻿using BadScript.Settings;
+﻿using BadScript.Common.Expressions;
+using BadScript.Settings;
 
 namespace BadScript.Testing
 {
@@ -12,7 +13,7 @@ namespace BadScript.Testing
         {
             BSEngineSettings es = BSEngineSettings.MakeDefault();
             BSEngine e = es.Build();
-            e.LoadFile( "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\ReturnValidatorTest.bs" );
+            e.LoadFile("D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\OptimizationTests.bs");
         }
 
         #endregion

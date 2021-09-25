@@ -1,0 +1,22 @@
+if(true)
+{
+	
+}
+else
+{
+	error("Invalid Optimization")
+}
+
+if(1 == 1)
+{
+	
+}
+else
+{
+	error("Invalid Optimization")
+}
+
+while(false)
+{
+	error("Invalid Optimization")
+}

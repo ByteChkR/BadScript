@@ -17,8 +17,17 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
         public BSValueExpression( SourcePosition srcPos, object o ) : base( srcPos )
         {
-            SourceValue = o;
-            m_Value = new BSObject( o );
+
+            if ( o is BSObject bso )
+            {
+                SourceValue = bso.GetInternalObject();
+                m_Value = bso;
+            }
+            else
+            {
+                SourceValue = o;
+                m_Value = new BSObject( o );
+            }
         }
 
         public override ABSObject Execute( BSScope scope )

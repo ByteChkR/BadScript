@@ -28,7 +28,7 @@
         ForExpr,
         BinaryExpr,
         UnaryExpr,
-
+        CustomBlock,
     }
 
 }

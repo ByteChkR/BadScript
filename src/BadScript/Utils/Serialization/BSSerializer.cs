@@ -28,6 +28,7 @@ namespace BadScript.Utils.Serialization
             new BsNullCheckPropertyExpressionSerializer(),
             new BsAssignExpressionSerializer(),
             new BsWhileExpressionSerializer(),
+            new BsBlockExpressionSerializer(),
             new BsTryExpressionSerializer(),
             new BsIfExpressionSerializer(),
             new BsEnumerableFunctionDefinitionExpressionSerializer(),
