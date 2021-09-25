@@ -43,7 +43,7 @@ namespace BadScript.Json
 
             if ( jsonT.Type == JTokenType.Boolean )
             {
-                return new BSObject( jsonT.Value < bool >() ? 1 : 0 );
+                return new BSObject( jsonT.Value < bool >() );
             }
 
             if ( jsonT.Type == JTokenType.Float || jsonT.Type == JTokenType.Integer )
