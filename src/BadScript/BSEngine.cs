@@ -16,7 +16,7 @@ using BadScript.Interfaces;
 using BadScript.Settings;
 using BadScript.Utils.Optimization;
 using BadScript.Utils.Serialization;
-using BadScript.Validators;
+using BadScript.Utils.Validators;
 
 namespace BadScript
 {

@@ -46,6 +46,11 @@ namespace BadScript.Utils
                 new BSObject( "create" ),
                 new BSFunction( "function create(major, minor, revision, build)", CreateVersion, 4 ) );
 
+            obj.InsertElement(
+                              new BSObject( "runtimeVersion" ),
+                              new BSVersionObject( typeof( BSEngine ).Assembly.GetName().Version )
+                             );
+
             obj.InsertElement( new BSObject( "calVer" ), new BSFunction( "function calVer(build)", CreateCalVer, 1 ) );
         }
 

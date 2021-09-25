@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -8,7 +7,7 @@ using BadScript.Common.Expressions.Implementations.Block;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Expressions.Implementations.Value;
 
-namespace BadScript.Validators
+namespace BadScript.Utils.Validators
 {
 
     public class BSFunctionReturnExpressionValidator : BSExpressionValidator
@@ -149,10 +148,6 @@ namespace BadScript.Validators
                                                         expressions
                                                        )
                               );
-            }
-            else
-            {
-                Console.WriteLine( "Valid Function: " + ( root?.ToString() ?? "GLOBAL" ) );
             }
         }
 

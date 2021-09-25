@@ -1,7 +1,7 @@
 ﻿using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 
-namespace BadScript.Validators
+namespace BadScript.Utils.Validators
 {
 
     public abstract class BSExpressionValidator
