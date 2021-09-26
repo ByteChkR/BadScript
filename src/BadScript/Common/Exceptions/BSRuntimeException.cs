@@ -9,7 +9,7 @@ namespace BadScript.Common.Exceptions
     public class BSRuntimeException : Exception
     {
 
-        public readonly SourcePosition Position;
+        public SourcePosition Position { get; }
 
         #region Public
 

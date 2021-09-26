@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+using BadScript.Common.Exceptions;
+
 namespace BadScript.Utils
 {
 
@@ -73,7 +75,7 @@ namespace BadScript.Utils
                 }
                 else
                 {
-                    throw new Exception( "Can not Find Settings: " + categoryName );
+                    throw new BSSettingsException( "Can not Find Settings: " + categoryName );
                 }
             }
 
@@ -96,7 +98,7 @@ namespace BadScript.Utils
                 }
                 else
                 {
-                    throw new Exception( "Can not Find Settings: " + settingName );
+                    throw new BSSettingsException( "Can not Find Settings: " + settingName );
                 }
             }
 

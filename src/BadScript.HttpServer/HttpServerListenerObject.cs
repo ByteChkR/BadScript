@@ -17,13 +17,13 @@ namespace BadScript.HttpServer
     public class HttpServerListenerObject : ABSObject
     {
 
-        private BSTable m_InstanceFunctions;
+        private readonly BSTable m_InstanceFunctions;
         private Task m_Listener;
-        private CancellationTokenSource m_TokenSource;
+        private readonly CancellationTokenSource m_TokenSource;
 
-        private ServerConfig m_Config;
-        private IPEndPoint m_EndPoint;
-        private bool m_UseSSL;
+        private readonly ServerConfig m_Config;
+        private readonly IPEndPoint m_EndPoint;
+        private readonly bool m_UseSSL;
 
         public override bool IsNull => false;
 
@@ -48,11 +48,11 @@ namespace BadScript.HttpServer
                                               {
                                                   {
                                                       new BSObject( "stop" ),
-                                                      new BSFunction( "function stop()", StopListener, 0 )
+                                                      new BSFunction( "function stop()", args => StopListener(), 0 )
                                                   },
                                                   {
                                                       new BSObject( "start" ),
-                                                      new BSFunction( "function start()", StartListener, 0 )
+                                                      new BSFunction( "function start()", args => StartListener(), 0 )
                                                   },
                                                   {
                                                       new BSObject( "isRunning" ), new BSFunction(
@@ -122,7 +122,7 @@ namespace BadScript.HttpServer
 
         #region Private
 
-        private ABSObject StartListener( ABSObject[] arg )
+        private ABSObject StartListener()
         {
             if ( m_Listener == null )
             {
@@ -136,7 +136,7 @@ namespace BadScript.HttpServer
             return BSObject.Null;
         }
 
-        private ABSObject StopListener( ABSObject[] arg )
+        private ABSObject StopListener()
         {
             if ( m_Listener != null )
             {

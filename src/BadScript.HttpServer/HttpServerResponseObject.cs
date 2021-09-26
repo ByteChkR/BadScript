@@ -16,7 +16,7 @@ namespace BadScript.HttpServer
     public class HttpServerResponseObject : ABSObject
     {
 
-        private BSTable m_InstanceFunctions;
+        private readonly BSTable m_InstanceFunctions;
         private IHttpResponse m_Response;
 
         public override bool IsNull => false;
@@ -40,24 +40,22 @@ namespace BadScript.HttpServer
                                               {
                                                   { new BSObject( "headers" ), new BSTable( pos, headers ) },
                                                   {
-                                                      new BSObject( "addHeader" ),
-                                                      new BSFunction(
-                                                                     "function addHeader(key, value)",
-                                                                     ResponseAddHeader,
-                                                                     2
-                                                                    )
+                                                      new BSObject( "addHeader" ), new BSFunction(
+                                                           "function addHeader(key, value)",
+                                                           ResponseAddHeader,
+                                                           2
+                                                          )
                                                   },
                                                   {
                                                       new BSObject( "redirect" ),
                                                       new BSFunction( "function redirect(url)", ResponseRedirect, 1 )
                                                   },
                                                   {
-                                                      new BSObject( "writeBody" ),
-                                                      new BSFunction(
-                                                                     "function writeBody(bodyStr)",
-                                                                     ResponseWriteBody,
-                                                                     1
-                                                                    )
+                                                      new BSObject( "writeBody" ), new BSFunction(
+                                                           "function writeBody(bodyStr)",
+                                                           ResponseWriteBody,
+                                                           1
+                                                          )
                                                   },
                                                   {
                                                       new BSObject( "setStatus" ), new BSFunction(

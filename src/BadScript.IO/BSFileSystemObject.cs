@@ -14,7 +14,7 @@ namespace BadScript.IO
     public class BSFileSystemObject : ABSObject
     {
 
-        private BSTable m_InstanceFunctions;
+        private readonly BSTable m_InstanceFunctions;
         private FileStream m_Stream;
         private readonly string m_FilePath;
 
@@ -34,7 +34,7 @@ namespace BadScript.IO
                                                   {
                                                       new BSObject( "close" ), new BSFunction(
                                                            "function close()",
-                                                           CloseFileStream,
+                                                           args => CloseFileStream(),
                                                            0
                                                           )
                                                   },
@@ -62,25 +62,25 @@ namespace BadScript.IO
                                                   {
                                                       new BSObject( "readLine" ), new BSFunction(
                                                            "function readLine()",
-                                                           ReadLine,
+                                                           args => ReadLine(),
                                                            0
                                                           )
                                                   },
                                                   {
                                                       new BSObject( "readbAll" ), new BSFunction(
                                                            "function readbAll()",
-                                                           ReadAllBinary,
+                                                           args => ReadAllBinary(),
                                                            0
                                                           )
                                                   },
                                                   {
                                                       new BSObject( "readAll" ),
-                                                      new BSFunction( "function readAll()", ReadAll, 0 )
+                                                      new BSFunction( "function readAll()", args => ReadAll(), 0 )
                                                   },
                                                   {
                                                       new BSObject( "getPosition" ), new BSFunction(
                                                            "function getPosition()",
-                                                           GetPosition,
+                                                           args => GetPosition(),
                                                            0
                                                           )
                                                   },
@@ -94,7 +94,7 @@ namespace BadScript.IO
                                                   {
                                                       new BSObject( "getLength" ), new BSFunction(
                                                            "function getLength()",
-                                                           GetLength,
+                                                           args => GetLength(),
                                                            0
                                                           )
                                                   },
@@ -164,7 +164,7 @@ namespace BadScript.IO
 
         #region Private
 
-        private ABSObject CloseFileStream( ABSObject[] arg )
+        private ABSObject CloseFileStream()
         {
             if ( m_Stream == null )
             {
@@ -177,7 +177,7 @@ namespace BadScript.IO
             return BSObject.Null;
         }
 
-        private ABSObject GetLength( ABSObject[] arg )
+        private ABSObject GetLength()
         {
             if ( m_Stream == null )
             {
@@ -187,7 +187,7 @@ namespace BadScript.IO
             return new BSObject( ( decimal )m_Stream.Length );
         }
 
-        private ABSObject GetPosition( ABSObject[] arg )
+        private ABSObject GetPosition()
         {
             if ( m_Stream == null )
             {
@@ -197,7 +197,7 @@ namespace BadScript.IO
             return new BSObject( ( decimal )m_Stream.Position );
         }
 
-        private ABSObject ReadAll( ABSObject[] arg )
+        private ABSObject ReadAll()
         {
             if ( m_Stream == null )
             {
@@ -211,7 +211,7 @@ namespace BadScript.IO
             }
         }
 
-        private ABSObject ReadAllBinary( ABSObject[] arg )
+        private ABSObject ReadAllBinary()
         {
             if ( m_Stream == null )
             {
@@ -225,7 +225,7 @@ namespace BadScript.IO
             return a;
         }
 
-        private ABSObject ReadLine( ABSObject[] arg )
+        private ABSObject ReadLine()
         {
             if ( m_Stream == null )
             {

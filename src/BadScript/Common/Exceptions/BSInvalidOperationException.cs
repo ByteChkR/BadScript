@@ -1,4 +1,6 @@
-﻿using BadScript.Common.Expressions;
+﻿using System.Text;
+
+using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 
 namespace BadScript.Common.Exceptions
@@ -22,7 +24,9 @@ namespace BadScript.Common.Exceptions
 
         private static string GenerateOperationErrorText( string op, ABSObject[] o )
         {
-            string r = $"Can not apply '{op}' between objects: ";
+            StringBuilder sb = new StringBuilder( "Can not apply '" );
+            sb.Append( op );
+            sb.Append( "' between objects: " );
 
             for ( int i = 0; i < o.Length; i++ )
             {
@@ -30,13 +34,13 @@ namespace BadScript.Common.Exceptions
 
                 if ( i != o.Length - 1 )
                 {
-                    r += r + ", ";
+                    sb.Append( ", " );
                 }
 
-                r += absObject;
+                sb.Append( absObject );
             }
 
-            return r;
+            return sb.ToString();
         }
 
         #endregion

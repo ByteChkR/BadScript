@@ -1,4 +1,6 @@
-﻿using BadScript.Common.Expressions;
+﻿using System.Text;
+
+using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 
 namespace BadScript.Common.Exceptions
@@ -26,14 +28,18 @@ namespace BadScript.Common.Exceptions
 
         private static string GenerateRuntimeMessage( string msg, ABSObject o, string[] acceptedTypes )
         {
-            string r = $"Runtime Exception: '{msg}'\nInvalid Object: {o}";
+            StringBuilder sb = new StringBuilder( "Runtime Exception: '" );
+            sb.Append( msg );
+            sb.Append( "'\nInvalid Object: " );
+            sb.Append( o );
 
             foreach ( string acceptedType in acceptedTypes )
             {
-                r += $"\nAccepted Type: {acceptedType}";
+                sb.Append( "\nAccepted Type: " );
+                sb.Append( acceptedType );
             }
 
-            return r;
+            return sb.ToString();
         }
 
         #endregion

@@ -8,9 +8,9 @@ namespace BadScript.IO
 
         private static readonly Crc s_Instance = new Crc();
 
-        private long[] m_PTable = new long[256];
+        private readonly long[] m_PTable = new long[256];
 
-        private long m_Poly = 0xEDB88320;
+        private readonly long m_Poly = 0xEDB88320;
 
         #region Public
 

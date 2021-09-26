@@ -1,6 +1,4 @@
-﻿using System;
-
-using BadScript.Common.Exceptions;
+﻿using BadScript.Common.Exceptions;
 
 namespace BadScript.Common.Types.References.Implementations
 {
@@ -43,7 +41,10 @@ namespace BadScript.Common.Types.References.Implementations
                 return m_SourceTable.GetRawElement( k );
             }
 
-            throw new Exception( $"Property '{k.SafeToString()}' is null in table '{m_SourceTable.SafeToString()}'" );
+            throw new BSRuntimeException(
+                                         m_Key.Position,
+                                         $"Property '{k.SafeToString()}' is null in table '{m_SourceTable.SafeToString()}'"
+                                        );
         }
 
         #endregion

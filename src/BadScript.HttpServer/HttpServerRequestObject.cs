@@ -17,8 +17,8 @@ namespace BadScript.HttpServer
     public class HttpServerRequestObject : ABSObject
     {
 
-        private BSTable m_InstanceFunctions;
-        private IHttpRequest m_Request;
+        private readonly BSTable m_InstanceFunctions;
+        private readonly IHttpRequest m_Request;
 
         public override bool IsNull => false;
 

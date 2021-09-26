@@ -11,8 +11,8 @@ namespace BadScript.Utils.Reflection
     public class BSReflectionReference : ABSReference
     {
 
-        private Func < ABSObject > m_Getter;
-        private Action < ABSObject > m_Setter;
+        private readonly Func < ABSObject > m_Getter;
+        private readonly Action < ABSObject > m_Setter;
 
         #region Public
 

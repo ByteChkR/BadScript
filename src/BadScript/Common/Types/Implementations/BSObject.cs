@@ -12,8 +12,6 @@ namespace BadScript.Common.Types.Implementations
 
         public static readonly BSObject Null = new BSObject( null );
 
-        //public static readonly BSObject One = new BSObject((decimal)1);
-        //public static readonly BSObject Zero = new BSObject((decimal)0);
         public static readonly BSObject True = new BSObject( true );
         public static readonly BSObject False = new BSObject( false );
 

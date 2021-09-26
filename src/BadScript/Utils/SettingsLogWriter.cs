@@ -20,7 +20,7 @@ namespace BadScript.Utils
         }
 
         private readonly Action < string > m_Write;
-        private SettingsLogSettings m_Settings;
+        private readonly SettingsLogSettings m_Settings;
 
         #region Public
 

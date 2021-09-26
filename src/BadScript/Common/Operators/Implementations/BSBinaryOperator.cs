@@ -9,8 +9,8 @@ namespace BadScript.Common.Operators.Implementations
     public class BSBinaryOperator : BSOperator
     {
 
-        private BSFunction m_OperatorImplementation;
-        private BSBinaryOperatorMetaData m_Meta;
+        private readonly BSFunction m_OperatorImplementation;
+        private readonly BSBinaryOperatorMetaData m_Meta;
 
         public override string OperatorKey { get; }
 

@@ -48,16 +48,16 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
                      new BSFunctionParameter[0],
                      new ABSObject[0]
                     );
-                
+
                 if ( ret != null )
                 {
                     scope.SetFlag( BSScopeFlags.Return, ret );
 
                     break;
                 }
-                else if (forScope.Flags == BSScopeFlags.Continue)
+                else if ( forScope.Flags == BSScopeFlags.Continue )
                 {
-                    forScope.SetFlag(BSScopeFlags.None);
+                    forScope.SetFlag( BSScopeFlags.None );
                 }
                 else if ( forScope.Flags == BSScopeFlags.Break )
                 {

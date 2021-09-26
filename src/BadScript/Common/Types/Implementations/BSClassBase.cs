@@ -17,7 +17,10 @@ namespace BadScript.Common.Types.Implementations
 
         #region Public
 
-        public static void Clear() => m_Classes.Clear();
+        public static void Clear()
+        {
+            m_Classes.Clear();
+        }
 
         public static BSClassInstance CreateInstance( string name, BSEngine engine, ABSObject[] args )
         {
@@ -34,6 +37,7 @@ namespace BadScript.Common.Types.Implementations
                                              $"Can not Create Class Definition because a Type with the name '{expr.Name}' does already exist."
                                             );
             }
+
             m_Classes.Add( expr.Name, expr );
         }
 

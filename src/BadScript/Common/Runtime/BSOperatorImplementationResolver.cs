@@ -18,8 +18,6 @@ namespace BadScript.Common.Runtime
     public static class BSOperatorImplementationResolver
     {
 
-        public static bool AllowOperatorOverrides = true;
-
         private static readonly Dictionary < string, string > s_KeyMapping = new Dictionary < string, string >
                                                                              {
                                                                                  { "++_Pre", "op_PreIncrement" },
@@ -56,6 +54,8 @@ namespace BadScript.Common.Runtime
                                                                              };
 
         private static List < ABSOperatorImplementation > m_Implementations;
+
+        public static bool AllowOperatorOverrides { get; set; } = true;
 
         #region Public
 

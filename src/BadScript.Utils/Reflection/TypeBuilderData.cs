@@ -88,7 +88,6 @@ namespace BadScript.Utils.Reflection
 
         private static TypePropertyBuilderData GenerateData( Type t, PropertyInfo pi )
         {
-            Type pType = pi.PropertyType;
             TypeBuilderData tData = GetData( t );
             Action < object, ABSObject > setter = null;
 
@@ -109,7 +108,6 @@ namespace BadScript.Utils.Reflection
 
         private static TypePropertyBuilderData GenerateData( Type t, FieldInfo pi )
         {
-            Type pType = pi.FieldType;
             TypeBuilderData tData = GetData( t );
             Action < object, ABSObject > setter = null;
 
@@ -147,7 +145,7 @@ namespace BadScript.Utils.Reflection
             return ( min, max );
         }
 
-        private static TypePropertyBuilderData GenerateData( Type t, MethodInfo mi )
+        private static TypePropertyBuilderData GenerateData( MethodInfo mi )
         {
             TypeBuilderData tRet = GetData( mi.ReturnType );
 

@@ -168,8 +168,6 @@ namespace BadScript.IO
                                              "function combine(path0, path1, ...)",
                                              args =>
                                              {
-                                                 ABSObject o = args[0].ResolveReference();
-
                                                  return new BSObject(
                                                                      Path.Combine(
                                                                           args.Select(

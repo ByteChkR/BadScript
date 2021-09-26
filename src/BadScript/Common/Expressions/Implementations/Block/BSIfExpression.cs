@@ -46,9 +46,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
                          new ABSObject[0]
                         );
 
-
-                    
-
                     if ( ret != null )
                     {
                         scope.SetFlag( BSScopeFlags.Return, ret );

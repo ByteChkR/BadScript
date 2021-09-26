@@ -76,12 +76,12 @@ namespace BadScript.Tools.CodeGenerator
             wrappers[typeof( bool )] = new WrapperTypeInfo( "", "", "@{0} ? BSObject.One : BSObject.Zero", "" );
             wrappers[typeof( void )] = new WrapperTypeInfo( "", "", "", "" );
             wrappers[typeof( Type )] = new WrapperTypeInfo( "", "", "", "" );
-            ( string tsrc, string name ) = Generate( t, wrappers );
+            ( string _, string _ ) = Generate( t, wrappers );
 
             string src = GenerateSource( wrappers );
 
-            string usings = MakeUsings( wrappers.Keys.ToList() ) +
-                            "\nusing System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing BadScript.Tools.CodeGenerator.Runtime;\r\nusing BadScript.Common.Types;\r\nusing BadScript.Common.Types.Implementations;\r\nusing BadScript.Utils.Reflection;\n\n";
+            string usings =
+                "\nusing System;\nusing System.Collections.Generic;\nusing System.Linq;\nusing BadScript.Tools.CodeGenerator.Runtime;\r\nusing BadScript.Common.Types;\r\nusing BadScript.Common.Types.Implementations;\r\nusing BadScript.Utils.Reflection;\n\n";
 
             if ( dbName != null )
             {
@@ -1058,7 +1058,7 @@ namespace BadScript.Tools.CodeGenerator
 
             if ( !wrappers.ContainsKey( t ) )
             {
-                ( string src, string name ) = Generate( t, wrappers );
+                ( string _, string name ) = Generate( t, wrappers );
 
                 return name != "";
             }
@@ -1066,23 +1066,6 @@ namespace BadScript.Tools.CodeGenerator
             {
                 return wrappers[t].GeneratedClass != "";
             }
-        }
-
-        private static string MakeUsings( List < Type > ts )
-        {
-            string usings = "";
-            List < string > ns = new List < string >();
-
-            //foreach (Type type in ts)
-            //{
-            //    if (ns.Contains(type.Namespace))
-            //        continue;
-
-            //    ns.Add(type.Namespace);
-            //    usings += $"using {type.Namespace};\n";
-            //}
-
-            return usings;
         }
 
         #endregion

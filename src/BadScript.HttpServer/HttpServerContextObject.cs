@@ -14,8 +14,8 @@ namespace BadScript.HttpServer
     public class HttpServerContextObject : ABSObject
     {
 
-        private BSTable m_InstanceFunctions;
-        private IHttpContext m_Context;
+        private readonly BSTable m_InstanceFunctions;
+        private readonly IHttpContext m_Context;
 
         public override bool IsNull => false;
 

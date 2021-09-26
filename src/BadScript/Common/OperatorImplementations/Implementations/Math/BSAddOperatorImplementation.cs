@@ -26,28 +26,36 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Math
                     return new BSObject( lD + rD );
                 }
 
-                if (rVal.TryConvertString(out string rS))
+                if ( rVal.TryConvertString( out string rS ) )
                 {
-                    return new BSObject(lD + rS);
+                    return new BSObject( lD + rS );
                 }
 
                 throw new BSInvalidOperationException( lVal.Position, "+(Add)", lVal, rVal );
             }
 
-            if ( lVal.TryConvertString( out string lS ))
+            if ( lVal.TryConvertString( out string lS ) )
             {
-                if(rVal.TryConvertString(out string rStr))
+                if ( rVal.TryConvertString( out string rStr ) )
+                {
                     return new BSObject( lS + rStr );
-                else if (rVal.TryConvertDecimal(out decimal rD))
-                    return new BSObject(lS + rD);
-                else if (rVal.TryConvertBool(out bool rB))
-                    return new BSObject(lS + rB);
+                }
+                else if ( rVal.TryConvertDecimal( out decimal rD ) )
+                {
+                    return new BSObject( lS + rD );
+                }
+                else if ( rVal.TryConvertBool( out bool rB ) )
+                {
+                    return new BSObject( lS + rB );
+                }
             }
 
             if ( lVal.TryConvertBool( out bool lB ) )
             {
-                if (rVal.TryConvertString(out string rStr))
-                    return new BSObject(lB + rStr);
+                if ( rVal.TryConvertString( out string rStr ) )
+                {
+                    return new BSObject( lB + rStr );
+                }
             }
 
             throw new BSInvalidOperationException( lVal.Position, "+(Add)", lVal, rVal );

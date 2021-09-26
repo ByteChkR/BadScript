@@ -83,14 +83,14 @@ namespace BadScript.Common.Types.Implementations
 
         public ABSReference GetProperty( string propertyName, bool lockRef )
         {
-            ABSObject k = new BSObject(propertyName);
+            ABSObject k = new BSObject( propertyName );
 
-            if (HasElement(k))
+            if ( HasElement( k ) )
             {
-                return GetElement(k);
+                return GetElement( k );
             }
 
-            return new BSTableReference(this, k, lockRef);
+            return new BSTableReference( this, k, lockRef );
         }
 
         public override ABSReference GetProperty( string propertyName )

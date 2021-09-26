@@ -73,7 +73,7 @@ namespace BadScript.Utils.Validators
 
             foreach ( BSExpression bsExpression in block )
             {
-                if ( bsExpression is BSReturnExpression r )
+                if ( bsExpression is BSReturnExpression )
                 {
                     info.HasLocalReturn = true;
                     info.SubBranches.Clear();

@@ -53,8 +53,6 @@ namespace BadScript.Utils.Reflection
 
             foreach ( Assembly asm in asms )
             {
-                string fn = asm.FullName;
-
                 if ( asm.IsDynamic )
                 {
                     continue;

@@ -17,7 +17,7 @@ namespace BadScript.Utils.Optimization
     public static class BSExpressionOptimizer
     {
 
-        public static bool WriteLogs = true;
+        public static bool WriteLogs { get; set; } = true;
 
         #region Public
 

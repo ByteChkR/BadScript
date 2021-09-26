@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -81,7 +80,7 @@ namespace BadScript.HttpServer
 
                     if ( !File.Exists( sslFile ) )
                     {
-                        throw new Exception( $"SSL Certificate not Found: '{sslFile}'" );
+                        throw new BSRuntimeException( $"SSL Certificate not Found: '{sslFile}'" );
                     }
 
                     if ( sslConfig.HasElement( new BSObject( "cert-pass" ) ) )

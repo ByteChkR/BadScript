@@ -24,8 +24,6 @@ namespace BadScript
     public class BSEngine
     {
 
-        public readonly BSParserSettings ParserSettings;
-
         private static readonly List < BSExpressionValidator > s_Validators =
             new List < BSExpressionValidator > { new BSFunctionReturnExpressionValidator() };
 
@@ -33,6 +31,8 @@ namespace BadScript
         private readonly ABSTable m_StaticData;
         private readonly ABSTable m_GlobalTable;
         private readonly List < ABSScriptInterface > m_Interfaces;
+
+        public BSParserSettings ParserSettings { get; }
 
         public string[] InterfaceNames => m_Interfaces.Select( x => x.Name ).ToArray();
 

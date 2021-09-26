@@ -61,19 +61,19 @@ namespace BadScript.Common.Runtime
             m_LocalVars.InsertElement( new BSObject( name ), o );
         }
 
-        public ABSReference Get(string name)
+        public ABSReference Get( string name )
         {
-            if (m_LocalVars.HasElement(new BSObject(name)))
+            if ( m_LocalVars.HasElement( new BSObject( name ) ) )
             {
-                return m_LocalVars.GetProperty(name);
+                return m_LocalVars.GetProperty( name );
             }
 
-            if (m_Parent != null && m_Parent.HasLocal(name))
+            if ( m_Parent != null && m_Parent.HasLocal( name ) )
             {
-                return m_Parent.Get(name);
+                return m_Parent.Get( name );
             }
 
-            throw new BSRuntimeException("Can not Set Property: " + name);
+            throw new BSRuntimeException( "Can not Set Property: " + name );
         }
 
         public ABSReference Get( string name, bool readonlyRef )
@@ -85,7 +85,7 @@ namespace BadScript.Common.Runtime
 
             if ( m_Parent != null && m_Parent.HasLocal( name ) )
             {
-                return m_Parent.Get( name, readonlyRef);
+                return m_Parent.Get( name, readonlyRef );
             }
 
             throw new BSRuntimeException( "Can not Set Property: " + name );
@@ -190,8 +190,6 @@ namespace BadScript.Common.Runtime
         private BSScope()
         {
             m_LocalVars.InsertElement( new BSObject( "__SELF" ), new BSObject( this ) );
-
-            //m_LocalVars.InsertElement( new BSObject( "__L" ), m_LocalVars );
         }
 
         IEnumerator IEnumerable.GetEnumerator()

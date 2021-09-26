@@ -73,7 +73,7 @@ namespace BadScript.Common
 
                 if ( IsStringQuotes() )
                 {
-                    BSExpression e = ParseString();
+                    ParseString();
 
                     continue;
                 }
@@ -113,7 +113,6 @@ namespace BadScript.Common
 
         public BSExpression Parse( int start )
         {
-            //BSExpression expr = ParseWord();
             BSExpression expr = ParseValue();
 
             return Parse( expr, start );
@@ -706,7 +705,7 @@ namespace BadScript.Common
         }
 
 #if !DEBUG
-        private class ParserException : Exception
+        public class ParserException : Exception
         {
             public ParserException( Exception inner ) : base( inner.Message ){}
 
@@ -805,6 +804,12 @@ namespace BadScript.Common
                     string key = GetNextWord();
                     ReadWhitespaceAndNewLine();
                     string equal = ParseKeyword();
+
+                    if ( equal != "=" )
+                    {
+                        throw new BSParserException( $"Expected '=' after Property Name '{key}'" );
+                    }
+
                     ReadWhitespaceAndNewLine();
                     es[key] = ParseExpression( int.MaxValue );
                     ReadWhitespaceAndNewLine();
@@ -816,6 +821,12 @@ namespace BadScript.Common
                         key = GetNextWord();
                         ReadWhitespaceAndNewLine();
                         equal = ParseKeyword();
+
+                        if ( equal != "=" )
+                        {
+                            throw new BSParserException( $"Expected '=' after Property Name '{key}'" );
+                        }
+
                         ReadWhitespaceAndNewLine();
                         es[key] = ParseExpression( int.MaxValue );
                         ReadWhitespaceAndNewLine();

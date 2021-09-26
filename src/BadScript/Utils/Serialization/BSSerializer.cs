@@ -75,13 +75,6 @@ namespace BadScript.Utils.Serialization
             Serialize( src, s, BSSerializerHints.Default );
         }
 
-        //public static byte[] Serialize( BSExpression[] src )
-        //{
-        //    MemoryStream ms = new MemoryStream();
-        //    Serialize( src, ms );
-        //    return ms.ToArray();
-        //}
-
         internal static BSExpression[] DeserializeBlock( this Stream s )
         {
             int blockSize = s.DeserializeInt32();
@@ -113,8 +106,6 @@ namespace BadScript.Utils.Serialization
 
         internal static BSExpression DeserializeExpression( this Stream s )
         {
-            List < byte > ret = new List < byte >();
-
             BSCompiledExpressionCode code = s.DeserializeOpCode();
             BSExpressionSerializer c = s_Compilers.First( x => x.CanDeserialize( code ) );
 

@@ -20,11 +20,12 @@ namespace BadScript.Common.Types.Implementations
         public readonly string Name;
         private readonly BSScope m_InstanceScope;
 
+        private readonly BSClassInstance m_BaseInstance;
+
         public BSScope InstanceScope => m_InstanceScope;
 
         public override bool IsNull => false;
 
-        private readonly BSClassInstance m_BaseInstance;
         #region Public
 
         public BSClassInstance(
@@ -45,30 +46,14 @@ namespace BadScript.Common.Types.Implementations
 
             m_InstanceScope.AddLocalVar(
                                         "IsInstanceOf",
-                                        new BSFunction( "function IsInstanceOf(TypeName/TypeInstance)", IsInstanceOf, 1 )
+                                        new BSFunction(
+                                                       "function IsInstanceOf(TypeName/TypeInstance)",
+                                                       IsInstanceOf,
+                                                       1
+                                                      )
                                        );
 
             Name = name;
-        }
-
-        private ABSObject IsInstanceOf( ABSObject[] arg )
-        {
-            if ( !arg[0].TryConvertString( out string name ) )
-            {
-                name = arg[0].GetProperty( "GetType" ).Invoke( Array.Empty < ABSObject >() ).ConvertString();
-            }
-
-            BSClassInstance instance = this;
-
-            while ( instance!=null )
-            {
-                if ( instance.Name == name )
-                    return BSObject.True;
-
-                instance = instance.m_BaseInstance;
-            }
-
-            return BSObject.False;
         }
 
         public override bool Equals( ABSObject other )
@@ -83,12 +68,13 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
-            ABSObject k = new BSObject( propertyName );
-
             if ( m_InstanceScope.HasLocal( propertyName ) )
             {
                 if ( propertyName == "this" || propertyName == "base" )
+                {
                     return m_InstanceScope.Get( propertyName, true );
+                }
+
                 return m_InstanceScope.Get( propertyName );
             }
 
@@ -210,6 +196,28 @@ namespace BadScript.Common.Types.Implementations
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        private ABSObject IsInstanceOf( ABSObject[] arg )
+        {
+            if ( !arg[0].TryConvertString( out string name ) )
+            {
+                name = arg[0].GetProperty( "GetType" ).Invoke( Array.Empty < ABSObject >() ).ConvertString();
+            }
+
+            BSClassInstance instance = this;
+
+            while ( instance != null )
+            {
+                if ( instance.Name == name )
+                {
+                    return BSObject.True;
+                }
+
+                instance = instance.m_BaseInstance;
+            }
+
+            return BSObject.False;
         }
 
         #endregion

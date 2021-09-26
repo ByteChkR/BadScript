@@ -8,8 +8,8 @@ namespace BadScript.Common.Operators.Implementations
     public class BSUnaryOperator : BSOperator
     {
 
-        private BSFunction m_OperatorImplementation;
-        private BSUnaryOperatorMetaData m_Meta;
+        private readonly BSFunction m_OperatorImplementation;
+        private readonly BSUnaryOperatorMetaData m_Meta;
 
         public override string OperatorKey { get; }
 

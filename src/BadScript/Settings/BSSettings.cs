@@ -21,8 +21,7 @@ namespace BadScript.Settings
                 s_BsRoot = value;
                 ParserCategory = s_BsRoot.AddCategory( "parser" );
                 RuntimeCategory = s_BsRoot.AddCategory( "runtime" );
-                SettingsPair v= RuntimeCategory.SetSetting( "version", typeof( BSEngine ).Assembly.GetName().Version.ToString() );
-               
+                RuntimeCategory.SetSetting( "version", typeof( BSEngine ).Assembly.GetName().Version.ToString() );
             }
         }
 
@@ -57,7 +56,7 @@ namespace BadScript.Settings
             foreach ( string pair in pairs )
             {
                 string p = Path.Combine( directory, pair );
-                SettingsPair spair = cat.SetSetting( Path.GetFileNameWithoutExtension( pair ), File.ReadAllText( p ) );
+                cat.SetSetting( Path.GetFileNameWithoutExtension( pair ), File.ReadAllText( p ) );
             }
         }
 
@@ -119,7 +118,7 @@ namespace BadScript.Settings
 
         static BSSettings()
         {
-            BsRoot = SettingsCategory.CreateRoot( "bs" ); // SettingsRoot.Root.AddCategory( "bs" );
+            BsRoot = SettingsCategory.CreateRoot( "bs" );
         }
 
         private static void SaveToZip( ZipArchive za, SettingsCategory cat, string directory )

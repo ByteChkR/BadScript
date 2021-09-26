@@ -205,12 +205,12 @@ namespace BadScript.Core
 
                                                   if ( arg is ABSTable table )
                                                   {
-                                                      return  table.HasElement(
-                                                                                args[1].ResolveReference()
-                                                                               )
-                                                                   ? BSObject.True
-                                                                   : BSObject.False
-                                                                         ;
+                                                      return table.HasElement(
+                                                                              args[1].ResolveReference()
+                                                                             )
+                                                                 ? BSObject.True
+                                                                 : BSObject.False
+                                                          ;
                                                   }
 
                                                   throw new BSInvalidTypeException(
@@ -225,14 +225,14 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject("isTable"),
+                               new BSObject( "isTable" ),
                                new BSFunction(
                                               "function isTable(obj)",
-                                              (args) =>
+                                              ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
 
-                                                  if (arg is ABSTable)
+                                                  if ( arg is ABSTable )
                                                   {
                                                       return BSObject.True;
                                                   }
@@ -244,14 +244,14 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject("isType"),
+                               new BSObject( "isType" ),
                                new BSFunction(
                                               "function isType(obj)",
-                                              (args) =>
+                                              ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
 
-                                                  if (arg is BSClassInstance)
+                                                  if ( arg is BSClassInstance )
                                                   {
                                                       return BSObject.True;
                                                   }
