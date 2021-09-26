@@ -41,3 +41,4 @@ ignore:
   - "src/BadScript.Utils"  
   - "src/BadScript.Xml"  
   - "src/BadScript.Zip"  
+  - "src/BadScript.Console"  

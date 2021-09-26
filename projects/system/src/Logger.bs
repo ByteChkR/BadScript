@@ -1,0 +1,24 @@
+global class Logger
+{
+	function Write(obj)
+	{
+		error("No implementation for 'Logger.Write' in type " + GetType())
+	}
+
+	function WriteLine(obj)
+	{
+		error("No implementation for 'Logger.WriteLine' in type " + GetType())
+	}
+
+	function Clear()
+	{
+		error("No implementation for 'Logger.Clear' in type " + GetType())
+	}
+}
+
+global class ConsoleLogger : Logger
+{
+	function Write(obj) => write(obj)
+	function WriteLine(obj) => print(obj)
+	function Clear() => clear()
+}

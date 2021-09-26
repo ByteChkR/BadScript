@@ -106,14 +106,12 @@ namespace BadScript.Tests
         [TestCaseSource( nameof( TestFiles ) )]
         public void RunTest( string key )
         {
-            BSClassBase.Clear();
             string file = m_Files[key];
             BSExpression[] expressions = m_Engine.ParseFile( file );
             MemoryStream ms = new MemoryStream();
             BSSerializer.Serialize( expressions, ms );
             ms.Position = 0;
-
-            BSClassBase.Clear();
+            
 
             expressions = BSSerializer.Deserialize( ms );
 

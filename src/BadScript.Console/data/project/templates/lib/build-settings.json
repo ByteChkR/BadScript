@@ -1,0 +1,40 @@
+{
+  "AppInfo": {
+    "Name": "Library",
+    "Version": "0.0.0.1"
+  },
+  "BuildTargets": {
+    "Targets": [
+      {
+        "Name": "build",
+        "OutputFormat": "text",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "Include": [
+          "./src/*.bs"
+        ],
+        "SubTarget": "",
+        "References": [],
+        "PreEvents": [
+          "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
+        ],
+        "PostEvents": []
+      },
+      {
+        "Name": "run",
+        "OutputFormat": "text",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "Include": [
+          "./src/*.bs",
+          "./tests/*.bs"
+        ],
+        "SubTarget": "",
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": [
+          "%BS_EXEC% --nologo -f %Target.OutputFile%"
+        ]
+      }
+    ]
+  },
+  "ReferenceResolvers": {}
+}

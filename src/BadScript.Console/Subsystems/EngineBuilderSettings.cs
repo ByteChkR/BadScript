@@ -1,9 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 
-using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
 using BadScript.Http;
@@ -20,33 +18,34 @@ using BadScript.Utils.Reflection;
 using BadScript.Xml;
 using BadScript.Zip;
 
-using NUnit.Framework;
+using CommandLine;
 
-namespace BadScript.Tests
+namespace BadScript.Console.Subsystems
 {
 
-    public class ClassTests
+    public class EngineBuilderSettings : BSConsoleSettings
     {
 
-        private static Dictionary < string, string > m_Files = new Dictionary < string, string >();
+        [Option( "include", Default = null, HelpText = "A list of Directories that will be loaded prior to the execution" )]
+        public IEnumerable < string > IncludeDirectories { get; set; }
 
-        private BSEngine m_Engine;
+        [Option(
+                   "interfaces",
+                   HelpText =
+                       "A list of Interfaces that will be loaded prior to the execution. Prefix an Interface with '#' to load it into global scope."
+               )]
+        public IEnumerable < string > ActiveInterfaces { get; set; }
+
+        [Option( "optimize", Default = null, HelpText = "If specified the Parser will optimize the parsed output." )]
+        public bool AllowOptimizations { get; set; }
 
         #region Public
 
-        [Test]
-        [TestCaseSource( nameof( TestFiles ) )]
-        public void RunTest( string key )
+        public BSEngineSettings CreateEngineSettings()
         {
-            string file = m_Files[key];
-            ABSObject o = m_Engine.LoadFile( file );
-            Assert.IsTrue( o.ConvertBool() );
-        }
+            BSEngineSettings es =
+                BSEngineSettings.MakeDefault( new BSParserSettings { AllowOptimization = AllowOptimizations } );
 
-        [SetUp]
-        public void Setup()
-        {
-            BSEngineSettings es = BSEngineSettings.MakeDefault();
             es.Interfaces.Add( new BadScriptCoreApi() );
             es.Interfaces.Add( new ConsoleApi() );
             es.Interfaces.Add( new ConsoleColorApi() );
@@ -64,27 +63,21 @@ namespace BadScript.Tests
             es.Interfaces.Add( new BSReflectionScriptInterface() );
             es.Interfaces.Add( new VersionToolsInterface() );
             es.Interfaces.Add( new XmlInterface() );
-            m_Engine = es.Build();
-        }
 
-        #endregion
-
-        #region Private
-
-        private static string[] TestFiles()
-        {
-            string testDir = TestContext.CurrentContext.TestDirectory + "/tests/class/";
-            string[] files = Directory.GetFiles( testDir, "*", SearchOption.AllDirectories );
-
-            for ( int i = 0; i < files.Length; i++ )
+            string[] incDirs = IncludeDirectories.ToArray();
+            if (incDirs .Length!=0 )
             {
-                string file = files[i];
-                string key = file.Remove( 0, testDir.Length );
-                m_Files[key] = file;
-                files[i] = key;
+                es.IncludeDirectories.AddRange(incDirs);
             }
 
-            return files;
+            string[] interfaces = IncludeDirectories.ToArray();
+            if (interfaces.Length!=0)
+            {
+                es.ActiveInterfaces.Clear();
+                es.ActiveInterfaces.AddRange(interfaces);
+            }
+
+            return es;
         }
 
         #endregion

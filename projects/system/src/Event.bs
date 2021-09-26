@@ -1,0 +1,72 @@
+global class Event
+{
+	_listeners = []
+	_argcount = 0
+	_collectReturns = false
+	function Event(?argc, ?aggregateReturns)
+	{
+		_argcount = argc
+		if(_argcount == null)
+		{
+			_argcount = 0
+		}
+
+		_collectReturns = aggregateReturns
+		if(_collectReturns == null)
+		{
+			_collectReturns = false
+		}
+	}
+
+
+	function AddListener(event)
+	{
+		if(isFunction(event))
+		{
+			_listeners.add(event)
+			return this
+		}
+		error("Can not add '" + debug(event) + "' to Event Handler")
+	}
+
+	function RemoveListener(event)
+	{
+		if(isFunction(event))
+		{
+			_listeners.remove(event)
+			return this
+		}
+		error("Can not remove '" + debug(event) + "' from Event Handler")
+	}
+
+	function Invoke(*args)
+	{
+
+		if(args.size() != _argcount)
+		{
+			error("Invalid Argument Count. Expected: " + _argcount + " but got " + args.size())
+			return null
+		}
+		if(_collectReturns)
+		{
+			r = []
+			foreach subscriber in _listeners
+			{
+				sr = subscriber.invoke(args)
+				r.add(sr)
+			}
+			return r
+		}
+
+		foreach subscriber in _listeners
+		{
+			subscriber.invoke(args)
+		}
+		return null
+	}
+
+	function ClearListeners() => _listeners.clear()
+	op_SelfPlus = AddListener
+	op_SelfMinus = RemoveListener
+	op_Invoke = Invoke
+}

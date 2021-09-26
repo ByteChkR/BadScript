@@ -30,7 +30,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
                 args[i] = nameParameter.Execute( scope );
             }
 
-            return BSClassBase.CreateInstance( ( Name.Left as BSPropertyExpression ).Right, scope.Engine, args );
+            return scope.Engine.TypeDatabase.CreateInstance( ( Name.Left as BSPropertyExpression ).Right, scope.Engine, args );
         }
 
         #endregion

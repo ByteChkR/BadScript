@@ -1,0 +1,9 @@
+v4 = new Vector4(1,1,1,1)
+v3 = new Vector3(1,1,1)
+v2 = new Vector2(1,1)
+
+v = v4 + v3 + v2
+print(debug(v))
+
+v = v * 2
+print(debug(v))
