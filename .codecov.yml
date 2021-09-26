@@ -37,7 +37,6 @@ ignore:
   - "src/BadScript.StringUtils"  
   - "src/BadScript.Testing"  
   - "src/BadScript.Tools.CodeGenerator"  
-  - "src/BadScript.Tools.CodeGenerator.Runtime"  
-  - "src/BadScript.Utils"  
+  - "src/BadScript.Tools.CodeGenerator.Runtime"
   - "src/BadScript.Xml"  
   - "src/BadScript.Zip"  
