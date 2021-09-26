@@ -16,9 +16,9 @@ using BadScript.Math;
 using BadScript.Process;
 using BadScript.Settings;
 using BadScript.StringUtils;
+using BadScript.Utility.Serialization;
 using BadScript.Utils;
 using BadScript.Utils.Reflection;
-using BadScript.Utils.Serialization;
 using BadScript.Xml;
 using BadScript.Zip;
 

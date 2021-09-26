@@ -6,7 +6,7 @@ using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types;
 using BadScript.Common.Types.References;
-using BadScript.Utils;
+using BadScript.Utility;
 
 namespace BadScript.Interfaces.Settings
 {

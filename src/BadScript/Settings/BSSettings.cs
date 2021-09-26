@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 
-using BadScript.Utils;
+using BadScript.Utility;
 
 namespace BadScript.Settings
 {

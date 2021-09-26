@@ -14,9 +14,9 @@ using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 using BadScript.Interfaces;
 using BadScript.Settings;
-using BadScript.Utils.Optimization;
-using BadScript.Utils.Serialization;
-using BadScript.Utils.Validators;
+using BadScript.Utility.Optimization;
+using BadScript.Utility.Serialization;
+using BadScript.Utility.Validators;
 
 namespace BadScript
 {
