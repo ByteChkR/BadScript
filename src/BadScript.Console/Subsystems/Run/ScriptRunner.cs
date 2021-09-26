@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using BadScript.Console.Logging;
+
 namespace BadScript.Console.Subsystems.Run
 {
 

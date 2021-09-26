@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using BadScript.Common.Expressions;
+using BadScript.Console.Logging;
 using BadScript.Console.Subsystems.Project.BuildFormats;
 using BadScript.Console.Subsystems.Project.DataObjects;
 using BadScript.Console.Subsystems.Project.Utils;
@@ -24,7 +25,8 @@ namespace BadScript.Console.Subsystems.Project
             BuildTarget t = ps.BuildTargets.GetTarget( settings.BuildTarget );
 
             Build( Path.GetDirectoryName( Path.GetFullPath( p ) ), ps, t );
-            ConsoleWriter.SuccessLine("Command 'project make' finished!");
+            ConsoleWriter.SuccessLine( "Command 'project make' finished!" );
+
             return 0;
         }
 

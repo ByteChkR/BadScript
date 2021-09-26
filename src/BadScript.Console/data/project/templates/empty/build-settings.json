@@ -1,0 +1,23 @@
+{
+  "AppInfo": {
+    "Name": "Empty",
+    "Version": "0.0.0.1"
+  },
+  "BuildTargets": {
+    "Targets": [
+      {
+        "Name": "build",
+        "OutputFormat": "text",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "Include": [
+          "./src/*.bs"
+        ],
+        "SubTarget": "",
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": []
+      }
+    ]
+  },
+  "ReferenceResolvers": {}
+}

@@ -20,14 +20,11 @@
         "PostEvents": []
       },
       {
-        "Name": "test",
+        "Name": "run",
         "OutputFormat": "text",
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
-        "Include": [
-          "./src/*.bs",
-          "./tests/*.bs"
-        ],
-        "SubTarget": "",
+        "Include": [],
+        "SubTarget": "build",
         "References": [],
         "PreEvents": [],
         "PostEvents": [

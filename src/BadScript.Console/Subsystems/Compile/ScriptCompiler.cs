@@ -1,5 +1,6 @@
 ﻿using System.IO;
 
+using BadScript.Console.Logging;
 using BadScript.Utility.Serialization;
 
 namespace BadScript.Console.Subsystems.Compile
@@ -31,6 +32,7 @@ namespace BadScript.Console.Subsystems.Compile
             }
 
             ConsoleWriter.SuccessLine( "Command 'compile' finished!" );
+
             return 0;
         }
 

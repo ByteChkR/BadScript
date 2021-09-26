@@ -20,7 +20,7 @@
         "PostEvents": []
       },
       {
-        "Name": "run",
+        "Name": "test",
         "OutputFormat": "text",
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
         "Include": [

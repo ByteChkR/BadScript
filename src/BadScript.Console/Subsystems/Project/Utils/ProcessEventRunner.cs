@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Text;
 
+using BadScript.Console.Logging;
+
 namespace BadScript.Console.Subsystems.Project.Utils
 {
 

@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "System",
-    "Version": "2021.9.26.3"
+    "Version": "2021.9.26.0"
   },
   "BuildTargets": {
     "Targets": [
@@ -20,7 +20,7 @@
         "PostEvents": []
       },
       {
-        "Name": "run",
+        "Name": "test",
         "OutputFormat": "text",
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
         "Include": [

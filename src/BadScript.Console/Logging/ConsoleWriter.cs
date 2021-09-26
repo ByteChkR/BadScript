@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BadScript.Console.Subsystems
+namespace BadScript.Console.Logging
 {
 
     public static class ConsoleWriter

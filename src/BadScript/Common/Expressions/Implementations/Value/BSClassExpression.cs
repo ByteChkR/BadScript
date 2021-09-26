@@ -84,7 +84,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
                 InitExpressions["ToString"] = expr;
             }
-
         }
 
         public void AddClassData( BSScope scope )
@@ -97,7 +96,8 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
         public override ABSObject Execute( BSScope scope )
         {
-            scope.Engine.TypeDatabase.AddClass(this);
+            scope.Engine.TypeDatabase.AddClass( this );
+
             return BSObject.Null;
         }
 
