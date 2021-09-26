@@ -1,9 +1,9 @@
 $preBuildDir = "$pwd/tools/version-helper.bs"
 $solutionRoot = "$pwd/../src/"
-$consoleProjectPath = "$pwd/../../BadScript.Console/src/BadScript.Console.Desktop/BadScript.Console.Desktop.csproj"
+$consoleProjectPath = "$pwd/../src/BadScript.Console/BadScript.Console.csproj"
 
 echo "Running Pre Build Scripts"
-dotnet run --project $consoleProjectPath $preBuildDir $solutionRoot
+dotnet run --project $consoleProjectPath run --files $preBuildDir -a $solutionRoot
 
 pause
 
