@@ -1,0 +1,3 @@
+root = environment.settings
+test = root.AddSetting("testSetting", "Test Value")
+return test != null && test.IsPersistent

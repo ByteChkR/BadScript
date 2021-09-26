@@ -1,0 +1,3 @@
+root = environment.settings
+categories = root.Categories
+return categories != null

@@ -1,0 +1,14 @@
+a = [
+	1,
+	2
+]
+v = 0
+foreach e in a
+{
+	if(e == 2)
+	{
+		continue
+	}
+	v += e
+}
+return v == 1

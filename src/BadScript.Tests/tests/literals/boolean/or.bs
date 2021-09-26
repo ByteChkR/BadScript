@@ -1,0 +1,2 @@
+bool = false
+return bool || true

@@ -1,0 +1,11 @@
+r = false
+t = {
+	op_SelfMultiply = function(other)
+	{
+		r = other == 2
+		return t
+	}
+}
+t *= 2
+
+return r

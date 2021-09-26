@@ -1,0 +1,2 @@
+env = environment.loadInterface("environment")
+return env != null && isTable(env)

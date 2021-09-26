@@ -88,7 +88,7 @@ namespace BadScript.Core
 
                                                   if ( a is ABSTable t )
                                                   {
-                                                      return t.Keys;
+                                                      return t.Values;
                                                   }
 
                                                   throw new BSInvalidTypeException(
@@ -205,13 +205,12 @@ namespace BadScript.Core
 
                                                   if ( arg is ABSTable table )
                                                   {
-                                                      return new BSObject(
-                                                                          ( decimal )( table.HasElement(
-                                                                                       args[1].ResolveReference()
-                                                                                      )
-                                                                                      ? 1
-                                                                                      : 0 )
-                                                                         );
+                                                      return  table.HasElement(
+                                                                                args[1].ResolveReference()
+                                                                               )
+                                                                   ? BSObject.True
+                                                                   : BSObject.False
+                                                                         ;
                                                   }
 
                                                   throw new BSInvalidTypeException(

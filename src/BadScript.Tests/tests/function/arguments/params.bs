@@ -1,0 +1,9 @@
+r = false
+function f(*args)
+{
+	r = args.size() == 1 && args[0] == 2
+}
+
+f(2)
+
+return r

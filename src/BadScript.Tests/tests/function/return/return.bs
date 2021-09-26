@@ -1,0 +1,6 @@
+function f()
+{
+	return true
+}
+
+return f()

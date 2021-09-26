@@ -1,0 +1,10 @@
+v = 0
+for i = 0 while< 10
+{
+	if(i == 5)
+	{
+		break
+	}
+	v = i
+}
+return v == 4

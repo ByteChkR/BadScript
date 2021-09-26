@@ -1,0 +1,15 @@
+t = {
+	a = 1
+}
+
+lock(t)
+
+try
+{
+	t.a = 2
+}
+catch (e)
+{
+	return true
+}
+return false

@@ -1,0 +1,11 @@
+r = false
+t = {
+	op_Modulus = function(other)
+	{
+		r = other == 2
+		return t
+	}
+}
+x = t % 2
+
+return r

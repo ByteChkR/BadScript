@@ -1,0 +1,12 @@
+r = false
+t = {
+	op_PostDecrement = function()
+	{
+		r = true
+		return t
+	}
+}
+
+v = t--
+
+return r

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.Runtime;
@@ -16,6 +17,8 @@ namespace BadScript.Common.Types.Implementations
 
         #region Public
 
+        public static void Clear() => m_Classes.Clear();
+
         public static BSClassInstance CreateInstance( string name, BSEngine engine, ABSObject[] args )
         {
             BSScope classScope = new BSScope( engine );
@@ -25,6 +28,12 @@ namespace BadScript.Common.Types.Implementations
 
         internal static void AddClass( BSClassExpression expr )
         {
+            if ( m_Classes.ContainsKey( expr.Name ) )
+            {
+                throw new BSRuntimeException(
+                                             $"Can not Create Class Definition because a Type with the name '{expr.Name}' does already exist."
+                                            );
+            }
             m_Classes.Add( expr.Name, expr );
         }
 

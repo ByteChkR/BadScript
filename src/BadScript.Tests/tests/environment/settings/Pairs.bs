@@ -1,0 +1,3 @@
+root = environment.settings
+pairs = root.Pairs
+return pairs != null

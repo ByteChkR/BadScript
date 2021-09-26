@@ -1,0 +1,11 @@
+r = false
+t = {
+	op_Not = function()
+	{
+		r = true
+		return t
+	}
+}
+x = !t
+
+return r

@@ -1,0 +1,2 @@
+num = 3 * 10
+return num == 30

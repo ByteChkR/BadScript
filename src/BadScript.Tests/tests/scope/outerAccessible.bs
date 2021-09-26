@@ -1,0 +1,10 @@
+a = 1
+r = false
+function f()
+{
+	r = a == 1
+}
+
+f()
+
+return r

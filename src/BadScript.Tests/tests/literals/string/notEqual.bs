@@ -1,0 +1,2 @@
+str = "Hello World"
+return str != null

@@ -1,0 +1,3 @@
+root = environment.settings
+test = root.AddCategory("test")
+return root.HasCategory("test")

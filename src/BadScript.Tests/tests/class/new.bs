@@ -1,0 +1,7 @@
+global class Test
+{
+	
+}
+
+t = new Test()
+return t != null

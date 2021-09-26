@@ -50,13 +50,13 @@ namespace BadScript.Interfaces.Settings
                                    "HasSetting", new BSFunctionReference(
                                                                          new BSFunction(
                                                                               "function HasSetting(name)",
-                                                                              objects => new BSObject(
+                                                                              objects => 
                                                                                    m_Category.HasSetting(
                                                                                         objects[0].ConvertString()
                                                                                        )
                                                                                        ? BSObject.True
                                                                                        : BSObject.False
-                                                                                  ),
+                                                                                  ,
                                                                               1
                                                                              )
                                                                         )
@@ -65,13 +65,13 @@ namespace BadScript.Interfaces.Settings
                                    "HasCategory", new BSFunctionReference(
                                                                           new BSFunction(
                                                                                "function HasCategory(name)",
-                                                                               objects => new BSObject(
+                                                                               objects =>
                                                                                     m_Category.HasCategory(
                                                                                          objects[0].ConvertString()
                                                                                         )
                                                                                         ? BSObject.True
                                                                                         : BSObject.False
-                                                                                   ),
+                                                                                   ,
                                                                                1
                                                                               )
                                                                          )

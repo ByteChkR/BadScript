@@ -1,0 +1,7 @@
+t = {
+	a = 1
+}
+
+k = keys(t)
+
+return k[0] == "a"

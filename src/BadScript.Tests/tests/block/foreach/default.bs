@@ -1,0 +1,10 @@
+a = [
+	1,
+	2
+]
+v = 0
+foreach e in a
+{
+	v += e
+}
+return v == 3

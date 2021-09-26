@@ -1,0 +1,14 @@
+
+global class Test
+{
+	A = 1
+	function F()
+	{
+		return A == 1
+	}
+}
+
+t = new Test()
+
+
+return t.F()

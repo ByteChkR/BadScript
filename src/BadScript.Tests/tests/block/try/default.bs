@@ -1,0 +1,10 @@
+r = false
+try
+{
+	error("Test")
+}
+catch (e)
+{
+	r = true
+}
+return r

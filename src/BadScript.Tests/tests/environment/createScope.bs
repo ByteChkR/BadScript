@@ -1,0 +1,2 @@
+scope = environment.createScope()
+return scope != null

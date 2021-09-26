@@ -1,0 +1,2 @@
+num = 300 / 10
+return num == 30

@@ -1,0 +1,9 @@
+r = false
+function f(?x)
+{
+	r = x == null
+}
+
+f()
+
+return r

@@ -1,0 +1,6 @@
+a = [
+	1
+]
+
+a.clear()
+return a.size() == 0

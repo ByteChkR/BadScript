@@ -1,0 +1,15 @@
+a = [
+	1
+]
+
+lock(a)
+
+try
+{
+	a[0] = 2
+}
+catch (e)
+{
+	return true
+}
+return false

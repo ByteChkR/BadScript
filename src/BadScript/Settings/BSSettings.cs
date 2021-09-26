@@ -21,6 +21,8 @@ namespace BadScript.Settings
                 s_BsRoot = value;
                 ParserCategory = s_BsRoot.AddCategory( "parser" );
                 RuntimeCategory = s_BsRoot.AddCategory( "runtime" );
+                SettingsPair v= RuntimeCategory.SetSetting( "version", typeof( BSEngine ).Assembly.GetName().Version.ToString() );
+               
             }
         }
 

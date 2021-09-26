@@ -1,0 +1,11 @@
+r = false
+t = {
+	op_PropertyAccess = function(other)
+	{
+		r = other == "a"
+		return t
+	}
+}
+x = t.a
+
+return r

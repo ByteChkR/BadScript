@@ -1,0 +1,3 @@
+scope = environment.createScope()
+str = "return true"
+return environment.loadScopedBenchmark(scope, str)

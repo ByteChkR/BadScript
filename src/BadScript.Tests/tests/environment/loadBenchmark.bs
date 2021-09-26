@@ -1,0 +1,2 @@
+str = "return true"
+return environment.loadBenchmark(str)

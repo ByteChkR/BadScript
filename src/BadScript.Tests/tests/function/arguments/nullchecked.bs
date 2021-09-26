@@ -1,0 +1,16 @@
+function f(!x)
+{
+	
+}
+
+try
+{
+	f(null)
+}
+catch (e)
+{
+	return true
+}
+
+
+return false

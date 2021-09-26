@@ -1,0 +1,4 @@
+root = environment.settings
+test = root.AddSetting("test", "testvalue")
+get = root.GetSetting("test")
+return get.Name == test.Name && test.Value == get.Value

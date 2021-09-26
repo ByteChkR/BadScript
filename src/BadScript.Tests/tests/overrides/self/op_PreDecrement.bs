@@ -1,0 +1,11 @@
+r = false
+t = {
+	op_PreDecrement = function()
+	{
+		r = true
+		return t
+	}
+}
+--t
+
+return r

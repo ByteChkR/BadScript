@@ -1,0 +1,13 @@
+global class Test
+{
+	
+}
+
+global class SubTest : Test
+{
+	
+}
+
+t = new SubTest()
+
+return t != null && t.IsInstanceOf(t) && t.IsInstanceOf("Test")

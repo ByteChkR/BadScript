@@ -1,0 +1,2 @@
+a = environment.getInterfaceNames()
+return isArray(a)

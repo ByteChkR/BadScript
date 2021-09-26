@@ -1,0 +1,16 @@
+function f()
+{
+	a = 2
+}
+
+f()
+
+try
+{
+	b = a == 2
+}
+catch (e)
+{
+	return true
+}
+return false

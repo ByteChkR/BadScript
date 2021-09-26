@@ -1,0 +1,21 @@
+
+global class Test
+{
+	A = 1
+	function Test()
+	{
+		A = 2
+	}
+}
+
+global class SubTest : Test
+{
+	function SubTest() : base()
+	{
+	}
+}
+
+t = new SubTest()
+
+
+return t.A == 2

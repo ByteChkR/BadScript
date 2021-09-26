@@ -1,0 +1,18 @@
+
+global class Test
+{
+	A = 1
+}
+
+global class SubTest : Test
+{
+	function F()
+	{
+		return A == 1
+	}
+}
+
+t = new SubTest()
+
+
+return t.F()

@@ -1,0 +1,8 @@
+r = false
+function f()
+{
+	r = true
+}
+
+f()
+return r

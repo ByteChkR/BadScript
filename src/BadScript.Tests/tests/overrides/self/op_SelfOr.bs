@@ -1,0 +1,11 @@
+r = false
+t = {
+	op_SelfOr = function(other)
+	{
+		r = other == 2
+		return t
+	}
+}
+t |= 2
+
+return r

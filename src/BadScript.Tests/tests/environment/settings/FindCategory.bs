@@ -1,0 +1,10 @@
+try
+{
+	root = environment.settings
+	cat = root.FindCategory("runtime")
+	return true
+}
+catch (e)
+{
+	return false
+}

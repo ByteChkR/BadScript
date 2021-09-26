@@ -1,0 +1,12 @@
+
+global class Test
+{
+	A = 1
+	function Test()
+	{
+		A = 2
+	}
+}
+
+t = new Test()
+return t.IsInstanceOf(t) && t.IsInstanceOf("Test")

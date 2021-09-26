@@ -1,0 +1,11 @@
+r = false
+t = {
+	op_PostIncrement = function()
+	{
+		r = true
+		return t
+	}
+}
+v = t++
+
+return r
