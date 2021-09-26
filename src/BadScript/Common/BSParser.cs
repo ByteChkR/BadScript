@@ -27,6 +27,8 @@ namespace BadScript.Common
         private int m_CurrentPosition;
         private readonly int m_SourcePositionOffset;
         private readonly string m_OffsetSource;
+        private readonly bool m_AllowFunctionBaseInvocation;
+        private readonly bool m_AllowFunctionGlobal;
 
         private char Current =>
             m_CurrentPosition < m_OriginalSource.Length ? m_OriginalSource[m_CurrentPosition] : '\0';
@@ -35,8 +37,10 @@ namespace BadScript.Common
 
         #region Public
 
-        public BSParser( string script, string originalSource = null, int srcPosOffset = 0 )
+        public BSParser( string script, string originalSource = null, int srcPosOffset = 0, bool allowFunctionBaseInvocation = false, bool allowFunctionGlobal = true )
         {
+            m_AllowFunctionBaseInvocation = allowFunctionBaseInvocation;
+            m_AllowFunctionGlobal = allowFunctionGlobal;
             m_OriginalSource = script;
             m_SourcePositionOffset = srcPosOffset;
             m_OffsetSource = originalSource ?? script;
@@ -387,7 +391,7 @@ namespace BadScript.Common
             ReadWhitespaceAndNewLine();
             int off = m_CurrentPosition+1;
             string block = ParseBlock();
-            BSParser p = new BSParser( block, m_OriginalSource, off );
+            BSParser p = new BSParser( block, m_OriginalSource, off, baseClass != null, false );
             BSExpression[] exprs = p.ParseToEnd();
 
             Dictionary < string, BSExpression > expressions = new Dictionary < string, BSExpression >();
@@ -400,6 +404,23 @@ namespace BadScript.Common
                 }
                 else if ( bsExpression is BSFunctionDefinitionExpression func )
                 {
+                    List < BSExpression > funcBlock = new List < BSExpression >( func.Block );
+                    BSInvocationExpression baseInvocation = func.BaseInvocation;
+                    if(baseInvocation!=null)
+                    {
+                        string baseFunc = func.Name == className ? baseClass : func.Name;
+                        baseInvocation.Left = new BSPropertyExpression(
+                                                                       SourcePosition.Unknown,
+                                                                       new BSPropertyExpression(
+                                                                            SourcePosition.Unknown,
+                                                                            null,
+                                                                            "base"
+                                                                           ),
+                                                                       baseFunc
+                                                                      );
+                        funcBlock.Insert( 0, baseInvocation );
+                        func.Block = funcBlock.ToArray();
+                    }
                     expressions[func.Name] = func;
                 }
                 else
@@ -414,12 +435,15 @@ namespace BadScript.Common
 
         public BSExpression ParseFunction( bool isGlobal )
         {
+            if ( isGlobal && !m_AllowFunctionGlobal )
+                throw new BSParserException( "'global' is invalid in this context" );
             StringBuilder sb = new StringBuilder();
             ReadWhitespaceAndNewLine();
 
             int pos = m_CurrentPosition;
 
             string funcName;
+            BSInvocationExpression baseInvocation = null;
 
             if ( IsWordStart() )
             {
@@ -433,6 +457,10 @@ namespace BadScript.Common
                 }
 
                 funcName = sb.ToString();
+
+                ReadWhitespaceAndNewLine();
+
+                
             }
             else
             {
@@ -449,6 +477,26 @@ namespace BadScript.Common
 
             ReadWhitespaceAndNewLine();
 
+            if (Is(':'))
+            {
+                m_CurrentPosition++;
+                ReadWhitespaceAndNewLine();
+                SourcePosition basePos = CreateSourcePosition();
+                string word = GetNextWord();
+
+                if (word != "base")
+                    throw new BSParserException("Base Invocations have to Invoke 'base'", this);
+                if (m_AllowFunctionBaseInvocation)
+                {
+                    baseInvocation = ParseInvocation(new BSPropertyExpression(basePos, null, "base"));
+                }
+                else
+                {
+                    throw new BSParserException("Base Invocation is Invalid in this Context", this);
+                }
+            }
+            ReadWhitespaceAndNewLine();
+
             if ( Is( '=' ) && Is( 1, '>' ) )
             {
                 m_CurrentPosition += 2;
@@ -459,7 +507,8 @@ namespace BadScript.Common
                                                           funcName,
                                                           args,
                                                           new[] { Parse( int.MaxValue ) },
-                                                          isGlobal
+                                                          isGlobal,
+                                                          baseInvocation
                                                          );
             }
 
@@ -469,10 +518,10 @@ namespace BadScript.Common
 
             BSExpression[] b = p.ParseToEnd();
 
-            return new BSFunctionDefinitionExpression( CreateSourcePosition( pos ), funcName, args, b, isGlobal );
+            return new BSFunctionDefinitionExpression( CreateSourcePosition( pos ), funcName, args, b, isGlobal, baseInvocation);
         }
 
-        public BSExpression ParseInvocation( BSExpression expr )
+        public BSInvocationExpression ParseInvocation( BSExpression expr )
         {
             int pos = m_CurrentPosition;
 
@@ -828,7 +877,8 @@ namespace BadScript.Common
             if (wordName == "new")
             {
                 ReadWhitespaceAndNewLine();
-                return new BSNewInstanceExpression(CreateSourcePosition(pos), GetNextWord());
+                SourcePosition p = CreateSourcePosition( pos );
+                return new BSNewInstanceExpression(p, ParseInvocation(new BSPropertyExpression(p, null, GetNextWord())));
             }
 
             if ( wordName == "continue" )

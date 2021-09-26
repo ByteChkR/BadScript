@@ -1,6 +1,12 @@
 global class Test
 {
 	A = 2
+	//Constructor
+	function Test(a)
+	{
+		A = a
+	}
+
 	function F(x)
 	{
 		return A * x
@@ -9,25 +15,39 @@ global class Test
 
 global class SubTest : Test
 {
+	//Constructor + Call Test Constructor with 200 as argument
+	function SubTest() : base(200) {}
 	function F(x)
 	{
+		//Explicit base.F invocation to be able to use the return
 		return base.F(x) * 2
+	}
+
+	function Set(x)
+	{
+		//base is not needed here. But makes code more clear
+		base.A = x
 	}
 }
 
 global class SubSubTest : SubTest
 {
-	
-	function Set(x)
-	{
-		base.A = x
-	}
+	//Explicitly Call base().
+	//Otherwise the base Constructor is not beeing called
+	function SubSubTest() : base() {}
+
+	//Explicitly Call base with modified arguments
+	//the same result can be reached by calling base.Set(x*2) in the body
+	function Set(x) : base(x*2) {}
 }
 
 
-testInstance = new SubSubTest
+testInstance = new SubSubTest()
+
+print(debug(testInstance))
 
 testInstance.Set(10)
+
 print(debug(testInstance))
 
 print(testInstance.F(10))

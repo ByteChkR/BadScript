@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using BadScript.Common.Exceptions;
+using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -17,6 +19,8 @@ namespace BadScript.Common.Expressions.Implementations.Block
         public BSFunctionParameter[] ArgNames;
         public BSExpression[] Block;
 
+        public BSInvocationExpression BaseInvocation;
+
         public override bool IsConstant => false;
 
         #region Public
@@ -26,8 +30,10 @@ namespace BadScript.Common.Expressions.Implementations.Block
             string name,
             BSFunctionParameter[] args,
             BSExpression[] block,
-            bool addGlobal ) : base( srcPos )
+            bool addGlobal,
+            BSInvocationExpression baseInvocation=null) : base( srcPos )
         {
+            BaseInvocation = baseInvocation;
             Name = name;
             ArgNames = args;
             Block = block;
