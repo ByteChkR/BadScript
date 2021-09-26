@@ -24,3 +24,20 @@ comment:
   layout: "reach,diff,flags,tree"
   behavior: default
   require_changes: no
+
+# ignore Non-Required BS interfaces
+ignore:
+  - "src/BadScript.Http"  
+  - "src/BadScript.Http.Server"  
+  - "src/BadScript.Imaging"  
+  - "src/BadScript.IO"  
+  - "src/BadScript.Json"  
+  - "src/BadScript.Math"  
+  - "src/BadScript.Process"  
+  - "src/BadScript.StringUtils"  
+  - "src/BadScript.Testing"  
+  - "src/BadScript.CodeGenerator"  
+  - "src/BadScript.CodeGenerator.Runtime"  
+  - "src/BadScript.Utils"  
+  - "src/BadScript.Xml"  
+  - "src/BadScript.Zip"  
