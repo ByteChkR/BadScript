@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 
 using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
 using BadScript.Http;

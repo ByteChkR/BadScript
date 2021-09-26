@@ -7,7 +7,7 @@ namespace BadScript.Console.Subsystems.Project
              "new",
              HelpText = "Creates a new Project Settings File based on a template in the current working directory"
          )]
-    public class ProjectCreatorSettings: BSConsoleSettings
+    public class ProjectCreatorSettings : BSConsoleSettings
     {
 
         [Option(

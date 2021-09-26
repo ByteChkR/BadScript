@@ -4,7 +4,6 @@ using System.IO;
 
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
 using BadScript.Http;
@@ -111,7 +110,6 @@ namespace BadScript.Tests
             MemoryStream ms = new MemoryStream();
             BSSerializer.Serialize( expressions, ms );
             ms.Position = 0;
-            
 
             expressions = BSSerializer.Deserialize( ms );
 

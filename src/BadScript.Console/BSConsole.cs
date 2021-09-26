@@ -62,7 +62,8 @@ namespace BadScript.Console
             }
 
             return Parser.Default.
-                          ParseArguments < ScriptRunnerSettings, ScriptCompilerSettings, IncludeManagerSettings >( args ).
+                          ParseArguments < ScriptRunnerSettings, ScriptCompilerSettings,
+                              IncludeManagerSettings >( args ).
                           MapResult(
                                     ( ScriptRunnerSettings o ) =>
                                     {
@@ -73,23 +74,23 @@ namespace BadScript.Console
 
                                         return ScriptRunner.Run( o );
                                     },
-                                    (ScriptCompilerSettings o) =>
+                                    ( ScriptCompilerSettings o ) =>
                                     {
-                                        if (!o.NoLogo)
+                                        if ( !o.NoLogo )
                                         {
                                             PrintHeaderInfo();
                                         }
 
-                                        return ScriptCompiler.Compile(o);
+                                        return ScriptCompiler.Compile( o );
                                     },
-                                    (IncludeManagerSettings o) =>
+                                    ( IncludeManagerSettings o ) =>
                                     {
-                                        if (!o.NoLogo)
+                                        if ( !o.NoLogo )
                                         {
                                             PrintHeaderInfo();
                                         }
 
-                                        return IncludeManager.Process(o);
+                                        return IncludeManager.Process( o );
                                     },
                                     HandleError
                                    );
