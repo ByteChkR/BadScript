@@ -1,0 +1,33 @@
+global class Test
+{
+	A = 2
+	function F(x)
+	{
+		return A * x
+	}
+}
+
+global class SubTest : Test
+{
+	function F(x)
+	{
+		return base.F(x) * 2
+	}
+}
+
+global class SubSubTest : SubTest
+{
+	
+	function Set(x)
+	{
+		base.A = x
+	}
+}
+
+
+testInstance = new SubSubTest
+
+testInstance.Set(10)
+print(debug(testInstance))
+
+print(testInstance.F(10))

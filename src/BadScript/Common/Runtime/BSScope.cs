@@ -1,19 +1,25 @@
-﻿using BadScript.Common.Exceptions;
+﻿using System.Collections;
+using System.Collections.Generic;
+
+using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
+using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
+using BadScript.Common.Types.References;
 using BadScript.Common.Types.References.Implementations;
 
 namespace BadScript.Common.Runtime
 {
 
-    public class BSScope
+    public class BSScope: IEnumerable<IForEachIteration>
     {
         private readonly BSScopeFlags m_AllowedFlags;
         private BSScopeFlags m_CurrentFlag;
         private readonly BSEngine m_Instance;
         private readonly BSScope m_Parent;
         private readonly BSTable m_LocalVars = new BSTable( SourcePosition.Unknown );
+        
 
         public BSScopeFlags Flags => m_CurrentFlag;
 
@@ -21,6 +27,8 @@ namespace BadScript.Common.Runtime
 
         public bool BreakExecution =>
             ( m_CurrentFlag & ( BSScopeFlags.Return | BSScopeFlags.Break | BSScopeFlags.Continue ) ) != 0;
+
+        public BSEngine Engine => m_Instance ?? m_Parent.Engine;
 
         #region Public
 
@@ -57,6 +65,7 @@ namespace BadScript.Common.Runtime
         {
             return m_LocalVars;
         }
+        
 
         public bool HasGlobal( string name )
         {
@@ -69,6 +78,37 @@ namespace BadScript.Common.Runtime
         {
             return m_LocalVars.HasElement( new BSObject( name ) ) ||
                    m_Parent != null && m_Parent.HasLocal( name );
+        }
+
+        public void Set( string name, ABSObject o )
+        {
+            if ( HasLocal( name ) )
+                m_LocalVars.SetProperty( name,o );
+            else if ( HasGlobal( name ) )
+            {
+                if ( m_Parent != null )
+                    m_Parent.Set( name, o );
+                else
+                {
+                    throw new BSRuntimeException( "Can not Set Property: " + name );
+                }
+            }
+            else
+            {
+                throw new BSRuntimeException("Can not Set Property: " + name);
+            }
+        }
+
+        public ABSReference Get( string name )
+        {
+            if (m_LocalVars.HasElement(new BSObject(name)))
+                return m_LocalVars.GetProperty( name );
+
+            if (m_Parent != null && m_Parent.HasLocal(name))
+            {
+                return m_Parent.Get(name);
+            }
+            throw new BSRuntimeException("Can not Set Property: " + name);
         }
 
         public ABSObject ResolveName( string name )
@@ -126,10 +166,21 @@ namespace BadScript.Common.Runtime
         {
 
             m_LocalVars.InsertElement( new BSObject( "__SELF" ), new BSObject( this ) );
-            m_LocalVars.InsertElement( new BSObject( "__L" ), m_LocalVars );
+            //m_LocalVars.InsertElement( new BSObject( "__L" ), m_LocalVars );
         }
 
         #endregion
+
+        public IEnumerator < IForEachIteration > GetEnumerator()
+        {
+            return m_LocalVars.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ( ( IEnumerable )m_LocalVars ).GetEnumerator();
+        }
+
     }
 
 }

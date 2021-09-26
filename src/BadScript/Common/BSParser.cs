@@ -343,6 +343,75 @@ namespace BadScript.Common
             return expr;
         }
 
+        public BSExpression ParseClass(bool isGlobal)
+        {
+            if ( !isGlobal )
+            {
+                throw new BSParserException( "Classes can only be defined 'global'" );
+            }
+            StringBuilder sb = new StringBuilder();
+            ReadWhitespaceAndNewLine();
+
+            SourcePosition pos = CreateSourcePosition();
+
+            sb.Append(m_OriginalSource[m_CurrentPosition]);
+            m_CurrentPosition++;
+
+            while (IsWordMiddle())
+            {
+                sb.Append(m_OriginalSource[m_CurrentPosition]);
+                m_CurrentPosition++;
+            }
+
+            string className = sb.ToString();
+            string baseClass = null;
+            ReadWhitespaceAndNewLine();
+
+            if ( Is( ':' ) )
+            {
+                m_CurrentPosition++;
+                ReadWhitespaceAndNewLine();
+                sb.Clear();
+                sb.Append(m_OriginalSource[m_CurrentPosition]);
+                m_CurrentPosition++;
+
+                while (IsWordMiddle())
+                {
+                    sb.Append(m_OriginalSource[m_CurrentPosition]);
+                    m_CurrentPosition++;
+                }
+
+                baseClass = sb.ToString();
+            }
+
+            ReadWhitespaceAndNewLine();
+            int off = m_CurrentPosition+1;
+            string block = ParseBlock();
+            BSParser p = new BSParser( block, m_OriginalSource, off );
+            BSExpression[] exprs = p.ParseToEnd();
+
+            Dictionary < string, BSExpression > expressions = new Dictionary < string, BSExpression >();
+
+            foreach ( BSExpression bsExpression in exprs )
+            {
+                if ( bsExpression is BSAssignExpression assign )
+                {
+                    expressions[( assign.Left as BSPropertyExpression ).Right] = assign.Right;
+                }
+                else if ( bsExpression is BSFunctionDefinitionExpression func )
+                {
+                    expressions[func.Name] = func;
+                }
+                else
+                {
+                    throw new BSParserException( $"Invalid Expression for Type: '{bsExpression}'" );
+                }
+            }
+
+            return new BSClassExpression( pos, className, baseClass, expressions );
+        }
+
+
         public BSExpression ParseFunction( bool isGlobal )
         {
             StringBuilder sb = new StringBuilder();
@@ -710,14 +779,6 @@ namespace BadScript.Common
                                                   Parse( ParseExpression( int.MaxValue ), this );
             }
 
-            //if ( Is( '!' ) )
-            //{
-            //    m_CurrentPosition++;
-
-            //    return BSOperatorPreceedenceTable.GetPrefix( int.MaxValue, "!" ).
-            //                                      Parse( ParseExpression( int.MaxValue ), this );
-            //}
-
             throw new BSParserException( "Can not Parse Value", this );
         }
 
@@ -745,6 +806,11 @@ namespace BadScript.Common
                 return ParseFunction( isGlobal );
             }
 
+            if ( wordName == "class" )
+            {
+                return ParseClass(isGlobal);
+            }
+
             if ( wordName == "enumerable" )
             {
                 return ParseEnumerableFunction( isGlobal );
@@ -755,9 +821,14 @@ namespace BadScript.Common
                 throw new BSParserException( "Expected 'function' or 'enumerable' after 'global'", this );
             }
 
-            if ( wordName == "return" )
+            if (wordName == "return")
             {
-                return new BSReturnExpression( CreateSourcePosition( pos ), ParseExpression( int.MaxValue ) );
+                return new BSReturnExpression(CreateSourcePosition(pos), ParseExpression(int.MaxValue));
+            }
+            if (wordName == "new")
+            {
+                ReadWhitespaceAndNewLine();
+                return new BSNewInstanceExpression(CreateSourcePosition(pos), GetNextWord());
             }
 
             if ( wordName == "continue" )

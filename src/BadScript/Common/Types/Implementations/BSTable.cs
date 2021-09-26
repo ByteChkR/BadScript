@@ -28,6 +28,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override ABSArray Values => new BSArray( m_InnerTable.Values );
 
+        
         #region Public
 
         public BSTable( SourcePosition pos ) : base( pos )
