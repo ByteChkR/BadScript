@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using BadScript.ConsoleUtils;
@@ -26,7 +27,11 @@ namespace BadScript.Console.Subsystems
     public class EngineBuilderSettings : BSConsoleSettings
     {
 
-        [Option( "include", Default = null, HelpText = "A list of Directories that will be loaded prior to the execution" )]
+        [Option(
+                   "include",
+                   Default = null,
+                   HelpText = "A list of Directories that will be loaded prior to the execution"
+               )]
         public IEnumerable < string > IncludeDirectories { get; set; }
 
         [Option(
@@ -65,16 +70,23 @@ namespace BadScript.Console.Subsystems
             es.Interfaces.Add( new XmlInterface() );
 
             string[] incDirs = IncludeDirectories.ToArray();
-            if (incDirs .Length!=0 )
+
+            if ( Directory.Exists( BSConsoleResources.IncludeDirectory ) )
             {
-                es.IncludeDirectories.AddRange(incDirs);
+                es.IncludeDirectories.Add( BSConsoleResources.IncludeDirectory );
             }
 
-            string[] interfaces = IncludeDirectories.ToArray();
-            if (interfaces.Length!=0)
+            if ( incDirs.Length != 0 )
+            {
+                es.IncludeDirectories.AddRange( incDirs );
+            }
+
+            string[] interfaces = ActiveInterfaces.ToArray();
+
+            if ( interfaces.Length != 0 )
             {
                 es.ActiveInterfaces.Clear();
-                es.ActiveInterfaces.AddRange(interfaces);
+                es.ActiveInterfaces.AddRange( interfaces );
             }
 
             return es;

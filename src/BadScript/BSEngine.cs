@@ -24,7 +24,7 @@ namespace BadScript
 
     public class BSEngine
     {
-        public BSTypeDatabase TypeDatabase { get; }
+
         private static readonly List < BSExpressionValidator > s_Validators =
             new List < BSExpressionValidator > { new BSFunctionReturnExpressionValidator() };
 
@@ -32,6 +32,8 @@ namespace BadScript
         private readonly ABSTable m_StaticData;
         private readonly ABSTable m_GlobalTable;
         private readonly List < ABSScriptInterface > m_Interfaces;
+
+        public BSTypeDatabase TypeDatabase { get; }
 
         public BSParserSettings ParserSettings { get; }
 
