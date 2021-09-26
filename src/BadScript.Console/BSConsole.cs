@@ -3,6 +3,7 @@ using System.Linq;
 
 using BadScript.Console.Logging;
 using BadScript.Console.Subsystems.Compile;
+using BadScript.Console.Subsystems.Include;
 using BadScript.Console.Subsystems.Project;
 using BadScript.Console.Subsystems.Run;
 
@@ -61,7 +62,7 @@ namespace BadScript.Console
             }
 
             return Parser.Default.
-                          ParseArguments < ScriptRunnerSettings, ScriptCompilerSettings >( args ).
+                          ParseArguments < ScriptRunnerSettings, ScriptCompilerSettings, IncludeManagerSettings >( args ).
                           MapResult(
                                     ( ScriptRunnerSettings o ) =>
                                     {
@@ -72,14 +73,23 @@ namespace BadScript.Console
 
                                         return ScriptRunner.Run( o );
                                     },
-                                    ( ScriptCompilerSettings o ) =>
+                                    (ScriptCompilerSettings o) =>
                                     {
-                                        if ( !o.NoLogo )
+                                        if (!o.NoLogo)
                                         {
                                             PrintHeaderInfo();
                                         }
 
-                                        return ScriptCompiler.Compile( o );
+                                        return ScriptCompiler.Compile(o);
+                                    },
+                                    (IncludeManagerSettings o) =>
+                                    {
+                                        if (!o.NoLogo)
+                                        {
+                                            PrintHeaderInfo();
+                                        }
+
+                                        return IncludeManager.Process(o);
                                     },
                                     HandleError
                                    );
