@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Interfaces;
@@ -8,6 +9,7 @@ namespace BadScript.Xml
 
     public class XmlInterface : ABSScriptInterface
     {
+
         #region Public
 
         public XmlInterface() : base( "xml" )
@@ -33,6 +35,7 @@ namespace BadScript.Xml
         }
 
         #endregion
+
     }
 
 }

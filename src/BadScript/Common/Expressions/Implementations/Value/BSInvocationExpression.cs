@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using BadScript.Common.Expressions.Implementations.Unary;
 using BadScript.Common.OperatorImplementations;
 using BadScript.Common.Runtime;
@@ -9,6 +10,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSInvocationExpression : BSUnaryExpression
     {
+
         public BSExpression[] Parameters;
 
         public override bool IsConstant => Left.IsConstant && Parameters.All( x => x.IsConstant );
@@ -16,8 +18,9 @@ namespace BadScript.Common.Expressions.Implementations.Value
         #region Public
 
         public BSInvocationExpression( SourcePosition srcPos, BSExpression left, BSExpression[] args ) : base(
-            srcPos,
-            left )
+             srcPos,
+             left
+            )
         {
             Parameters = args;
         }
@@ -39,6 +42,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
         }
 
         #endregion
+
     }
 
 }

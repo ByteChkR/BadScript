@@ -6,6 +6,7 @@ namespace BadScript.Utils
 
     public static class VersionExtensions
     {
+
         #region Public
 
         public static Version ChangeVersion( this Version version, string changeStr )
@@ -85,7 +86,7 @@ namespace BadScript.Utils
 
                     if ( long.TryParse( value, out long newValue ) )
                     {
-                        versions[i] = ( int ) ( newValue % ushort.MaxValue );
+                        versions[i] = ( int )( newValue % ushort.MaxValue );
                     }
                 }
                 else if ( int.TryParse( current, out int v ) )
@@ -97,11 +98,11 @@ namespace BadScript.Utils
             ApplyChangeReset( changeReset, original, versions );
 
             return new Version(
-                versions[0],
-                versions[1] < 0 ? 0 : versions[1],
-                versions[2] < 0 ? 0 : versions[2],
-                versions[3] < 0 ? 0 : versions[3]
-            );
+                               versions[0],
+                               versions[1] < 0 ? 0 : versions[1],
+                               versions[2] < 0 ? 0 : versions[2],
+                               versions[3] < 0 ? 0 : versions[3]
+                              );
         }
 
         #endregion
@@ -126,6 +127,7 @@ namespace BadScript.Utils
         }
 
         #endregion
+
     }
 
 }

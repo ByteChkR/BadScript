@@ -3,6 +3,7 @@
 
     public class BSGreaterOrEqualOperatorImplementation : ABSRelationalOperatorImplementation
     {
+
         #region Public
 
         public BSGreaterOrEqualOperatorImplementation() : base( ">=" )
@@ -19,6 +20,7 @@
         }
 
         #endregion
+
     }
 
 }

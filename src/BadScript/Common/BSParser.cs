@@ -37,7 +37,12 @@ namespace BadScript.Common
 
         #region Public
 
-        public BSParser( string script, string originalSource = null, int srcPosOffset = 0, bool allowFunctionBaseInvocation = false, bool allowFunctionGlobal = true )
+        public BSParser(
+            string script,
+            string originalSource = null,
+            int srcPosOffset = 0,
+            bool allowFunctionBaseInvocation = false,
+            bool allowFunctionGlobal = true )
         {
             m_AllowFunctionBaseInvocation = allowFunctionBaseInvocation;
             m_AllowFunctionGlobal = allowFunctionGlobal;
@@ -347,23 +352,24 @@ namespace BadScript.Common
             return expr;
         }
 
-        public BSExpression ParseClass(bool isGlobal)
+        public BSExpression ParseClass( bool isGlobal )
         {
             if ( !isGlobal )
             {
                 throw new BSParserException( "Classes can only be defined 'global'" );
             }
+
             StringBuilder sb = new StringBuilder();
             ReadWhitespaceAndNewLine();
 
             SourcePosition pos = CreateSourcePosition();
 
-            sb.Append(m_OriginalSource[m_CurrentPosition]);
+            sb.Append( m_OriginalSource[m_CurrentPosition] );
             m_CurrentPosition++;
 
-            while (IsWordMiddle())
+            while ( IsWordMiddle() )
             {
-                sb.Append(m_OriginalSource[m_CurrentPosition]);
+                sb.Append( m_OriginalSource[m_CurrentPosition] );
                 m_CurrentPosition++;
             }
 
@@ -376,12 +382,12 @@ namespace BadScript.Common
                 m_CurrentPosition++;
                 ReadWhitespaceAndNewLine();
                 sb.Clear();
-                sb.Append(m_OriginalSource[m_CurrentPosition]);
+                sb.Append( m_OriginalSource[m_CurrentPosition] );
                 m_CurrentPosition++;
 
-                while (IsWordMiddle())
+                while ( IsWordMiddle() )
                 {
-                    sb.Append(m_OriginalSource[m_CurrentPosition]);
+                    sb.Append( m_OriginalSource[m_CurrentPosition] );
                     m_CurrentPosition++;
                 }
 
@@ -389,7 +395,7 @@ namespace BadScript.Common
             }
 
             ReadWhitespaceAndNewLine();
-            int off = m_CurrentPosition+1;
+            int off = m_CurrentPosition + 1;
             string block = ParseBlock();
             BSParser p = new BSParser( block, m_OriginalSource, off, baseClass != null, false );
             BSExpression[] exprs = p.ParseToEnd();
@@ -406,9 +412,11 @@ namespace BadScript.Common
                 {
                     List < BSExpression > funcBlock = new List < BSExpression >( func.Block );
                     BSInvocationExpression baseInvocation = func.BaseInvocation;
-                    if(baseInvocation!=null)
+
+                    if ( baseInvocation != null )
                     {
                         string baseFunc = func.Name == className ? baseClass : func.Name;
+
                         baseInvocation.Left = new BSPropertyExpression(
                                                                        SourcePosition.Unknown,
                                                                        new BSPropertyExpression(
@@ -418,9 +426,11 @@ namespace BadScript.Common
                                                                            ),
                                                                        baseFunc
                                                                       );
+
                         funcBlock.Insert( 0, baseInvocation );
                         func.Block = funcBlock.ToArray();
                     }
+
                     expressions[func.Name] = func;
                 }
                 else
@@ -432,11 +442,13 @@ namespace BadScript.Common
             return new BSClassExpression( pos, className, baseClass, expressions );
         }
 
-
         public BSExpression ParseFunction( bool isGlobal )
         {
             if ( isGlobal && !m_AllowFunctionGlobal )
+            {
                 throw new BSParserException( "'global' is invalid in this context" );
+            }
+
             StringBuilder sb = new StringBuilder();
             ReadWhitespaceAndNewLine();
 
@@ -459,8 +471,6 @@ namespace BadScript.Common
                 funcName = sb.ToString();
 
                 ReadWhitespaceAndNewLine();
-
-                
             }
             else
             {
@@ -477,24 +487,28 @@ namespace BadScript.Common
 
             ReadWhitespaceAndNewLine();
 
-            if (Is(':'))
+            if ( Is( ':' ) )
             {
                 m_CurrentPosition++;
                 ReadWhitespaceAndNewLine();
                 SourcePosition basePos = CreateSourcePosition();
                 string word = GetNextWord();
 
-                if (word != "base")
-                    throw new BSParserException("Base Invocations have to Invoke 'base'", this);
-                if (m_AllowFunctionBaseInvocation)
+                if ( word != "base" )
                 {
-                    baseInvocation = ParseInvocation(new BSPropertyExpression(basePos, null, "base"));
+                    throw new BSParserException( "Base Invocations have to Invoke 'base'", this );
+                }
+
+                if ( m_AllowFunctionBaseInvocation )
+                {
+                    baseInvocation = ParseInvocation( new BSPropertyExpression( basePos, null, "base" ) );
                 }
                 else
                 {
-                    throw new BSParserException("Base Invocation is Invalid in this Context", this);
+                    throw new BSParserException( "Base Invocation is Invalid in this Context", this );
                 }
             }
+
             ReadWhitespaceAndNewLine();
 
             if ( Is( '=' ) && Is( 1, '>' ) )
@@ -518,7 +532,14 @@ namespace BadScript.Common
 
             BSExpression[] b = p.ParseToEnd();
 
-            return new BSFunctionDefinitionExpression( CreateSourcePosition( pos ), funcName, args, b, isGlobal, baseInvocation);
+            return new BSFunctionDefinitionExpression(
+                                                      CreateSourcePosition( pos ),
+                                                      funcName,
+                                                      args,
+                                                      b,
+                                                      isGlobal,
+                                                      baseInvocation
+                                                     );
         }
 
         public BSInvocationExpression ParseInvocation( BSExpression expr )
@@ -857,7 +878,7 @@ namespace BadScript.Common
 
             if ( wordName == "class" )
             {
-                return ParseClass(isGlobal);
+                return ParseClass( isGlobal );
             }
 
             if ( wordName == "enumerable" )
@@ -870,15 +891,20 @@ namespace BadScript.Common
                 throw new BSParserException( "Expected 'function' or 'enumerable' after 'global'", this );
             }
 
-            if (wordName == "return")
+            if ( wordName == "return" )
             {
-                return new BSReturnExpression(CreateSourcePosition(pos), ParseExpression(int.MaxValue));
+                return new BSReturnExpression( CreateSourcePosition( pos ), ParseExpression( int.MaxValue ) );
             }
-            if (wordName == "new")
+
+            if ( wordName == "new" )
             {
                 ReadWhitespaceAndNewLine();
                 SourcePosition p = CreateSourcePosition( pos );
-                return new BSNewInstanceExpression(p, ParseInvocation(new BSPropertyExpression(p, null, GetNextWord())));
+
+                return new BSNewInstanceExpression(
+                                                   p,
+                                                   ParseInvocation( new BSPropertyExpression( p, null, GetNextWord() ) )
+                                                  );
             }
 
             if ( wordName == "continue" )

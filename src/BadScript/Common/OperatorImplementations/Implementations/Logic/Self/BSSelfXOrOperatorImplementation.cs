@@ -3,6 +3,7 @@
 
     public class BSSelfXOrOperatorImplementation : ABSSelfLogicOperatorImplementation
     {
+
         #region Public
 
         public BSSelfXOrOperatorImplementation() : base( "^=" )
@@ -15,6 +16,7 @@
         }
 
         #endregion
+
     }
 
 }

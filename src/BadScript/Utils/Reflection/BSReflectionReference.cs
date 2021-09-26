@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
@@ -9,13 +10,15 @@ namespace BadScript.Utils.Reflection
 
     public class BSReflectionReference : ABSReference
     {
+
         private Func < ABSObject > m_Getter;
         private Action < ABSObject > m_Setter;
 
         #region Public
 
         public BSReflectionReference( Func < ABSObject > get, Action < ABSObject > set ) : base(
-            SourcePosition.Unknown )
+             SourcePosition.Unknown
+            )
         {
             m_Getter = get;
             m_Setter = set;
@@ -37,6 +40,7 @@ namespace BadScript.Utils.Reflection
         }
 
         #endregion
+
     }
 
 }

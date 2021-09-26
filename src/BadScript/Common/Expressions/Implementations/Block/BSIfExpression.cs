@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -10,6 +11,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSIfExpression : BSExpression
     {
+
         public Dictionary < BSExpression, BSExpression[] > ConditionMap;
         public BSExpression[] ElseBlock;
 
@@ -38,11 +40,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
                     BSScope funcScope = new BSScope( BSScopeFlags.IfBlock, scope );
 
                     ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                        funcScope,
-                        keyValuePair.Value,
-                        new BSFunctionParameter[0],
-                        new ABSObject[0]
-                    );
+                         funcScope,
+                         keyValuePair.Value,
+                         new BSFunctionParameter[0],
+                         new ABSObject[0]
+                        );
 
                     if ( ret != null )
                     {
@@ -55,7 +57,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
                     return BSObject.Null;
                 }
-
             }
 
             if ( ElseBlock != null )
@@ -63,11 +64,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 BSScope elseScope = new BSScope( BSScopeFlags.IfBlock, scope );
 
                 ABSObject elseR = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                    elseScope,
-                    ElseBlock,
-                    new BSFunctionParameter[0],
-                    new ABSObject[0]
-                );
+                     elseScope,
+                     ElseBlock,
+                     new BSFunctionParameter[0],
+                     new ABSObject[0]
+                    );
 
                 if ( elseR != null )
                 {
@@ -83,6 +84,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         }
 
         #endregion
+
     }
 
 }

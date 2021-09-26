@@ -6,6 +6,7 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSAssignmentOperator : BSOperator
     {
+
         public override string OperatorKey => "=";
 
         public override int Preceedence => 15;
@@ -15,12 +16,14 @@ namespace BadScript.Common.Operators.Implementations
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
             return new BSAssignExpression(
-                parser.CreateSourcePosition(),
-                left,
-                parser.ParseExpression( Preceedence - 1 ) );
+                                          parser.CreateSourcePosition(),
+                                          left,
+                                          parser.ParseExpression( Preceedence - 1 )
+                                         );
         }
 
         #endregion
+
     }
 
 }

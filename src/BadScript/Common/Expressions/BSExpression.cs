@@ -6,6 +6,7 @@ namespace BadScript.Common.Expressions
 
     public abstract class BSExpression
     {
+
         protected readonly SourcePosition m_Position;
 
         public abstract bool IsConstant { get; }
@@ -24,6 +25,7 @@ namespace BadScript.Common.Expressions
         }
 
         #endregion
+
     }
 
 }

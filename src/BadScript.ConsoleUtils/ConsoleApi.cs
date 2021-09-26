@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -9,6 +10,7 @@ namespace BadScript.ConsoleUtils
 
     public class ConsoleApi : ABSScriptInterface
     {
+
         public event Action Clear;
 
         public event Action < ABSObject > Write;
@@ -45,65 +47,63 @@ namespace BadScript.ConsoleUtils
         public override void AddApi( ABSTable root )
         {
             root.InsertElement(
-                new BSObject( "print" ),
-                new BSFunction(
-                    "function print(obj)",
-                    ( args ) =>
-                    {
+                               new BSObject( "print" ),
+                               new BSFunction(
+                                              "function print(obj)",
+                                              ( args ) =>
+                                              {
+                                                  ABSObject arg = args[0].ResolveReference();
 
-                        ABSObject arg = args[0].ResolveReference();
+                                                  WriteLine?.Invoke( arg );
 
-                        WriteLine?.Invoke( arg );
-
-                        return BSObject.Null;
-                    },
-                    1
-                )
-            );
-
-            root.InsertElement(
-                new BSObject( "write" ),
-                new BSFunction(
-                    "function write(obj)",
-                    ( args ) =>
-                    {
-
-                        ABSObject arg = args[0].ResolveReference();
-
-                        Write?.Invoke( arg );
-
-                        return BSObject.Null;
-                    },
-                    1
-                )
-            );
+                                                  return BSObject.Null;
+                                              },
+                                              1
+                                             )
+                              );
 
             root.InsertElement(
-                new BSObject( "read" ),
-                new BSFunction(
-                    "function read()",
-                    ( args ) => ReadLine?.Invoke() ?? BSObject.Null,
-                    0
-                )
-            );
+                               new BSObject( "write" ),
+                               new BSFunction(
+                                              "function write(obj)",
+                                              ( args ) =>
+                                              {
+                                                  ABSObject arg = args[0].ResolveReference();
+
+                                                  Write?.Invoke( arg );
+
+                                                  return BSObject.Null;
+                                              },
+                                              1
+                                             )
+                              );
 
             root.InsertElement(
-                new BSObject( "clear" ),
-                new BSFunction(
-                    "function clear()",
-                    ( args ) =>
-                    {
-                        Clear?.Invoke();
+                               new BSObject( "read" ),
+                               new BSFunction(
+                                              "function read()",
+                                              ( args ) => ReadLine?.Invoke() ?? BSObject.Null,
+                                              0
+                                             )
+                              );
 
-                        return BSObject.Null;
-                    },
-                    0
-                )
-            );
+            root.InsertElement(
+                               new BSObject( "clear" ),
+                               new BSFunction(
+                                              "function clear()",
+                                              ( args ) =>
+                                              {
+                                                  Clear?.Invoke();
 
+                                                  return BSObject.Null;
+                                              },
+                                              0
+                                             )
+                              );
         }
 
         #endregion
+
     }
 
 }

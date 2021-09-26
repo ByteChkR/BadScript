@@ -7,6 +7,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSValueExpression : BSExpression
     {
+
         private readonly BSObject m_Value;
 
         public object SourceValue { get; }
@@ -17,7 +18,6 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
         public BSValueExpression( SourcePosition srcPos, object o ) : base( srcPos )
         {
-
             if ( o is BSObject bso )
             {
                 SourceValue = bso.GetInternalObject();
@@ -36,6 +36,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
         }
 
         #endregion
+
     }
 
 }

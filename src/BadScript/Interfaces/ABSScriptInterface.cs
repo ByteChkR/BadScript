@@ -5,6 +5,7 @@ namespace BadScript.Interfaces
 
     public abstract class ABSScriptInterface
     {
+
         public string Name { get; }
 
         #region Public
@@ -21,6 +22,7 @@ namespace BadScript.Interfaces
         }
 
         #endregion
+
     }
 
 }

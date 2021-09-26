@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+
 using BadScript.Utils;
 
 namespace BadScript.Settings
@@ -9,6 +10,7 @@ namespace BadScript.Settings
 
     public static class BSSettings
     {
+
         private static SettingsCategory s_BsRoot;
 
         public static SettingsCategory BsRoot
@@ -16,7 +18,6 @@ namespace BadScript.Settings
             get => s_BsRoot;
             set
             {
-
                 s_BsRoot = value;
                 ParserCategory = s_BsRoot.AddCategory( "parser" );
                 RuntimeCategory = s_BsRoot.AddCategory( "runtime" );
@@ -70,7 +71,6 @@ namespace BadScript.Settings
 
         public static void SaveToDirectory( this SettingsCategory cat, string directory )
         {
-
             foreach ( SettingsCategory sub in cat )
             {
                 if ( !sub.IsPersistent )
@@ -83,7 +83,7 @@ namespace BadScript.Settings
                 sub.SaveToDirectory( p );
             }
 
-            foreach ( SettingsPair pair in ( IEnumerable < SettingsPair > ) cat )
+            foreach ( SettingsPair pair in ( IEnumerable < SettingsPair > )cat )
             {
                 if ( !pair.IsPersistent )
                 {
@@ -133,7 +133,7 @@ namespace BadScript.Settings
                 SaveToZip( za, sub, p );
             }
 
-            foreach ( SettingsPair pair in ( IEnumerable < SettingsPair > ) cat )
+            foreach ( SettingsPair pair in ( IEnumerable < SettingsPair > )cat )
             {
                 if ( !pair.IsPersistent )
                 {
@@ -148,11 +148,11 @@ namespace BadScript.Settings
                 using StreamWriter streamWriter = new StreamWriter( entryStream );
 
                 streamWriter.Write( pair.Value );
-
             }
         }
 
         #endregion
+
     }
 
 }

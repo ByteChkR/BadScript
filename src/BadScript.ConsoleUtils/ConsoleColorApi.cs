@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -9,6 +10,7 @@ namespace BadScript.ConsoleUtils
 
     public class ConsoleColorApi : ABSScriptInterface
     {
+
         #region Public
 
         public ConsoleColorApi() : base( "console-colors" )
@@ -18,21 +20,24 @@ namespace BadScript.ConsoleUtils
         public override void AddApi( ABSTable root )
         {
             root.InsertElement(
-                new BSObject( "setForeColor" ),
-                new BSFunction( "function setForeColor(consoleColor)", SetConsoleForeColor, 1 ) );
+                               new BSObject( "setForeColor" ),
+                               new BSFunction( "function setForeColor(consoleColor)", SetConsoleForeColor, 1 )
+                              );
 
             root.InsertElement(
-                new BSObject( "setBackColor" ),
-                new BSFunction( "function setBackColor(consoleColor)", SetConsoleBackColor, 1 ) );
+                               new BSObject( "setBackColor" ),
+                               new BSFunction( "function setBackColor(consoleColor)", SetConsoleBackColor, 1 )
+                              );
 
             root.InsertElement(
-                new BSObject( "getForeColor" ),
-                new BSFunction( "function getForeColor()", GetConsoleForeColor, 0 ) );
+                               new BSObject( "getForeColor" ),
+                               new BSFunction( "function getForeColor()", GetConsoleForeColor, 0 )
+                              );
 
             root.InsertElement(
-                new BSObject( "getBackColor" ),
-                new BSFunction( "function getBackColor()", GetConsoleBackColor, 0 ) );
-
+                               new BSObject( "getBackColor" ),
+                               new BSFunction( "function getBackColor()", GetConsoleBackColor, 0 )
+                              );
         }
 
         #endregion
@@ -74,6 +79,7 @@ namespace BadScript.ConsoleUtils
         }
 
         #endregion
+
     }
 
 }

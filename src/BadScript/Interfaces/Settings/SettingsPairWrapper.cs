@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
@@ -12,6 +13,7 @@ namespace BadScript.Interfaces.Settings
 
     public class SettingsPairWrapper : ABSObject
     {
+
         private readonly SettingsPair m_Pair;
         private readonly Dictionary < string, ABSReference > m_Properties;
 
@@ -24,19 +26,21 @@ namespace BadScript.Interfaces.Settings
             m_Pair = pair;
 
             m_Properties = new Dictionary < string, ABSReference >
-            {
-                { "Name", new BSReflectionReference( () => new BSObject( m_Pair.Name ), null ) },
-                {
-                    "Value", new BSReflectionReference(
-                        () => new BSObject( m_Pair.Value ),
-                        x => m_Pair.Value = x.ConvertString() )
-                },
-                {
-                    "IsPersistent", new BSReflectionReference(
-                        () => new BSObject( m_Pair.IsPersistent ),
-                        x => m_Pair.IsPersistent = x.ConvertBool() )
-                },
-            };
+                           {
+                               { "Name", new BSReflectionReference( () => new BSObject( m_Pair.Name ), null ) },
+                               {
+                                   "Value", new BSReflectionReference(
+                                                                      () => new BSObject( m_Pair.Value ),
+                                                                      x => m_Pair.Value = x.ConvertString()
+                                                                     )
+                               },
+                               {
+                                   "IsPersistent", new BSReflectionReference(
+                                                                             () => new BSObject( m_Pair.IsPersistent ),
+                                                                             x => m_Pair.IsPersistent = x.ConvertBool()
+                                                                            )
+                               },
+                           };
         }
 
         public override bool Equals( ABSObject other )
@@ -91,6 +95,7 @@ namespace BadScript.Interfaces.Settings
         }
 
         #endregion
+
     }
 
 }

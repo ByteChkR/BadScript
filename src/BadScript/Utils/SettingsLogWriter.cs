@@ -5,15 +5,18 @@ namespace BadScript.Utils
 
     public class SettingsLogWriter
     {
+
         [Flags]
         public enum SettingsLogSettings
         {
+
             None = 0,
             OnAddCategory = 1,
             OnAddPair = 2,
             OnValueChanged = 4,
             OnPersistenceChanged = 8,
             All = -1
+
         }
 
         private readonly Action < string > m_Write;
@@ -69,6 +72,7 @@ namespace BadScript.Utils
         }
 
         #endregion
+
     }
 
 }

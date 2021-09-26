@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
@@ -11,8 +12,10 @@ using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
 using BadScript.Interfaces;
 using BadScript.Utils.Reflection;
+
 using Ceen.Httpd;
 using Ceen.Httpd.Logging;
+
 using OpenSSL.PrivateKeyDecoder;
 
 namespace BadScript.HttpServer
@@ -20,6 +23,7 @@ namespace BadScript.HttpServer
 
     public class HttpServerApi : ABSScriptInterface
     {
+
         #region Public
 
         public HttpServerApi() : base( "http-server" )
@@ -28,17 +32,18 @@ namespace BadScript.HttpServer
 
         public override void AddApi( ABSTable root )
         {
-
             root.InsertElement(
-                new BSObject( "createListener" ),
-                new BSFunction( "function createListener(config)", CreateListener, 1 ) );
+                               new BSObject( "createListener" ),
+                               new BSFunction( "function createListener(config)", CreateListener, 1 )
+                              );
 
             BSTable statusCodes = EnumBuilder < HttpStatusCode >.Build();
             statusCodes.Lock();
 
             root.InsertElement(
-                new BSObject( "statusCodes" ),
-                statusCodes );
+                               new BSObject( "statusCodes" ),
+                               statusCodes
+                              );
         }
 
         #endregion
@@ -70,7 +75,7 @@ namespace BadScript.HttpServer
                 if ( configTable.HasElement( new BSObject( "ssl" ) ) )
                 {
                     usessl = true;
-                    ABSTable sslConfig = ( ABSTable ) configTable.GetRawElement( new BSObject( "ssl" ) );
+                    ABSTable sslConfig = ( ABSTable )configTable.GetRawElement( new BSObject( "ssl" ) );
 
                     string sslFile = sslConfig.GetRawElement( new BSObject( "cert-file" ) ).ConvertString();
 
@@ -81,20 +86,20 @@ namespace BadScript.HttpServer
 
                     if ( sslConfig.HasElement( new BSObject( "cert-pass" ) ) )
                     {
-
                         string pw = sslConfig.GetRawElement( new BSObject( "cert-pass" ) ).ConvertString();
 
                         config.SSLCertificate =
                             new X509Certificate2(
-                                sslFile,
-                                pw );
+                                                 sslFile,
+                                                 pw
+                                                );
                     }
                     else
                     {
-
                         config.SSLCertificate =
                             new X509Certificate2(
-                                sslFile );
+                                                 sslFile
+                                                );
                     }
 
                     if ( sslConfig.HasElement( new BSObject( "cert-key" ) ) )
@@ -104,24 +109,27 @@ namespace BadScript.HttpServer
 
                         config.SSLCertificate =
                             ( config.SSLCertificate as X509Certificate2 ).CopyWithPrivateKey(
-                                decoder.Decode(
-                                    File.ReadAllText( certKeyFile ) ) );
+                                 decoder.Decode(
+                                                File.ReadAllText( certKeyFile )
+                                               )
+                                );
                     }
-
                 }
 
                 return new HttpServerListenerObject(
-                    SourcePosition.Unknown,
-                    new IPEndPoint( IPAddress.Parse( endpoint ), port ),
-                    usessl,
-                    config,
-                    tcs );
+                                                    SourcePosition.Unknown,
+                                                    new IPEndPoint( IPAddress.Parse( endpoint ), port ),
+                                                    usessl,
+                                                    config,
+                                                    tcs
+                                                   );
             }
 
             throw new BSRuntimeException( "Invalid HTTP Server Configuration" );
         }
 
         #endregion
+
     }
 
 }

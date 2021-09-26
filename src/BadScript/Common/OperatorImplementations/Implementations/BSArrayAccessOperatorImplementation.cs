@@ -8,11 +8,11 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
     public class BSArrayAccessOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public BSArrayAccessOperatorImplementation() : base( "[]" )
         {
-
         }
 
         public override bool IsCorrectImplementation( ABSObject[] args )
@@ -38,19 +38,20 @@ namespace BadScript.Common.OperatorImplementations.Implementations
             {
                 if ( i.TryConvertDecimal( out decimal d ) )
                 {
-                    return a.GetElement( ( int ) d );
+                    return a.GetElement( ( int )d );
                 }
             }
 
             throw new BSInvalidTypeException(
-                SourcePosition.Unknown,
-                "Expected Array",
-                obj,
-                "Table"
-            );
+                                             SourcePosition.Unknown,
+                                             "Expected Array",
+                                             obj,
+                                             "Table"
+                                            );
         }
 
         #endregion
+
     }
 
 }

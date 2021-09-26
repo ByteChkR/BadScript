@@ -9,25 +9,32 @@ namespace BadScript.Common.Expressions.Implementations.Block
     {
 
         public BSExpression[] Block;
+
+        public override bool IsConstant => false;
+
+        #region Public
+
         public BSBlockExpression( BSExpression[] block ) : base( SourcePosition.Unknown )
         {
             Block = block;
         }
 
-        public override bool IsConstant => false;
-
         public override ABSObject Execute( BSScope scope )
         {
-            foreach ( BSExpression bsExpression in Block)
+            foreach ( BSExpression bsExpression in Block )
             {
                 bsExpression.Execute( scope );
 
                 if ( scope.BreakExecution )
+                {
                     break;
+                }
             }
 
             return BSObject.Null;
         }
+
+        #endregion
 
     }
 

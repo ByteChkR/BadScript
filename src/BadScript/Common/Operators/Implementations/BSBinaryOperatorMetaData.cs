@@ -6,6 +6,7 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSBinaryOperatorMetaData
     {
+
         public string OperatorKey;
         public string Signature;
         public int ArgumentCount;
@@ -22,15 +23,16 @@ namespace BadScript.Common.Operators.Implementations
         public BSFunction MakeFunction()
         {
             return new BSFunction(
-                $"function {OperatorKey}({Signature})",
-                objects => BSOperatorImplementationResolver.
-                           ResolveImplementation( OperatorKey, objects ).
-                           ExecuteOperator( objects ),
-                ArgumentCount
-            );
+                                  $"function {OperatorKey}({Signature})",
+                                  objects => BSOperatorImplementationResolver.
+                                             ResolveImplementation( OperatorKey, objects ).
+                                             ExecuteOperator( objects ),
+                                  ArgumentCount
+                                 );
         }
 
         #endregion
+
     }
 
 }

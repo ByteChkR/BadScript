@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BadScript.Common.Exceptions;
 
 namespace BadScript.Common.Types.References.Implementations
@@ -6,6 +7,7 @@ namespace BadScript.Common.Types.References.Implementations
 
     public class BSTableReference : ABSReference
     {
+
         private readonly ABSTable m_SourceTable;
         private readonly ABSObject m_Key;
         private readonly bool m_ReadOnly;
@@ -24,8 +26,9 @@ namespace BadScript.Common.Types.References.Implementations
             if ( m_ReadOnly )
             {
                 throw new BSRuntimeException(
-                    Position,
-                    $"Table '{m_SourceTable.SafeToString()}.{m_Key.SafeToString()}' is locked and can not be edited" );
+                                             Position,
+                                             $"Table '{m_SourceTable.SafeToString()}.{m_Key.SafeToString()}' is locked and can not be edited"
+                                            );
             }
 
             m_SourceTable.InsertElement( m_Key, obj );
@@ -41,10 +44,10 @@ namespace BadScript.Common.Types.References.Implementations
             }
 
             throw new Exception( $"Property '{k.SafeToString()}' is null in table '{m_SourceTable.SafeToString()}'" );
-
         }
 
         #endregion
+
     }
 
 }

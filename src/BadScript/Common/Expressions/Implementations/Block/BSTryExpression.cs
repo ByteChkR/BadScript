@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -9,6 +10,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSTryExpression : BSExpression
     {
+
         public BSExpression[] TryBlock;
         public BSExpression[] CatchBlock;
         public readonly string CapturedVar;
@@ -37,11 +39,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 BSScope tryScope = new BSScope( BSScopeFlags.None, scope );
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                    tryScope,
-                    TryBlock,
-                    new BSFunctionParameter[0],
-                    new ABSObject[0]
-                );
+                     tryScope,
+                     TryBlock,
+                     new BSFunctionParameter[0],
+                     new ABSObject[0]
+                    );
 
                 if ( ret != null )
                 {
@@ -51,7 +53,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 {
                     scope.SetFlag( tryScope.Flags );
                 }
-
             }
             catch ( Exception e )
             {
@@ -65,11 +66,11 @@ namespace BadScript.Common.Expressions.Implementations.Block
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                    catchScope,
-                    CatchBlock,
-                    new BSFunctionParameter[0],
-                    new ABSObject[0]
-                );
+                     catchScope,
+                     CatchBlock,
+                     new BSFunctionParameter[0],
+                     new ABSObject[0]
+                    );
 
                 if ( ret != null )
                 {
@@ -103,17 +104,20 @@ namespace BadScript.Common.Expressions.Implementations.Block
             t.InsertElement( new BSObject( "message" ), new BSObject( e.Message ) );
 
             t.InsertElement(
-                new BSObject( "getInner" ),
-                new BSFunction(
-                    "function getInner()",
-                    objects => MakeExceptionTable( stack, p, e.InnerException ),
-                    0,
-                    0 ) );
+                            new BSObject( "getInner" ),
+                            new BSFunction(
+                                           "function getInner()",
+                                           objects => MakeExceptionTable( stack, p, e.InnerException ),
+                                           0,
+                                           0
+                                          )
+                           );
 
             return t;
         }
 
         #endregion
+
     }
 
 }

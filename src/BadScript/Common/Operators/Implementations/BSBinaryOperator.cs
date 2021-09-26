@@ -8,6 +8,7 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSBinaryOperator : BSOperator
     {
+
         private BSFunction m_OperatorImplementation;
         private BSBinaryOperatorMetaData m_Meta;
 
@@ -23,12 +24,12 @@ namespace BadScript.Common.Operators.Implementations
             m_Meta = new BSBinaryOperatorMetaData( key, sig, argC );
 
             m_OperatorImplementation = new BSFunction(
-                $"function {key}({sig})",
-                objects => BSOperatorImplementationResolver.
-                           ResolveImplementation( key, objects ).
-                           ExecuteOperator( objects ),
-                argC
-            );
+                                                      $"function {key}({sig})",
+                                                      objects => BSOperatorImplementationResolver.
+                                                                 ResolveImplementation( key, objects ).
+                                                                 ExecuteOperator( objects ),
+                                                      argC
+                                                     );
 
             Preceedence = start;
         }
@@ -36,13 +37,18 @@ namespace BadScript.Common.Operators.Implementations
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
             return new BSInvocationExpression(
-                parser.CreateSourcePosition(),
-                new BSProxyExpression( parser.CreateSourcePosition(), m_OperatorImplementation, m_Meta ),
-                new[] { left, parser.ParseExpression( Preceedence - 1 ) }
-            );
+                                              parser.CreateSourcePosition(),
+                                              new BSProxyExpression(
+                                                                    parser.CreateSourcePosition(),
+                                                                    m_OperatorImplementation,
+                                                                    m_Meta
+                                                                   ),
+                                              new[] { left, parser.ParseExpression( Preceedence - 1 ) }
+                                             );
         }
 
         #endregion
+
     }
 
 }

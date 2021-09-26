@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
+
 using Ceen;
 
 namespace BadScript.HttpServer
@@ -11,6 +13,7 @@ namespace BadScript.HttpServer
 
     public class HttpServerContextObject : ABSObject
     {
+
         private BSTable m_InstanceFunctions;
         private IHttpContext m_Context;
 
@@ -23,13 +26,19 @@ namespace BadScript.HttpServer
             m_Context = context;
 
             m_InstanceFunctions = new BSTable(
-                pos,
-                new Dictionary < ABSObject, ABSObject >
-                {
-                    { new BSObject( "request" ), new BSFunction( "function request()", ContextGetRequest, 0 ) },
-                    { new BSObject( "response" ), new BSFunction( "function response()", ContextGetResponse, 0 ) }
-                }
-            );
+                                              pos,
+                                              new Dictionary < ABSObject, ABSObject >
+                                              {
+                                                  {
+                                                      new BSObject( "request" ),
+                                                      new BSFunction( "function request()", ContextGetRequest, 0 )
+                                                  },
+                                                  {
+                                                      new BSObject( "response" ),
+                                                      new BSFunction( "function response()", ContextGetResponse, 0 )
+                                                  }
+                                              }
+                                             );
         }
 
         public override bool Equals( ABSObject other )
@@ -102,6 +111,7 @@ namespace BadScript.HttpServer
         }
 
         #endregion
+
     }
 
 }

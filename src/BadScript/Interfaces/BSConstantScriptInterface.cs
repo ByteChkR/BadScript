@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BadScript.Common.Types;
 
 namespace BadScript.Interfaces
@@ -6,6 +7,7 @@ namespace BadScript.Interfaces
 
     public class BSConstantScriptInterface : ABSScriptInterface
     {
+
         private readonly Action < ABSTable > m_AddApi;
 
         #region Public
@@ -21,6 +23,7 @@ namespace BadScript.Interfaces
         }
 
         #endregion
+
     }
 
 }

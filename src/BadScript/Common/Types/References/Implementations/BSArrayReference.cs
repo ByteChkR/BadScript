@@ -5,6 +5,7 @@ namespace BadScript.Common.Types.References.Implementations
 
     public class BSArrayReference : ABSReference
     {
+
         private readonly ABSArray m_SourceTable;
         private readonly int m_Key;
         private readonly bool m_ReadOnly;
@@ -25,8 +26,9 @@ namespace BadScript.Common.Types.References.Implementations
             if ( m_ReadOnly )
             {
                 throw new BSRuntimeException(
-                    Position,
-                    $"Array '{m_SourceTable.SafeToString()}' is locked and can not be edited" );
+                                             Position,
+                                             $"Array '{m_SourceTable.SafeToString()}' is locked and can not be edited"
+                                            );
             }
 
             m_SourceTable.InsertElement( m_Key, obj );
@@ -43,6 +45,7 @@ namespace BadScript.Common.Types.References.Implementations
         }
 
         #endregion
+
     }
 
 }

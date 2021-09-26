@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -10,6 +11,7 @@ namespace BadScript.Utils.Reflection
 
     public class BSReflectionScriptInterface : ABSScriptInterface
     {
+
         #region Public
 
         public BSReflectionScriptInterface() : base( "reflection" )
@@ -21,16 +23,23 @@ namespace BadScript.Utils.Reflection
             root.InsertElement( new BSObject( "getType" ), new BSFunction( "function getType(fullName)", GetType, 1 ) );
 
             root.InsertElement(
-                new BSObject( "loadAssembly" ),
-                new BSFunction( "function loadAssembly(fullName)", LoadAssembly, 1, int.MaxValue ) );
+                               new BSObject( "loadAssembly" ),
+                               new BSFunction( "function loadAssembly(fullName)", LoadAssembly, 1, int.MaxValue )
+                              );
 
             root.InsertElement(
-                new BSObject( "wrapInstance" ),
-                new BSFunction( "function wrapInstance(instance)", WrapInstance, 1 ) );
+                               new BSObject( "wrapInstance" ),
+                               new BSFunction( "function wrapInstance(instance)", WrapInstance, 1 )
+                              );
 
             root.InsertElement(
-                new BSObject( "getConstructorData" ),
-                new BSFunction( "function getConstructorData()", objects => TypeBuilder.GetConstructorData(), 0 ) );
+                               new BSObject( "getConstructorData" ),
+                               new BSFunction(
+                                              "function getConstructorData()",
+                                              objects => TypeBuilder.GetConstructorData(),
+                                              0
+                                             )
+                              );
         }
 
         #endregion
@@ -86,12 +95,13 @@ namespace BadScript.Utils.Reflection
 
         private ABSObject WrapInstance( ABSObject[] arg )
         {
-            object o = ( ( BSObject ) arg[0] ).GetInternalObject();
+            object o = ( ( BSObject )arg[0] ).GetInternalObject();
 
             return TypeBuilder.Build( o.GetType(), o );
         }
 
         #endregion
+
     }
 
 }

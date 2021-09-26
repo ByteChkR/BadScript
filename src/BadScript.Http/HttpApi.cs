@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Types;
@@ -14,6 +15,7 @@ namespace BadScript.Http
 
     public class HttpApi : ABSScriptInterface
     {
+
         #region Public
 
         public HttpApi() : base( "http" )
@@ -23,29 +25,29 @@ namespace BadScript.Http
         public override void AddApi( ABSTable t )
         {
             t.InsertElement(
-                new BSObject( "get" ),
-                new BSFunction( "function get(url)/get(url, headers)", Get, 1, 2 ) );
+                            new BSObject( "get" ),
+                            new BSFunction( "function get(url)/get(url, headers)", Get, 1, 2 )
+                           );
 
             t.InsertElement(
-                new BSObject( "post" ),
-                new BSFunction( "function post(url, body)", Post, 2 )
-            );
+                            new BSObject( "post" ),
+                            new BSFunction( "function post(url, body)", Post, 2 )
+                           );
 
             t.InsertElement(
-                new BSObject( "downloadFile" ),
-                new BSFunction( "function downloadFile(url, destination)", DownloadFile, 2 )
-            );
+                            new BSObject( "downloadFile" ),
+                            new BSFunction( "function downloadFile(url, destination)", DownloadFile, 2 )
+                           );
 
             t.InsertElement(
-                new BSObject( "downloadString" ),
-                new BSFunction( "function downloadString(url)", DownloadString, 1 )
-            );
+                            new BSObject( "downloadString" ),
+                            new BSFunction( "function downloadString(url)", DownloadString, 1 )
+                           );
 
             t.InsertElement(
-                new BSObject( "createUri" ),
-                new BSFunction( "function createUri(url)", CreateUri, 1 )
-            );
-
+                            new BSObject( "createUri" ),
+                            new BSFunction( "function createUri(url)", CreateUri, 1 )
+                           );
         }
 
         #endregion
@@ -73,7 +75,6 @@ namespace BadScript.Http
             {
                 return new BSObject( wc.DownloadString( url ) );
             }
-
         }
 
         private static ABSObject Get( ABSObject[] args )
@@ -84,7 +85,7 @@ namespace BadScript.Http
 
             if ( args.Length == 2 )
             {
-                BSTable headers = ( BSTable ) args[1].ResolveReference();
+                BSTable headers = ( BSTable )args[1].ResolveReference();
 
                 foreach ( IForEachIteration forEachIteration in headers )
                 {
@@ -95,13 +96,13 @@ namespace BadScript.Http
 
             request.Credentials = CredentialCache.DefaultCredentials;
 
-            HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
+            HttpWebResponse response = ( HttpWebResponse )request.GetResponse();
             BSTable t = new BSTable( SourcePosition.Unknown );
 
             t.InsertElement(
-                new BSObject( "status" ),
-                new BSObject( ( decimal ) response.StatusCode )
-            );
+                            new BSObject( "status" ),
+                            new BSObject( ( decimal )response.StatusCode )
+                           );
 
             using ( TextReader tr = new StreamReader( response.GetResponseStream() ) )
             {
@@ -126,13 +127,13 @@ namespace BadScript.Http
                 stream.Write( data, 0, data.Length );
             }
 
-            HttpWebResponse response = ( HttpWebResponse ) request.GetResponse();
+            HttpWebResponse response = ( HttpWebResponse )request.GetResponse();
             BSTable t = new BSTable( SourcePosition.Unknown );
 
             t.InsertElement(
-                new BSObject( "status" ),
-                new BSObject( ( decimal ) response.StatusCode )
-            );
+                            new BSObject( "status" ),
+                            new BSObject( ( decimal )response.StatusCode )
+                           );
 
             using ( TextReader tr = new StreamReader( response.GetResponseStream() ) )
             {
@@ -148,29 +149,35 @@ namespace BadScript.Http
             BSTable table = new BSTable( SourcePosition.Unknown );
 
             table.InsertElement(
-                new BSObject( "getHost" ),
-                new BSFunction( "function getHost()", objects => new BSObject( uri.Host ), 0 ) );
+                                new BSObject( "getHost" ),
+                                new BSFunction( "function getHost()", objects => new BSObject( uri.Host ), 0 )
+                               );
 
             table.InsertElement(
-                new BSObject( "getLocalPath" ),
-                new BSFunction( "function getLocalPath()", objects => new BSObject( uri.LocalPath ), 0 ) );
+                                new BSObject( "getLocalPath" ),
+                                new BSFunction( "function getLocalPath()", objects => new BSObject( uri.LocalPath ), 0 )
+                               );
 
             table.InsertElement(
-                new BSObject( "getAuthority" ),
-                new BSFunction( "function getAuthority()", objects => new BSObject( uri.Authority ), 0 ) );
+                                new BSObject( "getAuthority" ),
+                                new BSFunction( "function getAuthority()", objects => new BSObject( uri.Authority ), 0 )
+                               );
 
             table.InsertElement(
-                new BSObject( "getScheme" ),
-                new BSFunction( "function getScheme()", objects => new BSObject( uri.Scheme ), 0 ) );
+                                new BSObject( "getScheme" ),
+                                new BSFunction( "function getScheme()", objects => new BSObject( uri.Scheme ), 0 )
+                               );
 
             table.InsertElement(
-                new BSObject( "getUserInfo" ),
-                new BSFunction( "function getUserInfo()", objects => new BSObject( uri.UserInfo ), 0 ) );
+                                new BSObject( "getUserInfo" ),
+                                new BSFunction( "function getUserInfo()", objects => new BSObject( uri.UserInfo ), 0 )
+                               );
 
             return table;
         }
 
         #endregion
+
     }
 
 }

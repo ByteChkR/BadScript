@@ -5,6 +5,7 @@ namespace BadScript.Common.Types.References
 
     public static class BSReferenceExtensions
     {
+
         #region Public
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -19,6 +20,7 @@ namespace BadScript.Common.Types.References
         }
 
         #endregion
+
     }
 
 }

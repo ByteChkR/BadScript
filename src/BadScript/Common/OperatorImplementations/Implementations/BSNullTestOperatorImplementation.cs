@@ -5,6 +5,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
     public class BSNullTestOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public BSNullTestOperatorImplementation() : base( "??" )
@@ -34,6 +35,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
         }
 
         #endregion
+
     }
 
 }

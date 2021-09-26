@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -13,6 +14,7 @@ namespace BadScript.Utils.Reflection
 
     internal struct TypeBuilderData
     {
+
         private static readonly List < Type > s_FilterTypes = new List < Type >();
         private static TypeBuilderTypeFilter s_FilterType = TypeBuilderTypeFilter.Blacklist;
 
@@ -31,7 +33,9 @@ namespace BadScript.Utils.Reflection
 
         private static readonly Dictionary < Type, TypeBuilderData > s_Builders =
             new Dictionary < Type, TypeBuilderData >();
+
         private readonly Dictionary < string, TypePropertyBuilderData > m_PropertyData;
+
         private static readonly Dictionary < string, (bool locked, List < BSFunction > ctors) > s_Constructors =
             new Dictionary < string, (bool locked, List < BSFunction > ctors) >();
 
@@ -91,13 +95,13 @@ namespace BadScript.Utils.Reflection
             if ( pi.CanWrite )
             {
                 setter = ( o, absObject ) =>
-                {
-                    if ( absObject is BSObject rtype )
-                    {
-                        object val = Convert.ChangeType( rtype.GetInternalObject(), pi.PropertyType );
-                        pi.SetValue( o, val );
-                    }
-                };
+                         {
+                             if ( absObject is BSObject rtype )
+                             {
+                                 object val = Convert.ChangeType( rtype.GetInternalObject(), pi.PropertyType );
+                                 pi.SetValue( o, val );
+                             }
+                         };
             }
 
             return new TypePropertyBuilderData( o => tData.WrapObject( pi.GetValue( o ) ), setter );
@@ -112,14 +116,14 @@ namespace BadScript.Utils.Reflection
             if ( !pi.IsInitOnly )
             {
                 setter = ( o, absObject ) =>
-                {
-                    if ( absObject is BSObject rtype )
-                    {
-                        object val = Convert.ChangeType( rtype.GetInternalObject(), pi.FieldType );
+                         {
+                             if ( absObject is BSObject rtype )
+                             {
+                                 object val = Convert.ChangeType( rtype.GetInternalObject(), pi.FieldType );
 
-                        pi.SetValue( o, val );
-                    }
-                };
+                                 pi.SetValue( o, val );
+                             }
+                         };
             }
 
             return new TypePropertyBuilderData( o => tData.WrapObject( pi.GetValue( o ) ), setter );
@@ -150,30 +154,38 @@ namespace BadScript.Utils.Reflection
             ParameterInfo[] pis = mi.GetParameters();
 
             Func < object, ABSObject > getter = o =>
-            {
-                Func < ABSObject[], ABSObject > func = objects =>
-                {
-                    object[] args = new object[objects.Length];
+                                                {
+                                                    Func < ABSObject[], ABSObject > func = objects =>
+                                                    {
+                                                        object[] args = new object[objects.Length];
 
-                    for ( int i = 0; i < objects.Length; i++ )
-                    {
-                        ABSObject absObject = objects[i];
+                                                        for ( int i = 0; i < objects.Length; i++ )
+                                                        {
+                                                            ABSObject absObject = objects[i];
 
-                        if ( absObject is BSObject arg )
-                        {
-                            args[i] = Convert.ChangeType( arg.GetInternalObject(), pis[i].ParameterType );
-                        }
-                    }
+                                                            if ( absObject is BSObject arg )
+                                                            {
+                                                                args[i] = Convert.ChangeType(
+                                                                     arg.GetInternalObject(),
+                                                                     pis[i].ParameterType
+                                                                    );
+                                                            }
+                                                        }
 
-                    return tRet.WrapObject( mi.Invoke( o, args ) );
-                };
+                                                        return tRet.WrapObject( mi.Invoke( o, args ) );
+                                                    };
 
-                ( int min, int max ) = GetParamRange( pis );
+                                                    ( int min, int max ) = GetParamRange( pis );
 
-                BSFunction f = new BSFunction( GenerateSignature( $"{mi.Name}", pis ), func, min, max );
+                                                    BSFunction f = new BSFunction(
+                                                         GenerateSignature( $"{mi.Name}", pis ),
+                                                         func,
+                                                         min,
+                                                         max
+                                                        );
 
-                return f;
-            };
+                                                    return f;
+                                                };
 
             return new TypePropertyBuilderData( getter, null );
         }
@@ -206,21 +218,24 @@ namespace BadScript.Utils.Reflection
             ParameterInfo[] pis = mi.GetParameters();
 
             Func < ABSObject[], ABSObject > func = objects =>
-            {
-                object[] args = new object[objects.Length];
+                                                   {
+                                                       object[] args = new object[objects.Length];
 
-                for ( int i = 0; i < objects.Length; i++ )
-                {
-                    ABSObject absObject = objects[i];
+                                                       for ( int i = 0; i < objects.Length; i++ )
+                                                       {
+                                                           ABSObject absObject = objects[i];
 
-                    if ( absObject is BSObject arg )
-                    {
-                        args[i] = Convert.ChangeType( arg.GetInternalObject(), pis[i].ParameterType );
-                    }
-                }
+                                                           if ( absObject is BSObject arg )
+                                                           {
+                                                               args[i] = Convert.ChangeType(
+                                                                    arg.GetInternalObject(),
+                                                                    pis[i].ParameterType
+                                                                   );
+                                                           }
+                                                       }
 
-                return tRet.WrapObject( mi.Invoke( args ) );
-            };
+                                                       return tRet.WrapObject( mi.Invoke( args ) );
+                                                   };
 
             ( int min, int max ) = GetParamRange( pis );
 
@@ -261,7 +276,6 @@ namespace BadScript.Utils.Reflection
             }
 
             return TypePropertyBuilderData.Empty;
-
         }
 
         private void Initialize()
@@ -323,12 +337,18 @@ namespace BadScript.Utils.Reflection
             foreach ( KeyValuePair < string, TypePropertyBuilderData > typePropertyBuilderData in m_PropertyData )
             {
                 props[typePropertyBuilderData.Key] = new BSReflectionReference(
-                    typePropertyBuilderData.Value.MakeGetter( instance ),
-                    typePropertyBuilderData.Value.MakeSetter( instance ) );
+                                                                               typePropertyBuilderData.Value.MakeGetter(
+                                                                                    instance
+                                                                                   ),
+                                                                               typePropertyBuilderData.Value.MakeSetter(
+                                                                                    instance
+                                                                                   )
+                                                                              );
             }
 
             return new BSReflectionTypeObject( m_Type, instance, props );
         }
+
     }
 
 }

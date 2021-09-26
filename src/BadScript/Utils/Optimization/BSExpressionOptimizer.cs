@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Binary;
 using BadScript.Common.Expressions.Implementations.Block;
@@ -15,6 +16,7 @@ namespace BadScript.Utils.Optimization
 
     public static class BSExpressionOptimizer
     {
+
         public static bool WriteLogs = true;
 
         #region Public
@@ -33,7 +35,6 @@ namespace BadScript.Utils.Optimization
 
         private static BSExpression OptimizeExpression( BSExpression expr )
         {
-
             if ( expr is BSFunctionDefinitionExpression fdef )
             {
                 for ( int i = 0; i < fdef.Block.Length; i++ )
@@ -57,7 +58,8 @@ namespace BadScript.Utils.Optimization
                     if ( WriteLogs )
                     {
                         Console.WriteLine(
-                            $"[Expression Optimizer] Optimizing {bin.GetType().Name}: " + o.SafeToString() );
+                                          $"[Expression Optimizer] Optimizing {bin.GetType().Name}: " + o.SafeToString()
+                                         );
                     }
 
                     return new BSProxyExpression( SourcePosition.Unknown, o, md );
@@ -90,7 +92,9 @@ namespace BadScript.Utils.Optimization
                     if ( WriteLogs )
                     {
                         Console.WriteLine(
-                            $"[Expression Optimizer] Optimizing {invoc.GetType().Name}: " + o.SafeToString() );
+                                          $"[Expression Optimizer] Optimizing {invoc.GetType().Name}: " +
+                                          o.SafeToString()
+                                         );
                     }
 
                     return new BSProxyExpression( SourcePosition.Unknown, o, md );
@@ -117,7 +121,9 @@ namespace BadScript.Utils.Optimization
                     if ( WriteLogs )
                     {
                         Console.WriteLine(
-                            $"[Expression Optimizer] Optimizing {unary.GetType().Name}: " + o.SafeToString() );
+                                          $"[Expression Optimizer] Optimizing {unary.GetType().Name}: " +
+                                          o.SafeToString()
+                                         );
                     }
 
                     return new BSProxyExpression( SourcePosition.Unknown, o, md );
@@ -129,7 +135,6 @@ namespace BadScript.Utils.Optimization
             }
             else if ( expr is BSIfExpression ifExpr )
             {
-
                 Dictionary < BSExpression, BSExpression[] > newConditions =
                     new Dictionary < BSExpression, BSExpression[] >();
 
@@ -153,19 +158,21 @@ namespace BadScript.Utils.Optimization
                     }
                 }
 
-                List < BSExpression > remList = new List <BSExpression>();
-                
+                List < BSExpression > remList = new List < BSExpression >();
+
                 foreach ( KeyValuePair < BSExpression, BSExpression[] > newCondition in newConditions )
                 {
                     if ( newCondition.Key is BSProxyExpression pexpr )
                     {
                         if ( pexpr.Object.TryConvertBool( out bool c ) && c )
                         {
-                            if (WriteLogs)
+                            if ( WriteLogs )
                             {
                                 Console.WriteLine(
-                                                  $"[Expression Optimizer] Replacing If Branch with If Block..");
+                                                  $"[Expression Optimizer] Replacing If Branch with If Block.."
+                                                 );
                             }
+
                             return new BSBlockExpression( newCondition.Value );
                         }
                         else
@@ -175,51 +182,59 @@ namespace BadScript.Utils.Optimization
                     }
                     else if ( newCondition.Key is BSValueExpression vexpr )
                     {
-
-                        if (vexpr.SourceValue is true)
+                        if ( vexpr.SourceValue is true )
                         {
-                            if (WriteLogs)
+                            if ( WriteLogs )
                             {
                                 Console.WriteLine(
-                                                  $"[Expression Optimizer] Replacing If Branch with If Block..");
+                                                  $"[Expression Optimizer] Replacing If Branch with If Block.."
+                                                 );
                             }
-                            return new BSBlockExpression(newCondition.Value);
+
+                            return new BSBlockExpression( newCondition.Value );
                         }
                         else
                         {
-                            remList.Add(vexpr);
+                            remList.Add( vexpr );
                         }
                     }
-                    else if (newCondition.Value.Length == 0)
+                    else if ( newCondition.Value.Length == 0 )
                     {
-                        remList.Add(newCondition.Key);
+                        remList.Add( newCondition.Key );
                     }
                 }
 
-                foreach (BSExpression bsExpression in remList )
+                foreach ( BSExpression bsExpression in remList )
                 {
-                    if (WriteLogs)
+                    if ( WriteLogs )
                     {
                         Console.WriteLine(
-                                          $"[Expression Optimizer] Removing If Branch {bsExpression}");
+                                          $"[Expression Optimizer] Removing If Branch {bsExpression}"
+                                         );
                     }
+
                     newConditions.Remove( bsExpression );
                 }
 
                 if ( newConditions.Count == 0 )
                 {
-                    if (WriteLogs)
+                    if ( WriteLogs )
                     {
                         Console.WriteLine(
-                                          $"[Expression Optimizer] Replacing If Branch with Else Block..");
+                                          $"[Expression Optimizer] Replacing If Branch with Else Block.."
+                                         );
                     }
 
-                    if ( ifExpr.ElseBlock != null && ifExpr.ElseBlock.Length!=0 )
+                    if ( ifExpr.ElseBlock != null && ifExpr.ElseBlock.Length != 0 )
                     {
                         return new BSBlockExpression( ifExpr.ElseBlock );
                     }
-                    return new BSProxyExpression(SourcePosition.Unknown, BSObject.Null, new BSExpressionOptimizerMetaData(null));
 
+                    return new BSProxyExpression(
+                                                 SourcePosition.Unknown,
+                                                 BSObject.Null,
+                                                 new BSExpressionOptimizerMetaData( null )
+                                                );
                 }
             }
             else if ( expr is BSTryExpression tryExpr )
@@ -238,23 +253,36 @@ namespace BadScript.Utils.Optimization
             {
                 whileExpr.Condition = OptimizeExpression( whileExpr.Condition );
 
-                if (whileExpr.Condition is BSProxyExpression pexpr && pexpr.Object.TryConvertBool(out bool v) && !v)
+                if ( whileExpr.Condition is BSProxyExpression pexpr && pexpr.Object.TryConvertBool( out bool v ) && !v )
                 {
-                    if (WriteLogs)
+                    if ( WriteLogs )
                     {
                         Console.WriteLine(
-                                          $"[Expression Optimizer] Removing Unreachable While Loop");
+                                          $"[Expression Optimizer] Removing Unreachable While Loop"
+                                         );
                     }
-                    return new BSProxyExpression(SourcePosition.Unknown, BSObject.Null, new BSExpressionOptimizerMetaData(null));
+
+                    return new BSProxyExpression(
+                                                 SourcePosition.Unknown,
+                                                 BSObject.Null,
+                                                 new BSExpressionOptimizerMetaData( null )
+                                                );
                 }
-                if (whileExpr.Condition is BSValueExpression vexpr && vexpr.SourceValue is false)
+
+                if ( whileExpr.Condition is BSValueExpression vexpr && vexpr.SourceValue is false )
                 {
-                    if (WriteLogs)
+                    if ( WriteLogs )
                     {
                         Console.WriteLine(
-                                          $"[Expression Optimizer] Removing Unreachable While Loop");
+                                          $"[Expression Optimizer] Removing Unreachable While Loop"
+                                         );
                     }
-                    return new BSProxyExpression(SourcePosition.Unknown, BSObject.Null, new BSExpressionOptimizerMetaData(null));
+
+                    return new BSProxyExpression(
+                                                 SourcePosition.Unknown,
+                                                 BSObject.Null,
+                                                 new BSExpressionOptimizerMetaData( null )
+                                                );
                 }
 
                 for ( int i = 0; i < whileExpr.Block.Length; i++ )
@@ -287,6 +315,7 @@ namespace BadScript.Utils.Optimization
         }
 
         #endregion
+
     }
 
 }

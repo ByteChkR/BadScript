@@ -3,6 +3,7 @@
 
     public class BSSelfMultiplyOperatorImplementation : ABSSelfMathOperatorImplementation
     {
+
         #region Public
 
         public BSSelfMultiplyOperatorImplementation() : base( "*=" )
@@ -19,6 +20,7 @@
         }
 
         #endregion
+
     }
 
 }

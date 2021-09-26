@@ -7,6 +7,7 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
     public class BSNullCheckPropertyExpression : BSExpression
     {
+
         public readonly string Right;
 
         public override bool IsConstant => false;
@@ -16,7 +17,8 @@ namespace BadScript.Common.Expressions.Implementations.Access
         #region Public
 
         public BSNullCheckPropertyExpression( SourcePosition srcPos, BSExpression left, string varname ) : base(
-            srcPos )
+             srcPos
+            )
         {
             Left = left;
             Right = varname;
@@ -40,6 +42,7 @@ namespace BadScript.Common.Expressions.Implementations.Access
         }
 
         #endregion
+
     }
 
 }

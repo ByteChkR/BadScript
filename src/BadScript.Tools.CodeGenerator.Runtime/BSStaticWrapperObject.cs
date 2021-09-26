@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
@@ -14,48 +15,60 @@ using BadScript.Common.Types.References;
 namespace BadScript.Tools.CodeGenerator.Runtime
 {
 
-    public class BSStaticWrapperObject : ABSObject, IEnumerable <IForEachIteration>
+    public class BSStaticWrapperObject : ABSObject, IEnumerable < IForEachIteration >
     {
+
         protected Dictionary < string, ABSReference > m_StaticProperties;
+        private Type m_WrappedType;
 
         public string[] Properties => m_StaticProperties.Keys.ToArray();
-        private Type m_WrappedType;
-        public BSStaticWrapperObject(Type t) : base( SourcePosition.Unknown )
+
+        public override bool IsNull => false;
+
+        #region Public
+
+        public BSStaticWrapperObject( Type t ) : base( SourcePosition.Unknown )
         {
             m_WrappedType = t;
             m_StaticProperties = new Dictionary < string, ABSReference >();
         }
 
-        public override bool IsNull => false;
-
-        public override bool Equals(ABSObject other)
+        public override bool Equals( ABSObject other )
         {
             return ReferenceEquals( this, other );
         }
 
-        public override ABSReference GetProperty(string propertyName)
+        public IEnumerator < IForEachIteration > GetEnumerator()
         {
-            if (m_StaticProperties.ContainsKey(propertyName))
+            foreach ( KeyValuePair < string, ABSReference > keyValuePair in m_StaticProperties )
+            {
+                yield return new ForEachIteration( new ABSObject[] { new BSObject( keyValuePair.Key ) } );
+            }
+        }
+
+        public override ABSReference GetProperty( string propertyName )
+        {
+            if ( m_StaticProperties.ContainsKey( propertyName ) )
             {
                 return m_StaticProperties[propertyName];
             }
 
-            throw new BSRuntimeException("Invalid Property Name: " + propertyName);
+            throw new BSRuntimeException( "Invalid Property Name: " + propertyName );
         }
 
-        public override bool HasProperty(string propertyName)
+        public override bool HasProperty( string propertyName )
         {
-            return m_StaticProperties.ContainsKey(propertyName);
+            return m_StaticProperties.ContainsKey( propertyName );
         }
 
-        public override ABSObject Invoke(ABSObject[] args)
+        public override ABSObject Invoke( ABSObject[] args )
         {
-
-            throw new BSRuntimeException("Can not Invoke Object");
+            throw new BSRuntimeException( "Can not Invoke Object" );
         }
-        public override string SafeToString(Dictionary<ABSObject, string> doneList)
+
+        public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
-            if (doneList.ContainsKey(this))
+            if ( doneList.ContainsKey( this ) )
             {
                 return "<recursion>";
             }
@@ -63,130 +76,127 @@ namespace BadScript.Tools.CodeGenerator.Runtime
             doneList[this] = "{}";
 
             StringWriter sw = new StringWriter();
-            IndentedTextWriter tw = new IndentedTextWriter(sw);
-            tw.WriteLine('{');
+            IndentedTextWriter tw = new IndentedTextWriter( sw );
+            tw.WriteLine( '{' );
 
-            foreach (KeyValuePair<string, ABSReference> bsRuntimeObject in m_StaticProperties)
+            foreach ( KeyValuePair < string, ABSReference > bsRuntimeObject in m_StaticProperties )
             {
-                List<string> keyLines = bsRuntimeObject.Key.
-                                                        Split(
-                                                            new[] { '\n' },
-                                                            StringSplitOptions.RemoveEmptyEntries
-                                                        ).
-                                                        Select(x => x.Trim()).
-                                                        Where(x => !string.IsNullOrEmpty(x)).
-                                                        ToList();
+                List < string > keyLines = bsRuntimeObject.Key.
+                                                           Split(
+                                                                 new[] { '\n' },
+                                                                 StringSplitOptions.RemoveEmptyEntries
+                                                                ).
+                                                           Select( x => x.Trim() ).
+                                                           Where( x => !string.IsNullOrEmpty( x ) ).
+                                                           ToList();
 
                 List < string > valueLines = new List < string >();
 
-                if(WrapperHelper.AllowRecurseToString)
+                if ( WrapperHelper.AllowRecurseToString )
                 {
                     ABSObject resolvedValue = bsRuntimeObject.Value.ResolveReference();
-                    
+
                     if ( resolvedValue is IBSWrappedObject wo )
                     {
-                        valueLines = wo.GetInternalObject().ToString().Split('\n').ToList();
+                        valueLines = wo.GetInternalObject().ToString().Split( '\n' ).ToList();
                     }
                     else
                     {
-                        valueLines = resolvedValue.SafeToString(doneList).
-                                                          Split(
-                                                              new[] { '\n' },
-                                                              StringSplitOptions.RemoveEmptyEntries
-                                                          ).
-                                                          Select(x => x.Trim()).
-                                                          Where(x => !string.IsNullOrEmpty(x)).
-                                                          ToList();
+                        valueLines = resolvedValue.SafeToString( doneList ).
+                                                   Split(
+                                                         new[] { '\n' },
+                                                         StringSplitOptions.RemoveEmptyEntries
+                                                        ).
+                                                   Select( x => x.Trim() ).
+                                                   Where( x => !string.IsNullOrEmpty( x ) ).
+                                                   ToList();
                     }
                 }
 
                 tw.Indent = 1;
 
-                for (int i = 0; i < keyLines.Count; i++)
+                for ( int i = 0; i < keyLines.Count; i++ )
                 {
                     string keyLine = keyLines[i];
 
-                    if (i < keyLines.Count - 1)
+                    if ( i < keyLines.Count - 1 )
                     {
-                        tw.WriteLine(keyLine);
+                        tw.WriteLine( keyLine );
                     }
                     else
                     {
-                        if(valueLines.Count != 0)
+                        if ( valueLines.Count != 0 )
                         {
-                            tw.Write(keyLine + " = ");
+                            tw.Write( keyLine + " = " );
                         }
                         else
                         {
-                            tw.WriteLine(keyLine + " = ");
+                            tw.WriteLine( keyLine + " = " );
                         }
                     }
                 }
 
                 tw.Indent = 2;
 
-                for (int i = 0; i < valueLines.Count; i++)
+                for ( int i = 0; i < valueLines.Count; i++ )
                 {
                     string valueLine = valueLines[i];
-                    tw.WriteLine(valueLine);
+                    tw.WriteLine( valueLine );
                 }
             }
 
             tw.Indent = 0;
-            tw.WriteLine('}');
+            tw.WriteLine( '}' );
 
             doneList[this] = sw.ToString();
 
             return sw.ToString();
         }
 
-        public override void SetProperty(string propertyName, ABSObject obj)
+        public override void SetProperty( string propertyName, ABSObject obj )
         {
-            if (m_StaticProperties.ContainsKey(propertyName))
+            if ( m_StaticProperties.ContainsKey( propertyName ) )
             {
-                m_StaticProperties[propertyName].Assign(obj);
+                m_StaticProperties[propertyName].Assign( obj );
 
                 return;
             }
-            throw new BSRuntimeException("Object does not support writing properties");
+
+            throw new BSRuntimeException( "Object does not support writing properties" );
         }
 
-        public override bool TryConvertBool(out bool v)
+        public override bool TryConvertBool( out bool v )
         {
             v = true;
 
             return true;
         }
 
-        public override bool TryConvertDecimal(out decimal d)
+        public override bool TryConvertDecimal( out decimal d )
         {
             d = 0;
 
             return false;
         }
 
-        public override bool TryConvertString(out string v)
+        public override bool TryConvertString( out string v )
         {
-
             v = m_WrappedType.Name;
 
             return true;
         }
 
+        #endregion
 
-
-        public IEnumerator<IForEachIteration> GetEnumerator()
-        {
-            foreach (KeyValuePair<string, ABSReference> keyValuePair in m_StaticProperties)
-            {
-                yield return new ForEachIteration(new ABSObject[] { new BSObject(keyValuePair.Key) });
-            }
-        }
+        #region Private
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
+
+        #endregion
+
     }
 
 }

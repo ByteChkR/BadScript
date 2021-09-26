@@ -5,12 +5,21 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
     public static class WrapperConstructorDataBaseExtensions
     {
-        public static ABSObject Get<T>(this IWrapperConstructorDataBase db, object[] args )
+
+        #region Public
+
+        public static ABSObject Get < T >( this IWrapperConstructorDataBase db, object[] args )
         {
             return db.Get( typeof( T ), args );
         }
 
-        public static bool HasType < T >( this IWrapperConstructorDataBase db ) => db.HasType( typeof( T ) );
+        public static bool HasType < T >( this IWrapperConstructorDataBase db )
+        {
+            return db.HasType( typeof( T ) );
+        }
+
+        #endregion
+
     }
 
 }

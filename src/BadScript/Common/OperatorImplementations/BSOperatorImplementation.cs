@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using BadScript.Common.Types;
 
 namespace BadScript.Common.OperatorImplementations
@@ -6,6 +7,7 @@ namespace BadScript.Common.OperatorImplementations
 
     public class BSOperatorImplementation : ABSOperatorImplementation
     {
+
         private readonly BSFunction m_Implementation;
 
         #region Public
@@ -30,6 +32,7 @@ namespace BadScript.Common.OperatorImplementations
         }
 
         #endregion
+
     }
 
 }

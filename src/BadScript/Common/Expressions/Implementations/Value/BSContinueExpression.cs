@@ -7,6 +7,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
     public class BSContinueExpression : BSExpression
     {
+
         public override bool IsConstant => false;
 
         #region Public
@@ -23,6 +24,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
         }
 
         #endregion
+
     }
 
 }

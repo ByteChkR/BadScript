@@ -8,14 +8,16 @@ namespace BadScript.Common.Expressions.Implementations.Binary
 
     public class BSAssignExpression : BSBinaryExpression
     {
+
         public override bool IsConstant => Left.IsConstant && Right.IsConstant;
 
         #region Public
 
         public BSAssignExpression( SourcePosition srcPos, BSExpression left, BSExpression right ) : base(
-            srcPos,
-            left,
-            right )
+             srcPos,
+             left,
+             right
+            )
         {
         }
 
@@ -32,17 +34,18 @@ namespace BadScript.Common.Expressions.Implementations.Binary
             else
             {
                 throw new BSInvalidTypeException(
-                    m_Position,
-                    "Expected Assignable Reference",
-                    left,
-                    "Reference"
-                );
+                                                 m_Position,
+                                                 "Expected Assignable Reference",
+                                                 left,
+                                                 "Reference"
+                                                );
             }
 
             return right;
         }
 
         #endregion
+
     }
 
 }

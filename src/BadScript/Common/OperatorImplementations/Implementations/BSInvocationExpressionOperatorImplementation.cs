@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using BadScript.Common.Types;
 
 namespace BadScript.Common.OperatorImplementations.Implementations
@@ -6,6 +7,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
 
     public class BSInvocationExpressionOperatorImplementation : ABSOperatorImplementation
     {
+
         #region Public
 
         public BSInvocationExpressionOperatorImplementation() : base( "()" )
@@ -30,6 +32,7 @@ namespace BadScript.Common.OperatorImplementations.Implementations
         }
 
         #endregion
+
     }
 
 }

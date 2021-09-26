@@ -3,8 +3,10 @@
 
     public enum TypeBuilderTypeFilter
     {
+
         Blacklist,
         Whitelist
+
     }
 
 }

@@ -6,11 +6,18 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
     public abstract class WrapperStaticDataBase
     {
+
         public Dictionary < Type, BSStaticWrapperObject > StaticTypes;
+
+        #region Protected
+
         protected WrapperStaticDataBase()
         {
-            StaticTypes = new Dictionary < Type, BSStaticWrapperObject>();
+            StaticTypes = new Dictionary < Type, BSStaticWrapperObject >();
         }
+
+        #endregion
+
     }
 
 }

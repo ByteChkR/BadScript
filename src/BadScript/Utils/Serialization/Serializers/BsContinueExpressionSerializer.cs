@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
 
@@ -8,6 +9,7 @@ namespace BadScript.Utils.Serialization.Serializers
 
     public class BsContinueExpressionSerializer : BSExpressionSerializer
     {
+
         #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
@@ -27,12 +29,12 @@ namespace BadScript.Utils.Serialization.Serializers
 
         public override void Serialize( BSExpression e, Stream ret )
         {
-
-            byte[] b = BitConverter.GetBytes( ( byte ) BSCompiledExpressionCode.ContinueExpr );
+            byte[] b = BitConverter.GetBytes( ( byte )BSCompiledExpressionCode.ContinueExpr );
             ret.Write( b, 0, b.Length );
         }
 
         #endregion
+
     }
 
 }

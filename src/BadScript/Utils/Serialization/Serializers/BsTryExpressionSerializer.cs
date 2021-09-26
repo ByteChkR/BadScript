@@ -1,4 +1,5 @@
 ﻿using System.IO;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block;
 
@@ -7,6 +8,7 @@ namespace BadScript.Utils.Serialization.Serializers
 
     public class BsTryExpressionSerializer : BSExpressionSerializer
     {
+
         #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
@@ -30,15 +32,15 @@ namespace BadScript.Utils.Serialization.Serializers
 
         public override void Serialize( BSExpression e, Stream ret )
         {
-            BSTryExpression expr = ( BSTryExpression ) e;
+            BSTryExpression expr = ( BSTryExpression )e;
             ret.SerializeOpCode( BSCompiledExpressionCode.TryExpr );
             ret.SerializeBlock( expr.TryBlock );
             ret.SerializeString( expr.CapturedVar );
             ret.SerializeBlock( expr.CatchBlock );
-
         }
 
         #endregion
+
     }
 
 }

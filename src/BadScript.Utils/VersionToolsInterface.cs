@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Interfaces;
@@ -8,6 +9,7 @@ namespace BadScript.Utils
 
     public class VersionToolsInterface : BSConstantScriptInterface
     {
+
         #region Public
 
         public VersionToolsInterface() : base( "versioning", MakeInterface )
@@ -23,28 +25,33 @@ namespace BadScript.Utils
             string fmtString = "(~){yyyy}.(~){MM}.(~){dd}.+";
 
             return new BSVersionObject(
-                new Version( 0, 0, 0, ( int ) arg[0].ConvertDecimal() ).ChangeVersion( fmtString ) );
+                                       new Version( 0, 0, 0, ( int )arg[0].ConvertDecimal() ).ChangeVersion( fmtString )
+                                      );
         }
 
         private static ABSObject CreateVersion( ABSObject[] arg )
         {
             return new BSVersionObject(
-                new Version(
-                    ( int ) arg[0].ConvertDecimal(),
-                    ( int ) arg[1].ConvertDecimal(),
-                    ( int ) arg[2].ConvertDecimal(),
-                    ( int ) arg[3].ConvertDecimal() ) );
+                                       new Version(
+                                                   ( int )arg[0].ConvertDecimal(),
+                                                   ( int )arg[1].ConvertDecimal(),
+                                                   ( int )arg[2].ConvertDecimal(),
+                                                   ( int )arg[3].ConvertDecimal()
+                                                  )
+                                      );
         }
 
         private static void MakeInterface( ABSTable obj )
         {
             obj.InsertElement(
-                new BSObject( "parse" ),
-                new BSFunction( "function parse(versionStr)", ParseVersion, 1 ) );
+                              new BSObject( "parse" ),
+                              new BSFunction( "function parse(versionStr)", ParseVersion, 1 )
+                             );
 
             obj.InsertElement(
-                new BSObject( "create" ),
-                new BSFunction( "function create(major, minor, revision, build)", CreateVersion, 4 ) );
+                              new BSObject( "create" ),
+                              new BSFunction( "function create(major, minor, revision, build)", CreateVersion, 4 )
+                             );
 
             obj.InsertElement(
                               new BSObject( "runtimeVersion" ),
@@ -62,6 +69,7 @@ namespace BadScript.Utils
         }
 
         #endregion
+
     }
 
 }

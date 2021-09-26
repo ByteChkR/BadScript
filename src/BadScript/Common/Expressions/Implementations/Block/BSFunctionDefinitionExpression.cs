@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 
 using BadScript.Common.Exceptions;
@@ -31,7 +30,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
             BSFunctionParameter[] args,
             BSExpression[] block,
             bool addGlobal,
-            BSInvocationExpression baseInvocation=null) : base( srcPos )
+            BSInvocationExpression baseInvocation = null ) : base( srcPos )
         {
             BaseInvocation = baseInvocation;
             Name = name;

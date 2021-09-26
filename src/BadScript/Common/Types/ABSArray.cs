@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Types.References;
 
@@ -8,6 +9,7 @@ namespace BadScript.Common.Types
 
     public abstract class ABSArray : ABSObject
     {
+
         #region Public
 
         public abstract IEnumerable < T > ForEach < T >( Func < ABSObject, T > o );
@@ -46,6 +48,7 @@ namespace BadScript.Common.Types
         }
 
         #endregion
+
     }
 
 }

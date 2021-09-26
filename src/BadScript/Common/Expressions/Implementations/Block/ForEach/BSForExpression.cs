@@ -8,13 +8,16 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
     public class BSForExpression : BSExpression
     {
+
         public BSExpression CounterDefinition;
         public BSExpression CounterCondition;
         public BSExpression CounterIncrement;
         public BSExpression[] Block;
-        public override bool IsConstant => CounterDefinition.IsConstant &&
-                                           CounterCondition.IsConstant &&
-                                           CounterIncrement.IsConstant;
+
+        public override bool IsConstant =>
+            CounterDefinition.IsConstant &&
+            CounterCondition.IsConstant &&
+            CounterIncrement.IsConstant;
 
         #region Public
 
@@ -39,13 +42,12 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
             while ( c.TryConvertBool( out bool d ) && d )
             {
-
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                    forScope,
-                    Block,
-                    new BSFunctionParameter[0],
-                    new ABSObject[0]
-                );
+                     forScope,
+                     Block,
+                     new BSFunctionParameter[0],
+                     new ABSObject[0]
+                    );
 
                 if ( forScope.Flags == BSScopeFlags.Continue )
                 {
@@ -66,13 +68,13 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
                 CounterIncrement.Execute( forScope );
 
                 c = CounterCondition.Execute( forScope ).ResolveReference();
-
             }
 
             return BSObject.Null;
         }
 
         #endregion
+
     }
 
 }

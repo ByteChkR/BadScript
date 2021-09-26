@@ -8,6 +8,7 @@ namespace BadScript.Common.Expressions.Implementations.Access
 
     public class BSPropertyExpression : BSExpression
     {
+
         public readonly string Right;
 
         public override bool IsConstant => false;
@@ -29,9 +30,10 @@ namespace BadScript.Common.Expressions.Implementations.Access
                 ABSObject l = Left.Execute( scope );
 
                 ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation(
-                    ".",
-                    new[] { l, new BSObject( Right ) },
-                    true );
+                     ".",
+                     new[] { l, new BSObject( Right ) },
+                     true
+                    );
 
                 return impl.ExecuteOperator( new[] { l, new BSObject( Right ) } );
             }
@@ -40,6 +42,7 @@ namespace BadScript.Common.Expressions.Implementations.Access
         }
 
         #endregion
+
     }
 
 }

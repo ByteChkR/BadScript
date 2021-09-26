@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block;
@@ -14,29 +15,34 @@ namespace BadScript.Utils.Serialization
 
     public static class BSSerializer
     {
+
         private static readonly List < BSExpressionSerializer > s_Compilers = new List < BSExpressionSerializer >
-        {
-            new BsArrayAccessExpressionSerializer(),
-            new BsArrayExpressionSerializer(),
-            new BsBreakExpressionSerializer(),
-            new BsContinueExpressionSerializer(),
-            new BsInvocationExpressionSerializer(),
-            new BsPropertyExpressionSerializer(),
-            new BsReturnExpressionSerializer(),
-            new BsTableExpressionSerializer(),
-            new BsValueExpressionSerializer(),
-            new BsNullCheckPropertyExpressionSerializer(),
-            new BsAssignExpressionSerializer(),
-            new BsWhileExpressionSerializer(),
-            new BsBlockExpressionSerializer(),
-            new BsTryExpressionSerializer(),
-            new BsIfExpressionSerializer(),
-            new BsEnumerableFunctionDefinitionExpressionSerializer(),
-            new BsForeachExpressionSerializer(),
-            new BsForExpressionSerializer(),
-            new BsFunctionDefinitionExpressionSerializer(),
-            new BsProxyExpressionSerializer()
-        };
+                                                                              {
+                                                                                  new
+                                                                                      BsArrayAccessExpressionSerializer(),
+                                                                                  new BsArrayExpressionSerializer(),
+                                                                                  new BsBreakExpressionSerializer(),
+                                                                                  new BsContinueExpressionSerializer(),
+                                                                                  new BsInvocationExpressionSerializer(),
+                                                                                  new BsPropertyExpressionSerializer(),
+                                                                                  new BsReturnExpressionSerializer(),
+                                                                                  new BsTableExpressionSerializer(),
+                                                                                  new BsValueExpressionSerializer(),
+                                                                                  new
+                                                                                      BsNullCheckPropertyExpressionSerializer(),
+                                                                                  new BsAssignExpressionSerializer(),
+                                                                                  new BsWhileExpressionSerializer(),
+                                                                                  new BsBlockExpressionSerializer(),
+                                                                                  new BsTryExpressionSerializer(),
+                                                                                  new BsIfExpressionSerializer(),
+                                                                                  new
+                                                                                      BsEnumerableFunctionDefinitionExpressionSerializer(),
+                                                                                  new BsForeachExpressionSerializer(),
+                                                                                  new BsForExpressionSerializer(),
+                                                                                  new
+                                                                                      BsFunctionDefinitionExpressionSerializer(),
+                                                                                  new BsProxyExpressionSerializer()
+                                                                              };
 
         #region Public
 
@@ -102,7 +108,7 @@ namespace BadScript.Utils.Serialization
             byte[] b = new byte[sizeof( double )];
             s.Read( b, 0, b.Length );
 
-            return ( decimal ) BitConverter.ToDouble( b, 0 );
+            return ( decimal )BitConverter.ToDouble( b, 0 );
         }
 
         internal static BSExpression DeserializeExpression( this Stream s )
@@ -123,10 +129,11 @@ namespace BadScript.Utils.Serialization
             for ( int i = 0; i < c; i++ )
             {
                 ret[i] = new BSFunctionParameter(
-                    s.DeserializeString(),
-                    s.DeserializeBool(),
-                    s.DeserializeBool(),
-                    s.DeserializeBool() );
+                                                 s.DeserializeString(),
+                                                 s.DeserializeBool(),
+                                                 s.DeserializeBool(),
+                                                 s.DeserializeBool()
+                                                );
             }
 
             return ret;
@@ -172,12 +179,12 @@ namespace BadScript.Utils.Serialization
 
         internal static BSCompiledExpressionCode DeserializeOpCode( this Stream s )
         {
-            return ( BSCompiledExpressionCode ) s.ReadByte();
+            return ( BSCompiledExpressionCode )s.ReadByte();
         }
 
         internal static BSSerializerHints DeserializeSHint( this Stream s )
         {
-            return ( BSSerializerHints ) s.ReadByte();
+            return ( BSSerializerHints )s.ReadByte();
         }
 
         internal static string DeserializeString( this Stream s )
@@ -206,7 +213,7 @@ namespace BadScript.Utils.Serialization
 
         internal static void SerializeDecimal( this Stream l, decimal n )
         {
-            byte[] b = BitConverter.GetBytes( ( double ) n );
+            byte[] b = BitConverter.GetBytes( ( double )n );
             l.Write( b, 0, b.Length );
         }
 
@@ -214,7 +221,6 @@ namespace BadScript.Utils.Serialization
         {
             BSExpressionSerializer c = s_Compilers.First( x => x.CanSerialize( expr ) );
             c.Serialize( expr, l );
-
         }
 
         internal static void SerializeFunctionParameters( this Stream l, BSFunctionParameter[] args )
@@ -260,12 +266,12 @@ namespace BadScript.Utils.Serialization
 
         internal static void SerializeOpCode( this Stream l, BSCompiledExpressionCode code )
         {
-            l.Write( new[] { ( byte ) code }, 0, 1 );
+            l.Write( new[] { ( byte )code }, 0, 1 );
         }
 
         internal static void SerializeSHint( this Stream l, BSSerializerHints hint )
         {
-            l.Write( new[] { ( byte ) hint }, 0, 1 );
+            l.Write( new[] { ( byte )hint }, 0, 1 );
         }
 
         internal static void SerializeString( this Stream l, string str )
@@ -307,6 +313,7 @@ namespace BadScript.Utils.Serialization
         }
 
         #endregion
+
     }
 
 }

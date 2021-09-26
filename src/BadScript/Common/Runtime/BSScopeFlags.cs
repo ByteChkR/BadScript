@@ -6,6 +6,7 @@ namespace BadScript.Common.Runtime
     [Flags]
     public enum BSScopeFlags
     {
+
         None = 0,
         Break = 1,
         Continue = 2,
@@ -13,6 +14,7 @@ namespace BadScript.Common.Runtime
         Function = Return,
         IfBlock = Function,
         Loop = Return | Break | Continue
+
     }
 
 }

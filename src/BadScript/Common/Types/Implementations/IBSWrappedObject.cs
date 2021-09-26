@@ -3,7 +3,9 @@
 
     public interface IBSWrappedObject
     {
+
         object GetInternalObject();
+
     }
 
 }

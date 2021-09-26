@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
+
 using Ceen;
 
 namespace BadScript.HttpServer
@@ -13,6 +15,7 @@ namespace BadScript.HttpServer
 
     public class HttpServerResponseObject : ABSObject
     {
+
         private BSTable m_InstanceFunctions;
         private IHttpResponse m_Response;
 
@@ -32,28 +35,40 @@ namespace BadScript.HttpServer
             }
 
             m_InstanceFunctions = new BSTable(
-                pos,
-                new Dictionary < ABSObject, ABSObject >
-                {
-                    { new BSObject( "headers" ), new BSTable( pos, headers ) },
-                    {
-                        new BSObject( "addHeader" ),
-                        new BSFunction( "function addHeader(key, value)", ResponseAddHeader, 2 )
-                    },
-                    { new BSObject( "redirect" ), new BSFunction( "function redirect(url)", ResponseRedirect, 1 ) },
-                    {
-                        new BSObject( "writeBody" ),
-                        new BSFunction( "function writeBody(bodyStr)", ResponseWriteBody, 1 )
-                    },
-                    {
-                        new BSObject( "setStatus" ), new BSFunction(
-                            "function setStatus(statusCode)/setStatus(statusCode, message)",
-                            SetStatusCode,
-                            1,
-                            2 )
-                    },
-                }
-            );
+                                              pos,
+                                              new Dictionary < ABSObject, ABSObject >
+                                              {
+                                                  { new BSObject( "headers" ), new BSTable( pos, headers ) },
+                                                  {
+                                                      new BSObject( "addHeader" ),
+                                                      new BSFunction(
+                                                                     "function addHeader(key, value)",
+                                                                     ResponseAddHeader,
+                                                                     2
+                                                                    )
+                                                  },
+                                                  {
+                                                      new BSObject( "redirect" ),
+                                                      new BSFunction( "function redirect(url)", ResponseRedirect, 1 )
+                                                  },
+                                                  {
+                                                      new BSObject( "writeBody" ),
+                                                      new BSFunction(
+                                                                     "function writeBody(bodyStr)",
+                                                                     ResponseWriteBody,
+                                                                     1
+                                                                    )
+                                                  },
+                                                  {
+                                                      new BSObject( "setStatus" ), new BSFunction(
+                                                           "function setStatus(statusCode)/setStatus(statusCode, message)",
+                                                           SetStatusCode,
+                                                           1,
+                                                           2
+                                                          )
+                                                  },
+                                              }
+                                             );
         }
 
         public override bool Equals( ABSObject other )
@@ -141,17 +156,18 @@ namespace BadScript.HttpServer
         {
             if ( arg.Length == 1 )
             {
-                m_Response.SetStatus( ( HttpStatusCode ) arg[0].ConvertDecimal() );
+                m_Response.SetStatus( ( HttpStatusCode )arg[0].ConvertDecimal() );
             }
             else
             {
-                m_Response.SetStatus( ( HttpStatusCode ) arg[0].ConvertDecimal(), arg[1].ConvertString() );
+                m_Response.SetStatus( ( HttpStatusCode )arg[0].ConvertDecimal(), arg[1].ConvertString() );
             }
 
             return BSObject.Null;
         }
 
         #endregion
+
     }
 
 }

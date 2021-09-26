@@ -3,6 +3,7 @@
 
     public class BSFunctionParameter
     {
+
         public string Name;
         public bool IsOptional;
         public bool NotNull;
@@ -19,6 +20,7 @@
         }
 
         #endregion
+
     }
 
 }

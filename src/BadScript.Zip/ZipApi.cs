@@ -1,4 +1,5 @@
 ﻿using System.IO.Compression;
+
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -9,6 +10,7 @@ namespace BadScript.Zip
 
     public class ZipApi : ABSScriptInterface
     {
+
         #region Public
 
         public ZipApi() : base( "zip" )
@@ -18,22 +20,22 @@ namespace BadScript.Zip
         public override void AddApi( ABSTable t )
         {
             t.InsertElement(
-                new BSObject( "createFromDirectory" ),
-                new BSFunction(
-                    "createFromDirectory(sourceDir, destinationFile)",
-                    CreateFromFolder,
-                    2
-                )
-            );
+                            new BSObject( "createFromDirectory" ),
+                            new BSFunction(
+                                           "createFromDirectory(sourceDir, destinationFile)",
+                                           CreateFromFolder,
+                                           2
+                                          )
+                           );
 
             t.InsertElement(
-                new BSObject( "extractToDirectory" ),
-                new BSFunction(
-                    "extractToDirectory(sourceFile, destinationDir)",
-                    ExtractToFolder,
-                    2
-                )
-            );
+                            new BSObject( "extractToDirectory" ),
+                            new BSFunction(
+                                           "extractToDirectory(sourceFile, destinationDir)",
+                                           ExtractToFolder,
+                                           2
+                                          )
+                           );
         }
 
         #endregion
@@ -43,8 +45,9 @@ namespace BadScript.Zip
         private static ABSObject CreateFromFolder( ABSObject[] args )
         {
             ZipFile.CreateFromDirectory(
-                args[0].ResolveReference().ConvertString(),
-                args[1].ResolveReference().ConvertString() );
+                                        args[0].ResolveReference().ConvertString(),
+                                        args[1].ResolveReference().ConvertString()
+                                       );
 
             return BSObject.Null;
         }
@@ -52,13 +55,15 @@ namespace BadScript.Zip
         private static ABSObject ExtractToFolder( ABSObject[] args )
         {
             ZipFile.ExtractToDirectory(
-                args[0].ResolveReference().ConvertString(),
-                args[1].ResolveReference().ConvertString() );
+                                       args[0].ResolveReference().ConvertString(),
+                                       args[1].ResolveReference().ConvertString()
+                                      );
 
             return BSObject.Null;
         }
 
         #endregion
+
     }
 
 }

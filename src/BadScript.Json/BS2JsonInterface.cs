@@ -7,6 +7,7 @@ namespace BadScript.Json
 
     public class BS2JsonInterface : ABSScriptInterface
     {
+
         #region Public
 
         public BS2JsonInterface() : base( "json" )
@@ -20,6 +21,7 @@ namespace BadScript.Json
         }
 
         #endregion
+
     }
 
 }

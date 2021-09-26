@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
+
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -11,13 +12,15 @@ namespace BadScript.Utils.Reflection
 
     internal class BSReflectionTypeObject : BSObject
     {
+
         private readonly Dictionary < string, ABSReference > m_Properties;
         private readonly Type m_ReflectedType;
 
         #region Public
 
         public BSReflectionTypeObject( Type t, object instance, Dictionary < string, ABSReference > properties ) : base(
-            instance )
+             instance
+            )
         {
             m_Properties = properties;
             m_ReflectedType = t;
@@ -86,6 +89,7 @@ namespace BadScript.Utils.Reflection
         }
 
         #endregion
+
     }
 
 }

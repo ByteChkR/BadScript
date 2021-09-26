@@ -9,6 +9,8 @@ namespace BadScript.Utils.Serialization.Serializers
     public class BsBlockExpressionSerializer : BSExpressionSerializer
     {
 
+        #region Public
+
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
             return code == BSCompiledExpressionCode.CustomBlock;
@@ -21,7 +23,7 @@ namespace BadScript.Utils.Serialization.Serializers
 
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
         {
-            return new BSBlockExpression(s.DeserializeBlock());
+            return new BSBlockExpression( s.DeserializeBlock() );
         }
 
         public override void Serialize( BSExpression expr, Stream s )
@@ -30,6 +32,8 @@ namespace BadScript.Utils.Serialization.Serializers
             s.SerializeOpCode( BSCompiledExpressionCode.CustomBlock );
             s.SerializeBlock( b.Block );
         }
+
+        #endregion
 
     }
 

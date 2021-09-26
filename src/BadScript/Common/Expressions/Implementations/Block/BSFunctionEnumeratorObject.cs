@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
 using BadScript.Common.Runtime;
@@ -11,6 +12,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSFunctionEnumeratorObject : ABSObject, IEnumerable < IForEachIteration >
     {
+
         private int m_State;
         private readonly BSExpression[] m_Block;
         private readonly (string, ABSObject)[] m_Arguments;
@@ -65,7 +67,6 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
         public override ABSReference GetProperty( string propertyName )
         {
-
             throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
@@ -120,6 +121,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         }
 
         #endregion
+
     }
 
 }

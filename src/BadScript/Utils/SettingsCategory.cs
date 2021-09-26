@@ -8,6 +8,7 @@ namespace BadScript.Utils
 
     public class SettingsCategory : IEnumerable < SettingsCategory >, IEnumerable < SettingsPair >
     {
+
         public readonly string Name;
         public bool IsPersistent = true;
 
@@ -187,10 +188,11 @@ namespace BadScript.Utils
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ( ( IEnumerable ) m_SubCategories ).GetEnumerator();
+            return ( ( IEnumerable )m_SubCategories ).GetEnumerator();
         }
 
         #endregion
+
     }
 
 }

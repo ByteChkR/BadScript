@@ -5,6 +5,7 @@ namespace BadScript.IO
 
     public class Crc
     {
+
         private static readonly Crc s_Instance = new Crc();
 
         private long[] m_PTable = new long[256];
@@ -37,7 +38,6 @@ namespace BadScript.IO
 
                 m_PTable[i] = crc;
             }
-
         }
 
         public static uint GetCrc( string fileName )
@@ -47,7 +47,6 @@ namespace BadScript.IO
 
         public uint GetCrc32( string fileName )
         {
-
             //4KB Buffer
             int bufferSize = 0x1000;
 
@@ -60,7 +59,7 @@ namespace BadScript.IO
             {
                 if ( streamLength < bufferSize )
                 {
-                    bufferSize = ( int ) streamLength;
+                    bufferSize = ( int )streamLength;
                 }
 
                 byte[] buffer = new byte[bufferSize];
@@ -73,16 +72,16 @@ namespace BadScript.IO
                 }
 
                 streamLength -= bufferSize;
-
             }
 
             fs.Close();
             crc = -crc - 1; // !(CRC)
 
-            return ( uint ) crc;
+            return ( uint )crc;
         }
 
         #endregion
+
     }
 
 }

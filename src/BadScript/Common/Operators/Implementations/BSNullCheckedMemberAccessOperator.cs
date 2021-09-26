@@ -6,6 +6,7 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSNullCheckedMemberAccessOperator : BSOperator
     {
+
         public override string OperatorKey => "?.";
 
         public override int Preceedence => 2;
@@ -21,6 +22,7 @@ namespace BadScript.Common.Operators.Implementations
         }
 
         #endregion
+
     }
 
 }

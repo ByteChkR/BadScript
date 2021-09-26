@@ -3,6 +3,7 @@
 
     public class BSGreaterThanOperatorImplementation : ABSRelationalOperatorImplementation
     {
+
         #region Public
 
         public BSGreaterThanOperatorImplementation() : base( ">" )
@@ -19,6 +20,7 @@
         }
 
         #endregion
+
     }
 
 }

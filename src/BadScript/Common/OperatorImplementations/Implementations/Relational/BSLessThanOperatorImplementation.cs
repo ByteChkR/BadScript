@@ -3,6 +3,7 @@
 
     public class BSLessThanOperatorImplementation : ABSRelationalOperatorImplementation
     {
+
         #region Public
 
         public BSLessThanOperatorImplementation() : base( "<" )
@@ -19,6 +20,7 @@
         }
 
         #endregion
+
     }
 
 }

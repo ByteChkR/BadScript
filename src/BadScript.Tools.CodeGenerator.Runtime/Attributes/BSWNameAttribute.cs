@@ -4,14 +4,24 @@ namespace BadScript.Tools.CodeGenerator.Runtime.Attributes
 {
 
     [AttributeUsage(
-        AttributeTargets.Method |
-        AttributeTargets.Field |
-        AttributeTargets.Property)]
-    public class BSWNameAttribute:Attribute
+                       AttributeTargets.Method |
+                       AttributeTargets.Field |
+                       AttributeTargets.Property
+                   )]
+    public class BSWNameAttribute : Attribute
     {
+
         public readonly string Name;
 
-        public BSWNameAttribute( string name ) => Name = name;
+        #region Public
+
+        public BSWNameAttribute( string name )
+        {
+            Name = name;
+        }
+
+        #endregion
+
     }
 
 }

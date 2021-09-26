@@ -6,6 +6,7 @@ namespace BadScript.StringUtils
 
     public static class StringUtilsApiExtensions
     {
+
         #region Public
 
         public static void InsertElement( this ABSTable t, string name, ABSObject o )
@@ -14,6 +15,7 @@ namespace BadScript.StringUtils
         }
 
         #endregion
+
     }
 
 }

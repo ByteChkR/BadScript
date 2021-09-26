@@ -1,4 +1,5 @@
 ﻿using System.IO;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
 
@@ -7,6 +8,7 @@ namespace BadScript.Utils.Serialization.Serializers
 
     public class BsArrayExpressionSerializer : BSExpressionSerializer
     {
+
         #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
@@ -26,14 +28,14 @@ namespace BadScript.Utils.Serialization.Serializers
 
         public override void Serialize( BSExpression e, Stream ret )
         {
-            BSArrayExpression expr = ( BSArrayExpression ) e;
+            BSArrayExpression expr = ( BSArrayExpression )e;
 
             ret.SerializeOpCode( BSCompiledExpressionCode.ArrayExpr );
             ret.SerializeBlock( expr.InitExpressions );
-
         }
 
         #endregion
+
     }
 
 }

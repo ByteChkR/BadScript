@@ -12,14 +12,14 @@ using BadScript.Common.Types.References.Implementations;
 namespace BadScript.Common.Runtime
 {
 
-    public class BSScope: IEnumerable<IForEachIteration>
+    public class BSScope : IEnumerable < IForEachIteration >
     {
+
         private readonly BSScopeFlags m_AllowedFlags;
         private BSScopeFlags m_CurrentFlag;
         private readonly BSEngine m_Instance;
         private readonly BSScope m_Parent;
         private readonly BSTable m_LocalVars = new BSTable( SourcePosition.Unknown );
-        
 
         public BSScopeFlags Flags => m_CurrentFlag;
 
@@ -61,54 +61,42 @@ namespace BadScript.Common.Runtime
             m_LocalVars.InsertElement( new BSObject( name ), o );
         }
 
+        public ABSReference Get( string name )
+        {
+            if ( m_LocalVars.HasElement( new BSObject( name ) ) )
+            {
+                return m_LocalVars.GetProperty( name );
+            }
+
+            if ( m_Parent != null && m_Parent.HasLocal( name ) )
+            {
+                return m_Parent.Get( name );
+            }
+
+            throw new BSRuntimeException( "Can not Set Property: " + name );
+        }
+
+        public IEnumerator < IForEachIteration > GetEnumerator()
+        {
+            return m_LocalVars.GetEnumerator();
+        }
+
         public ABSTable GetLocals()
         {
             return m_LocalVars;
         }
-        
 
         public bool HasGlobal( string name )
         {
             return m_Instance == null
-                ? m_Parent.HasGlobal( name )
-                : m_Instance.HasElement( new BSObject( name ) );
+                       ? m_Parent.HasGlobal( name )
+                       : m_Instance.HasElement( new BSObject( name ) );
         }
 
         public bool HasLocal( string name )
         {
             return m_LocalVars.HasElement( new BSObject( name ) ) ||
                    m_Parent != null && m_Parent.HasLocal( name );
-        }
-
-        public void Set( string name, ABSObject o )
-        {
-            if ( HasLocal( name ) )
-                m_LocalVars.SetProperty( name,o );
-            else if ( HasGlobal( name ) )
-            {
-                if ( m_Parent != null )
-                    m_Parent.Set( name, o );
-                else
-                {
-                    throw new BSRuntimeException( "Can not Set Property: " + name );
-                }
-            }
-            else
-            {
-                throw new BSRuntimeException("Can not Set Property: " + name);
-            }
-        }
-
-        public ABSReference Get( string name )
-        {
-            if (m_LocalVars.HasElement(new BSObject(name)))
-                return m_LocalVars.GetProperty( name );
-
-            if (m_Parent != null && m_Parent.HasLocal(name))
-            {
-                return m_Parent.Get(name);
-            }
-            throw new BSRuntimeException("Can not Set Property: " + name);
         }
 
         public ABSObject ResolveName( string name )
@@ -133,6 +121,29 @@ namespace BadScript.Common.Runtime
             return new BSTableReference( m_LocalVars, i, false );
         }
 
+        public void Set( string name, ABSObject o )
+        {
+            if ( HasLocal( name ) )
+            {
+                m_LocalVars.SetProperty( name, o );
+            }
+            else if ( HasGlobal( name ) )
+            {
+                if ( m_Parent != null )
+                {
+                    m_Parent.Set( name, o );
+                }
+                else
+                {
+                    throw new BSRuntimeException( "Can not Set Property: " + name );
+                }
+            }
+            else
+            {
+                throw new BSRuntimeException( "Can not Set Property: " + name );
+            }
+        }
+
         public void SetFlag( BSScopeFlags flag, ABSObject val = null )
         {
             if ( val != null )
@@ -140,15 +151,14 @@ namespace BadScript.Common.Runtime
                 if ( flag != BSScopeFlags.Return )
                 {
                     throw new BSRuntimeException(
-                        "Invalid Use of Return in a scope that does not allow return values" );
+                                                 "Invalid Use of Return in a scope that does not allow return values"
+                                                );
                 }
 
                 Return = val;
-
             }
             else
             {
-
                 if ( flag != BSScopeFlags.None && ( m_AllowedFlags & flag ) == 0 )
                 {
                     throw new BSRuntimeException( "Invalid Scope Flag: " + flag );
@@ -164,22 +174,17 @@ namespace BadScript.Common.Runtime
 
         private BSScope()
         {
-
             m_LocalVars.InsertElement( new BSObject( "__SELF" ), new BSObject( this ) );
+
             //m_LocalVars.InsertElement( new BSObject( "__L" ), m_LocalVars );
-        }
-
-        #endregion
-
-        public IEnumerator < IForEachIteration > GetEnumerator()
-        {
-            return m_LocalVars.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ( ( IEnumerable )m_LocalVars ).GetEnumerator();
         }
+
+        #endregion
 
     }
 

@@ -3,8 +3,11 @@
 
     public interface IWrapperObjectCreator
     {
+
         int ArgCount { get; }
+
         object Create( object[] args );
+
     }
 
 }

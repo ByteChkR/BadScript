@@ -6,6 +6,7 @@ namespace BadScript.Common.Types.Implementations
 
     public class BSFunctionReference : ABSReference
     {
+
         private readonly BSFunction m_Func;
 
         #region Public
@@ -26,6 +27,7 @@ namespace BadScript.Common.Types.Implementations
         }
 
         #endregion
+
     }
 
 }

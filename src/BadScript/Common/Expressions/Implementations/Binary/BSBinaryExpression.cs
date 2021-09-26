@@ -3,6 +3,7 @@
 
     public abstract class BSBinaryExpression : BSExpression
     {
+
         public BSExpression Left;
         public BSExpression Right;
 
@@ -15,6 +16,7 @@
         }
 
         #endregion
+
     }
 
 }

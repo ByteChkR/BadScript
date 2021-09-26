@@ -7,6 +7,7 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSProxyExpression : BSExpression
     {
+
         public readonly ABSObject Object;
         public readonly object ProxyMetaData;
 
@@ -26,6 +27,7 @@ namespace BadScript.Common.Operators.Implementations
         }
 
         #endregion
+
     }
 
 }

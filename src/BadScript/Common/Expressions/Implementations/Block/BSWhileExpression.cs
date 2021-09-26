@@ -8,6 +8,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
     public class BSWhileExpression : BSExpression
     {
+
         public BSExpression Condition;
         public BSExpression[] Block;
 
@@ -28,13 +29,12 @@ namespace BadScript.Common.Expressions.Implementations.Block
 
             while ( o.TryConvertBool( out bool d ) && d )
             {
-
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
-                    funcScope,
-                    Block,
-                    new BSFunctionParameter[0],
-                    new ABSObject[0]
-                );
+                     funcScope,
+                     Block,
+                     new BSFunctionParameter[0],
+                     new ABSObject[0]
+                    );
 
                 if ( funcScope.Flags == BSScopeFlags.Continue )
                 {
@@ -59,6 +59,7 @@ namespace BadScript.Common.Expressions.Implementations.Block
         }
 
         #endregion
+
     }
 
 }

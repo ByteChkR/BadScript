@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using BadScript.Common.Expressions;
 
 namespace BadScript.Common.Types.References
@@ -6,6 +7,7 @@ namespace BadScript.Common.Types.References
 
     public abstract class ABSReference : ABSObject
     {
+
         public override bool IsNull => Get().IsNull;
 
         #region Public
@@ -73,6 +75,7 @@ namespace BadScript.Common.Types.References
         }
 
         #endregion
+
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
@@ -12,6 +13,7 @@ namespace BadScript.IO
 
     public class BSFileSystemObject : ABSObject
     {
+
         private BSTable m_InstanceFunctions;
         private FileStream m_Stream;
         private readonly string m_FilePath;
@@ -26,82 +28,85 @@ namespace BadScript.IO
             m_Stream = fs;
 
             m_InstanceFunctions = new BSTable(
-                SourcePosition.Unknown,
-                new Dictionary < ABSObject, ABSObject >
-                {
-                    {
-                        new BSObject( "close" ), new BSFunction(
-                            "function close()",
-                            CloseFileStream,
-                            0
-                        )
-                    },
-                    {
-                        new BSObject( "write" ), new BSFunction(
-                            "function write(str)",
-                            WriteString,
-                            1
-                        )
-                    },
-                    {
-                        new BSObject( "writeb" ), new BSFunction(
-                            "function writeb(str)",
-                            WriteBinary,
-                            1
-                        )
-                    },
-                    {
-                        new BSObject( "writeLine" ), new BSFunction(
-                            "function writeLine(str)",
-                            WriteLine,
-                            1
-                        )
-                    },
-                    {
-                        new BSObject( "readLine" ), new BSFunction(
-                            "function readLine()",
-                            ReadLine,
-                            0
-                        )
-                    },
-                    {
-                        new BSObject( "readbAll" ), new BSFunction(
-                            "function readbAll()",
-                            ReadAllBinary,
-                            0
-                        )
-                    },
-                    { new BSObject( "readAll" ), new BSFunction( "function readAll()", ReadAll, 0 ) },
-                    {
-                        new BSObject( "getPosition" ), new BSFunction(
-                            "function getPosition()",
-                            GetPosition,
-                            0
-                        )
-                    },
-                    {
-                        new BSObject( "setPosition" ), new BSFunction(
-                            "function setPosition(pos)",
-                            SetPosition,
-                            1
-                        )
-                    },
-                    {
-                        new BSObject( "getLength" ), new BSFunction(
-                            "function getLength()",
-                            GetLength,
-                            0
-                        )
-                    },
-                    {
-                        new BSObject( "setLength" ), new BSFunction(
-                            "function setLength(len)",
-                            SetLength,
-                            1
-                        )
-                    }
-                }
-            );
+                                              SourcePosition.Unknown,
+                                              new Dictionary < ABSObject, ABSObject >
+                                              {
+                                                  {
+                                                      new BSObject( "close" ), new BSFunction(
+                                                           "function close()",
+                                                           CloseFileStream,
+                                                           0
+                                                          )
+                                                  },
+                                                  {
+                                                      new BSObject( "write" ), new BSFunction(
+                                                           "function write(str)",
+                                                           WriteString,
+                                                           1
+                                                          )
+                                                  },
+                                                  {
+                                                      new BSObject( "writeb" ), new BSFunction(
+                                                           "function writeb(str)",
+                                                           WriteBinary,
+                                                           1
+                                                          )
+                                                  },
+                                                  {
+                                                      new BSObject( "writeLine" ), new BSFunction(
+                                                           "function writeLine(str)",
+                                                           WriteLine,
+                                                           1
+                                                          )
+                                                  },
+                                                  {
+                                                      new BSObject( "readLine" ), new BSFunction(
+                                                           "function readLine()",
+                                                           ReadLine,
+                                                           0
+                                                          )
+                                                  },
+                                                  {
+                                                      new BSObject( "readbAll" ), new BSFunction(
+                                                           "function readbAll()",
+                                                           ReadAllBinary,
+                                                           0
+                                                          )
+                                                  },
+                                                  {
+                                                      new BSObject( "readAll" ),
+                                                      new BSFunction( "function readAll()", ReadAll, 0 )
+                                                  },
+                                                  {
+                                                      new BSObject( "getPosition" ), new BSFunction(
+                                                           "function getPosition()",
+                                                           GetPosition,
+                                                           0
+                                                          )
+                                                  },
+                                                  {
+                                                      new BSObject( "setPosition" ), new BSFunction(
+                                                           "function setPosition(pos)",
+                                                           SetPosition,
+                                                           1
+                                                          )
+                                                  },
+                                                  {
+                                                      new BSObject( "getLength" ), new BSFunction(
+                                                           "function getLength()",
+                                                           GetLength,
+                                                           0
+                                                          )
+                                                  },
+                                                  {
+                                                      new BSObject( "setLength" ), new BSFunction(
+                                                           "function setLength(len)",
+                                                           SetLength,
+                                                           1
+                                                          )
+                                                  }
+                                              }
+                                             );
         }
 
         public override bool Equals( ABSObject other )
@@ -179,7 +184,7 @@ namespace BadScript.IO
                 throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
-            return new BSObject( ( decimal ) m_Stream.Length );
+            return new BSObject( ( decimal )m_Stream.Length );
         }
 
         private ABSObject GetPosition( ABSObject[] arg )
@@ -189,7 +194,7 @@ namespace BadScript.IO
                 throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
-            return new BSObject( ( decimal ) m_Stream.Position );
+            return new BSObject( ( decimal )m_Stream.Position );
         }
 
         private ABSObject ReadAll( ABSObject[] arg )
@@ -215,7 +220,7 @@ namespace BadScript.IO
 
             byte[] buf = new byte[m_Stream.Length];
             m_Stream.Read( buf, 0, buf.Length );
-            BSArray a = new BSArray( buf.Select( x => new BSObject( ( decimal ) x ) ) );
+            BSArray a = new BSArray( buf.Select( x => new BSObject( ( decimal )x ) ) );
 
             return a;
         }
@@ -242,10 +247,9 @@ namespace BadScript.IO
             }
 
             ABSObject o = arg[0].ResolveReference();
-            m_Stream.SetLength( ( long ) o.ConvertDecimal() );
+            m_Stream.SetLength( ( long )o.ConvertDecimal() );
 
             return BSObject.Null;
-
         }
 
         private ABSObject SetPosition( ABSObject[] arg )
@@ -257,7 +261,7 @@ namespace BadScript.IO
 
             ABSObject o = arg[0].ResolveReference();
 
-            m_Stream.Position = ( long ) o.ConvertDecimal();
+            m_Stream.Position = ( long )o.ConvertDecimal();
 
             return BSObject.Null;
         }
@@ -275,7 +279,7 @@ namespace BadScript.IO
             {
                 for ( int i = 0; i < arr.GetLength(); i++ )
                 {
-                    m_Stream.WriteByte( ( byte ) arr.GetRawElement( i ).ConvertDecimal() );
+                    m_Stream.WriteByte( ( byte )arr.GetRawElement( i ).ConvertDecimal() );
                 }
             }
 
@@ -317,6 +321,7 @@ namespace BadScript.IO
         }
 
         #endregion
+
     }
 
 }

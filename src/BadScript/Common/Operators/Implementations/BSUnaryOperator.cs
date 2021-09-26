@@ -7,6 +7,7 @@ namespace BadScript.Common.Operators.Implementations
 
     public class BSUnaryOperator : BSOperator
     {
+
         private BSFunction m_OperatorImplementation;
         private BSUnaryOperatorMetaData m_Meta;
 
@@ -26,12 +27,18 @@ namespace BadScript.Common.Operators.Implementations
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
             return new BSInvocationExpression(
-                parser.CreateSourcePosition(),
-                new BSProxyExpression( parser.CreateSourcePosition(), m_OperatorImplementation, m_Meta ),
-                new[] { left } );
+                                              parser.CreateSourcePosition(),
+                                              new BSProxyExpression(
+                                                                    parser.CreateSourcePosition(),
+                                                                    m_OperatorImplementation,
+                                                                    m_Meta
+                                                                   ),
+                                              new[] { left }
+                                             );
         }
 
         #endregion
+
     }
 
 }

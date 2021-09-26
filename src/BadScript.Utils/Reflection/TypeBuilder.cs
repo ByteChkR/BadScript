@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BadScript.Common.Types;
 
 namespace BadScript.Utils.Reflection
@@ -6,6 +7,7 @@ namespace BadScript.Utils.Reflection
 
     public static class TypeBuilder < T >
     {
+
         #region Public
 
         public static void AddFilterType()
@@ -19,10 +21,12 @@ namespace BadScript.Utils.Reflection
         }
 
         #endregion
+
     }
 
     public static class TypeBuilder
     {
+
         #region Public
 
         public static void AddFilterType( Type t )
@@ -58,6 +62,7 @@ namespace BadScript.Utils.Reflection
         }
 
         #endregion
+
     }
 
 }

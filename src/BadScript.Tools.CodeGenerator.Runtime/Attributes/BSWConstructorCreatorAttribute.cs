@@ -5,10 +5,12 @@ namespace BadScript.Tools.CodeGenerator.Runtime.Attributes
 {
 
     [AttributeUsage(
-        AttributeTargets.Class | 
-        AttributeTargets.Struct)]
+                       AttributeTargets.Class |
+                       AttributeTargets.Struct
+                   )]
     public class BSWConstructorCreatorAttribute : Attribute
     {
+
         public Type ConstructorCreatorType;
 
         private bool HasValidConstructor =>
@@ -16,23 +18,29 @@ namespace BadScript.Tools.CodeGenerator.Runtime.Attributes
 
         private bool IsCreatorType => typeof( IWrapperObjectCreator ).IsAssignableFrom( ConstructorCreatorType );
 
-        public BSWConstructorCreatorAttribute(Type creatorType)
+        #region Public
+
+        public BSWConstructorCreatorAttribute( Type creatorType )
         {
             ConstructorCreatorType = creatorType;
 
-            if (!IsCreatorType)
+            if ( !IsCreatorType )
             {
                 throw new Exception(
-                    $"Invalid Creator. The Creator must inherit from '{nameof(IWrapperObjectCreator)}'");
+                                    $"Invalid Creator. The Creator must inherit from '{nameof( IWrapperObjectCreator )}'"
+                                   );
             }
 
-            if (!HasValidConstructor)
+            if ( !HasValidConstructor )
             {
                 throw new Exception(
-                    $"Creator Type: '{ConstructorCreatorType.Name}' does not have an empty Constructor");
+                                    $"Creator Type: '{ConstructorCreatorType.Name}' does not have an empty Constructor"
+                                   );
             }
-
         }
+
+        #endregion
+
     }
 
 }

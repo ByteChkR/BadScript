@@ -3,6 +3,7 @@
 
     public class BSParserSettings
     {
+
         public bool AllowOptimization;
 
         public static BSParserSettings Default => new BSParserSettings { AllowOptimization = true };
@@ -11,10 +12,10 @@
 
         public BSParserSettings()
         {
-
         }
 
         #endregion
+
     }
 
 }

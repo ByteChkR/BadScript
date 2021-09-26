@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -11,18 +13,18 @@ namespace BadScript.Json
 
     internal static class Json2BS
     {
+
         #region Public
 
         public static ABSObject Convert( ABSObject[] args )
         {
             ABSObject o = args[0].ResolveReference();
 
-            JToken jsonO = ( JToken ) JsonConvert.DeserializeObject( o.ConvertString() );
+            JToken jsonO = ( JToken )JsonConvert.DeserializeObject( o.ConvertString() );
 
             ABSObject ret = Convert( jsonO );
 
             return ret;
-
         }
 
         #endregion
@@ -90,10 +92,10 @@ namespace BadScript.Json
                     return new BSObject( token.Value < string >() );
 
                 case JTokenType.Integer:
-                    return new BSObject( ( decimal ) token.Value < int >() );
+                    return new BSObject( ( decimal )token.Value < int >() );
 
                 case JTokenType.Float:
-                    return new BSObject( ( decimal ) token.Value < float >() );
+                    return new BSObject( ( decimal )token.Value < float >() );
 
                 case JTokenType.Boolean:
                     return new BSObject( token.Value < bool >() ? 1 : 0 );
@@ -107,6 +109,7 @@ namespace BadScript.Json
         }
 
         #endregion
+
     }
 
 }

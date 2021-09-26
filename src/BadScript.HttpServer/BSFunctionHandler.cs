@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
+
 using BadScript.Common.Types;
+
 using Ceen;
 
 namespace BadScript.HttpServer
@@ -7,6 +9,7 @@ namespace BadScript.HttpServer
 
     public class BSFunctionHandler : IHttpModule
     {
+
         private readonly ABSObject m_Func;
 
         #region Public
@@ -24,6 +27,7 @@ namespace BadScript.HttpServer
         }
 
         #endregion
+
     }
 
 }

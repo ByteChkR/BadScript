@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block;
 
@@ -8,6 +9,7 @@ namespace BadScript.Utils.Serialization.Serializers
 
     public class BsFunctionDefinitionExpressionSerializer : BSExpressionSerializer
     {
+
         #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
@@ -29,26 +31,27 @@ namespace BadScript.Utils.Serialization.Serializers
             BSExpression[] exprs = s.DeserializeBlock();
 
             return new BSFunctionDefinitionExpression(
-                SourcePosition.Unknown,
-                name,
-                args.ToArray(),
-                exprs.ToArray(),
-                global );
+                                                      SourcePosition.Unknown,
+                                                      name,
+                                                      args.ToArray(),
+                                                      exprs.ToArray(),
+                                                      global
+                                                     );
         }
 
         public override void Serialize( BSExpression e, Stream ret )
         {
-            BSFunctionDefinitionExpression expr = ( BSFunctionDefinitionExpression ) e;
+            BSFunctionDefinitionExpression expr = ( BSFunctionDefinitionExpression )e;
             ret.SerializeOpCode( BSCompiledExpressionCode.FunctionDefinitionExpr );
             ret.SerializeString( expr.Name );
             ret.SerializeBool( expr.Global );
             ret.SerializeFunctionParameters( expr.ArgNames );
 
             ret.SerializeBlock( expr.Block );
-
         }
 
         #endregion
+
     }
 
 }

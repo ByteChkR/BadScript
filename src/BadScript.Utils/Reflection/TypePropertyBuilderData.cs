@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
@@ -7,6 +8,7 @@ namespace BadScript.Utils.Reflection
 
     internal readonly struct TypePropertyBuilderData : ITypePropertyData
     {
+
         public static TypePropertyBuilderData Empty => new TypePropertyBuilderData( o => BSObject.Null, null );
 
         private readonly Func < object, ABSObject > m_Getter;
@@ -31,6 +33,7 @@ namespace BadScript.Utils.Reflection
 
             return ( o ) => s( instance, o );
         }
+
     }
 
 }

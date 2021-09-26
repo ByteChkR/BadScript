@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Newtonsoft.Json;
 
 namespace BadScript.Utils
@@ -6,6 +7,7 @@ namespace BadScript.Utils
 
     public class SettingsPair
     {
+
         public readonly string Name;
         private string m_Value;
         private bool m_IsPersistent = true;
@@ -28,6 +30,7 @@ namespace BadScript.Utils
                 }
             }
         }
+
         public bool IsPersistent
         {
             get => m_IsPersistent;
@@ -77,6 +80,7 @@ namespace BadScript.Utils
         }
 
         #endregion
+
     }
 
 }

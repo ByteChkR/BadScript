@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
@@ -12,6 +13,7 @@ namespace BadScript.Interfaces.Settings
 
     public class SettingsCategoryEnumerator : ABSObject, IEnumerable < IForEachIteration >
     {
+
         private readonly SettingsCategory m_Category;
 
         public override bool IsNull => false;
@@ -92,6 +94,7 @@ namespace BadScript.Interfaces.Settings
         }
 
         #endregion
+
     }
 
 }
