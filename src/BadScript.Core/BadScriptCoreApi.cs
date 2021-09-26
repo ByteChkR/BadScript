@@ -226,14 +226,33 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isTable" ),
+                               new BSObject("isTable"),
                                new BSFunction(
                                               "function isTable(obj)",
-                                              ( args ) =>
+                                              (args) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
 
-                                                  if ( arg is ABSTable )
+                                                  if (arg is ABSTable)
+                                                  {
+                                                      return BSObject.True;
+                                                  }
+
+                                                  return BSObject.False;
+                                              },
+                                              1
+                                             )
+                              );
+
+            root.InsertElement(
+                               new BSObject("isType"),
+                               new BSFunction(
+                                              "function isType(obj)",
+                                              (args) =>
+                                              {
+                                                  ABSObject arg = args[0].ResolveReference();
+
+                                                  if (arg is BSClassInstance)
                                                   {
                                                       return BSObject.True;
                                                   }

@@ -36,11 +36,11 @@ namespace BadScript.Utils
             return m_Properties.ContainsKey( propertyName ) || base.HasProperty( propertyName );
         }
 
-        public override bool TryConvertDecimal( out decimal d )
+        public override bool TryConvertString( out string v )
         {
-            d = 0;
+            v = m_InternalObject.ToString();
 
-            return false;
+            return true;
         }
 
         #endregion

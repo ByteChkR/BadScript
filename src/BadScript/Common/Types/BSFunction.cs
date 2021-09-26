@@ -77,7 +77,7 @@ namespace BadScript.Common.Types
 
         public override bool IsNull => false;
 
-        private static int StackCount => s_Stacks[Thread.CurrentThread].Count;
+        private static int StackCount => s_Stacks.Count==0 ? 0 : s_Stacks[Thread.CurrentThread].Count;
 
         #region Public
 
