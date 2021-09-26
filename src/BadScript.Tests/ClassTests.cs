@@ -55,7 +55,7 @@ namespace BadScript.Tests
         }
         private static string[] TestFiles()
         {
-            string testDir = TestContext.CurrentContext.TestDirectory + "\\tests\\class\\";
+            string testDir = TestContext.CurrentContext.TestDirectory + "/tests/class/";
             string[] files = Directory.GetFiles(testDir, "*", SearchOption.AllDirectories);
             for (int i = 0; i < files.Length; i++)
             {
