@@ -41,7 +41,9 @@ namespace BadScript.Utils.Serialization
                                                                                   new BsForExpressionSerializer(),
                                                                                   new
                                                                                       BsFunctionDefinitionExpressionSerializer(),
-                                                                                  new BsProxyExpressionSerializer()
+                                                                                  new BsProxyExpressionSerializer(),
+                                                                                  new BsNewClassExpressionSerializer(),
+                                                                                  new BsClassDefExpressionSerializer()
                                                                               };
 
         #region Public
@@ -107,7 +109,12 @@ namespace BadScript.Utils.Serialization
         internal static BSExpression DeserializeExpression( this Stream s )
         {
             BSCompiledExpressionCode code = s.DeserializeOpCode();
-            BSExpressionSerializer c = s_Compilers.First( x => x.CanDeserialize( code ) );
+            BSExpressionSerializer c = s_Compilers.FirstOrDefault( x => x.CanDeserialize( code ) );
+
+            if ( c == null )
+            {
+                throw new BSSerializerException( $"Can not find serializer for Expression Code '{code}'" );
+            }
 
             return c.Deserialize( code, s );
         }
@@ -210,7 +217,13 @@ namespace BadScript.Utils.Serialization
 
         internal static void SerializeExpression( this Stream l, BSExpression expr )
         {
-            BSExpressionSerializer c = s_Compilers.First( x => x.CanSerialize( expr ) );
+            BSExpressionSerializer c = s_Compilers.FirstOrDefault( x => x.CanSerialize( expr ) );
+
+            if ( c == null )
+            {
+                throw new BSSerializerException( $"Can not find serializer for Expression '{expr.GetType()}'" );
+            }
+
             c.Serialize( expr, l );
         }
 

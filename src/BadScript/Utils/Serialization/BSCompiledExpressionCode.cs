@@ -29,6 +29,8 @@
         BinaryExpr,
         UnaryExpr,
         CustomBlock,
+        ClassDefExpr,
+        NewClassExpr,
 
     }
 

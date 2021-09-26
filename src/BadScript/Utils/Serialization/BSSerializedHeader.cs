@@ -10,9 +10,9 @@ namespace BadScript.Utils.Serialization
 
         public bool IsValidHeader =>
             Magic[0] == 69 &&
-            Magic[0] == 42 &&
-            Magic[0] == 69 &&
-            Magic[0] == 42;
+            Magic[1] == 42 &&
+            Magic[2] == 69 &&
+            Magic[3] == 42;
 
         public byte[] Magic;
         public BSSerializerHints SerializerHints;

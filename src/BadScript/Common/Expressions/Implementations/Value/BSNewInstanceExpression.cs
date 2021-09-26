@@ -9,7 +9,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
     public class BSNewInstanceExpression : BSExpression
     {
 
-        private readonly BSInvocationExpression Name;
+        public BSInvocationExpression Name;
 
         public override bool IsConstant => false;
 

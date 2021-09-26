@@ -328,6 +328,12 @@ namespace BadScript
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        public BSExpression[] ParseFile( string path )
+        {
+            return ParseString( File.ReadAllText( path ) );
+        }
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public BSExpression[] ParseString( string script )
         {
             BSParser parser = new BSParser( Preprocess( script ) );
