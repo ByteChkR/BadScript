@@ -1,0 +1,23 @@
+language: csharp
+mono: none
+sudo: required
+dist: xenial
+
+matrix:
+  include:
+    - dotnet: 5.0
+      env:
+        - SOLUTION="src/BadScript.sln"
+        - BUILDCONFIG="Release"
+
+#Restore the Submodules and the Project
+install:
+  #Restore Projects
+  - dotnet restore src/
+
+script:
+  - dotnet build $SOLUTION -c $BUILDCONFIG
+
+after_script:
+  - dotnet test $SOLUTION --collect:"XPlat Code Coverage" -c $BUILDCONFIG
+  - bash <(curl -s https://codecov.io/bash) #Uploading the coverage report to Codecov.
