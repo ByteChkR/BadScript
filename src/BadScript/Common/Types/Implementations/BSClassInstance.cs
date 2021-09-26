@@ -24,6 +24,7 @@ namespace BadScript.Common.Types.Implementations
 
         public override bool IsNull => false;
 
+        private readonly BSClassInstance m_BaseInstance;
         #region Public
 
         public BSClassInstance(
@@ -32,6 +33,7 @@ namespace BadScript.Common.Types.Implementations
             BSClassInstance baseInstance,
             BSScope instanceScope ) : base( pos )
         {
+            m_BaseInstance = baseInstance;
             m_InstanceScope = instanceScope;
 
             if ( baseInstance != null )
@@ -40,7 +42,33 @@ namespace BadScript.Common.Types.Implementations
             }
 
             m_InstanceScope.AddLocalVar( "this", this );
+
+            m_InstanceScope.AddLocalVar(
+                                        "IsInstanceOf",
+                                        new BSFunction( "function IsInstanceOf(TypeName/TypeInstance)", IsInstanceOf, 1 )
+                                       );
+
             Name = name;
+        }
+
+        private ABSObject IsInstanceOf( ABSObject[] arg )
+        {
+            if ( !arg[0].TryConvertString( out string name ) )
+            {
+                name = arg[0].GetProperty( "GetType" ).Invoke( Array.Empty < ABSObject >() ).ConvertString();
+            }
+
+            BSClassInstance instance = this;
+
+            while ( instance!=null )
+            {
+                if ( instance.Name == name )
+                    return BSObject.True;
+
+                instance = instance.m_BaseInstance;
+            }
+
+            return BSObject.False;
         }
 
         public override bool Equals( ABSObject other )
@@ -59,6 +87,8 @@ namespace BadScript.Common.Types.Implementations
 
             if ( m_InstanceScope.HasLocal( propertyName ) )
             {
+                if ( propertyName == "this" || propertyName == "base" )
+                    return m_InstanceScope.Get( propertyName, true );
                 return m_InstanceScope.Get( propertyName );
             }
 

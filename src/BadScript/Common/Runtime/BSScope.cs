@@ -61,16 +61,31 @@ namespace BadScript.Common.Runtime
             m_LocalVars.InsertElement( new BSObject( name ), o );
         }
 
-        public ABSReference Get( string name )
+        public ABSReference Get(string name)
+        {
+            if (m_LocalVars.HasElement(new BSObject(name)))
+            {
+                return m_LocalVars.GetProperty(name);
+            }
+
+            if (m_Parent != null && m_Parent.HasLocal(name))
+            {
+                return m_Parent.Get(name);
+            }
+
+            throw new BSRuntimeException("Can not Set Property: " + name);
+        }
+
+        public ABSReference Get( string name, bool readonlyRef )
         {
             if ( m_LocalVars.HasElement( new BSObject( name ) ) )
             {
-                return m_LocalVars.GetProperty( name );
+                return m_LocalVars.GetProperty( name, readonlyRef );
             }
 
             if ( m_Parent != null && m_Parent.HasLocal( name ) )
             {
-                return m_Parent.Get( name );
+                return m_Parent.Get( name, readonlyRef);
             }
 
             throw new BSRuntimeException( "Can not Set Property: " + name );

@@ -51,3 +51,8 @@ testInstance.Set(10)
 print(debug(testInstance))
 
 print(testInstance.F(10))
+
+print(testInstance.ToString())
+
+print(testInstance.IsInstanceOf("Test"))
+print(testInstance.IsInstanceOf(testInstance))

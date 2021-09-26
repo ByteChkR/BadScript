@@ -81,18 +81,21 @@ namespace BadScript.Common.Types.Implementations
             return m_InnerTable.Count;
         }
 
-        public override ABSReference GetProperty( string propertyName )
+        public ABSReference GetProperty( string propertyName, bool lockRef )
         {
-            ABSObject k = new BSObject( propertyName );
+            ABSObject k = new BSObject(propertyName);
 
-            if ( HasElement( k ) )
+            if (HasElement(k))
             {
-                return GetElement( k );
+                return GetElement(k);
             }
 
-            return new BSTableReference( this, k, m_Locked );
+            return new BSTableReference(this, k, lockRef);
+        }
 
-            //throw new BSRuntimeException( $"Property {propertyName} does not exist" );
+        public override ABSReference GetProperty( string propertyName )
+        {
+            return GetProperty( propertyName, m_Locked );
         }
 
         public override ABSObject GetRawElement( ABSObject k )
