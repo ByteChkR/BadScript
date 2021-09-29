@@ -2,7 +2,7 @@
 using System.IO;
 
 using BadScript.Common.Expressions;
-using BadScript.Common.Expressions.Implementations.Value;
+using BadScript.Common.Expressions.Implementations.Types;
 
 namespace BadScript.Utility.Serialization.Serializers
 {

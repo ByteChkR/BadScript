@@ -4,11 +4,12 @@ using System.Linq;
 
 using BadScript.Common.Expressions.Implementations.Access;
 using BadScript.Common.Expressions.Implementations.Block;
+using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 
-namespace BadScript.Common.Expressions.Implementations.Value
+namespace BadScript.Common.Expressions.Implementations.Types
 {
 
     public class BSClassExpression : BSExpression
@@ -18,9 +19,10 @@ namespace BadScript.Common.Expressions.Implementations.Value
         public readonly string Name;
         public readonly string BaseName;
         public readonly bool IsGlobal;
+
         public override bool IsConstant => InitExpressions.All( x => x.Value.IsConstant );
 
-        public  BSScope DefiningScope { get; private set; }
+        public BSScope DefiningScope { get; private set; }
 
         #region Public
 
@@ -33,7 +35,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
         {
             Name = name;
             BaseName = baseName;
-            IsGlobal = isGlobal;    
+            IsGlobal = isGlobal;
             InitExpressions = initExprs ?? new Dictionary < string, BSExpression >();
 
             //Add Default Functions
@@ -101,12 +103,16 @@ namespace BadScript.Common.Expressions.Implementations.Value
         public override ABSObject Execute( BSScope scope )
         {
             DefiningScope = scope;
-            if(IsGlobal)
-                scope.Engine.NamespaceRoot.AddType(this);
+
+            if ( IsGlobal )
+            {
+                scope.Engine.NamespaceRoot.AddType( this );
+            }
             else
             {
                 scope.Namespace.AddType( this );
             }
+
             return BSObject.Null;
         }
 

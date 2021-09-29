@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-
-using BadScript.Common.Exceptions;
-using BadScript.Common.Expressions;
-using BadScript.Common.Expressions.Implementations.Value;
+﻿using BadScript.Common.Expressions;
+using BadScript.Common.Expressions.Implementations.Types;
 using BadScript.Common.Namespaces;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
@@ -15,9 +12,7 @@ namespace BadScript.Utility
     public class BSTypeDatabase
     {
 
-
         #region Public
-
 
         public BSClassInstance CreateInstance( string name, BSEngine engine, BSNamespace start, ABSObject[] args )
         {
@@ -26,14 +21,13 @@ namespace BadScript.Utility
             return CreateBaseInstance( name, classScope, start, args );
         }
 
-
         #endregion
 
         #region Private
 
         private BSClassInstance CreateBaseInstance( string name, BSScope scope, BSNamespace start, ABSObject[] args )
         {
-            BSClassExpression expr = start.ResolveType(name, true);
+            BSClassExpression expr = start.ResolveType( name, true );
             BSClassInstance baseInstance = null;
 
             if ( expr.BaseName != null )

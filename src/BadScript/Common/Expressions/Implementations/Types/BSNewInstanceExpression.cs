@@ -1,8 +1,9 @@
 ﻿using BadScript.Common.Expressions.Implementations.Access;
+using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 
-namespace BadScript.Common.Expressions.Implementations.Value
+namespace BadScript.Common.Expressions.Implementations.Types
 {
 
     public class BSNewInstanceExpression : BSExpression

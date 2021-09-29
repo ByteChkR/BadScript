@@ -10,6 +10,7 @@ using BadScript.Common.Expressions.Implementations.Access;
 using BadScript.Common.Expressions.Implementations.Binary;
 using BadScript.Common.Expressions.Implementations.Block;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
+using BadScript.Common.Expressions.Implementations.Types;
 using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.Operators;
 using BadScript.Common.Operators.Implementations;
@@ -351,21 +352,21 @@ namespace BadScript.Common
             return expr;
         }
 
-
         public BSUsingExpression ParseUsing()
         {
             SourcePosition sp = CreateSourcePosition();
 
             ReadWhitespaceAndNewLine();
-            List<string> fn = new();
+            List < string > fn = new();
             bool restart = true;
-            while (restart)
+
+            while ( restart )
             {
                 ReadWhitespaceAndNewLine();
-                fn.Add(GetNextWord());
+                fn.Add( GetNextWord() );
                 ReadWhitespaceAndNewLine();
 
-                if (Is('.'))
+                if ( Is( '.' ) )
                 {
                     restart = true;
                     m_CurrentPosition++;
@@ -376,8 +377,9 @@ namespace BadScript.Common
                 }
             }
 
-            return new BSUsingExpression(sp, fn.ToArray());
+            return new BSUsingExpression( sp, fn.ToArray() );
         }
+
         public BSNamespaceExpression ParseNamespace()
         {
             SourcePosition sp = CreateSourcePosition();
@@ -385,12 +387,14 @@ namespace BadScript.Common
             ReadWhitespaceAndNewLine();
             List < string > fn = new();
             bool restart = true;
-            while (restart)
+
+            while ( restart )
             {
                 ReadWhitespaceAndNewLine();
                 fn.Add( GetNextWord() );
                 ReadWhitespaceAndNewLine();
-                if (Is( '{' ) )
+
+                if ( Is( '{' ) )
                 {
                     restart = false;
                 }
@@ -402,15 +406,13 @@ namespace BadScript.Common
                 }
             }
 
-
             ReadWhitespaceAndNewLine();
             int off = m_CurrentPosition + 1;
             string block = ParseBlock();
-            BSParser p = new BSParser(block, m_OriginalSource, off);
+            BSParser p = new BSParser( block, m_OriginalSource, off );
             BSExpression[] exprs = p.ParseToEnd();
-            
 
-            return new BSNamespaceExpression( sp,fn.ToArray(), exprs );
+            return new BSNamespaceExpression( sp, fn.ToArray(), exprs );
         }
 
         public BSExpression ParseClass( bool isGlobal )
@@ -965,10 +967,14 @@ namespace BadScript.Common
             }
 
             if ( wordName == "namespace" )
+            {
                 return ParseNamespace();
+            }
 
             if ( wordName == "using" )
+            {
                 return ParseUsing();
+            }
 
             if ( wordName == "return" )
             {
