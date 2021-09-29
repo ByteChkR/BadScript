@@ -45,12 +45,11 @@ namespace BadScript.Testing
             es.Interfaces.Add( new VersionToolsInterface() );
             es.Interfaces.Add( new XmlInterface() );
             es.Interfaces.Add( BSReflectionInterface.Instance );
-            
-            BSReflectionInterface.Instance.AddType<Version>();
-            BSReflectionInterface.Instance.AddType<DateTime>();
-            BSReflectionInterface.Instance.AddType<TimeSpan>();
-            BSReflectionInterface.Instance.AddType<Vector4>();
-            
+
+            BSReflectionInterface.Instance.AddType < Version >();
+            BSReflectionInterface.Instance.AddType < DateTime >();
+            BSReflectionInterface.Instance.AddType < TimeSpan >();
+            BSReflectionInterface.Instance.AddType < Vector4 >();
 
             BSEngine e = es.Build();
             e.LoadFile( "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\ReflectionTest.bs" );

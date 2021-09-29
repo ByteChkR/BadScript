@@ -9,12 +9,15 @@ namespace BadScript.Common.Expressions.Implementations.Types
     {
 
         public readonly string[] FullName;
+
+        public override bool IsConstant => false;
+
+        #region Public
+
         public BSUsingExpression( SourcePosition pos, string[] fullName ) : base( pos )
         {
             FullName = fullName;
         }
-
-        public override bool IsConstant => false;
 
         public override ABSObject Execute( BSScope scope )
         {
@@ -22,6 +25,8 @@ namespace BadScript.Common.Expressions.Implementations.Types
 
             return BSObject.Null;
         }
+
+        #endregion
 
     }
 

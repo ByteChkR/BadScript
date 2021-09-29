@@ -2,13 +2,14 @@
 
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Types;
-using BadScript.Common.Expressions.Implementations.Value;
 
 namespace BadScript.Utility.Serialization.Serializers
 {
 
     public class BsNamespaceExpressionSerializer : BSExpressionSerializer
     {
+
+        #region Public
 
         public override bool CanDeserialize( BSCompiledExpressionCode code )
         {
@@ -33,8 +34,10 @@ namespace BadScript.Utility.Serialization.Serializers
             BSNamespaceExpression ns = ( BSNamespaceExpression )expr;
             s.SerializeOpCode( BSCompiledExpressionCode.NamespaceDefExpr );
             s.SerializeStringArray( ns.FullName );
-            s.SerializeBlock(ns.Block);
+            s.SerializeBlock( ns.Block );
         }
+
+        #endregion
 
     }
 

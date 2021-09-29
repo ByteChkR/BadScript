@@ -35,6 +35,7 @@ namespace BadScript
         private readonly List < ABSScriptInterface > m_Interfaces;
 
         public BSNamespaceRoot NamespaceRoot { get; }
+
         public BSTypeDatabase TypeDatabase { get; }
 
         public BSParserSettings ParserSettings { get; }

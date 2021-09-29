@@ -16,34 +16,24 @@ namespace BadScript.Utils.Reflection
         private readonly MethodInfo[] m_MethodInfos;
         private readonly object m_Instance;
 
-        public BSReflectedMethod(object instance, MethodInfo[] mis ) : base(SourcePosition.Unknown, $"function  {mis[0].Name}(...)", null,mis.Min(x=>x.GetParameters().Length), mis.Max(x=>x.GetParameters().Length) )
+        #region Public
+
+        public BSReflectedMethod( object instance, MethodInfo[] mis ) : base(
+                                                                             SourcePosition.Unknown,
+                                                                             $"function  {mis[0].Name}(...)",
+                                                                             null,
+                                                                             mis.Min( x => x.GetParameters().Length ),
+                                                                             mis.Max( x => x.GetParameters().Length )
+                                                                            )
         {
             m_Instance = instance;
             m_MethodInfos = mis;
             SetFunc( InvokeMethod );
         }
 
-        public static object[] GetObjects( ABSObject[] args )
+        public static MethodInfo FindMethod( MethodInfo[] mis, object[] args )
         {
-            List<object> types = new List<object>();
-
-            foreach (ABSObject absObject in args)
-            {
-                if (absObject is IBSWrappedObject wo)
-                {
-                    object o = wo.GetInternalObject();
-                    if (o == null)
-                        throw new Exception(); //TODO: Better Exception
-                    types.Add(o);
-                }
-            }
-
-            return types.ToArray();
-        }
-
-        public static MethodInfo FindMethod(MethodInfo[] mis, object[] args )
-        {
-            foreach ( MethodInfo methodInfo in mis)
+            foreach ( MethodInfo methodInfo in mis )
             {
                 ParameterInfo[] pis = methodInfo.GetParameters();
                 int min = 0;
@@ -61,7 +51,7 @@ namespace BadScript.Utils.Reflection
                     }
                 }
 
-                if ( min <= args.Length && max >= args.Length && CheckTypes(pis, args))
+                if ( min <= args.Length && max >= args.Length && CheckTypes( pis, args ) )
                 {
                     return methodInfo;
                 }
@@ -69,6 +59,37 @@ namespace BadScript.Utils.Reflection
 
             throw new Exception(); //TODO: Do better
         }
+
+        public static object[] GetObjects( ABSObject[] args )
+        {
+            List < object > types = new List < object >();
+
+            foreach ( ABSObject absObject in args )
+            {
+                if ( absObject is IBSWrappedObject wo )
+                {
+                    object o = wo.GetInternalObject();
+
+                    if ( o == null )
+                    {
+                        throw new Exception(); //TODO: Better Exception
+                    }
+
+                    types.Add( o );
+                }
+            }
+
+            return types.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return DebugData;
+        }
+
+        #endregion
+
+        #region Private
 
         private static bool CheckTypes( ParameterInfo[] pis, object[] args )
         {
@@ -89,22 +110,18 @@ namespace BadScript.Utils.Reflection
         private ABSObject InvokeMethod( MethodInfo mi, object[] args )
         {
             object o = mi.Invoke( m_Instance, args );
-            
-            return BSReflectionInterface.Instance.Wrap( o );
 
+            return BSReflectionInterface.Instance.Wrap( o );
         }
 
-        private ABSObject InvokeMethod(ABSObject[] args)
+        private ABSObject InvokeMethod( ABSObject[] args )
         {
             object[] a = GetObjects( args );
 
-            return InvokeMethod( FindMethod(m_MethodInfos, a ), a );
+            return InvokeMethod( FindMethod( m_MethodInfos, a ), a );
         }
 
-        public override string ToString()
-        {
-            return DebugData;
-        }
+        #endregion
 
     }
 

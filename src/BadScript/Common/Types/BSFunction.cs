@@ -16,6 +16,8 @@ namespace BadScript.Common.Types
     public class BSFunction : ABSObject
     {
 
+        protected readonly string DebugData = null;
+
         private class BSCachedFunction
         {
 
@@ -39,15 +41,12 @@ namespace BadScript.Common.Types
             new Dictionary < Thread, Stack < BSFunction > >();
 
         private readonly (int min, int max)? m_ParameterCount;
-        protected readonly string DebugData = null;
 
         private readonly List < BSFunction > m_Hooks = new List < BSFunction >();
         private readonly Dictionary < string, BSCachedFunction > m_Properties;
 
         private Func < ABSObject[],
             ABSObject > m_Func;
-
-        protected void SetFunc( Func < ABSObject[], ABSObject > func ) => m_Func = func;
 
         public static string[] StackTrace
         {
@@ -262,6 +261,15 @@ namespace BadScript.Common.Types
             v = null;
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected void SetFunc( Func < ABSObject[], ABSObject > func )
+        {
+            m_Func = func;
         }
 
         #endregion

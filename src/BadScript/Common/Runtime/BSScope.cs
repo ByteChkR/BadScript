@@ -18,14 +18,13 @@ namespace BadScript.Common.Runtime
 
         private BSNamespace m_Namespace;
 
-        public void SetNamespace( BSNamespace ns ) => m_Namespace = ns;
-        public BSNamespace Namespace => m_Namespace ?? m_Parent.Namespace;
-
         private readonly BSScopeFlags m_AllowedFlags;
         private BSScopeFlags m_CurrentFlag;
         private readonly BSEngine m_Instance;
         private readonly BSScope m_Parent;
         private readonly BSTable m_LocalVars = new BSTable( SourcePosition.Unknown );
+
+        public BSNamespace Namespace => m_Namespace ?? m_Parent.Namespace;
 
         public BSScopeFlags Flags => m_CurrentFlag;
 
@@ -188,6 +187,11 @@ namespace BadScript.Common.Runtime
             }
 
             m_CurrentFlag = flag;
+        }
+
+        public void SetNamespace( BSNamespace ns )
+        {
+            m_Namespace = ns;
         }
 
         #endregion

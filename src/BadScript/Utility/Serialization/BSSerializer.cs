@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 
 using BadScript.Common.Exceptions;
@@ -188,6 +187,15 @@ namespace BadScript.Utility.Serialization
             return ( BSSerializerHints )s.ReadByte();
         }
 
+        internal static string DeserializeString( this Stream s )
+        {
+            int c = s.DeserializeInt32();
+            byte[] sBuf = new byte[c];
+            s.Read( sBuf, 0, sBuf.Length );
+
+            return Encoding.UTF8.GetString( sBuf );
+        }
+
         internal static string[] DeserializeStringArray( this Stream s )
         {
             int count = s.DeserializeInt32();
@@ -199,25 +207,6 @@ namespace BadScript.Utility.Serialization
             }
 
             return arr;
-        }
-
-        internal static void SerializeStringArray( this Stream s, string[] arr )
-        {
-            s.SerializeInt32( arr.Length );
-
-            foreach ( string s1 in arr )
-            {
-                s.SerializeString( s1 );
-            }
-        }
-
-        internal static string DeserializeString( this Stream s )
-        {
-            int c = s.DeserializeInt32();
-            byte[] sBuf = new byte[c];
-            s.Read( sBuf, 0, sBuf.Length );
-
-            return Encoding.UTF8.GetString( sBuf );
         }
 
         internal static void SerializeBlock( this Stream l, BSExpression[] src )
@@ -310,6 +299,16 @@ namespace BadScript.Utility.Serialization
             byte[] bl = BitConverter.GetBytes( b.Length );
             l.Write( bl, 0, bl.Length );
             l.Write( b, 0, b.Length );
+        }
+
+        internal static void SerializeStringArray( this Stream s, string[] arr )
+        {
+            s.SerializeInt32( arr.Length );
+
+            foreach ( string s1 in arr )
+            {
+                s.SerializeString( s1 );
+            }
         }
 
         #endregion
