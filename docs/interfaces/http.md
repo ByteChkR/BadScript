@@ -50,3 +50,6 @@ Directly downloads the specified resource and returns the content interpreted as
 
 ### createUri(url)
 Creates an `URI Object` from the specified string
+
+
+[List of All Interfaces](./Interfaces.md)

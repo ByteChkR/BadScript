@@ -71,3 +71,6 @@ returns true if the string is digits only
 
 ### format(formatStr, arg0, arg1, ...)
 returns the formatted string using C# `string.format()`
+
+
+[List of All Interfaces](./Interfaces.md)

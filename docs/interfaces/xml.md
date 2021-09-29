@@ -62,3 +62,6 @@ Returns the Documents string representation
 
 ### createDoc(str)
 Creates a new XML Document with the specified contents
+
+
+[List of All Interfaces](./Interfaces.md)

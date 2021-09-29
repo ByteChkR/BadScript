@@ -52,3 +52,6 @@ Removes an active hook from the target
 
 ## releaseHooks(target)
 Removes all hooks from the target
+
+
+[List of All Interfaces](./Interfaces.md)
