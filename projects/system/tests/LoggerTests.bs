@@ -1,12 +1,17 @@
-logger = new Logger()
-try
+namespace System.Logging.Tests
 {
-	logger.WriteLine("Test Should Error")
-}
-catch(e)
-{
-	
-}
+	using System.Logging
 
-logger = new ConsoleLogger()
-logger.WriteLine("Log Test")
+	logger = new Logger()
+	try
+	{
+		logger.WriteLine("Test Should Error")
+	}
+	catch(e)
+	{
+		
+	}
+
+	logger = new ConsoleLogger()
+	logger.WriteLine("Log Test")
+}

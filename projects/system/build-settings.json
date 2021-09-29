@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "System",
-    "Version": "2021.9.26.0"
+    "Version": "2021.9.29.1"
   },
   "BuildTargets": {
     "Targets": [
@@ -24,14 +24,14 @@
         "OutputFormat": "text",
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
         "Include": [
-          "./src/*.bs",
-          "./tests/*.bs"
+          "./tests/*.bs",
+          "./src/*.bs"
         ],
         "SubTarget": "",
         "References": [],
         "PreEvents": [],
         "PostEvents": [
-          "%BS_EXEC% --nologo -f %Target.OutputFile%"
+          "%BS_EXEC% run --nologo -f %Target.OutputFile%"
         ]
       }
     ]

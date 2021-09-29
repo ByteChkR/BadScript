@@ -1,17 +1,22 @@
-function subscriber0()
+namespace System.Tests
 {
-	print("Recieved Event")
+	using System
+
+	function subscriber0()
+	{
+		print("Recieved Event")
+	}
+
+	function subscriber1(arg)
+	{
+		print("Received Event. Argument: " + arg)
+	}
+
+	ev0 = new Event()
+	ev0 += subscriber0
+	ev0()
+
+	ev1 = new Event(1)
+	ev1 += subscriber1
+	ev1("Argument Test")
 }
-
-function subscriber1(arg)
-{
-	print("Received Event. Argument: " + arg)
-}
-
-ev0 = new Event()
-ev0 += subscriber0
-ev0()
-
-ev1 = new Event(1)
-ev1 += subscriber1
-ev1("Argument Test")

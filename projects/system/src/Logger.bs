@@ -1,24 +1,28 @@
-global class Logger
+
+namespace System.Logging
 {
-	function Write(obj)
+	class Logger
 	{
-		error("No implementation for 'Logger.Write' in type " + GetType())
+		function Write(obj)
+		{
+			error("No implementation for 'Logger.Write' in type " + GetType())
+		}
+
+		function WriteLine(obj)
+		{
+			error("No implementation for 'Logger.WriteLine' in type " + GetType())
+		}
+
+		function Clear()
+		{
+			error("No implementation for 'Logger.Clear' in type " + GetType())
+		}
 	}
 
-	function WriteLine(obj)
+	class ConsoleLogger : Logger
 	{
-		error("No implementation for 'Logger.WriteLine' in type " + GetType())
+		function Write(obj) => write(obj)
+		function WriteLine(obj) => print(obj)
+		function Clear() => clear()
 	}
-
-	function Clear()
-	{
-		error("No implementation for 'Logger.Clear' in type " + GetType())
-	}
-}
-
-global class ConsoleLogger : Logger
-{
-	function Write(obj) => write(obj)
-	function WriteLine(obj) => print(obj)
-	function Clear() => clear()
 }

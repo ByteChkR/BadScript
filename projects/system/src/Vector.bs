@@ -1,123 +1,129 @@
-environment.loadInterface("math")
-global class Vector4
+
+
+namespace System.Vectors
 {
-	X = 0
-	Y = 0
-	Z = 0
-	W = 0
-	function Vector4(x, y, z, w)
+	math = environment.loadInterface("math", {})
+	class Vector4
 	{
-		X = x
-		Y = y
-		Z = z
-		W = w
-	}
-
-	function Add(other)
-	{
-		return new Vector4(
-			X + other.X,
-			Y + other.Y,
-			Z + other.Z,
-			W + other.W)
-	}
-
-	function Sub(other)
-	{
-		return new Vector4(
-			X - other.X,
-			Y - other.Y,
-			Z - other.Z,
-			W - other.W)
-	}
-
-	function Scale(scalar)
-	{
-		return new Vector4(
-			X * scalar,
-			Y * scalar,
-			Z * scalar,
-			W * scalar)
-	}
-
-	function SqrMagnitude()
-	{
-		return X + Y + Z + W
-	}
-
-	function Magnitude()
-	{
-		return math.sqrt(SqrMagnitude())
-	}
-
-	function Normalized()
-	{
-		return Scale(1 / Magnitude())
-	}
-
-	function op_Plus(other)
-	{
-		if(isType(other))
+		X = 0
+		Y = 0
+		Z = 0
+		W = 0
+		function Vector4(x, y, z, w)
 		{
-			return Add(other)
+			X = x
+			Y = y
+			Z = z
+			W = w
 		}
-		else
+
+		function Add(other)
 		{
-			print(debug(other))
-			error("Can only Add a Vector with a Vector.")
+			return new Vector4(
+				X + other.X,
+				Y + other.Y,
+				Z + other.Z,
+				W + other.W)
 		}
+
+		function Sub(other)
+		{
+			return new Vector4(
+				X - other.X,
+				Y - other.Y,
+				Z - other.Z,
+				W - other.W)
+		}
+
+		function Scale(scalar)
+		{
+			return new Vector4(
+				X * scalar,
+				Y * scalar,
+				Z * scalar,
+				W * scalar)
+		}
+
+		function SqrMagnitude()
+		{
+			return X + Y + Z + W
+		}
+
+		function Magnitude()
+		{
+			return math.sqrt(SqrMagnitude())
+		}
+
+		function Normalized()
+		{
+			return Scale(1 / Magnitude())
+		}
+
+		function op_Plus(other)
+		{
+			if(isType(other))
+			{
+				return Add(other)
+			}
+			else
+			{
+				print(debug(other))
+				error("Can only Add a Vector with a Vector.")
+			}
+		}
+
+		function op_Minus(other)
+		{
+			if(isType(other))
+			{
+				return Sub(other)
+			}
+			else
+			{
+				error("Can only Add a Vector with a Vector.")
+			}
+		}
+
+		function op_Multiply(other)
+		{
+			if(isType(other))
+			{
+				error("Can not Multiply Two Vectors. Right side has to be scalar")
+			}
+			else
+			{
+				return Scale(other)
+			}
+		}
+
+		function op_Equals(other)
+		{
+			if(isType(other))
+			{
+				return	X == other.X &&
+						Y == other.Y &&
+						Z == other.Z &&
+						W == other.W
+			}
+			return false
+		}
+
+		function op_InEqual(other)
+		{
+			return op_Equals(other) == false
+		}
+
 	}
 
-	function op_Minus(other)
+	class Vector3 : Vector4
 	{
-		if(isType(other))
-		{
-			return Sub(other)
-		}
-		else
-		{
-			error("Can only Add a Vector with a Vector.")
-		}
+		function Vector3(x, y, z) : base(x, y, z, 0) {}
 	}
 
-	function op_Multiply(other)
+
+	class Vector2 : Vector3
 	{
-		if(isType(other))
-		{
-			error("Can not Multiply Two Vectors. Right side has to be scalar")
-		}
-		else
-		{
-			return Scale(other)
-		}
+		function Vector2(x, y) : base(x, y, 0) {}
 	}
 
-	function op_Equals(other)
-	{
-		if(isType(other))
-		{
-			return	X == other.X &&
-					Y == other.Y &&
-					Z == other.Z &&
-					W == other.W
-		}
-		return false
-	}
-
-	function op_InEqual(other)
-	{
-		return op_Equals(other) == false
-	}
-
-}
-
-global class Vector3 : Vector4
-{
-	function Vector3(x, y, z) : base(x, y, z, 0) {}
-}
-
-
-global class Vector2 : Vector3
-{
-	function Vector2(x, y) : base(x, y, 0) {}
 }
