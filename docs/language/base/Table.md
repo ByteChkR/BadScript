@@ -24,3 +24,6 @@ Text = table["Element"] + " " + table.OtherElement //Text = "Hello World"
 - [op_Inequality(!=)](./operators/Inequality.md)
 - [op_ArrayAccess([key])](./operators/ArrayAccess.md)
 - [op_MemberAccess(.key)](./operators/MemberAccess.md)
+
+
+[List of all Built-In Types](./BuiltInTypes.md)

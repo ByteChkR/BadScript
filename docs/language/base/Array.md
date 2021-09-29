@@ -130,3 +130,5 @@ array.swap(0, 1) //New Array Order: [2, 1, 3]
 	- Index of the first Element that will be swapped
 - idx2
 	- Index of the second Element that will be swapped
+
+[List of all Built-In Types](./BuiltInTypes.md)

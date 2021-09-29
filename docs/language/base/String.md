@@ -19,3 +19,6 @@ else
 - [op_Inequality(!=)](./operators/Inequality.md)
 - [op_Addition(+)](./operators/Addition.md)
 - [op_SelfAddition(+=)](./operators/Addition.md)
+
+
+[List of all Built-In Types](./BuiltInTypes.md)

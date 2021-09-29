@@ -24,3 +24,6 @@ else
 - [op_SelfAnd(&=)](./operators/SelfAnd.md)
 - [op_SelfOr(|=)](./operators/SelfOr.md)
 - [op_SelfExplicitOr(^=)](./operators/SelfExclusiveOr.md)
+
+
+[List of all Built-In Types](./BuiltInTypes.md)

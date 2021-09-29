@@ -246,3 +246,6 @@ f.hook(f_hook2)
 
 f.releaseHooks() //Clears all Hooks
 ```
+
+
+[List of all Built-In Types](./BuiltInTypes.md)

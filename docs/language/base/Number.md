@@ -32,3 +32,6 @@ else
 - [op_SelfMultiply(\*=)](./operators/Multiply.md)
 - [op_SelfDivision(/=)](./operators/Division.md)
 - [op_SelfModulus(%=)](./operators/Modulus.md)
+
+
+[List of all Built-In Types](./BuiltInTypes.md)
