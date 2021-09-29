@@ -65,9 +65,9 @@ namespace BadScript.Console.Subsystems
             es.Interfaces.Add( new StringUtilsApi() );
             es.Interfaces.Add( new ZipApi() );
             es.Interfaces.Add( new ImagingApi() );
-            es.Interfaces.Add( new BSReflectionScriptInterface() );
             es.Interfaces.Add( new VersionToolsInterface() );
             es.Interfaces.Add( new XmlInterface() );
+            es.Interfaces.Add( BSReflectionInterface.Instance );
 
             string[] incDirs = IncludeDirectories.ToArray();
 

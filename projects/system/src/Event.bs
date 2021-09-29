@@ -68,8 +68,8 @@ namespace System
 		}
 
 		function ClearListeners() => _listeners.clear()
-		op_SelfPlus = AddListener
-		op_SelfMinus = RemoveListener
+		op_SelfAddition = AddListener
+		op_SelfSubtraction = RemoveListener
 		op_Invoke = Invoke
 	}
 }

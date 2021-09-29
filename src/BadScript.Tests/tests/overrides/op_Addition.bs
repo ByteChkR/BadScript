@@ -1,12 +1,11 @@
 r = false
-x = 0
 t = {
-	op_SelfPlus = function(other)
+	op_Addition = function(other)
 	{
 		r = other == 2
 		return t
 	}
 }
-t += 2
+x = t + 2
 
 return r

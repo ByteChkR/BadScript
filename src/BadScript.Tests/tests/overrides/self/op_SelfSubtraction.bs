@@ -1,11 +1,11 @@
 r = false
 t = {
-	op_LessOrEqual = function(other)
+	op_SelfSubtraction = function(other)
 	{
 		r = other == 2
 		return t
 	}
 }
-x = t <= 2
+t -= 2
 
 return r

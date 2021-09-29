@@ -15,7 +15,6 @@ using BadScript.Process;
 using BadScript.Settings;
 using BadScript.StringUtils;
 using BadScript.Utils;
-using BadScript.Utils.Reflection;
 using BadScript.Xml;
 using BadScript.Zip;
 
@@ -60,7 +59,6 @@ namespace BadScript.Tests
             es.Interfaces.Add( new StringUtilsApi() );
             es.Interfaces.Add( new ZipApi() );
             es.Interfaces.Add( new ImagingApi() );
-            es.Interfaces.Add( new BSReflectionScriptInterface() );
             es.Interfaces.Add( new VersionToolsInterface() );
             es.Interfaces.Add( new XmlInterface() );
             m_Engine = es.Build();

@@ -1,11 +1,11 @@
 r = false
 t = {
-	op_Plus = function(other)
+	op_Inequality = function(other)
 	{
 		r = other == 2
 		return t
 	}
 }
-x = t + 2
+x = t != 2
 
 return r

@@ -1,11 +1,11 @@
 r = false
 t = {
-	op_XOr = function(other)
+	op_GreaterThanOrEqual = function(other)
 	{
 		r = other == 2
 		return t
 	}
 }
-x = t ^ 2
+x = t >= 2
 
 return r

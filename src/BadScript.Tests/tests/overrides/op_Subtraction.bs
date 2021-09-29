@@ -1,11 +1,11 @@
 r = false
 t = {
-	op_SelfDivide = function(other)
+	op_Subtraction = function(other)
 	{
 		r = other == 2
 		return t
 	}
 }
-t /= 2
+x = t - 2
 
 return r

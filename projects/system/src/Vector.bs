@@ -59,7 +59,7 @@ namespace System.Vectors
 			return Scale(1 / Magnitude())
 		}
 
-		function op_Plus(other)
+		function op_Addition(other)
 		{
 			if(isType(other))
 			{
@@ -72,7 +72,7 @@ namespace System.Vectors
 			}
 		}
 
-		function op_Minus(other)
+		function op_Subtraction(other)
 		{
 			if(isType(other))
 			{
@@ -96,7 +96,19 @@ namespace System.Vectors
 			}
 		}
 
-		function op_Equals(other)
+		function op_Division(other)
+		{
+			if(isType(other))
+			{
+				error("Can not Multiply Two Vectors. Right side has to be scalar")
+			}
+			else
+			{
+				return Scale(1 / other)
+			}
+		}
+
+		function op_Equality(other)
 		{
 			if(isType(other))
 			{
@@ -108,7 +120,7 @@ namespace System.Vectors
 			return false
 		}
 
-		function op_InEqual(other)
+		function op_Inequality(other)
 		{
 			return op_Equals(other) == false
 		}

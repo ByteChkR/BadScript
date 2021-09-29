@@ -1,0 +1,5 @@
+reflection = environment.loadInterface("reflection")
+
+Vector4 = reflection.getType("Vector4")
+
+print(debug(Vector4))

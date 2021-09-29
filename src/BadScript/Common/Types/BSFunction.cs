@@ -39,13 +39,15 @@ namespace BadScript.Common.Types
             new Dictionary < Thread, Stack < BSFunction > >();
 
         private readonly (int min, int max)? m_ParameterCount;
-        private readonly string m_DebugData = null;
+        protected readonly string DebugData = null;
 
         private readonly List < BSFunction > m_Hooks = new List < BSFunction >();
         private readonly Dictionary < string, BSCachedFunction > m_Properties;
 
         private Func < ABSObject[],
             ABSObject > m_Func;
+
+        protected void SetFunc( Func < ABSObject[], ABSObject > func ) => m_Func = func;
 
         public static string[] StackTrace
         {
@@ -56,7 +58,7 @@ namespace BadScript.Common.Types
                     return new string[0];
                 }
 
-                return s_Stacks[Thread.CurrentThread].Select( x => x.m_DebugData ).ToArray();
+                return s_Stacks[Thread.CurrentThread].Select( x => x.DebugData ).ToArray();
             }
         }
 
@@ -209,7 +211,7 @@ namespace BadScript.Common.Types
             {
                 throw new BSRuntimeException(
                                              Position,
-                                             $"Invalid parameter Count: '{m_DebugData}' expected {min} - {max} and got {args.Length}"
+                                             $"Invalid parameter Count: '{DebugData}' expected {min} - {max} and got {args.Length}"
                                             );
             }
 
@@ -233,7 +235,7 @@ namespace BadScript.Common.Types
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
-            return m_DebugData ?? m_Func.ToString();
+            return DebugData ?? m_Func.ToString();
         }
 
         public override void SetProperty( string propertyName, ABSObject obj )
@@ -272,7 +274,7 @@ namespace BadScript.Common.Types
             Func < ABSObject[], ABSObject >
                 func ) : base( pos )
         {
-            m_DebugData = debugData;
+            DebugData = debugData;
             m_Func = func;
             m_Properties = new();
 

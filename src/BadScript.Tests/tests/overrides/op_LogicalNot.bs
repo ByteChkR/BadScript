@@ -1,6 +1,6 @@
 r = false
 t = {
-	op_Not = function()
+	op_LogicalNot = function()
 	{
 		r = true
 		return t

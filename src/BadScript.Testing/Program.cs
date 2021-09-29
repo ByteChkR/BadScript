@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 using BadScript.ConsoleUtils;
 using BadScript.Core;
@@ -41,11 +42,18 @@ namespace BadScript.Testing
             es.Interfaces.Add( new StringUtilsApi() );
             es.Interfaces.Add( new ZipApi() );
             es.Interfaces.Add( new ImagingApi() );
-            es.Interfaces.Add( new BSReflectionScriptInterface() );
             es.Interfaces.Add( new VersionToolsInterface() );
             es.Interfaces.Add( new XmlInterface() );
+            es.Interfaces.Add( BSReflectionInterface.Instance );
+            
+            BSReflectionInterface.Instance.AddType<Version>();
+            BSReflectionInterface.Instance.AddType<DateTime>();
+            BSReflectionInterface.Instance.AddType<TimeSpan>();
+            BSReflectionInterface.Instance.AddType<Vector4>();
+            
+
             BSEngine e = es.Build();
-            e.LoadFile( "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\NamespaceTest.bs" );
+            e.LoadFile( "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\ReflectionTest.bs" );
         }
 
         #endregion
