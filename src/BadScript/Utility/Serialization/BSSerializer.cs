@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 using BadScript.Common.Exceptions;
@@ -43,7 +44,9 @@ namespace BadScript.Utility.Serialization
                                                                                       BsFunctionDefinitionExpressionSerializer(),
                                                                                   new BsProxyExpressionSerializer(),
                                                                                   new BsNewClassExpressionSerializer(),
-                                                                                  new BsClassDefExpressionSerializer()
+                                                                                  new BsClassDefExpressionSerializer(),
+                                                                                  new BsUsingExpressionSerializer(),
+                                                                                  new BsNamespaceExpressionSerializer()
                                                                               };
 
         #region Public
@@ -183,6 +186,29 @@ namespace BadScript.Utility.Serialization
         internal static BSSerializerHints DeserializeSHint( this Stream s )
         {
             return ( BSSerializerHints )s.ReadByte();
+        }
+
+        internal static string[] DeserializeStringArray( this Stream s )
+        {
+            int count = s.DeserializeInt32();
+            string[] arr = new string[count];
+
+            for ( int i = 0; i < count; i++ )
+            {
+                arr[i] = s.DeserializeString();
+            }
+
+            return arr;
+        }
+
+        internal static void SerializeStringArray( this Stream s, string[] arr )
+        {
+            s.SerializeInt32( arr.Length );
+
+            foreach ( string s1 in arr )
+            {
+                s.SerializeString( s1 );
+            }
         }
 
         internal static string DeserializeString( this Stream s )

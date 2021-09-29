@@ -45,7 +45,7 @@ namespace BadScript.Testing
             es.Interfaces.Add( new VersionToolsInterface() );
             es.Interfaces.Add( new XmlInterface() );
             BSEngine e = es.Build();
-            e.LoadFile( "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\class.bs" );
+            e.LoadFile( "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\NamespaceTest.bs" );
         }
 
         #endregion

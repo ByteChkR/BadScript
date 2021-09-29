@@ -17,8 +17,10 @@ namespace BadScript.Common.Expressions.Implementations.Value
         public readonly Dictionary < string, BSExpression > InitExpressions;
         public readonly string Name;
         public readonly string BaseName;
-
+        public readonly bool IsGlobal;
         public override bool IsConstant => InitExpressions.All( x => x.Value.IsConstant );
+
+        public  BSScope DefiningScope { get; private set; }
 
         #region Public
 
@@ -26,10 +28,12 @@ namespace BadScript.Common.Expressions.Implementations.Value
             SourcePosition pos,
             string name,
             string baseName,
+            bool isGlobal,
             Dictionary < string, BSExpression > initExprs = null ) : base( pos )
         {
             Name = name;
             BaseName = baseName;
+            IsGlobal = isGlobal;    
             InitExpressions = initExprs ?? new Dictionary < string, BSExpression >();
 
             //Add Default Functions
@@ -96,8 +100,13 @@ namespace BadScript.Common.Expressions.Implementations.Value
 
         public override ABSObject Execute( BSScope scope )
         {
-            scope.Engine.TypeDatabase.AddClass( this );
-
+            DefiningScope = scope;
+            if(IsGlobal)
+                scope.Engine.NamespaceRoot.AddType(this);
+            else
+            {
+                scope.Namespace.AddType( this );
+            }
             return BSObject.Null;
         }
 

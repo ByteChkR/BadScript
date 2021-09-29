@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using BadScript.Common.Expressions;
 using BadScript.Common.Types;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
@@ -14,6 +15,7 @@ using BadScript.Math;
 using BadScript.Process;
 using BadScript.Settings;
 using BadScript.StringUtils;
+using BadScript.Utility.Serialization;
 using BadScript.Utils;
 using BadScript.Utils.Reflection;
 using BadScript.Xml;
@@ -24,7 +26,7 @@ using NUnit.Framework;
 namespace BadScript.Tests
 {
 
-    public class ArrayTests
+    public class SerializerTests
     {
 
         private static Dictionary < string, string > m_Files = new Dictionary < string, string >();
@@ -38,7 +40,14 @@ namespace BadScript.Tests
         public void RunTest( string key )
         {
             string file = m_Files[key];
-            ABSObject o = m_Engine.LoadFile( file );
+            BSExpression[] expressions = m_Engine.ParseFile( file );
+            MemoryStream ms = new MemoryStream();
+            BSSerializer.Serialize( expressions, ms );
+            ms.Position = 0;
+
+            expressions = BSSerializer.Deserialize( ms );
+
+            ABSObject o = m_Engine.LoadScript( expressions );
             Assert.IsTrue( o.ConvertBool() );
         }
 
@@ -72,7 +81,7 @@ namespace BadScript.Tests
 
         private static string[] TestFiles()
         {
-            string testDir = TestContext.CurrentContext.TestDirectory + "/tests/array/";
+            string testDir = TestContext.CurrentContext.TestDirectory + "/tests/";
             string[] files = Directory.GetFiles( testDir, "*", SearchOption.AllDirectories );
 
             for ( int i = 0; i < files.Length; i++ )

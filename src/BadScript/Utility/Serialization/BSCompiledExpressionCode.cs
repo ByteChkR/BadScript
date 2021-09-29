@@ -31,6 +31,8 @@
         CustomBlock,
         ClassDefExpr,
         NewClassExpr,
+        NamespaceDefExpr,
+        UsingDefExpr,
 
     }
 

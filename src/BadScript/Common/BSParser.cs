@@ -351,12 +351,74 @@ namespace BadScript.Common
             return expr;
         }
 
+
+        public BSUsingExpression ParseUsing()
+        {
+            SourcePosition sp = CreateSourcePosition();
+
+            ReadWhitespaceAndNewLine();
+            List<string> fn = new();
+            bool restart = true;
+            while (restart)
+            {
+                ReadWhitespaceAndNewLine();
+                fn.Add(GetNextWord());
+                ReadWhitespaceAndNewLine();
+
+                if (Is('.'))
+                {
+                    restart = true;
+                    m_CurrentPosition++;
+                }
+                else
+                {
+                    restart = false;
+                }
+            }
+
+            return new BSUsingExpression(sp, fn.ToArray());
+        }
+        public BSNamespaceExpression ParseNamespace()
+        {
+            SourcePosition sp = CreateSourcePosition();
+
+            ReadWhitespaceAndNewLine();
+            List < string > fn = new();
+            bool restart = true;
+            while (restart)
+            {
+                ReadWhitespaceAndNewLine();
+                fn.Add( GetNextWord() );
+                ReadWhitespaceAndNewLine();
+                if (Is( '{' ) )
+                {
+                    restart = false;
+                }
+
+                if ( Is( '.' ) )
+                {
+                    restart = true;
+                    m_CurrentPosition++;
+                }
+            }
+
+
+            ReadWhitespaceAndNewLine();
+            int off = m_CurrentPosition + 1;
+            string block = ParseBlock();
+            BSParser p = new BSParser(block, m_OriginalSource, off);
+            BSExpression[] exprs = p.ParseToEnd();
+            
+
+            return new BSNamespaceExpression( sp,fn.ToArray(), exprs );
+        }
+
         public BSExpression ParseClass( bool isGlobal )
         {
-            if ( !isGlobal )
-            {
-                throw new BSParserException( "Classes can only be defined 'global'" );
-            }
+            //if ( !isGlobal )
+            //{
+            //    throw new BSParserException( "Classes can only be defined 'global'" );
+            //}
 
             StringBuilder sb = new StringBuilder();
             ReadWhitespaceAndNewLine();
@@ -438,7 +500,7 @@ namespace BadScript.Common
                 }
             }
 
-            return new BSClassExpression( pos, className, baseClass, expressions );
+            return new BSClassExpression( pos, className, baseClass, isGlobal, expressions );
         }
 
         public BSExpression ParseFunction( bool isGlobal )
@@ -899,8 +961,14 @@ namespace BadScript.Common
 
             if ( isGlobal )
             {
-                throw new BSParserException( "Expected 'function' or 'enumerable' after 'global'", this );
+                throw new BSParserException( "Expected 'function', 'class' or 'enumerable' after 'global'", this );
             }
+
+            if ( wordName == "namespace" )
+                return ParseNamespace();
+
+            if ( wordName == "using" )
+                return ParseUsing();
 
             if ( wordName == "return" )
             {

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 
 using BadScript.Common.Expressions;
+using BadScript.Common.Expressions.Implementations.Types;
 using BadScript.Common.Expressions.Implementations.Value;
 
 namespace BadScript.Utility.Serialization.Serializers

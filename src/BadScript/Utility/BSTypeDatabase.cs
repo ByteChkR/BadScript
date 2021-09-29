@@ -3,6 +3,7 @@
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Value;
+using BadScript.Common.Namespaces;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -14,51 +15,34 @@ namespace BadScript.Utility
     public class BSTypeDatabase
     {
 
-        private readonly Dictionary < string, BSClassExpression > m_Classes =
-            new Dictionary < string, BSClassExpression >();
 
         #region Public
 
-        public void Clear()
-        {
-            m_Classes.Clear();
-        }
 
-        public BSClassInstance CreateInstance( string name, BSEngine engine, ABSObject[] args )
+        public BSClassInstance CreateInstance( string name, BSEngine engine, BSNamespace start, ABSObject[] args )
         {
             BSScope classScope = new BSScope( engine );
 
-            return CreateBaseInstance( name, classScope, args );
+            return CreateBaseInstance( name, classScope, start, args );
         }
 
-        internal void AddClass( BSClassExpression expr )
-        {
-            if ( m_Classes.ContainsKey( expr.Name ) )
-            {
-                throw new BSRuntimeException(
-                                             $"Can not Create Class Definition because a Type with the name '{expr.Name}' does already exist."
-                                            );
-            }
-
-            m_Classes.Add( expr.Name, expr );
-        }
 
         #endregion
 
         #region Private
 
-        private BSClassInstance CreateBaseInstance( string name, BSScope scope, ABSObject[] args )
+        private BSClassInstance CreateBaseInstance( string name, BSScope scope, BSNamespace start, ABSObject[] args )
         {
-            BSClassExpression expr = m_Classes[name];
+            BSClassExpression expr = start.ResolveType(name, true);
             BSClassInstance baseInstance = null;
 
             if ( expr.BaseName != null )
             {
-                baseInstance = CreateBaseInstance( expr.BaseName, scope, null );
+                baseInstance = CreateBaseInstance( expr.BaseName, scope, expr.DefiningScope.Namespace, null );
                 scope = new BSScope( BSScopeFlags.None, baseInstance.InstanceScope );
             }
 
-            m_Classes[name].AddClassData( scope );
+            expr.AddClassData( scope );
 
             BSClassInstance table = new BSClassInstance( SourcePosition.Unknown, name, baseInstance, scope );
 

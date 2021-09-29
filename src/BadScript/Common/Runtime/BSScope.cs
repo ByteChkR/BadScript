@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block.ForEach;
+using BadScript.Common.Namespaces;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -14,6 +15,11 @@ namespace BadScript.Common.Runtime
 
     public class BSScope : IEnumerable < IForEachIteration >
     {
+
+        private BSNamespace m_Namespace;
+
+        public void SetNamespace( BSNamespace ns ) => m_Namespace = ns;
+        public BSNamespace Namespace => m_Namespace ?? m_Parent.Namespace;
 
         private readonly BSScopeFlags m_AllowedFlags;
         private BSScopeFlags m_CurrentFlag;
@@ -36,6 +42,7 @@ namespace BadScript.Common.Runtime
         {
             m_AllowedFlags = BSScopeFlags.Return;
             m_Instance = instance;
+            m_Namespace = m_Instance.NamespaceRoot;
         }
 
         public BSScope( BSScopeFlags allowedFlags, BSScope parent ) : this()

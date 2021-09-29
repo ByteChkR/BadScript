@@ -1,0 +1,22 @@
+namespace System.TestNamespace2
+{
+	class ClassTest
+	{
+
+	}
+}
+
+namespace System.TestNamespace1
+{
+	using System.TestNamespace2
+	class VectorTest : ClassTest
+	{
+
+	}
+}
+
+vtest = new VectorTest()
+
+ctest = new ClassTest()
+
+return true

@@ -25,6 +25,7 @@ namespace BadScript.Utility.Serialization.Serializers
         public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
         {
             string name = s.DeserializeString();
+            bool isGlobal = s.DeserializeBool();
             bool hasBase = s.DeserializeBool();
             string baseName = null;
 
@@ -35,7 +36,7 @@ namespace BadScript.Utility.Serialization.Serializers
 
             Dictionary < string, BSExpression > initExpressions = s.DeserializeNameMap();
 
-            return new BSClassExpression( SourcePosition.Unknown, name, baseName, initExpressions );
+            return new BSClassExpression( SourcePosition.Unknown, name, baseName, isGlobal, initExpressions );
         }
 
         public override void Serialize( BSExpression expr, Stream s )
@@ -43,6 +44,7 @@ namespace BadScript.Utility.Serialization.Serializers
             BSClassExpression b = ( BSClassExpression )expr;
             s.SerializeOpCode( BSCompiledExpressionCode.ClassDefExpr );
             s.SerializeString( b.Name );
+            s.SerializeBool( b.IsGlobal );
             bool hasBase = b.BaseName != null;
             s.SerializeBool( hasBase );
 

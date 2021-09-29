@@ -32,6 +32,7 @@ namespace BadScript.Common.Expressions.Implementations.Value
             return scope.Engine.TypeDatabase.CreateInstance(
                                                             ( Name.Left as BSPropertyExpression ).Right,
                                                             scope.Engine,
+                                                            scope.Namespace,
                                                             args
                                                            );
         }

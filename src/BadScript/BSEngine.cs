@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using BadScript.Common;
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
+using BadScript.Common.Namespaces;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
@@ -33,6 +34,7 @@ namespace BadScript
         private readonly ABSTable m_GlobalTable;
         private readonly List < ABSScriptInterface > m_Interfaces;
 
+        public BSNamespaceRoot NamespaceRoot { get; }
         public BSTypeDatabase TypeDatabase { get; }
 
         public BSParserSettings ParserSettings { get; }
@@ -47,6 +49,7 @@ namespace BadScript
             List < ABSScriptInterface > interfaces,
             Dictionary < string, ABSObject > gTable = null )
         {
+            NamespaceRoot = new BSNamespaceRoot();
             TypeDatabase = new BSTypeDatabase();
             ParserSettings = parserSettings;
             m_Interfaces = interfaces;
