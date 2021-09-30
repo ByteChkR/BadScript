@@ -66,21 +66,23 @@ namespace BadScript.Common.OperatorImplementations.Implementations.Math
             ABSObject lVal = arg[0];
             ABSObject rVal = arg[1];
 
-            if ( lVal.TryConvertDecimal( out decimal _ ) ||
-                 lVal.TryConvertString( out string _ ) )
+
+            if ( lVal.TryConvertString( out string _ ) && (rVal.TryConvertBool(out bool _) ||
+                                                           rVal.TryConvertDecimal(out decimal _) ||
+                                                           rVal.TryConvertString(out string _)))
             {
-                if ( rVal.TryConvertDecimal( out decimal _ ) ||
-                     rVal.TryConvertString( out string _ ) )
-                {
-                    return true;
-                }
-                else
-                {
-                    throw new BSRuntimeException( $"Can not convert object '{rVal}' to a string or decimal" );
-                }
+                return true;
+            }
+            if (lVal.TryConvertDecimal(out decimal _) && (rVal.TryConvertDecimal(out decimal _) || rVal.TryConvertString(out string v)))
+            {
+                return true;
             }
 
-            throw new BSRuntimeException( $"Can not convert object '{lVal}' to a string or decimal" );
+            if (lVal.TryConvertBool(out bool _) && (rVal.TryConvertBool(out bool _) || rVal.TryConvertString(out string _)))
+            {
+                return true;
+            }
+            throw new BSRuntimeException($"Can not convert objects '{lVal}', '{rVal}'");
         }
 
         #endregion
