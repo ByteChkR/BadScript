@@ -2,14 +2,16 @@ namespace System.Tests
 {
 	using System
 
+	passNoArgs = false
+	passArgs = false
 	function subscriber0()
 	{
-		print("Recieved Event")
+		passNoArgs = true
 	}
 
 	function subscriber1(arg)
 	{
-		print("Received Event. Argument: " + arg)
+		passArgs = true
 	}
 
 	ev0 = new Event()
@@ -19,4 +21,21 @@ namespace System.Tests
 	ev1 = new Event(1)
 	ev1 += subscriber1
 	ev1("Argument Test")
+
+	pass = true
+	if(!passNoArgs)
+	{
+		print("[TEST] Event with no Args Failed!")
+		pass = false
+	}
+	if(!passArgs)
+	{
+		print("[TEST] Event with Args Failed!")
+		pass = false
+	}
+
+	if(!pass)
+	{
+		error("Event Tests Failed")
+	}
 }

@@ -3,15 +3,22 @@ namespace System.Logging.Tests
 	using System.Logging
 
 	logger = new Logger()
+	passAbstract = false
 	try
 	{
 		logger.WriteLine("Test Should Error")
 	}
 	catch(e)
 	{
-		
+		passAbstract = true
 	}
 
 	logger = new ConsoleLogger()
 	logger.WriteLine("Log Test")
+
+	if(!passAbstract)
+	{		
+		print("[TEST] Abstract Logger Test Failed!")
+		error("Logger Tests Failed")
+	}
 }

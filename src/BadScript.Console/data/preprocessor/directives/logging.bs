@@ -1,0 +1,15 @@
+#define TAG = "[PREPROCESSOR]"
+#custom LOG(!message)
+{
+	print(TAG + "[LOG]" + message)
+}
+
+#custom WARN(!message)
+{
+	print(TAG + "[WARN]" + message)
+}
+
+#custom ERROR(!message)
+{
+	error(TAG + "[WARN]" + message)
+}

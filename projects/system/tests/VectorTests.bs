@@ -1,14 +1,21 @@
+
 namespace System.Vectors.Tests
 {
 	using System.Vectors
 
+	bool pass = true
 	v4 = new Vector4(1,1,1,1)
 	v3 = new Vector3(1,1,1)
 	v2 = new Vector2(1,1)
 
 	v = v4 + v3 + v2
-	print(debug(v))
+	pass &= v.X == 3 && v.Y == 3 && v.Z == 2 && v.W == 1
 
 	v = v * 2
-	print(debug(v))
+	pass &= v.X == 6 && v.Y == 6 && v.Z == 4 && v.W == 2
+
+	if(!pass)
+	{
+		error("Vector Tests Failed")
+	}
 }

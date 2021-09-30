@@ -10,7 +10,8 @@
         "OutputFormat": "text",
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
         "Include": [
-          "./src/*.bs"
+          "./src/*.bs",
+          "%BS_DIR%data/preprocessor/directives/*.bs"
         ],
         "SubTarget": "",
         "References": [],
@@ -26,7 +27,8 @@
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
         "Include": [
           "./tests/*.bs",
-          "./src/*.bs"
+          "./src/*.bs",
+          "%BS_DIR%data/preprocessor/directives/*.bs"
         ],
         "SubTarget": "",
         "References": [],
