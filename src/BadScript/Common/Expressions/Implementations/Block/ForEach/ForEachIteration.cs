@@ -8,7 +8,7 @@ namespace BadScript.Common.Expressions.Implementations.Block.ForEach
 
         private readonly ABSObject[] m_Objs;
 
-        public ForEachIteration( ABSObject[] o )
+        public ForEachIteration( params ABSObject[] o )
         {
             m_Objs = o;
         }
