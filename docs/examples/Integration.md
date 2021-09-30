@@ -8,7 +8,7 @@ The example takes a greeter object and a list of names as input.
 The Script will set the Greeter.Name field and call Greet() for each name.
 
 In This Example:
-- Implementing a `ABSObject` from scratch
+- Implementing an `ABSObject` from scratch
 - Implementing a `BSObject`(simplified way of doing it)
 - Making it possible to use `foreach` with a custom object
 
