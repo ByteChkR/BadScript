@@ -78,8 +78,7 @@ private static void Main( string[] args )
 
     Console.Write( "Enter Names(delimit by comma): " );
     string names = Console.ReadLine();
-    string[] nameArray = names.
-    						Split( new[] { ',' }, StringSplitOptions.RemoveEmptyEntries );
+    string[] nameArray = names.Split( new[] { ',' }, StringSplitOptions.RemoveEmptyEntries );
 
     //Prepare Arguments
     ABSObject[] arguments =
@@ -97,10 +96,8 @@ The Wrapper is meant to showcase the simplest way to creating an `ABSObject` by 
 
 ```cs
 public class NameListWrapper :
-	    BSObject, 	//Override BSObject
-	    			//to have all members already overridden with their default implementations
-	    IEnumerable < IForEachIteration > //Implement this interface,
-	    									//to be able to "foreach" on the object
+	    BSObject, 	//Override BSObject to have all members already overridden with their default implementations
+	    IEnumerable < IForEachIteration > //Implement this interface, to be able to "foreach" on the object
 {
 
     private readonly NameList m_List;
