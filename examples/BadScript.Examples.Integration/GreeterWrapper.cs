@@ -20,7 +20,7 @@ namespace BadScript.Examples.Integration
         private readonly BSFunction m_GreetFunction;
         private readonly ABSReference m_GreetReference;
 
-        public override bool IsNull => false;
+        public override bool IsNull => m_Object == null;
 
         #region Public
 
@@ -82,7 +82,7 @@ namespace BadScript.Examples.Integration
 
         public override ABSObject Invoke( ABSObject[] args )
         {
-            throw new BSRuntimeException( $"Can not find Invoke Object '{this}'" );
+            throw new BSRuntimeException( $"Can not Invoke Object '{this}'" );
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
