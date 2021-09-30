@@ -1,0 +1,1 @@
+# Bad Script Serialization Format Documentation
