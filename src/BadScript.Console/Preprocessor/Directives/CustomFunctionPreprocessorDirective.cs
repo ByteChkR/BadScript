@@ -32,11 +32,13 @@ namespace BadScript.Console.Preprocessor.Directives
 
         public CustomFunctionPreprocessorDirective() : base("#custom") { }
 
+
+
         public override string Process(BSParser p, SourcePreprocessorContext ctx)
         {
             p.SetPosition(p.GetPosition() + Name.Length); //Skip #define
 
-            BSFunctionDefinitionExpression expr = p.ParseFunction(false);
+            BSFunctionDefinitionExpression expr = p.ParseFunction(false,s=> SourcePreprocessor.Preprocess(s, ctx.DirectivesNames));
 
             ctx.Directives.Add( new FunctionPreprocessorDirective( expr ) );
 

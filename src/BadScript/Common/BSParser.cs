@@ -213,7 +213,7 @@ namespace BadScript.Common
             throw new BSParserException( "Expected ']'", this );
         }
 
-        public (BSExpression, BSExpression[]) ParseConditionalBlock()
+        public (BSExpression, BSExpression[]) ParseConditionalBlock(Func <string, string> blockModifier = null )
         {
             if ( Is( '(' ) )
             {
@@ -230,6 +230,7 @@ namespace BadScript.Common
                 m_CurrentPosition++;
                 ReadWhitespaceAndNewLine();
                 string block = ParseBlock();
+                block = blockModifier?.Invoke(block) ?? block;
 
                 BSParser p = new BSParser( block );
 
@@ -508,7 +509,7 @@ namespace BadScript.Common
             return new BSClassExpression( pos, className, baseClass, isGlobal, expressions );
         }
 
-        public BSFunctionDefinitionExpression ParseFunction( bool isGlobal )
+        public BSFunctionDefinitionExpression ParseFunction( bool isGlobal, Func <string, string> blockModifier =null )
         {
             if ( isGlobal && !m_AllowFunctionGlobal )
             {
@@ -593,6 +594,8 @@ namespace BadScript.Common
             }
 
             string block = ParseBlock();
+
+            block = blockModifier?.Invoke( block ) ?? block;
 
             BSParser p = new BSParser( block, m_OffsetSource, m_SourcePositionOffset + pos );
 
@@ -1050,7 +1053,7 @@ namespace BadScript.Common
             return new BSPropertyExpression( CreateSourcePosition( pos ), left, wordName );
         }
 
-        public BSForExpression ParseForExpression( int pos )
+        public BSForExpression ParseForExpression( int pos , Func <string, string> blockModifier =null)
         {
             BSAssignExpression cDecl = (BSAssignExpression)ParseExpression(int.MaxValue);
             BSPropertyExpression cProp = (BSPropertyExpression)cDecl.Left;
@@ -1178,6 +1181,9 @@ namespace BadScript.Common
             ReadWhitespaceAndNewLine();
             string block = ParseBlock();
 
+
+            block = blockModifier?.Invoke(block) ?? block;
+
             BSParser p = new BSParser(block);
 
             BSExpression[] b = p.ParseToEnd();
@@ -1263,7 +1269,7 @@ namespace BadScript.Common
             return new BSTryExpression(CreateSourcePosition(pos), tryBlock, catchBlock, exVar);
         }
 
-        public BSIfExpression ParseIfExpression(int pos)
+        public BSIfExpression ParseIfExpression(int pos, Func <string, string> blockModifier = null )
         {
             string wordName;
             Dictionary<BSExpression, BSExpression[]> cMap =
@@ -1286,6 +1292,7 @@ namespace BadScript.Common
                     if (Is('{'))
                     {
                         string block = ParseBlock();
+                        block = blockModifier?.Invoke( block ) ?? block;
 
                         BSParser p = new BSParser(block);
 
@@ -1300,7 +1307,7 @@ namespace BadScript.Common
 
                     if (wordName == "if")
                     {
-                        (BSExpression, BSExpression[]) sA = ParseConditionalBlock();
+                        (BSExpression, BSExpression[]) sA = ParseConditionalBlock(blockModifier);
                         cMap.Add(sA.Item1, sA.Item2);
                         resetIndex = ReadWhitespaceAndNewLine();
 

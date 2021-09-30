@@ -5,7 +5,6 @@ namespace BadScript.Console.Preprocessor
 
     public abstract class SourcePreprocessorDirective
     {
-
         public virtual string Name { get; }
 
         protected SourcePreprocessorDirective(){}

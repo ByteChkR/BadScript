@@ -27,7 +27,7 @@ namespace BadScript.Console.Preprocessor.Directives
 
 
 
-            BSForExpression expr = p.ParseForExpression(pos);
+            BSForExpression expr = p.ParseForExpression(pos, s=> SourcePreprocessor.Preprocess(s, ctx.DirectivesNames));
 
             expr.Execute(aggrScope);
 

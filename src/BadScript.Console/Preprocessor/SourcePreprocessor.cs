@@ -9,9 +9,15 @@ using BadScript.Console.Preprocessor.Directives;
 using BadScript.Console.Subsystems.Project;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
+using BadScript.Http;
+using BadScript.IO;
+using BadScript.Json;
+using BadScript.Math;
+using BadScript.Process;
 using BadScript.Settings;
 using BadScript.StringUtils;
-
+using BadScript.Xml;
+using BadScript.Zip;
 
 namespace BadScript.Console.Preprocessor
 {
@@ -41,7 +47,16 @@ namespace BadScript.Console.Preprocessor
 
             settings.Interfaces.Add(new ConsoleApi());
             settings.Interfaces.Add(new BadScriptCoreApi());
-
+            settings.Interfaces.Add(new HttpApi());
+            settings.Interfaces.Add(new Json2BSInterface());
+            settings.Interfaces.Add(new BS2JsonInterface());
+            settings.Interfaces.Add(new XmlInterface());
+            settings.Interfaces.Add(new ZipApi());
+            settings.Interfaces.Add(new BSMathApi());
+            settings.Interfaces.Add(new ProcessApi());
+            settings.Interfaces.Add(new BSFileSystemInterface());
+            settings.Interfaces.Add(new BSFileSystemPathInterface(AppDomain.CurrentDomain.BaseDirectory));
+            
             settings.Interfaces.Add( new StringUtilsApi() );
             settings.ActiveInterfaces.Add( "string" );
             
@@ -73,7 +88,7 @@ namespace BadScript.Console.Preprocessor
 
         public static string Preprocess( string source, string directives )
         {
-            SourcePreprocessorContext ctx = new SourcePreprocessorContext(CreateEngine(), source, s_Directives);
+            SourcePreprocessorContext ctx = new SourcePreprocessorContext(CreateEngine(), source, directives, s_Directives);
 
             ctx.ScriptEngine.LoadSource( directives, ctx.RuntimeScope, Array.Empty < ABSObject >() );
 

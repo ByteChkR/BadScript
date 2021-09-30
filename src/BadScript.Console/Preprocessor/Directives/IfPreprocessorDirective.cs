@@ -15,7 +15,7 @@ namespace BadScript.Console.Preprocessor.Directives
             int pos = p.GetPosition() + Name.Length;
             p.SetPosition(pos); //Skip #define
 
-            BSIfExpression expr = p.ParseIfExpression(pos);
+            BSIfExpression expr = p.ParseIfExpression(pos, s=> SourcePreprocessor.Preprocess(s, ctx.DirectivesNames));
 
             expr.Execute(ctx.RuntimeScope);
 
