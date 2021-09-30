@@ -1,6 +1,6 @@
 # Bad Script Console Example
 
-[Example Project](https://github.com/ByteChkR/BadScript/tree/develop/examples/BadScript.Examples.Console)
+[Example Project](https://github.com/ByteChkR/BadScript/tree/master/examples/BadScript.Examples.Console)
 
 
 A small program that has console output and can run scripts from files.

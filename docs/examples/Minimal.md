@@ -1,6 +1,6 @@
 # Bad Script Minimal Example
 
-[Example Project](https://github.com/ByteChkR/BadScript/tree/develop/examples/BadScript.Examples.Minimal)
+[Example Project](https://github.com/ByteChkR/BadScript/tree/master/examples/BadScript.Examples.Minimal)
 
 This example aims to be as small as possible.
 

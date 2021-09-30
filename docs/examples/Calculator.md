@@ -1,6 +1,6 @@
 # Bad Script Calculator Example
 
-[Example Project](https://github.com/ByteChkR/BadScript/tree/develop/examples/BadScript.Examples.Calculator)
+[Example Project](https://github.com/ByteChkR/BadScript/tree/master/examples/BadScript.Examples.Calculator)
 
 This example is a small expression calculator.
 Using a custom scope to keep variables between executions.

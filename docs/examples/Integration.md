@@ -1,6 +1,6 @@
 # Bad Script Integration Example
 
-[Example Project](https://github.com/ByteChkR/BadScript/tree/develop/examples/BadScript.Examples.Integration)
+[Example Project](https://github.com/ByteChkR/BadScript/tree/master/examples/BadScript.Examples.Integration)
 
 This example is a showcase on how one might integrate the language in their projects.
 
