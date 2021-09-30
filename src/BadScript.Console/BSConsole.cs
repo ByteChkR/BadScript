@@ -91,7 +91,7 @@ namespace BadScript.Console
         private static void PrintHeaderInfo()
         {
             string h =
-                $"Bad Script Console (CLI: {typeof( BSConsoleResources ).Assembly.GetName().Version}, Runtime: {typeof( BSEngine ).Assembly.GetName().Version})\n\nLoading Runtime...\n";
+                $"Bad Script Console (CLI: {typeof( BSConsoleDirectories ).Assembly.GetName().Version}, Runtime: {typeof( BSEngine ).Assembly.GetName().Version})\n\nLoading Runtime...\n";
 
             ConsoleWriter.SuccessLine( h );
         }

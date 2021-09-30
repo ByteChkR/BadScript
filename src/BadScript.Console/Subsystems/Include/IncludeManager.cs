@@ -12,9 +12,9 @@ namespace BadScript.Console.Subsystems.Include
 
         public static int Process( IncludeManagerSettings settings )
         {
-            if ( !Directory.Exists( BSConsoleResources.IncludeDirectory ) )
+            if ( !Directory.Exists(EngineBuilderDirectories.Instance.IncludeDirectory ) )
             {
-                Directory.CreateDirectory( BSConsoleResources.IncludeDirectory );
+                Directory.CreateDirectory(EngineBuilderDirectories.Instance.IncludeDirectory );
             }
 
             int ret = 0;
@@ -64,7 +64,7 @@ namespace BadScript.Console.Subsystems.Include
             }
 
             ConsoleWriter.LogLine( "Adding File: " + Path.GetFileName( target ) );
-            string dst = Path.Combine( BSConsoleResources.IncludeDirectory, Path.GetFileName( target ) );
+            string dst = Path.Combine(EngineBuilderDirectories.Instance.IncludeDirectory, Path.GetFileName( target ) );
             File.Copy( target, dst, true );
 
             return 0;
@@ -73,7 +73,7 @@ namespace BadScript.Console.Subsystems.Include
         private static void ListIncludedFiles()
         {
             string[] files = Directory.GetFiles(
-                                                BSConsoleResources.IncludeDirectory,
+                                                EngineBuilderDirectories.Instance.IncludeDirectory,
                                                 "*",
                                                 SearchOption.AllDirectories
                                                );
@@ -82,7 +82,7 @@ namespace BadScript.Console.Subsystems.Include
 
             foreach ( string file in files )
             {
-                ConsoleWriter.LogLine( $"\t- {file.Remove( 0, BSConsoleResources.IncludeDirectory.Length )}" );
+                ConsoleWriter.LogLine( $"\t- {file.Remove( 0, EngineBuilderDirectories.Instance.IncludeDirectory.Length )}" );
             }
 
             ConsoleWriter.LogLine( "" );
@@ -90,7 +90,7 @@ namespace BadScript.Console.Subsystems.Include
 
         private static int RemoveInclude( string target )
         {
-            string file = Path.Combine( BSConsoleResources.IncludeDirectory, target );
+            string file = Path.Combine(EngineBuilderDirectories.Instance.IncludeDirectory, target );
 
             if ( !File.Exists( file ) )
             {

@@ -20,6 +20,7 @@ namespace BadScript.Console.Subsystems.Project
 
         public static int Build( ProjectBuilderSettings settings )
         {
+            SourcePreprocessorDirectories.InitializeIfNull();
             string p = "./build-settings.json";
             ProjectSettings ps = ProjectSettings.Deserialize( File.ReadAllText( p ) );
             ps.SaveLocation = p;

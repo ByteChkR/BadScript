@@ -3,7 +3,7 @@ using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block;
 using BadScript.Common.Types;
 
-namespace BadScript.Console.Preprocessor
+namespace BadScript.Console.Preprocessor.Directives
 {
 
     public class CustomFunctionPreprocessorDirective : SourcePreprocessorDirective

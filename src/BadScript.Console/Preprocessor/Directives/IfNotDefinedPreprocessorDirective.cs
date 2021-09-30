@@ -3,13 +3,13 @@ using BadScript.Common.Expressions;
 using BadScript.Common.Expressions.Implementations.Block;
 using BadScript.Common.Types;
 
-namespace BadScript.Console.Preprocessor
+namespace BadScript.Console.Preprocessor.Directives
 {
 
     public class IfNotDefinedPreprocessorDirective : SourcePreprocessorDirective
     {
 
-        public IfNotDefinedPreprocessorDirective() : base("#ndef") { }
+        public IfNotDefinedPreprocessorDirective() : base("#ifndef") { }
 
         public override string Process(BSParser p, SourcePreprocessorContext ctx)
         {
@@ -21,12 +21,12 @@ namespace BadScript.Console.Preprocessor
             p.ReadWhitespaceAndNewLine();
             string block = p.ParseBlock();
 
-            BSParser sp = new BSParser( block, ctx.OriginalSource, p.GetPosition() );
-            BSExpression blockExpr = new BSBlockExpression( sp.ParseToEnd() );
-            
-            if ( !ctx.RuntimeScope.Has( def ) )
+            BSParser sp = new BSParser(block, ctx.OriginalSource, p.GetPosition());
+            BSExpression blockExpr = new BSBlockExpression(sp.ParseToEnd());
+
+            if (!ctx.RuntimeScope.Has(def))
             {
-                blockExpr.Execute( ctx.RuntimeScope );
+                blockExpr.Execute(ctx.RuntimeScope);
 
                 ABSObject o = ctx.RuntimeScope.Return;
 
@@ -35,6 +35,8 @@ namespace BadScript.Console.Preprocessor
 
             return "";
         }
+
+
 
     }
 

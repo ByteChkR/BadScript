@@ -5,6 +5,8 @@ using System.Linq;
 
 using BadScript.Common;
 using BadScript.Common.Types;
+using BadScript.Console.Preprocessor.Directives;
+using BadScript.Console.Subsystems.Project;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
 using BadScript.Settings;
@@ -17,10 +19,17 @@ namespace BadScript.Console.Preprocessor
     public static class SourcePreprocessor
     {
 
-        private static string PreprocessorDirectory =>
-            Path.Combine(BSConsoleResources.DataDirectory, "project", "preprocessor");
+
         private static readonly List < SourcePreprocessorDirective > s_Directives =
-            new List < SourcePreprocessorDirective >{ new DefinePreprocessorDirective(), new IfPreprocessorDirective(), new IfNotDefinedPreprocessorDirective(), new CustomFunctionPreprocessorDirective()};
+            new List < SourcePreprocessorDirective >
+            {
+                new DefinePreprocessorDirective(),
+                new IfPreprocessorDirective(),
+                new IfDefinedPreprocessorDirective(),
+                new IfNotDefinedPreprocessorDirective(),
+                new CustomFunctionPreprocessorDirective(),
+                new ForPreprocessorDirective(),
+            };
 
         
 
@@ -28,11 +37,7 @@ namespace BadScript.Console.Preprocessor
         {
             BSEngineSettings settings = BSEngineSettings.MakeDefault();
             settings.IncludeDirectories.Clear();
-
-            if ( !Directory.Exists( PreprocessorDirectory ) )
-                Directory.CreateDirectory( PreprocessorDirectory );
-
-            settings.IncludeDirectories.Add( PreprocessorDirectory );
+            settings.IncludeDirectories.Add(ProjectSystemDirectories.Instance.PreprocessorIncludeDirectory);
 
             settings.Interfaces.Add(new ConsoleApi());
             settings.Interfaces.Add(new BadScriptCoreApi());
@@ -46,9 +51,13 @@ namespace BadScript.Console.Preprocessor
 
         private static bool IsName( string source, int idx, string name )
         {
-            return idx + name.Length <= source.Length && source.Substring( idx, name.Length ) == name;
+            return idx + name.Length <= source.Length &&
+                   source.Substring( idx, name.Length ) == name &&
+                   IsNonWordChar( source, idx + name.Length );
         }
 
+        private static bool IsNonWordChar( string source, int idx ) =>
+            idx >= source.Length || !char.IsLetterOrDigit( source[idx] ) && source[idx] != '_';
         private static (SourcePreprocessorDirective, int) FindNext( SourcePreprocessorContext ctx,  int current )
         {
             for ( int i = current; i < ctx.OriginalSource.Length; i++ )

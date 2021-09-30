@@ -1,7 +1,7 @@
 ﻿using BadScript.Common;
 using BadScript.Common.Expressions;
 
-namespace BadScript.Console.Preprocessor
+namespace BadScript.Console.Preprocessor.Directives
 {
 
     public class DefinePreprocessorDirective : SourcePreprocessorDirective

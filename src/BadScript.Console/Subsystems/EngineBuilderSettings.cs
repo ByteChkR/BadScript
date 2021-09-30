@@ -71,9 +71,9 @@ namespace BadScript.Console.Subsystems
 
             string[] incDirs = IncludeDirectories.ToArray();
 
-            if ( Directory.Exists( BSConsoleResources.IncludeDirectory ) )
+            if ( Directory.Exists(EngineBuilderDirectories.Instance.IncludeDirectory ) )
             {
-                es.IncludeDirectories.Add( BSConsoleResources.IncludeDirectory );
+                es.IncludeDirectories.Add(EngineBuilderDirectories.Instance.IncludeDirectory );
             }
 
             if ( incDirs.Length != 0 )
