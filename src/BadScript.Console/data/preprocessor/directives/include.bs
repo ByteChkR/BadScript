@@ -1,0 +1,27 @@
+#define fs = environment.loadInterface("fs", {})
+#define http = environment.loadInterface("http", {})
+#custom INCLUDE_IO(!file)
+{
+	if(fs.exists(file))
+	{
+		return fs.readAll(file)
+	}
+	else
+	{
+		error("Can not Include File: " + file)
+		return ""
+	}
+}
+#custom INCLUDE_WEB(!url)
+{
+	response = http.get(url)
+	if(response.status == 100)
+	{
+		return response.body
+	}
+	else
+	{
+		error("Can not Get File '" + url + "' Error Code: " + response.status)
+		return ""
+	}
+}
