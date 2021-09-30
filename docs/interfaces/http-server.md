@@ -83,3 +83,6 @@ Writes the Body of the Response and closes the response(sending it in the proces
 
 ##### setStatus(statusCode)/setStatus(statusCode, message)
 Sets the Specified status code and message.
+
+
+[List of All Interfaces](./Interfaces.md)

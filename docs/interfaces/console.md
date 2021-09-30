@@ -33,3 +33,6 @@ Returns the current foreground color
 
 ## getBackColor()
 Returns the current background color
+
+
+[List of All Interfaces](./Interfaces.md)

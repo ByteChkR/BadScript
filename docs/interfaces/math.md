@@ -79,3 +79,6 @@ Returns the Square Root of x
 
 ### truncate(n)
 Returns the truncated version of N
+
+
+[List of All Interfaces](./Interfaces.md)

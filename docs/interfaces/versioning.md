@@ -45,3 +45,6 @@ Creates a new version object
 
 ### calVer(build)
 Creates a new version object with the format: `YYYY.MM.DD.build`
+
+
+[List of All Interfaces](./Interfaces.md)

@@ -62,3 +62,6 @@ If Alpha is not specified the color will be fully opaque
 
 ### rotateFlipType
 Enum that defines the possible flips a bitmap can do.
+
+
+[List of All Interfaces](./Interfaces.md)

@@ -12,14 +12,11 @@ Contains all properties that exist in the wrapped C# Object
 
 ## Functions
 
-### getType(fullName)
-returns the C# Type with the specified name
+### create(typename, args0, args...)
+Creates a C# Type Instance with the specified name and a constructor with the fitting arguments
 
-### loadAssembly(fullName)
-makes sure that all types from the specifed assembly have been loaded.
+### getType(typename)
+Returns a C# Type object containing all static members
 
-### wrapInstance(instance)
-Wraps an existing `C# Type Instance` into a Reflection Wrapper
 
-### getConstructorData()
-Returns a list of constructors of types that have been loaded and can be created
+[List of All Interfaces](./Interfaces.md)

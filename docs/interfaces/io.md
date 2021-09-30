@@ -91,3 +91,7 @@ Writes all text to the specified path
 
 ### readAll(path)
 Reads all text from the specified path
+
+
+
+[List of All Interfaces](./Interfaces.md)
