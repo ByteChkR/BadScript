@@ -248,7 +248,7 @@ f(null) //Will crash because the runtime tries to invoke f_Hook2 with null as fi
 
 ## Capturing Variables in local scopes
 It is possible to capture variables into a scope that is completely unavailable to anthing else than its subscopes.
-A useful application is demonstrated in Section [Local Variable Naming Schemes](#Local_Variable_Naming_Schemes) by using a function.
+A useful application is demonstrated in Section [Local Variable Naming Schemes](#local-variable-naming-schemes) by using a function.
 ```js
 function makeObject()
 {
