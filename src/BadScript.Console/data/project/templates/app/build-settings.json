@@ -17,7 +17,8 @@
         "PreEvents": [
           "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
         ],
-        "PostEvents": []
+        "PostEvents": [],
+        "PreprocessorDirectives": ""
       },
       {
         "Name": "run",
@@ -29,9 +30,11 @@
         "PreEvents": [],
         "PostEvents": [
           "%BS_EXEC% --nologo -f %Target.OutputFile%"
-        ]
+        ],
+        "PreprocessorDirectives": ""
       }
     ]
   },
+  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\"",
   "ReferenceResolvers": {}
 }

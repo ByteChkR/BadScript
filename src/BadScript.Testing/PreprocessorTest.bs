@@ -1,0 +1,15 @@
+//Define Custom Directives
+#custom PP_LOG(!message) => print("[PPLOG] " + message)
+#custom PP_WARN(!message) => print("[PPWARN] " + message)
+#custom PP_ERR(!message) => error("[PPERR] " + message)
+
+//Define DEBUG if not already defined.
+#ndef DEBUG { DEBUG = false }
+
+print("PP Test")
+
+//Insert Debug Print if we have DEBUG set
+#if(DEBUG) { return "print(\"Debugging is Active\")" }
+
+#PP_LOG("Logging During Preprocessor Step")
+#PP_WARN("Warning During Preprocessor Step")

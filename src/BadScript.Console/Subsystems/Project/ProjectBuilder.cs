@@ -5,6 +5,7 @@ using System.Text;
 
 using BadScript.Common.Expressions;
 using BadScript.Console.Logging;
+using BadScript.Console.Preprocessor;
 using BadScript.Console.Subsystems.Project.BuildFormats;
 using BadScript.Console.Subsystems.Project.DataObjects;
 using BadScript.Console.Subsystems.Project.Utils;
@@ -144,12 +145,29 @@ namespace BadScript.Console.Subsystems.Project
                 }
             }
 
-            ConsoleWriter.LogLine( "\tProcessing Source.." );
             string outFile = "";
 
             if ( t.OutputFormat != "none" )
             {
-                outFile = ProcessGeneratedFile( s, t, GenerateIncludeFiles( s, t, referencedFiles ) );
+                ConsoleWriter.LogLine("\tFinding Included Files...");
+                string source = GenerateIncludeFiles( s, t, referencedFiles );
+
+                ConsoleWriter.LogLine("\tRunning Preprocessor...");
+
+                string dirs = "";
+
+                if ( s.PreprocessorDirectives != null )
+                    dirs += s.ResolveValue(s.PreprocessorDirectives,t.Name);
+
+                if ( t.PreprocessorDirectives != null )
+                    dirs += " " + s.ResolveValue(t.PreprocessorDirectives, t.Name);
+                string src = SourcePreprocessor.Preprocess(
+                                                           source,
+                                                            dirs
+                                                          );
+
+                ConsoleWriter.LogLine("\tProcessing Source...");
+                outFile = ProcessGeneratedFile( s, t, src );
             }
             else
             {
@@ -225,8 +243,6 @@ namespace BadScript.Console.Subsystems.Project
             }
 
             ConsoleWriter.LogLine( log );
-
-            List < BSExpression > m_Exprs = new List < BSExpression >();
 
             for ( int i = refs.Count - 1; i >= 0; i-- )
             {

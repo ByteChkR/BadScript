@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace BadScript.Console.Subsystems.Project.DataObjects
 {
+    
 
     public class ProjectSettings : ReflectedObject
     {
@@ -17,6 +18,7 @@ namespace BadScript.Console.Subsystems.Project.DataObjects
         public AppInfo AppInfo = new();
         public ProjectBuildTargetCollection BuildTargets;
         public Dictionary < string, string > ReferenceResolvers = new();
+        public string PreprocessorDirectives = "";
 
         private static List < BuildOutputFormat > s_Formats = new List < BuildOutputFormat >
                                                               {

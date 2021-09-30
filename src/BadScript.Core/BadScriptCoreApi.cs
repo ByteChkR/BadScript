@@ -5,6 +5,7 @@ using System.Threading;
 
 using BadScript.Common.Exceptions;
 using BadScript.Common.Expressions;
+using BadScript.Common.Runtime;
 using BadScript.Common.Types;
 using BadScript.Common.Types.Implementations;
 using BadScript.Common.Types.References;
@@ -212,12 +213,24 @@ namespace BadScript.Core
                                                                  : BSObject.False
                                                           ;
                                                   }
+                                                  else if ( arg is IBSWrappedObject wo )
+                                                  {
+                                                      object o = wo.GetInternalObject();
+
+                                                      if ( o is BSScope scope )
+                                                      {
+                                                          return scope.Has( args[1].ConvertString() )
+                                                                     ? BSObject.True
+                                                                     : BSObject.False;
+                                                      }
+                                                  }
 
                                                   throw new BSInvalidTypeException(
                                                        SourcePosition.Unknown,
                                                        "Expected Table",
                                                        arg,
-                                                       "Table"
+                                                       "Table",
+                                                       "Scope"
                                                       );
                                               },
                                               2

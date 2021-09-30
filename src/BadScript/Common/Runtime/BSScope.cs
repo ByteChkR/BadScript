@@ -107,6 +107,8 @@ namespace BadScript.Common.Runtime
             return m_LocalVars;
         }
 
+        public bool Has( string name ) => HasLocal( name ) || HasGlobal( name );
+
         public bool HasGlobal( string name )
         {
             return m_Instance == null
@@ -163,6 +165,12 @@ namespace BadScript.Common.Runtime
             {
                 throw new BSRuntimeException( "Can not Set Property: " + name );
             }
+        }
+
+        public void ResetFlag()
+        {
+            m_CurrentFlag = BSScopeFlags.None;
+            Return = null;
         }
 
         public void SetFlag( BSScopeFlags flag, ABSObject val = null )

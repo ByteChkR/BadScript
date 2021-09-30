@@ -31,6 +31,9 @@ namespace BadScript.Common
         private readonly bool m_AllowFunctionBaseInvocation;
         private readonly bool m_AllowFunctionGlobal;
 
+        public void SetPosition(int pos) => m_CurrentPosition = pos;
+        public int GetPosition() => m_CurrentPosition;
+
         private char Current =>
             m_CurrentPosition < m_OriginalSource.Length ? m_OriginalSource[m_CurrentPosition] : '\0';
 
@@ -505,7 +508,7 @@ namespace BadScript.Common
             return new BSClassExpression( pos, className, baseClass, isGlobal, expressions );
         }
 
-        public BSExpression ParseFunction( bool isGlobal )
+        public BSFunctionDefinitionExpression ParseFunction( bool isGlobal )
         {
             if ( isGlobal && !m_AllowFunctionGlobal )
             {
@@ -1004,145 +1007,17 @@ namespace BadScript.Common
 
             if ( wordName == "if" )
             {
-                Dictionary < BSExpression, BSExpression[] > cMap =
-                    new Dictionary < BSExpression, BSExpression[] >();
-
-                BSExpression[] elseBlock = null;
-
-                (BSExpression, BSExpression[]) a = ParseConditionalBlock();
-                cMap.Add( a.Item1, a.Item2 );
-                int resetIndex = ReadWhitespaceAndNewLine();
-
-                if ( Current != '\0' )
-                {
-                    wordName = GetNextWord();
-
-                    while ( wordName == "else" )
-                    {
-                        ReadWhitespaceAndNewLine();
-
-                        if ( Is( '{' ) )
-                        {
-                            string block = ParseBlock();
-
-                            BSParser p = new BSParser( block );
-
-                            elseBlock = p.ParseToEnd();
-
-                            break;
-                        }
-
-                        resetIndex = ReadWhitespaceAndNewLine();
-                        wordName = GetNextWord();
-                        ReadWhitespaceAndNewLine();
-
-                        if ( wordName == "if" )
-                        {
-                            (BSExpression, BSExpression[]) sA = ParseConditionalBlock();
-                            cMap.Add( sA.Item1, sA.Item2 );
-                            resetIndex = ReadWhitespaceAndNewLine();
-
-                            if ( !TryReadNextWord( out wordName ) )
-                            {
-                                m_CurrentPosition = resetIndex;
-                            }
-                            else
-                            {
-                                ReadWhitespaceAndNewLine();
-                            }
-                        }
-                        else
-                        {
-                            m_CurrentPosition = resetIndex;
-                        }
-                    }
-
-                    if ( wordName != "else" )
-                    {
-                        m_CurrentPosition = resetIndex;
-                    }
-                }
-
-                return new BSIfExpression( CreateSourcePosition( pos ), cMap, elseBlock );
+                return ParseIfExpression(pos);
             }
 
             if ( wordName == "try" )
             {
-                ReadWhitespaceAndNewLine();
-                string block = ParseBlock();
-
-                BSParser p = new BSParser( block );
-
-                BSExpression[] tryBlock = p.ParseToEnd();
-                ReadWhitespaceAndNewLine();
-                string catchStr = GetNextWord();
-
-                if ( catchStr != "catch" )
-                {
-                    throw new BSParserException( "Expected 'catch' after 'try' block", this );
-                }
-
-                ReadWhitespaceAndNewLine();
-
-                string exVar = null;
-
-                if ( Is( '(' ) )
-                {
-                    m_CurrentPosition++;
-                    exVar = ParseArgumentName();
-
-                    if ( !Is( ')' ) )
-                    {
-                        throw new BSParserException( "Expected ')' after catch clause", this );
-                    }
-
-                    m_CurrentPosition++;
-                }
-
-                ReadWhitespaceAndNewLine();
-                string cBlock = ParseBlock();
-
-                BSParser cP = new BSParser( cBlock );
-
-                BSExpression[] catchBlock = cP.ParseToEnd();
-                ReadWhitespaceAndNewLine();
-
-                return new BSTryExpression( CreateSourcePosition( pos ), tryBlock, catchBlock, exVar );
+                return ParseTryExpression( pos );
             }
 
             if ( wordName == "foreach" )
             {
-                ReadWhitespaceAndNewLine();
-
-                string[] vars;
-
-                if ( Is( '(' ) )
-                {
-                    vars = ParseArgumentList().Select( x => x.Name ).ToArray();
-                }
-                else
-                {
-                    vars = new[] { GetNextWord() };
-                }
-
-                ReadWhitespaceAndNewLine();
-                string inStr = GetNextWord();
-
-                if ( inStr != "in" )
-                {
-                    throw new BSParserException( $"Expected 'in' got '{inStr}'", this );
-                }
-
-                ReadWhitespaceAndNewLine();
-                BSExpression cDecl = ParseExpression( int.MaxValue );
-                ReadWhitespaceAndNewLine();
-                string block = ParseBlock();
-
-                BSParser p = new BSParser( block );
-
-                BSExpression[] b = p.ParseToEnd();
-
-                return new BSForeachExpression( CreateSourcePosition( pos ), vars, cDecl, b );
+                return ParseForeachExpression( pos );
             }
 
             if ( wordName == "while" )
@@ -1154,137 +1029,7 @@ namespace BadScript.Common
 
             if ( wordName == "for" )
             {
-                BSAssignExpression cDecl = ( BSAssignExpression )ParseExpression( int.MaxValue );
-                BSPropertyExpression cProp = ( BSPropertyExpression )cDecl.Left;
-
-                string untilWord = ParseKey();
-
-                if ( !untilWord.StartsWith( "while" ) )
-                {
-                    throw new BSParserException( "Expected while", this );
-                }
-
-                ReadWhitespaceAndNewLine();
-
-                BSExpression cCond;
-
-                string op = untilWord.Substring( "while".Length, untilWord.Length - "while".Length );
-
-                if ( string.IsNullOrEmpty( op ) )
-                {
-                    //Check condition to be true
-                    cCond = ParseExpression( int.MaxValue );
-                }
-                else
-                {
-                    //Use OP to wrap the condition into an expression that checks for true/false
-                    switch ( op )
-                    {
-                        case "=":
-                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "==" ).
-                                                               Parse( cProp, this );
-
-                            break;
-
-                        case "!":
-                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "!=" ).
-                                                               Parse( cProp, this );
-
-                            break;
-
-                        case "<":
-                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "<" ).
-                                                               Parse( cProp, this );
-
-                            break;
-
-                        case ">":
-                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, ">" ).
-                                                               Parse( cProp, this );
-
-                            break;
-
-                        case "<=":
-                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "<=" ).
-                                                               Parse( cProp, this );
-
-                            break;
-
-                        case ">=":
-                            cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, ">=" ).
-                                                               Parse( cProp, this );
-
-                            break;
-
-                        default:
-                            throw new BSParserException( "Invalid Operator: " + op, this );
-                    }
-                }
-
-                string step = ParseKey();
-
-                BSExpression cInc;
-
-                if ( step != "step" )
-                {
-                    m_CurrentPosition -= step.Length;
-
-                    cInc = new BSAssignExpression(
-                                                  CreateSourcePosition( pos ),
-                                                  cProp,
-                                                  new BSInvocationExpression(
-                                                                             CreateSourcePosition( pos ),
-                                                                             new BSProxyExpression(
-                                                                                  CreateSourcePosition( pos ),
-                                                                                  new BSFunction(
-                                                                                       CreateSourcePosition( pos ),
-                                                                                       "function +(a, b)",
-                                                                                       objects =>
-                                                                                           BSOperatorImplementationResolver.
-                                                                                               ResolveImplementation(
-                                                                                                    "+",
-                                                                                                    objects
-                                                                                                   ).
-                                                                                               ExecuteOperator(
-                                                                                                    objects
-                                                                                                   ),
-                                                                                       2
-                                                                                      ),
-                                                                                  new BSBinaryOperatorMetaData(
-                                                                                       "+",
-                                                                                       "a, b",
-                                                                                       2
-                                                                                      )
-                                                                                 ),
-                                                                             new BSExpression[]
-                                                                             {
-                                                                                 cProp,
-                                                                                 new BSValueExpression(
-                                                                                      CreateSourcePosition( pos ),
-                                                                                      ( decimal )1
-                                                                                     )
-                                                                             }
-                                                                            )
-                                                 );
-                }
-                else
-                {
-                    cInc = new BSAssignExpression(
-                                                  CreateSourcePosition( pos ),
-                                                  cProp,
-                                                  BSOperatorPreceedenceTable.Get( int.MaxValue, "+" ).
-                                                                             Parse( cProp, this )
-                                                 );
-                }
-
-                ReadWhitespaceAndNewLine();
-                string block = ParseBlock();
-
-                BSParser p = new BSParser( block );
-
-                BSExpression[] b = p.ParseToEnd();
-
-                return new BSForExpression( CreateSourcePosition( pos ), cDecl, cCond, cInc, b );
+                return ParseForExpression( pos );
             }
 
             if ( wordName == "null" && left == null )
@@ -1303,6 +1048,284 @@ namespace BadScript.Common
             }
 
             return new BSPropertyExpression( CreateSourcePosition( pos ), left, wordName );
+        }
+
+        public BSForExpression ParseForExpression( int pos )
+        {
+            BSAssignExpression cDecl = (BSAssignExpression)ParseExpression(int.MaxValue);
+            BSPropertyExpression cProp = (BSPropertyExpression)cDecl.Left;
+
+            string untilWord = ParseKey();
+
+            if (!untilWord.StartsWith("while"))
+            {
+                throw new BSParserException("Expected while", this);
+            }
+
+            ReadWhitespaceAndNewLine();
+
+            BSExpression cCond;
+
+            string op = untilWord.Substring("while".Length, untilWord.Length - "while".Length);
+
+            if (string.IsNullOrEmpty(op))
+            {
+                //Check condition to be true
+                cCond = ParseExpression(int.MaxValue);
+            }
+            else
+            {
+                //Use OP to wrap the condition into an expression that checks for true/false
+                switch (op)
+                {
+                    case "=":
+                        cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, "==").
+                                                           Parse(cProp, this);
+
+                        break;
+
+                    case "!":
+                        cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, "!=").
+                                                           Parse(cProp, this);
+
+                        break;
+
+                    case "<":
+                        cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, "<").
+                                                           Parse(cProp, this);
+
+                        break;
+
+                    case ">":
+                        cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, ">").
+                                                           Parse(cProp, this);
+
+                        break;
+
+                    case "<=":
+                        cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, "<=").
+                                                           Parse(cProp, this);
+
+                        break;
+
+                    case ">=":
+                        cCond = BSOperatorPreceedenceTable.Get(int.MaxValue, ">=").
+                                                           Parse(cProp, this);
+
+                        break;
+
+                    default:
+                        throw new BSParserException("Invalid Operator: " + op, this);
+                }
+            }
+
+            string step = ParseKey();
+
+            BSExpression cInc;
+
+            if (step != "step")
+            {
+                m_CurrentPosition -= step.Length;
+
+                cInc = new BSAssignExpression(
+                                              CreateSourcePosition(pos),
+                                              cProp,
+                                              new BSInvocationExpression(
+                                                                         CreateSourcePosition(pos),
+                                                                         new BSProxyExpression(
+                                                                              CreateSourcePosition(pos),
+                                                                              new BSFunction(
+                                                                                   CreateSourcePosition(pos),
+                                                                                   "function +(a, b)",
+                                                                                   objects =>
+                                                                                       BSOperatorImplementationResolver.
+                                                                                           ResolveImplementation(
+                                                                                                "+",
+                                                                                                objects
+                                                                                               ).
+                                                                                           ExecuteOperator(
+                                                                                                objects
+                                                                                               ),
+                                                                                   2
+                                                                                  ),
+                                                                              new BSBinaryOperatorMetaData(
+                                                                                   "+",
+                                                                                   "a, b",
+                                                                                   2
+                                                                                  )
+                                                                             ),
+                                                                         new BSExpression[]
+                                                                         {
+                                                                                 cProp,
+                                                                                 new BSValueExpression(
+                                                                                      CreateSourcePosition( pos ),
+                                                                                      ( decimal )1
+                                                                                     )
+                                                                         }
+                                                                        )
+                                             );
+            }
+            else
+            {
+                cInc = new BSAssignExpression(
+                                              CreateSourcePosition(pos),
+                                              cProp,
+                                              BSOperatorPreceedenceTable.Get(int.MaxValue, "+").
+                                                                         Parse(cProp, this)
+                                             );
+            }
+
+            ReadWhitespaceAndNewLine();
+            string block = ParseBlock();
+
+            BSParser p = new BSParser(block);
+
+            BSExpression[] b = p.ParseToEnd();
+
+            return new BSForExpression(CreateSourcePosition(pos), cDecl, cCond, cInc, b);
+        }
+        public BSForeachExpression ParseForeachExpression( int pos )
+        {
+            ReadWhitespaceAndNewLine();
+
+            string[] vars;
+
+            if (Is('('))
+            {
+                vars = ParseArgumentList().Select(x => x.Name).ToArray();
+            }
+            else
+            {
+                vars = new[] { GetNextWord() };
+            }
+
+            ReadWhitespaceAndNewLine();
+            string inStr = GetNextWord();
+
+            if (inStr != "in")
+            {
+                throw new BSParserException($"Expected 'in' got '{inStr}'", this);
+            }
+
+            ReadWhitespaceAndNewLine();
+            BSExpression cDecl = ParseExpression(int.MaxValue);
+            ReadWhitespaceAndNewLine();
+            string block = ParseBlock();
+
+            BSParser p = new BSParser(block);
+
+            BSExpression[] b = p.ParseToEnd();
+
+            return new BSForeachExpression(CreateSourcePosition(pos), vars, cDecl, b);
+        }
+
+        public BSTryExpression ParseTryExpression(int pos)
+        {
+            ReadWhitespaceAndNewLine();
+            string block = ParseBlock();
+
+            BSParser p = new BSParser(block);
+
+            BSExpression[] tryBlock = p.ParseToEnd();
+            ReadWhitespaceAndNewLine();
+            string catchStr = GetNextWord();
+
+            if (catchStr != "catch")
+            {
+                throw new BSParserException("Expected 'catch' after 'try' block", this);
+            }
+
+            ReadWhitespaceAndNewLine();
+
+            string exVar = null;
+
+            if (Is('('))
+            {
+                m_CurrentPosition++;
+                exVar = ParseArgumentName();
+
+                if (!Is(')'))
+                {
+                    throw new BSParserException("Expected ')' after catch clause", this);
+                }
+
+                m_CurrentPosition++;
+            }
+
+            ReadWhitespaceAndNewLine();
+            string cBlock = ParseBlock();
+
+            BSParser cP = new BSParser(cBlock);
+
+            BSExpression[] catchBlock = cP.ParseToEnd();
+            ReadWhitespaceAndNewLine();
+
+            return new BSTryExpression(CreateSourcePosition(pos), tryBlock, catchBlock, exVar);
+        }
+
+        public BSIfExpression ParseIfExpression(int pos)
+        {
+            string wordName;
+            Dictionary<BSExpression, BSExpression[]> cMap =
+                    new Dictionary<BSExpression, BSExpression[]>();
+
+            BSExpression[] elseBlock = null;
+
+            (BSExpression, BSExpression[]) a = ParseConditionalBlock();
+            cMap.Add(a.Item1, a.Item2);
+            int resetIndex = ReadWhitespaceAndNewLine();
+
+            if (Current != '\0' && IsWordStart())
+            {
+                wordName = GetNextWord();
+
+                while (wordName == "else")
+                {
+                    ReadWhitespaceAndNewLine();
+
+                    if (Is('{'))
+                    {
+                        string block = ParseBlock();
+
+                        BSParser p = new BSParser(block);
+
+                        elseBlock = p.ParseToEnd();
+
+                        break;
+                    }
+
+                    resetIndex = ReadWhitespaceAndNewLine();
+                    wordName = GetNextWord();
+                    ReadWhitespaceAndNewLine();
+
+                    if (wordName == "if")
+                    {
+                        (BSExpression, BSExpression[]) sA = ParseConditionalBlock();
+                        cMap.Add(sA.Item1, sA.Item2);
+                        resetIndex = ReadWhitespaceAndNewLine();
+
+                        if (!TryReadNextWord(out wordName))
+                        {
+                            m_CurrentPosition = resetIndex;
+                        }
+                        else
+                        {
+                            ReadWhitespaceAndNewLine();
+                        }
+                    }
+                    else
+                    {
+                        m_CurrentPosition = resetIndex;
+                    }
+                }
+
+                if (wordName != "else")
+                {
+                    m_CurrentPosition = resetIndex;
+                }
+            }
+
+            return new BSIfExpression(CreateSourcePosition(pos), cMap, elseBlock);
         }
 
         public int ReadWhitespaceAndNewLine()
@@ -1503,7 +1526,7 @@ namespace BadScript.Common
             }
         }
 
-        private string ParseBlock()
+        public string ParseBlock()
         {
             if ( !Is( '{' ) )
             {

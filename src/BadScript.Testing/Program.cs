@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Numerics;
 
+using BadScript.Console.Preprocessor;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
 using BadScript.Http;
@@ -27,32 +29,10 @@ namespace BadScript.Testing
 
         public static void Main( string[] args )
         {
-            BSEngineSettings es = BSEngineSettings.MakeDefault();
-            es.Interfaces.Add( new BadScriptCoreApi() );
-            es.Interfaces.Add( new ConsoleApi() );
-            es.Interfaces.Add( new ConsoleColorApi() );
-            es.Interfaces.Add( new BS2JsonInterface() );
-            es.Interfaces.Add( new Json2BSInterface() );
-            es.Interfaces.Add( new BSFileSystemInterface() );
-            es.Interfaces.Add( new BSFileSystemPathInterface( AppDomain.CurrentDomain.BaseDirectory ) );
-            es.Interfaces.Add( new BSMathApi() );
-            es.Interfaces.Add( new HttpApi() );
-            es.Interfaces.Add( new HttpServerApi() );
-            es.Interfaces.Add( new ProcessApi() );
-            es.Interfaces.Add( new StringUtilsApi() );
-            es.Interfaces.Add( new ZipApi() );
-            es.Interfaces.Add( new ImagingApi() );
-            es.Interfaces.Add( new VersionToolsInterface() );
-            es.Interfaces.Add( new XmlInterface() );
-            es.Interfaces.Add( BSReflectionInterface.Instance );
+            string file = "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\PreprocessorTest.bs";
 
-            BSReflectionInterface.Instance.AddType < Version >();
-            BSReflectionInterface.Instance.AddType < DateTime >();
-            BSReflectionInterface.Instance.AddType < TimeSpan >();
-            BSReflectionInterface.Instance.AddType < Vector4 >();
+            System.Console.WriteLine( SourcePreprocessor.Preprocess( File.ReadAllText( file ), "DEBUG=true" ));
 
-            BSEngine e = es.Build();
-            e.LoadFile( "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\ReflectionTest.bs" );
         }
 
         #endregion
