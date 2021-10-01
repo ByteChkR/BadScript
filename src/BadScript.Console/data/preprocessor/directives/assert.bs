@@ -1,0 +1,132 @@
+#macro ASSERT_DEFINED(VAR)
+{
+	if(!hasKey(__SELF, "VAR"))
+	{
+		error("Assertion Failed. VAR is not Defined")
+	}
+}
+
+#macro ASSERT_INTERFACE_AVAILABLE(NAME)
+{
+	#ASSERT_DEFINED(environment)
+	#ASSERT_TABLE(environment)
+	if(!environment.hasInterface("NAME"))
+	{
+		error("Assertion Failed. Interface NAME is not available")
+	}
+}
+
+#macro ASSERT_EQUALS(LEFT, RIGHT)
+{
+	if(LEFT != RIGHT)
+	{
+		error("Assertion Failed. left is not equal to right. Actual Left: '" + LEFT + "' Actual Right: '" + RIGHT + "'")
+	}
+}
+
+#macro ASSERT_NULL(VAR)
+{
+	if(VAR != null)
+	{
+		error("Assertion Failed. var is not NULL. Actual Value: " + VAR)
+	}
+}
+
+#macro ASSERT_NOT_NULL(VAR)
+{
+	if(VAR == null)
+	{
+		error("Assertion Failed. var is NULL.")
+	}
+}
+
+#macro ASSERT_BOOL(VAR)
+{
+	#ASSERT_NOT_NULL(VAR)
+	if(!isBoolean(VAR))
+	{
+		error("Assertion Failed. var is not a boolean. Actual Value: " + VAR)
+	}
+}
+
+#macro ASSERT_TRUE(VAR)
+{
+	#ASSERT_BOOL(VAR)
+	if(!VAR)
+	{
+		error("Assertion Failed. var is not true. Actual Value: " + VAR)
+	}
+}
+#macro ASSERT_FALSE(VAR)
+{
+	#ASSERT_BOOL(VAR)
+	if(!VAR)
+	{
+		error("Assertion Failed. var is not true. Actual Value: " + VAR)
+	}
+}
+
+#macro ASSERT_STRING(VAR)
+{
+	#ASSERT_NOT_NULL(VAR)
+	if(!isString(VAR))
+	{
+		error("Assertion Failed. var is not a string. Actual Value: " + VAR)
+	}
+}
+
+#macro ASSERT_NUMBER(VAR)
+{
+	#ASSERT_NOT_NULL(VAR)
+	if(!isNumber(VAR))
+	{
+		error("Assertion Failed. var is not a number. Actual Value: " + VAR)
+	}
+}
+
+#macro ASSERT_ARRAY(VAR)
+{
+	#ASSERT_NOT_NULL(VAR)
+	if(!isArray(VAR))
+	{
+		error("Assertion Failed. var is not an Array. Actual Value: " + VAR)
+	}
+}
+
+#macro ASSERT_TABLE(VAR)
+{
+	#ASSERT_NOT_NULL(VAR)
+	if(!isArray(VAR))
+	{
+		error("Assertion Failed. var is not a Table. Actual Value: " + VAR)
+	}
+}
+
+#macro ASSERT_TYPE(VAR)
+{
+	#ASSERT_NOT_NULL(VAR)
+	if(!isType(VAR))
+	{
+		error("Assertion Failed. var is not a Type. Actual Value: " + VAR)
+	}
+}
+
+#macro ASSERT_FUNCTION(VAR)
+{
+	#ASSERT_NOT_NULL(VAR)
+	if(!isFunction(VAR))
+	{
+		error("Assertion Failed. var is not a Type. Actual Value: " + VAR)
+	}
+}
+
+#macro ASSERT_EXISTS(FILE)
+{
+	#ASSERT_STRING(FILE)
+	#LOAD_INTERFACE(fs)
+
+	if(!fs.exists(FILE))
+	{
+		error("Assertion Failed. The file does not exist.")
+	}
+}

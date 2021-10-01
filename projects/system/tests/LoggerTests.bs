@@ -16,9 +16,5 @@ namespace System.Logging.Tests
 	logger = new ConsoleLogger()
 	logger.WriteLine("Log Test")
 
-	if(!passAbstract)
-	{		
-		print("[TEST] Abstract Logger Test Failed!")
-		error("Logger Tests Failed")
-	}
+	#ASSERT_TRUE(passAbstract)
 }

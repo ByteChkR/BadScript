@@ -1,0 +1,7 @@
+#macro LOAD_SCRIPT(PATH)
+{
+	#ASSERT_EXISTS(PATH)
+	#LOAD_INTERFACE(fs)
+	#LOAD_INTERFACE(environment)
+	environment.loadString(fs.readAll(PATH))
+}

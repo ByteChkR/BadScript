@@ -11,6 +11,7 @@ namespace System.Tests
 
 	function subscriber1(arg)
 	{
+		#ASSERT_EQUALS(arg, "Argument Test")
 		passArgs = true
 	}
 
@@ -18,24 +19,11 @@ namespace System.Tests
 	ev0 += subscriber0
 	ev0()
 
+	#ASSERT_TRUE(passNoArgs)
+
 	ev1 = new Event(1)
 	ev1 += subscriber1
 	ev1("Argument Test")
 
-	pass = true
-	if(!passNoArgs)
-	{
-		print("[TEST] Event with no Args Failed!")
-		pass = false
-	}
-	if(!passArgs)
-	{
-		print("[TEST] Event with Args Failed!")
-		pass = false
-	}
-
-	if(!pass)
-	{
-		error("Event Tests Failed")
-	}
+	#ASSERT_TRUE(passArgs)
 }
