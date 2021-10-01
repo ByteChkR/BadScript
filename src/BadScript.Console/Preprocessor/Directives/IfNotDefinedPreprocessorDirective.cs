@@ -19,7 +19,8 @@ namespace BadScript.Console.Preprocessor.Directives
             string def = p.GetNextWord();
 
             p.ReadWhitespaceAndNewLine();
-            string block = SourcePreprocessor.Preprocess(p.ParseBlock(), ctx.DirectivesNames);
+            string block = p.ParseBlock();
+            block = SourcePreprocessor.Preprocess(block, ctx.CreateSubContext(block));
 
             BSParser sp = new BSParser(block, ctx.OriginalSource, p.GetPosition());
             BSExpression blockExpr = new BSBlockExpression(sp.ParseToEnd());

@@ -35,6 +35,7 @@ namespace BadScript.Console.Preprocessor
                 new IfNotDefinedPreprocessorDirective(),
                 new CustomFunctionPreprocessorDirective(),
                 new ForPreprocessorDirective(),
+                new CustomMacroPreprocessorDirective()
             };
 
         
@@ -64,14 +65,14 @@ namespace BadScript.Console.Preprocessor
             return settings.Build();
         }
 
-        private static bool IsName( string source, int idx, string name )
+        public static bool IsName( string source, int idx, string name )
         {
             return idx + name.Length <= source.Length &&
                    source.Substring( idx, name.Length ) == name &&
                    IsNonWordChar( source, idx + name.Length );
         }
 
-        private static bool IsNonWordChar( string source, int idx ) =>
+        public static bool IsNonWordChar( string source, int idx ) =>
             idx >= source.Length || !char.IsLetterOrDigit( source[idx] ) && source[idx] != '_';
         private static (SourcePreprocessorDirective, int) FindNext( SourcePreprocessorContext ctx,  int current )
         {
@@ -90,7 +91,12 @@ namespace BadScript.Console.Preprocessor
         {
             SourcePreprocessorContext ctx = new SourcePreprocessorContext(CreateEngine(), source, directives, s_Directives);
 
-            ctx.ScriptEngine.LoadSource( directives, ctx.RuntimeScope, Array.Empty < ABSObject >() );
+            return Preprocess( source, ctx );
+        }
+        public static string Preprocess(string source, SourcePreprocessorContext ctx)
+        {
+            
+            ctx.ScriptEngine.LoadSource( ctx.DirectivesNames, ctx.RuntimeScope, Array.Empty < ABSObject >() );
 
 
             int current = 0;

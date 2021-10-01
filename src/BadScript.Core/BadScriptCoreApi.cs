@@ -257,14 +257,14 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isType" ),
+                               new BSObject("isType"),
                                new BSFunction(
                                               "function isType(obj)",
-                                              ( args ) =>
+                                              (args) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
 
-                                                  if ( arg is BSClassInstance )
+                                                  if (arg is BSClassInstance)
                                                   {
                                                       return BSObject.True;
                                                   }
@@ -274,6 +274,62 @@ namespace BadScript.Core
                                               1
                                              )
                               );
+
+            root.InsertElement(
+                               new BSObject("isString"),
+                               new BSFunction(
+                                              "function isString(obj)",
+                                              (args) =>
+                                              {
+                                                  ABSObject arg = args[0].ResolveReference();
+
+                                                  if (arg.TryConvertString(out string _))
+                                                  {
+                                                      return BSObject.True;
+                                                  }
+
+                                                  return BSObject.False;
+                                              },
+                                              1
+                                             )
+                              );
+
+            root.InsertElement(
+                               new BSObject("isNumber"),
+                               new BSFunction(
+                                              "function isNumber(obj)",
+                                              (args) =>
+                                              {
+                                                  ABSObject arg = args[0].ResolveReference();
+
+                                                  if (arg.TryConvertDecimal(out decimal _))
+                                                  {
+                                                      return BSObject.True;
+                                                  }
+
+                                                  return BSObject.False;
+                                              },
+                                              1
+                                             )
+                              );
+            root.InsertElement(
+                                                    new BSObject("isBoolean"),
+                                                    new BSFunction(
+                                                                   "function isBoolean(obj)",
+                                                                   (args) =>
+                                                                   {
+                                                                       ABSObject arg = args[0].ResolveReference();
+
+                                                                       if (arg.TryConvertBool(out bool _))
+                                                                       {
+                                                                           return BSObject.True;
+                                                                       }
+
+                                                                       return BSObject.False;
+                                                                   },
+                                                                   1
+                                                                  )
+                                                   );
 
             root.InsertElement( new BSObject( "escape" ), new BSFunction( "function escape(str)", EscapeString, 1 ) );
 

@@ -14,14 +14,35 @@ namespace BadScript.Console.Preprocessor
         public string DirectivesNames { get; }
         public List<SourcePreprocessorDirective> Directives { get; }
 
-        public SourcePreprocessorContext( BSEngine engine, string src, string directiveNames, IEnumerable<SourcePreprocessorDirective> directives )
+        public SourcePreprocessorContext(
+            BSEngine engine,
+            string src,
+            string directiveNames,
+            IEnumerable < SourcePreprocessorDirective > directives ) : this(
+                                                                            engine,
+                                                                            new BSScope( engine ),
+                                                                            src,
+                                                                            directiveNames,
+                                                                            directives
+                                                                           ) { }
+
+        private SourcePreprocessorContext(
+            BSEngine engine,
+            BSScope scope,
+            string src,
+            string directiveNames,
+            IEnumerable < SourcePreprocessorDirective > directives )
         {
             ScriptEngine = engine;
             OriginalSource = src;
             DirectivesNames = directiveNames;
-            RuntimeScope = new BSScope(ScriptEngine);
-            Directives = new List < SourcePreprocessorDirective >( directives );
+            RuntimeScope = scope;
+            Directives = new List<SourcePreprocessorDirective>(directives);
         }
+
+        public SourcePreprocessorContext CreateSubContext( string src ) =>
+            new SourcePreprocessorContext( ScriptEngine, RuntimeScope, src, DirectivesNames, Directives );
+
     }
 
 }

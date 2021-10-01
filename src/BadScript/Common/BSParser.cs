@@ -611,6 +611,7 @@ namespace BadScript.Common
                                                      );
         }
 
+
         public BSInvocationExpression ParseInvocation( BSExpression expr )
         {
             int pos = m_CurrentPosition;
@@ -1413,7 +1414,7 @@ namespace BadScript.Common
                      m_OriginalSource[m_CurrentPosition] == '_' );
         }
 
-        private BSFunctionParameter[] ParseArgumentList()
+        public BSFunctionParameter[] ParseArgumentList()
         {
             if ( !Is( '(' ) )
             {
