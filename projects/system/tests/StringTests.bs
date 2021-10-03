@@ -1,0 +1,18 @@
+
+namespace System.Tests
+{
+	using System
+
+	hello = new String("Hello")
+	world = new String(" World")
+
+	
+	arrPass = hello[0] == "H"
+	#ASSERT_TRUE(arrPass)
+
+	hello_world = hello + world
+	addPass = hello_world == "Hello World"
+	#ASSERT_TRUE(addPass)
+
+
+}

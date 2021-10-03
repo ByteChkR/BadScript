@@ -1,0 +1,192 @@
+namespace System
+{
+	#ASSERT_INTERFACE_AVAILABLE(string)
+
+	string = environment.loadInterface("string")
+
+	class String
+	{
+		_str = null
+		function String(!str)
+		{
+			#ASSERT_STRING(str)
+
+			_str = str
+		}
+
+		function Length()
+		{
+			return string.length(_str)
+		}
+
+		function Substring(start, length)
+		{
+			return new String(string.substr(_str, start, length))
+		}
+
+		function Remove(start, length)
+		{
+			return new String(string.remove(_str, start, length))
+		}
+
+		function ToNumber()
+		{
+			return string.toNumber(_str)
+		}
+
+		function Trim()
+		{
+			return new String(string.trim(_str))
+		}
+
+		function TrimStart()
+		{
+			return new String(string.trimStart(_str))
+		}
+
+
+		function TrimEnd()
+		{
+			return new String(string.trimEnd(_str))
+		}
+
+		function Split(*splits)
+		{
+			strs = string.split(_str, splits)
+			for i = 0 while< strs.size()
+			{
+				strs[i] = new String(strs[i])
+			}
+			return strs
+		}
+
+		function CharAt(i)
+		{
+			return new String(string.charAt(_str, i))
+		}
+
+		function EndsWith(str)
+		{
+			return string.endsWith(_str, str)
+		}
+		function StartsWith(str)
+		{
+			return string.startsWith(_str, str)
+		}
+
+		function IndexOf(searchStr)
+		{
+			return string.indexOf(_str, searchStr)
+		}
+
+		function Insert(i, str)
+		{
+			return new String(string.insert(_str, i, str))
+		}
+
+		function LastIndexOf(searchStr)
+		{
+			return string.lastIndexOf(_str, searchStr)
+		}
+
+		function Replace(oldStr, newStr)
+		{
+			return new String(string.replace(_str, oldStr, newStr))
+		}
+
+		function ToArray()
+		{
+			return string.toArray(_str)
+		}
+
+		function IsLetter(?i)
+		{
+			i = i ?? 0
+			return string.isLetter(CharAt(i))
+		}
+		function IsWhiteSpace(?i)
+		{
+			i = i ?? 0
+			return string.isWhiteSpace(CharAt(i))
+		}
+		function IsDigit(?i)
+		{
+			i = i ?? 0
+			return string.isDigit(CharAt(i))
+		}
+
+		function ToLower()
+		{
+			return new String(string.toLower(_str))
+		}
+
+		function Format(*args)
+		{
+			args.insert(0, _str)
+
+			return new String(string.format.invoke(args, true))
+		}
+
+		function op_ArrayAccess(i)
+		{
+			return CharAt(i)
+		}
+
+
+		function op_SelfAddition(other)
+		{
+			return op_Addition(other)
+		}
+
+
+		function op_Equality(other)
+		{
+			if(environment.defaultOp("==", other, null))
+			{
+				return false
+			}
+
+			if(isString(other))
+			{
+				return _str == other
+			}
+			if(isType(other))
+			{
+				return other.IsInstanceOf(this)
+			}
+			return false
+		}
+
+
+		function op_Inequality(other)
+		{
+			return !op_Equality(other)
+		}
+
+		function op_Addition(other)
+		{
+			if(other == null)
+			{
+				return new String(_str + "NULL")
+			}
+			else if(isString(other))
+			{
+				return new String(_str + other)
+			}
+			else if(isType(other))
+			{
+				if(other.IsInstanceOf(this))
+				{
+					return new String(_str + other.ToString())
+				}
+			}
+			error("Can not Apply 'op_Addition' to string and object " + other)
+			return null
+		}
+
+		function ToString()
+		{
+			return _str
+		}
+	}
+}
