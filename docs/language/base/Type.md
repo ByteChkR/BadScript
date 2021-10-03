@@ -1,6 +1,6 @@
 # Bad Script Typesystem
 Bad Script supports the definition of types.
-The simplest possible type one can define only has a name and a predefined set of [default functions](#type-default-functions).
+The simplest possible type one can define only has a name and a predefined set of [default functions](#default-functions).
 ```js
 class MyType
 {
