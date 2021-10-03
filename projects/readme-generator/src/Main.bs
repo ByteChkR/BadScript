@@ -4,6 +4,11 @@ if(args.size() == 1)
 {
 	outputDir = args[0]
 }
+else
+{
+	print("No Output Directory Specified")
+	return -1
+}
 
 knownItems = []
 fs = environment.loadInterface("fs", {})
@@ -187,3 +192,5 @@ foreach	iface in interfaces
 {
 	makeInterfaceReadme(iface)
 }
+
+return 1

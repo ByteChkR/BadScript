@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using BadScript.Console.AppPackage;
 using BadScript.Console.Logging;
 using BadScript.Console.Subsystems.Compile;
 using BadScript.Console.Subsystems.Include;
@@ -55,7 +56,7 @@ namespace BadScript.Console
 
             return CommandLine.Parser.Default.
                                ParseArguments < ScriptRunnerSettings, ScriptCompilerSettings,
-                                   IncludeManagerSettings >( args ).
+                                   IncludeManagerSettings, AppPackageRunnerSettings, AppBuilderSettings >( args ).
                                MapResult(
                                          ( ScriptRunnerSettings o ) =>
                                          {
@@ -75,14 +76,32 @@ namespace BadScript.Console
 
                                              return ScriptCompiler.Compile( o );
                                          },
-                                         ( IncludeManagerSettings o ) =>
+                                         (IncludeManagerSettings o) =>
                                          {
-                                             if ( !o.NoLogo )
+                                             if (!o.NoLogo)
                                              {
                                                  PrintHeaderInfo();
                                              }
 
-                                             return IncludeManager.Process( o );
+                                             return IncludeManager.Process(o);
+                                         },
+                                         (AppPackageRunnerSettings o) =>
+                                         {
+                                             if (!o.NoLogo)
+                                             {
+                                                 PrintHeaderInfo();
+                                             }
+
+                                             return AppPackageRunner.RunPackage(o);
+                                         },
+                                         (AppBuilderSettings o) =>
+                                         {
+                                             if (!o.NoLogo)
+                                             {
+                                                 PrintHeaderInfo();
+                                             }
+
+                                             return AppBuilder.Build(o);
                                          },
                                          HandleError
                                         );

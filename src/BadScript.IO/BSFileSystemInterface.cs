@@ -337,9 +337,8 @@ namespace BadScript.IO
                                                  ABSObject o = args[0].ResolveReference();
                                                  FileAccess m = FileAccess.ReadWrite;
 
-                                                 return new BSFileSystemObject(
+                                                 return new BSStreamObject(
                                                                                o.Position,
-                                                                               o.ConvertString(),
                                                                                File.Open(
                                                                                     o.ConvertString(),
                                                                                     FileMode.OpenOrCreate,

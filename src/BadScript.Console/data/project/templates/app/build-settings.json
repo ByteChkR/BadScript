@@ -15,9 +15,7 @@
         ],
         "SubTarget": "",
         "References": [],
-        "PreEvents": [
-          "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
-        ],
+        "PreEvents": [],
         "PostEvents": [],
         "PreprocessorDirectives": ""
       },
@@ -33,6 +31,21 @@
           "%BS_EXEC% --nologo -f %Target.OutputFile%"
         ],
         "PreprocessorDirectives": ""
+      },
+      {
+        "Name": "publish",
+        "OutputFormat": "none",
+        "OutputFile": "%SubTarget.OutputFile%",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "build",
+        "References": [],
+        "PreEvents": [
+          "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
+        ],
+        "PostEvents": [
+          "%BS_EXEC% appbuilder --nologo -f %Target.OutputFile% -n %AppInfo.Name% -v %AppInfo.Version% -r ./res -o ./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.bsapp"
+        ]
       }
     ]
   },

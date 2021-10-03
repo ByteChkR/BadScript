@@ -46,10 +46,12 @@ namespace BadScript.Console.Subsystems
 
         #region Public
 
-        public BSEngineSettings CreateEngineSettings()
+        public BSEngineSettings CreateEngineSettings() =>
+            CreateEngineSettings( AllowOptimizations, IncludeDirectories.ToArray(), ActiveInterfaces.ToArray() );
+        public static BSEngineSettings CreateEngineSettings(bool allowOpt, string[] includeDirs, string[] activeInterfaces)
         {
             BSEngineSettings es =
-                BSEngineSettings.MakeDefault( new BSParserSettings { AllowOptimization = AllowOptimizations } );
+                BSEngineSettings.MakeDefault( new BSParserSettings { AllowOptimization = allowOpt } );
 
             es.Interfaces.Add( new BSCoreInterface() );
             es.Interfaces.Add( new BSConsoleInterface() );
@@ -68,25 +70,23 @@ namespace BadScript.Console.Subsystems
             es.Interfaces.Add( new BSVersioningInterface() );
             es.Interfaces.Add( new BSXmlInterface() );
             es.Interfaces.Add( BSReflectionInterface.Instance );
-
-            string[] incDirs = IncludeDirectories.ToArray();
+            
 
             if ( Directory.Exists( EngineBuilderDirectories.Instance.IncludeDirectory ) )
             {
                 es.IncludeDirectories.Add( EngineBuilderDirectories.Instance.IncludeDirectory );
             }
 
-            if ( incDirs.Length != 0 )
+            if (includeDirs.Length != 0 )
             {
-                es.IncludeDirectories.AddRange( incDirs );
+                es.IncludeDirectories.AddRange(includeDirs);
             }
 
-            string[] interfaces = ActiveInterfaces.ToArray();
 
-            if ( interfaces.Length != 0 )
+            if (activeInterfaces.Length != 0 )
             {
                 es.ActiveInterfaces.Clear();
-                es.ActiveInterfaces.AddRange( interfaces );
+                es.ActiveInterfaces.AddRange(activeInterfaces);
             }
 
             return es;

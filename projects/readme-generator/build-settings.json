@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "readme-generator",
-    "Version": "2021.10.3.7"
+    "Version": "2021.10.3.16"
   },
   "BuildTargets": {
     "Targets": [
@@ -16,9 +16,7 @@
         ],
         "SubTarget": "",
         "References": [],
-        "PreEvents": [
-          "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
-        ],
+        "PreEvents": [],
         "PostEvents": []
       },
       {
@@ -32,6 +30,36 @@
         "PreEvents": [],
         "PostEvents": [
           "%BS_EXEC% run --nologo -f %Target.OutputFile% -a ../../docs/interfaces/new"
+        ]
+      },
+      {
+        "Name": "publish",
+        "OutputFormat": "none",
+        "OutputFile": "%SubTarget.OutputFile%",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "build",
+        "References": [],
+        "PreEvents": [
+          "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
+        ],
+        "PostEvents": [
+          "%BS_EXEC% appbuilder --nologo -f %Target.OutputFile% -n %AppInfo.Name% -v %AppInfo.Version% -r ./res -o ./bin/%Target.Name%/%AppInfo.Name%_%AppInfo.Version%.bsapp"
+        ]
+      },
+      {
+        "Name": "publishrelease",
+        "OutputFormat": "none",
+        "OutputFile": "%SubTarget.OutputFile%",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "build",
+        "References": [],
+        "PreEvents": [
+          "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
+        ],
+        "PostEvents": [
+          "%BS_EXEC% appbuilder --nologo -f %Target.OutputFile% -n %AppInfo.Name% -v %AppInfo.Version% -r ./res -o ../../docs/projects/%AppInfo.Name%.bsapp"
         ]
       }
     ]
