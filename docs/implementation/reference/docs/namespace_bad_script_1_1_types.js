@@ -5,5 +5,6 @@ var namespace_bad_script_1_1_types =
     [ "ABSArray", "class_bad_script_1_1_types_1_1_a_b_s_array.html", "class_bad_script_1_1_types_1_1_a_b_s_array" ],
     [ "ABSObject", "class_bad_script_1_1_types_1_1_a_b_s_object.html", "class_bad_script_1_1_types_1_1_a_b_s_object" ],
     [ "ABSTable", "class_bad_script_1_1_types_1_1_a_b_s_table.html", "class_bad_script_1_1_types_1_1_a_b_s_table" ],
-    [ "BSFunction", "class_bad_script_1_1_types_1_1_b_s_function.html", "class_bad_script_1_1_types_1_1_b_s_function" ]
+    [ "BSFunction", "class_bad_script_1_1_types_1_1_b_s_function.html", "class_bad_script_1_1_types_1_1_b_s_function" ],
+    [ "BSStreamObject", "class_bad_script_1_1_types_1_1_b_s_stream_object.html", "class_bad_script_1_1_types_1_1_b_s_stream_object" ]
 ];

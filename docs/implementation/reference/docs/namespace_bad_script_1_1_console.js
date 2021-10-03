@@ -1,5 +1,6 @@
 var namespace_bad_script_1_1_console =
 [
+    [ "AppPackage", "namespace_bad_script_1_1_console_1_1_app_package.html", "namespace_bad_script_1_1_console_1_1_app_package" ],
     [ "Logging", "namespace_bad_script_1_1_console_1_1_logging.html", "namespace_bad_script_1_1_console_1_1_logging" ],
     [ "Preprocessor", "namespace_bad_script_1_1_console_1_1_preprocessor.html", "namespace_bad_script_1_1_console_1_1_preprocessor" ],
     [ "Subsystems", "namespace_bad_script_1_1_console_1_1_subsystems.html", "namespace_bad_script_1_1_console_1_1_subsystems" ],
