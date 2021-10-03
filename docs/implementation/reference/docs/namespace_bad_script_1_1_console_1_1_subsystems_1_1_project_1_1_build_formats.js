@@ -1,0 +1,6 @@
+var namespace_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_build_formats =
+[
+    [ "BinaryOutputFormat", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_build_formats_1_1_binary_output_format.html", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_build_formats_1_1_binary_output_format" ],
+    [ "BuildOutputFormat", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_build_formats_1_1_build_output_format.html", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_build_formats_1_1_build_output_format" ],
+    [ "TextOutputFormat", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_build_formats_1_1_text_output_format.html", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_build_formats_1_1_text_output_format" ]
+];

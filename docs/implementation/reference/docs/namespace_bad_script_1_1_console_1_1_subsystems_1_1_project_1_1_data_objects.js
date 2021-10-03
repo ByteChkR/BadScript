@@ -1,0 +1,8 @@
+var namespace_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects =
+[
+    [ "AppInfo", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_app_info.html", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_app_info" ],
+    [ "BuildTarget", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_build_target.html", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_build_target" ],
+    [ "BuildTargetReference", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_build_target_reference.html", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_build_target_reference" ],
+    [ "ProjectBuildTargetCollection", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_project_build_target_collection.html", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_project_build_target_collection" ],
+    [ "ProjectSettings", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_project_settings.html", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_data_objects_1_1_project_settings" ]
+];

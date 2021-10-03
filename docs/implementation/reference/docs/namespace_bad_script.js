@@ -1,0 +1,25 @@
+var namespace_bad_script =
+[
+    [ "Common", "namespace_bad_script_1_1_common.html", "namespace_bad_script_1_1_common" ],
+    [ "Console", "namespace_bad_script_1_1_console.html", "namespace_bad_script_1_1_console" ],
+    [ "ConsoleUtils", "namespace_bad_script_1_1_console_utils.html", "namespace_bad_script_1_1_console_utils" ],
+    [ "Core", "namespace_bad_script_1_1_core.html", "namespace_bad_script_1_1_core" ],
+    [ "Http", "namespace_bad_script_1_1_http.html", "namespace_bad_script_1_1_http" ],
+    [ "HttpServer", "namespace_bad_script_1_1_http_server.html", "namespace_bad_script_1_1_http_server" ],
+    [ "Imaging", "namespace_bad_script_1_1_imaging.html", "namespace_bad_script_1_1_imaging" ],
+    [ "Interfaces", "namespace_bad_script_1_1_interfaces.html", "namespace_bad_script_1_1_interfaces" ],
+    [ "IO", "namespace_bad_script_1_1_i_o.html", "namespace_bad_script_1_1_i_o" ],
+    [ "Json", "namespace_bad_script_1_1_json.html", "namespace_bad_script_1_1_json" ],
+    [ "Math", "namespace_bad_script_1_1_math.html", "namespace_bad_script_1_1_math" ],
+    [ "Process", "namespace_bad_script_1_1_process.html", "namespace_bad_script_1_1_process" ],
+    [ "Settings", "namespace_bad_script_1_1_settings.html", "namespace_bad_script_1_1_settings" ],
+    [ "StringUtils", "namespace_bad_script_1_1_string_utils.html", "namespace_bad_script_1_1_string_utils" ],
+    [ "Testing", "namespace_bad_script_1_1_testing.html", "namespace_bad_script_1_1_testing" ],
+    [ "Tests", "namespace_bad_script_1_1_tests.html", "namespace_bad_script_1_1_tests" ],
+    [ "Tools", "namespace_bad_script_1_1_tools.html", "namespace_bad_script_1_1_tools" ],
+    [ "Utility", "namespace_bad_script_1_1_utility.html", "namespace_bad_script_1_1_utility" ],
+    [ "Utils", "namespace_bad_script_1_1_utils.html", "namespace_bad_script_1_1_utils" ],
+    [ "Xml", "namespace_bad_script_1_1_xml.html", "namespace_bad_script_1_1_xml" ],
+    [ "Zip", "namespace_bad_script_1_1_zip.html", "namespace_bad_script_1_1_zip" ],
+    [ "BSEngine", "class_bad_script_1_1_b_s_engine.html", "class_bad_script_1_1_b_s_engine" ]
+];
