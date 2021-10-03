@@ -2,6 +2,7 @@
 using BadScript.Common.Expressions.Implementations.Value;
 using BadScript.Common.Runtime;
 using BadScript.Common.Types;
+using BadScript.Utility;
 
 namespace BadScript.Common.Expressions.Implementations.Types
 {
@@ -30,7 +31,7 @@ namespace BadScript.Common.Expressions.Implementations.Types
                 args[i] = nameParameter.Execute( scope );
             }
 
-            return scope.Engine.TypeDatabase.CreateInstance(
+            return BSTypeDatabase.CreateInstance(
                                                             ( Name.Left as BSPropertyExpression ).Right,
                                                             scope.Engine,
                                                             scope.Namespace,

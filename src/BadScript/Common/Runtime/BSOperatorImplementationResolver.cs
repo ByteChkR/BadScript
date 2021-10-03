@@ -59,8 +59,9 @@ namespace BadScript.Common.Runtime
 
         #region Public
 
-        public static void AddImplementation( ABSOperatorImplementation o )
+        public static void AddImplementation(string functionName, ABSOperatorImplementation o )
         {
+            s_KeyMapping[o.OperatorKey] = functionName;
             m_Implementations.Add( o );
         }
 

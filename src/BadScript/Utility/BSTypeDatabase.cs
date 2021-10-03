@@ -9,12 +9,12 @@ using BadScript.Common.Types.References;
 namespace BadScript.Utility
 {
 
-    public class BSTypeDatabase
+    public static class BSTypeDatabase
     {
 
         #region Public
 
-        public BSClassInstance CreateInstance( string name, BSEngine engine, BSNamespace start, ABSObject[] args )
+        public static BSClassInstance CreateInstance( string name, BSEngine engine, BSNamespace start, ABSObject[] args )
         {
             BSScope classScope = new BSScope( engine );
 
@@ -25,7 +25,7 @@ namespace BadScript.Utility
 
         #region Private
 
-        private BSClassInstance CreateBaseInstance( string name, BSScope scope, BSNamespace start, ABSObject[] args )
+        private static BSClassInstance CreateBaseInstance( string name, BSScope scope, BSNamespace start, ABSObject[] args )
         {
             BSClassExpression expr = start.ResolveType( name, true );
             BSClassInstance baseInstance = null;

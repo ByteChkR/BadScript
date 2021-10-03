@@ -6,47 +6,91 @@ using BadScript.Common.Expressions.Implementations.Types;
 
 namespace BadScript.Common.Namespaces
 {
-
+    /// <summary>
+    /// Namespace Object used in the Type System
+    /// Contains sub namespaces and types.
+    /// </summary>
     public class BSNamespace
     {
 
+        /// <summary>
+        /// The parent namespace(null if root)
+        /// </summary>
         public readonly BSNamespace Parent;
+        /// <summary>
+        /// The Name of the namespace("" if root)
+        /// </summary>
         public readonly string Name;
 
         private readonly List < BSNamespace > m_Children = new();
         private readonly List < BSNamespace > m_IncludedNamespaces = new();
         private readonly List < BSClassExpression > m_Types = new();
 
+        /// <summary>
+        /// The Full Name of the Namespace
+        /// Namespaces are seperated by '.'
+        /// Example:    MyApp.Internal.Configs
+        /// </summary>
         public string FullName => string.IsNullOrEmpty( Parent.Name ) ? Name : Parent.FullName + "." + Name;
 
         #region Public
 
+        /// <summary>
+        /// Creates a new Namespace in the selected parent object.
+        /// </summary>
+        /// <param name="parent">Parent Namespace</param>
+        /// <param name="name">Name of this namespace</param>
         public BSNamespace( BSNamespace parent, string name )
         {
             Name = name;
             Parent = parent;
         }
 
+        /// <summary>
+        /// Adds a Type Definition to the namespace
+        /// </summary>
+        /// <param name="expr"></param>
         public void AddType( BSClassExpression expr )
         {
             m_Types.Add( expr );
         }
 
+        /// <summary>
+        /// Adds a used namespace.
+        /// All types within that namespace will become accessible to this namespace.
+        /// </summary>
+        /// <param name="ns">The used namespace</param>
         public void AddUsing( BSNamespace ns )
         {
             m_IncludedNamespaces.Add( ns );
         }
 
+        /// <summary>
+        /// Returns true if the namespace contains a type with the specified name. Or if a Parent Namespace contains the type with the specified name
+        /// </summary>
+        /// <param name="name">Name of the Type</param>
+        /// <param name="includeChildren">Should the namespace also include its child namespaces in the search</param>
+        /// <returns>True if Contains</returns>
         public virtual bool ContainsType( string name, bool includeChildren )
         {
             return HasType( name, includeChildren ) || Parent.ContainsType( name, false );
         }
 
+        /// <summary>
+        /// Returns a Direct Child Namespace by the specified name
+        /// </summary>
+        /// <param name="name">Name of the Namespace</param>
+        /// <returns>Namespace instance</returns>
         public BSNamespace GetNamespace( string name )
         {
             return m_Children.First( x => x.Name == name );
         }
 
+        /// <summary>
+        /// Finds or creates a namespace with the specified name
+        /// </summary>
+        /// <param name="name">Namespace name</param>
+        /// <returns></returns>
         public BSNamespace GetOrCreateNamespace( string name )
         {
             BSNamespace ns = m_Children.FirstOrDefault( x => x.Name == name );
@@ -60,6 +104,12 @@ namespace BadScript.Common.Namespaces
             return ns;
         }
 
+        /// <summary>
+        /// Resolves a type by its specified name
+        /// </summary>
+        /// <param name="name">Name of the Type</param>
+        /// <param name="includeChildren">Should the namespace also include its child namespaces in the search</param>
+        /// <returns>BS Type Definition</returns>
         public virtual BSClassExpression ResolveType( string name, bool includeChildren )
         {
             if (

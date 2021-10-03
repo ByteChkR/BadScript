@@ -4,7 +4,9 @@ using BadScript.Common.Expressions;
 
 namespace BadScript.Common.Types.References
 {
-
+    /// <summary>
+    /// Class used to Assign Values to variables
+    /// </summary>
     public abstract class ABSReference : ABSObject
     {
 
@@ -12,8 +14,16 @@ namespace BadScript.Common.Types.References
 
         #region Public
 
+        /// <summary>
+        /// Assigns a value to the element that this reference is pointing to
+        /// </summary>
+        /// <param name="obj">Object to Assign</param>
         public abstract void Assign( ABSObject obj );
 
+        /// <summary>
+        /// Returns the Value of the Reference
+        /// </summary>
+        /// <returns></returns>
         public abstract ABSObject Get();
 
         public override bool Equals( ABSObject other )

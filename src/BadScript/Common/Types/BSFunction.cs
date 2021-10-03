@@ -12,10 +12,11 @@ using BadScript.Common.Types.References;
 
 namespace BadScript.Common.Types
 {
-
+    /// <summary>
+    /// Implements a BS Function
+    /// </summary>
     public class BSFunction : ABSObject
     {
-
         protected readonly string DebugData = null;
 
         private class BSCachedFunction
@@ -48,6 +49,9 @@ namespace BadScript.Common.Types
         private Func < ABSObject[],
             ABSObject > m_Func;
 
+        /// <summary>
+        /// The Stacktrace of the Current Thread
+        /// </summary>
         public static string[] StackTrace
         {
             get
@@ -61,6 +65,9 @@ namespace BadScript.Common.Types
             }
         }
 
+        /// <summary>
+        /// The flattened Stacktrace of the Current Thread
+        /// </summary>
         public static string FlatTrace
         {
             get
@@ -78,10 +85,19 @@ namespace BadScript.Common.Types
 
         public override bool IsNull => false;
 
+        /// <summary>
+        /// The Stack Depth of the Current thread
+        /// </summary>
         private static int StackCount => s_Stacks.Count == 0 ? 0 : s_Stacks[Thread.CurrentThread].Count;
 
         #region Public
 
+        /// <summary>
+        /// Creates a new BSFunction Instance
+        /// </summary>
+        /// <param name="debugData">Debug Data</param>
+        /// <param name="func">Function Implementation</param>
+        /// <param name="argCount">Argument Count</param>
         public BSFunction(
             string debugData,
             Func < ABSObject[], ABSObject >
@@ -90,6 +106,13 @@ namespace BadScript.Common.Types
         {
         }
 
+        /// <summary>
+        /// Creates a new BSFunction Instance
+        /// </summary>
+        /// <param name="pos">Source Position</param>
+        /// <param name="debugData">Debug Data</param>
+        /// <param name="func">Function Implementation</param>
+        /// <param name="argCount">Argument Count</param>
         public BSFunction(
             SourcePosition pos,
             string debugData,
@@ -100,6 +123,14 @@ namespace BadScript.Common.Types
             m_ParameterCount = ( argCount, argCount );
         }
 
+        /// <summary>
+        /// Creates a new BSFunction Instance
+        /// </summary>
+        /// <param name="pos">Source Position</param>
+        /// <param name="debugData">Debug Data</param>
+        /// <param name="func">Function Implementation</param>
+        /// <param name="minArgs">The Minimum amount of arguments</param>
+        /// <param name="maxArgs">The Maximum amount of arguments</param>
         public BSFunction(
             SourcePosition pos,
             string debugData,
@@ -110,7 +141,13 @@ namespace BadScript.Common.Types
         {
             m_ParameterCount = ( minArgs, maxArgs );
         }
-
+        /// <summary>
+        /// Creates a new BSFunction Instance
+        /// </summary>
+        /// <param name="debugData">Debug Data</param>
+        /// <param name="func">Function Implementation</param>
+        /// <param name="minArgs">The Minimum amount of arguments</param>
+        /// <param name="maxArgs">The Maximum amount of arguments</param>
         public BSFunction(
             string debugData,
             Func < ABSObject[], ABSObject >
@@ -121,11 +158,19 @@ namespace BadScript.Common.Types
             m_ParameterCount = ( minArgs, maxArgs );
         }
 
+        /// <summary>
+        /// Returns the Top Most function on the Call stack
+        /// </summary>
+        /// <returns></returns>
         public static BSFunction GetTopStack()
         {
             return StackCount == 0 ? null : PeekStack();
         }
 
+        /// <summary>
+        /// Unwind the stack until the stack top is equal to the specified function
+        /// </summary>
+        /// <param name="top">new Stack Top</param>
         public static void RestoreStack( BSFunction top )
         {
             if ( top == null )
@@ -139,11 +184,18 @@ namespace BadScript.Common.Types
             }
         }
 
+        /// <summary>
+        /// Add a function hook to this function
+        /// </summary>
+        /// <param name="func"></param>
         public void AddHook( BSFunction func )
         {
             m_Hooks.Add( func );
         }
 
+        /// <summary>
+        /// Clear all function hooks
+        /// </summary>
         public void ClearHooks()
         {
             m_Hooks.Clear();
@@ -154,6 +206,8 @@ namespace BadScript.Common.Types
             return ReferenceEquals( this, other );
         }
 
+        
+        
         public override ABSReference GetProperty( string propertyName )
         {
             if ( m_Properties.ContainsKey( propertyName ) )
@@ -169,6 +223,12 @@ namespace BadScript.Common.Types
             return m_Properties.ContainsKey( propertyName );
         }
 
+        /// <summary>
+        /// Invokes the current object with the specified arguments
+        /// </summary>
+        /// <param name="args">Arguments for the invocation</param>
+        /// <param name="executeHooks">if true, the registered hooks get executed.</param>
+        /// <returns></returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject Invoke( ABSObject[] args, bool executeHooks )
         {
@@ -226,6 +286,10 @@ namespace BadScript.Common.Types
             return Invoke( args, true );
         }
 
+        /// <summary>
+        /// Remove a function hook from this function
+        /// </summary>
+        /// <param name="func"></param>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public void RemoveHook( BSFunction func )
         {

@@ -23,6 +23,10 @@ using BadScript.Utility.Validators;
 namespace BadScript
 {
 
+    /// <summary>
+    /// BSEngine is the root object of every BS Runtime Instance.
+    /// BSEngine ties together the Parsing and the Execution of Scripts into a single class.
+    /// </summary>
     public class BSEngine
     {
 
@@ -34,16 +38,31 @@ namespace BadScript
         private readonly ABSTable m_GlobalTable;
         private readonly List < ABSScriptInterface > m_Interfaces;
 
+        /// <summary>
+        /// The namespace Root for all namespaces defined in scripts.
+        /// When a type gets defined outside a namespace, they are saved in this namespace.
+        /// </summary>
         public BSNamespaceRoot NamespaceRoot { get; }
 
-        public BSTypeDatabase TypeDatabase { get; }
-
+        /// <summary>
+        /// Contains settings for the BSParser used when parsing scripts
+        /// </summary>
         public BSParserSettings ParserSettings { get; }
 
+        /// <summary>
+        /// Contains the names of all available ABSScriptInterface instances
+        /// </summary>
         public string[] InterfaceNames => m_Interfaces.Select( x => x.Name ).ToArray();
 
         #region Public
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parserSettings">Settings for the BSParser instance</param>
+        /// <param name="startObjects">Static data that is readonly and is available at all Scope Levels</param>
+        /// <param name="interfaces">Available Interfaces</param>
+        /// <param name="gTable">Optional Global Table Definition. Can be used to add default elements before the BSEngine gets created.</param>
         public BSEngine(
             BSParserSettings parserSettings,
             Dictionary < string, ABSObject > startObjects,
@@ -51,7 +70,6 @@ namespace BadScript
             Dictionary < string, ABSObject > gTable = null )
         {
             NamespaceRoot = new BSNamespaceRoot();
-            TypeDatabase = new BSTypeDatabase();
             ParserSettings = parserSettings;
             m_Interfaces = interfaces;
             m_Preprocessors = new Dictionary < string, ABSObject >();
@@ -91,6 +109,11 @@ namespace BadScript
             m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
         }
 
+        /// <summary>
+        /// Creates an Executable BSExpression Tree from the BSBinary Format
+        /// </summary>
+        /// <param name="bin">Binary Data</param>
+        /// <returns>Expression Tree</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static BSExpression[] ParseBinary( byte[] bin )
         {
@@ -100,17 +123,30 @@ namespace BadScript
             }
         }
 
+        /// <summary>
+        /// Creates an Executable BSExpression Tree from a serialized file
+        /// </summary>
+        /// <param name="file">Path to File</param>
+        /// <returns>Expression Tree</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public static BSExpression[] ParseBinary( string file )
         {
             return ParseBinary( File.ReadAllBytes( file ) );
         }
 
+        /// <summary>
+        /// Adds an Interface to the list of available interfaces
+        /// </summary>
+        /// <param name="i"></param>
         public void AddInterface( ABSScriptInterface i )
         {
             m_Interfaces.Add( i );
         }
 
+        /// <summary>
+        /// Returns the Global Table for this engine instance
+        /// </summary>
+        /// <returns></returns>
         public ABSTable GetGlobalTable()
         {
             return m_GlobalTable;
@@ -121,36 +157,77 @@ namespace BadScript
             return m_Interfaces.Any( x => x.Name == key );
         }
 
+        /// <summary>
+        /// Loads and Executes a Binary
+        /// </summary>
+        /// <param name="bin">Binary Data</param>
+        /// <param name="scope">The Scope that the Execution will take place in</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadBinary( byte[] bin, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), scope, args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a Binary
+        /// </summary>
+        /// <param name="bin">Binary Data</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadBinary( byte[] bin, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a Binary
+        /// </summary>
+        /// <param name="bin">Binary Data</param>
+        /// <param name="scope">The Scope that the Execution will take place in</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadBinary( byte[] bin, BSScope scope, string[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), scope, args, isBenchmark );
         }
-
+        /// <summary>
+        /// Loads and Executes a Binary
+        /// </summary>
+        /// <param name="bin">Binary Data</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadBinary( byte[] bin, string[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), args, isBenchmark );
         }
-
+        /// <summary>
+        /// Loads and Executes a Binary
+        /// </summary>
+        /// <param name="bin">Binary Data</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadBinary( byte[] bin, bool isBenchmark = false )
         {
             return LoadScript( ParseBinary( bin ), isBenchmark );
         }
-
+        /// <summary>
+        /// Loads and Executes a File
+        /// </summary>
+        /// <param name="path">File Path</param>
+        /// <param name="scope">The Scope that the Execution will take place in</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadFile( string path, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
@@ -162,6 +239,13 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), scope, args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a File
+        /// </summary>
+        /// <param name="path">File Path</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadFile( string path, ABSObject[] args, bool isBenchmark = false )
         {
@@ -173,6 +257,14 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a File
+        /// </summary>
+        /// <param name="path">File Path</param>
+        /// <param name="scope">The Scope that the Execution will take place in</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadFile( string path, BSScope scope, string[] args, bool isBenchmark = false )
         {
@@ -184,6 +276,13 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), scope, args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a File
+        /// </summary>
+        /// <param name="path">File Path</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadFile( string path, string[] args, bool isBenchmark = false )
         {
@@ -195,6 +294,12 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a File
+        /// </summary>
+        /// <param name="path">File Path</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadFile( string path, bool isBenchmark = false )
         {
@@ -206,6 +311,12 @@ namespace BadScript
             return LoadSource( File.ReadAllText( path ), isBenchmark );
         }
 
+        /// <summary>
+        /// Loads an interface and returns the loaded table.
+        /// </summary>
+        /// <param name="key">Interface Key</param>
+        /// <param name="t">Optional Table Instance that the interface is loaded in</param>
+        /// <returns>The Loaded Interface</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSTable LoadInterface( string key, ABSTable t = null )
         {
@@ -231,12 +342,25 @@ namespace BadScript
             return table;
         }
 
+        /// <summary>
+        /// Loads and Executes an BSExpression Tree
+        /// </summary>
+        /// <param name="exprs">The Expressions to Execute</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, bool isBenchmark = false )
         {
             return LoadScript( exprs, new ABSObject[0], isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes an BSExpression Tree
+        /// </summary>
+        /// <param name="exprs">The Expressions to Execute</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, string[] args, bool isBenchmark = false )
         {
@@ -247,12 +371,27 @@ namespace BadScript
                              );
         }
 
+        /// <summary>
+        /// Loads and Executes an BSExpression Tree
+        /// </summary>
+        /// <param name="exprs">The Expressions to Execute</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( exprs, new BSScope( this ), args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes an BSExpression Tree
+        /// </summary>
+        /// <param name="exprs">The Expressions to Execute</param>
+        /// <param name="scope">The Scope that the Execution will take place in</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, string[] args, bool isBenchmark = false )
         {
@@ -264,6 +403,14 @@ namespace BadScript
                              );
         }
 
+        /// <summary>
+        /// Loads and Executes an BSExpression Tree
+        /// </summary>
+        /// <param name="exprs">The Expressions to Execute</param>
+        /// <param name="scope">The Scope that the Execution will take place in</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
@@ -305,42 +452,88 @@ namespace BadScript
             return scope.Return ?? scope.GetLocals();
         }
 
+        /// <summary>
+        /// Loads and Executes a script from source
+        /// </summary>
+        /// <param name="src">The Source to Execute</param>
+        /// <param name="scope">The Scope that the Execution will take place in</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadSource( string src, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), scope, args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a script from source
+        /// </summary>
+        /// <param name="src">The Source to Execute</param>
+        /// <param name="scope">The Scope that the Execution will take place in</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadSource( string src, BSScope scope, string[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), scope, args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a script from source
+        /// </summary>
+        /// <param name="src">The Source to Execute</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadSource( string src, string[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a script from source
+        /// </summary>
+        /// <param name="src">The Source to Execute</param>
+        /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadSource( string src, ABSObject[] args, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), args, isBenchmark );
         }
 
+        /// <summary>
+        /// Loads and Executes a script from source
+        /// </summary>
+        /// <param name="src">The Source to Execute</param>
+        /// <param name="isBenchmark">Display Execution Time</param>
+        /// <returns>Return of the Execution. The ABSTable instance of the specified scope if no explicit return inside the script</returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadSource( string src, bool isBenchmark = false )
         {
             return LoadScript( ParseString( src ), isBenchmark );
         }
 
+        /// <summary>
+        /// Parses a BS Expression Tree from file
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <returns></returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public BSExpression[] ParseFile( string path )
         {
             return ParseString( File.ReadAllText( path ) );
         }
 
+        /// <summary>
+        /// Parses a BS Expression Tree from source
+        /// </summary>
+        /// <param name="script">The source to parse</param>
+        /// <returns></returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public BSExpression[] ParseString( string script )
         {
