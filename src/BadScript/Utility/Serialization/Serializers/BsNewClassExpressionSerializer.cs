@@ -22,9 +22,9 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSNewInstanceExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            BSExpression expr = s.DeserializeExpression();
+            BSExpression expr = s.DeserializeExpression(context);
 
             if ( expr is BSInvocationExpression invoc )
             {
@@ -36,11 +36,11 @@ namespace BadScript.Utility.Serialization.Serializers
                                            );
         }
 
-        public override void Serialize( BSExpression expr, Stream s )
+        public override void Serialize( BSExpression expr, Stream s, BSSerializerContext context)
         {
             BSNewInstanceExpression e = ( BSNewInstanceExpression )expr;
             s.SerializeOpCode( BSCompiledExpressionCode.NewClassExpr );
-            s.SerializeExpression( e.Name );
+            s.SerializeExpression( e.Name,context );
         }
 
         #endregion

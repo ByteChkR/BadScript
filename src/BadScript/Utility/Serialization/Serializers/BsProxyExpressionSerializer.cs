@@ -24,13 +24,13 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSProxyExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
             if ( code == BSCompiledExpressionCode.UnaryExpr )
             {
-                string key = s.DeserializeString();
-                string implKey = s.DeserializeString();
-                string sig = s.DeserializeString();
+                string key = s.DeserializeString(context);
+                string implKey = s.DeserializeString(context);
+                string sig = s.DeserializeString(context);
                 int argc = s.DeserializeInt32();
                 BSUnaryOperatorMetaData um = new BSUnaryOperatorMetaData( key, implKey, sig, argc );
 
@@ -38,8 +38,8 @@ namespace BadScript.Utility.Serialization.Serializers
             }
             else if ( code == BSCompiledExpressionCode.BinaryExpr )
             {
-                string key = s.DeserializeString();
-                string sig = s.DeserializeString();
+                string key = s.DeserializeString(context);
+                string sig = s.DeserializeString(context);
                 int argc = s.DeserializeInt32();
                 BSBinaryOperatorMetaData um = new BSBinaryOperatorMetaData( key, sig, argc );
 
@@ -52,7 +52,7 @@ namespace BadScript.Utility.Serialization.Serializers
                                                  );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSProxyExpression expr = ( BSProxyExpression )e;
 
@@ -67,16 +67,16 @@ namespace BadScript.Utility.Serialization.Serializers
             if ( expr.ProxyMetaData is BSBinaryOperatorMetaData bm )
             {
                 ret.SerializeOpCode( BSCompiledExpressionCode.BinaryExpr );
-                ret.SerializeString( bm.OperatorKey );
-                ret.SerializeString( bm.Signature );
+                ret.SerializeString( bm.OperatorKey , context);
+                ret.SerializeString( bm.Signature, context);
                 ret.SerializeInt32( bm.ArgumentCount );
             }
             else if ( expr.ProxyMetaData is BSUnaryOperatorMetaData um )
             {
                 ret.SerializeOpCode( BSCompiledExpressionCode.UnaryExpr );
-                ret.SerializeString( um.OperatorKey );
-                ret.SerializeString( um.ImplementationOperatorKey );
-                ret.SerializeString( um.Signature );
+                ret.SerializeString( um.OperatorKey, context);
+                ret.SerializeString( um.ImplementationOperatorKey, context);
+                ret.SerializeString( um.Signature, context);
                 ret.SerializeInt32( um.ArgumentCount );
             }
             else if ( expr.ProxyMetaData is BSExpressionOptimizerMetaData om )
@@ -85,7 +85,7 @@ namespace BadScript.Utility.Serialization.Serializers
 
                 if ( om.ExpressionCode == BSCompiledExpressionCode.ValueString )
                 {
-                    ret.SerializeString( ( string )om.Value );
+                    ret.SerializeString( ( string )om.Value, context);
                 }
                 else if ( om.ExpressionCode == BSCompiledExpressionCode.ValueDecimal )
                 {

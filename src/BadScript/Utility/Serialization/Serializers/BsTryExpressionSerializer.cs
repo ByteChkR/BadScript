@@ -21,22 +21,22 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSTryExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            BSExpression[] tryBlock = s.DeserializeBlock();
-            string cVar = s.DeserializeString();
-            BSExpression[] catchBlock = s.DeserializeBlock();
+            BSExpression[] tryBlock = s.DeserializeBlock(context);
+            string cVar = s.DeserializeString(context);
+            BSExpression[] catchBlock = s.DeserializeBlock(context);
 
             return new BSTryExpression( SourcePosition.Unknown, tryBlock, catchBlock, cVar );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSTryExpression expr = ( BSTryExpression )e;
             ret.SerializeOpCode( BSCompiledExpressionCode.TryExpr );
-            ret.SerializeBlock( expr.TryBlock );
-            ret.SerializeString( expr.CapturedVar );
-            ret.SerializeBlock( expr.CatchBlock );
+            ret.SerializeBlock( expr.TryBlock, context);
+            ret.SerializeString( expr.CapturedVar, context);
+            ret.SerializeBlock( expr.CatchBlock, context);
         }
 
         #endregion

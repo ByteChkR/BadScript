@@ -22,13 +22,13 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSFunctionDefinitionExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            string name = s.DeserializeString();
+            string name = s.DeserializeString(context);
             bool global = s.DeserializeBool();
-            BSFunctionParameter[] args = s.DeserializeFunctionParameters();
+            BSFunctionParameter[] args = s.DeserializeFunctionParameters(context);
 
-            BSExpression[] exprs = s.DeserializeBlock();
+            BSExpression[] exprs = s.DeserializeBlock(context);
 
             return new BSFunctionDefinitionExpression(
                                                       SourcePosition.Unknown,
@@ -39,15 +39,15 @@ namespace BadScript.Utility.Serialization.Serializers
                                                      );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSFunctionDefinitionExpression expr = ( BSFunctionDefinitionExpression )e;
             ret.SerializeOpCode( BSCompiledExpressionCode.FunctionDefinitionExpr );
-            ret.SerializeString( expr.Name );
+            ret.SerializeString( expr.Name, context );
             ret.SerializeBool( expr.Global );
-            ret.SerializeFunctionParameters( expr.ArgNames );
+            ret.SerializeFunctionParameters( expr.ArgNames, context);
 
-            ret.SerializeBlock( expr.Block );
+            ret.SerializeBlock( expr.Block, context);
         }
 
         #endregion

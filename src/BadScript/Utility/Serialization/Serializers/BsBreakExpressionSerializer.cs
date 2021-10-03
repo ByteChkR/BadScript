@@ -21,12 +21,12 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSBreakExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
             return new BSBreakExpression( SourcePosition.Unknown );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             ret.SerializeOpCode( BSCompiledExpressionCode.BreakExpr );
         }

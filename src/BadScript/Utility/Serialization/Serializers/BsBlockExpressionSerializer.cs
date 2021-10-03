@@ -21,16 +21,16 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSBlockExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            return new BSBlockExpression( s.DeserializeBlock() );
+            return new BSBlockExpression( s.DeserializeBlock(context) );
         }
 
-        public override void Serialize( BSExpression expr, Stream s )
+        public override void Serialize( BSExpression expr, Stream s, BSSerializerContext context)
         {
             BSBlockExpression b = ( BSBlockExpression )expr;
             s.SerializeOpCode( BSCompiledExpressionCode.CustomBlock );
-            s.SerializeBlock( b.Block );
+            s.SerializeBlock( b.Block, context );
         }
 
         #endregion

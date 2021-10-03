@@ -35,19 +35,35 @@ namespace BadScript.Tests
         #region Public
 
         [Test]
-        [TestCaseSource( nameof( TestFiles ) )]
-        public void RunTest( string key )
+        [TestCaseSource(nameof(TestFiles))]
+        public void RunTest(string key)
         {
             string file = m_Files[key];
-            BSExpression[] expressions = m_Engine.ParseFile( file );
+            BSExpression[] expressions = m_Engine.ParseFile(file);
             MemoryStream ms = new MemoryStream();
-            BSSerializer.Serialize( expressions, ms );
+            BSSerializer.Serialize(expressions, ms);
             ms.Position = 0;
 
-            expressions = BSSerializer.Deserialize( ms );
+            expressions = BSSerializer.Deserialize(ms);
 
-            ABSObject o = m_Engine.LoadScript( expressions );
-            Assert.IsTrue( o.ConvertBool() );
+            ABSObject o = m_Engine.LoadScript(expressions);
+            Assert.IsTrue(o.ConvertBool());
+        }
+
+        [Test]
+        [TestCaseSource(nameof(TestFiles))]
+        public void RunTestUncached(string key)
+        {
+            string file = m_Files[key];
+            BSExpression[] expressions = m_Engine.ParseFile(file);
+            MemoryStream ms = new MemoryStream();
+            BSSerializer.Serialize(expressions, ms, BSSerializerHints.NoStringCache);
+            ms.Position = 0;
+
+            expressions = BSSerializer.Deserialize(ms);
+
+            ABSObject o = m_Engine.LoadScript(expressions);
+            Assert.IsTrue(o.ConvertBool());
         }
 
         [SetUp]

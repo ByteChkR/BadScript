@@ -21,20 +21,20 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSNullCheckPropertyExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            BSExpression e = s.DeserializeExpression();
+            BSExpression e = s.DeserializeExpression(context);
 
-            return new BSNullCheckPropertyExpression( SourcePosition.Unknown, e, s.DeserializeString() );
+            return new BSNullCheckPropertyExpression( SourcePosition.Unknown, e, s.DeserializeString(context) );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSNullCheckPropertyExpression expr = ( BSNullCheckPropertyExpression )e;
 
             ret.SerializeOpCode( BSCompiledExpressionCode.NullCheckPropertyAccessExpr );
-            ret.SerializeExpression( expr.Left );
-            ret.SerializeString( expr.Right );
+            ret.SerializeExpression( expr.Left , context);
+            ret.SerializeString( expr.Right, context );
         }
 
         #endregion

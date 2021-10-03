@@ -21,22 +21,22 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSPropertyExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
             bool hasVal = s.DeserializeBool();
             BSExpression expr = null;
 
             if ( hasVal )
             {
-                expr = s.DeserializeExpression();
+                expr = s.DeserializeExpression(context);
             }
 
-            string r = s.DeserializeString();
+            string r = s.DeserializeString(context);
 
             return new BSPropertyExpression( SourcePosition.Unknown, expr, r );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSPropertyExpression expr = ( BSPropertyExpression )e;
 
@@ -45,10 +45,10 @@ namespace BadScript.Utility.Serialization.Serializers
 
             if ( expr.Left != null )
             {
-                ret.SerializeExpression( expr.Left );
+                ret.SerializeExpression( expr.Left, context );
             }
 
-            ret.SerializeString( expr.Right );
+            ret.SerializeString( expr.Right, context );
         }
 
         #endregion

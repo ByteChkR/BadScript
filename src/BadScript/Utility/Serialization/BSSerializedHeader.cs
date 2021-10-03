@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace BadScript.Utility.Serialization
@@ -17,6 +18,7 @@ namespace BadScript.Utility.Serialization
         public byte[] Magic;
         public BSSerializerHints SerializerHints;
         public string BSSerializerFormatVersion;
+        public List <string> StringTable;
 
         public static BSSerializedHeader CreateEmpty( BSSerializerHints hints )
         {
@@ -25,7 +27,8 @@ namespace BadScript.Utility.Serialization
                        Magic = new byte[] { 69, 42, 69, 42 },
                        BSSerializerFormatVersion =
                            $"v{Assembly.GetExecutingAssembly().GetName().Version}",
-                       SerializerHints = hints
+                       SerializerHints = hints,
+                       StringTable = new List < string >()
                    };
         }
 

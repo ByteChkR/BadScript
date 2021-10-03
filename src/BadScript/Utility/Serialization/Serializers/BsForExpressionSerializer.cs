@@ -21,24 +21,24 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSForExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            BSExpression cDef = s.DeserializeExpression();
-            BSExpression cCond = s.DeserializeExpression();
-            BSExpression cInc = s.DeserializeExpression();
-            BSExpression[] block = s.DeserializeBlock();
+            BSExpression cDef = s.DeserializeExpression(context);
+            BSExpression cCond = s.DeserializeExpression(context);
+            BSExpression cInc = s.DeserializeExpression(context);
+            BSExpression[] block = s.DeserializeBlock(context);
 
             return new BSForExpression( SourcePosition.Unknown, cDef, cCond, cInc, block );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSForExpression expr = ( BSForExpression )e;
             ret.SerializeOpCode( BSCompiledExpressionCode.ForExpr );
-            ret.SerializeExpression( expr.CounterDefinition );
-            ret.SerializeExpression( expr.CounterCondition );
-            ret.SerializeExpression( expr.CounterIncrement );
-            ret.SerializeBlock( expr.Block );
+            ret.SerializeExpression( expr.CounterDefinition , context);
+            ret.SerializeExpression( expr.CounterCondition, context);
+            ret.SerializeExpression( expr.CounterIncrement, context);
+            ret.SerializeBlock( expr.Block, context);
         }
 
         #endregion

@@ -7,8 +7,8 @@ namespace BadScript.Utility.Serialization
     public enum BSSerializerHints : byte
     {
 
-        Default,
-        Compressed = 1
+        Default = 0,
+        NoStringCache = 1
 
     }
 

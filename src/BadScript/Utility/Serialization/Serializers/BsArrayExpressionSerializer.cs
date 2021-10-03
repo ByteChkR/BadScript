@@ -21,17 +21,17 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSArrayExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            return new BSArrayExpression( SourcePosition.Unknown, s.DeserializeBlock() );
+            return new BSArrayExpression( SourcePosition.Unknown, s.DeserializeBlock(context) );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSArrayExpression expr = ( BSArrayExpression )e;
 
             ret.SerializeOpCode( BSCompiledExpressionCode.ArrayExpr );
-            ret.SerializeBlock( expr.InitExpressions );
+            ret.SerializeBlock( expr.InitExpressions , context);
         }
 
         #endregion

@@ -21,24 +21,24 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSEnumerableFunctionDefinitionExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            string n = s.DeserializeString();
+            string n = s.DeserializeString(context);
             bool g = s.DeserializeBool();
-            BSFunctionParameter[] p = s.DeserializeFunctionParameters();
-            BSExpression[] b = s.DeserializeBlock();
+            BSFunctionParameter[] p = s.DeserializeFunctionParameters(context);
+            BSExpression[] b = s.DeserializeBlock(context);
 
             return new BSEnumerableFunctionDefinitionExpression( SourcePosition.Unknown, n, g, p, b );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSEnumerableFunctionDefinitionExpression expr = ( BSEnumerableFunctionDefinitionExpression )e;
             ret.SerializeOpCode( BSCompiledExpressionCode.FunctionEnumerableDefinitionExpr );
-            ret.SerializeString( expr.Name );
+            ret.SerializeString( expr.Name,context );
             ret.SerializeBool( expr.Global );
-            ret.SerializeFunctionParameters( expr.ArgNames );
-            ret.SerializeBlock( expr.Block );
+            ret.SerializeFunctionParameters( expr.ArgNames, context );
+            ret.SerializeBlock( expr.Block, context);
         }
 
         #endregion

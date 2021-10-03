@@ -21,19 +21,19 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSAssignExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            BSExpression l = s.DeserializeExpression();
+            BSExpression l = s.DeserializeExpression(context);
 
-            return new BSAssignExpression( SourcePosition.Unknown, l, s.DeserializeExpression() );
+            return new BSAssignExpression( SourcePosition.Unknown, l, s.DeserializeExpression(context) );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSAssignExpression expr = ( BSAssignExpression )e;
             ret.SerializeOpCode( BSCompiledExpressionCode.AssignExpr );
-            ret.SerializeExpression( expr.Left );
-            ret.SerializeExpression( expr.Right );
+            ret.SerializeExpression( expr.Left,context );
+            ret.SerializeExpression( expr.Right ,context);
         }
 
         #endregion

@@ -14,9 +14,9 @@ namespace BadScript.Utility.Serialization.Serializers
 
         public abstract bool CanSerialize( BSExpression expr );
 
-        public abstract BSExpression Deserialize( BSCompiledExpressionCode code, Stream s );
+        public abstract BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context );
 
-        public abstract void Serialize( BSExpression expr, Stream s );
+        public abstract void Serialize( BSExpression expr, Stream s, BSSerializerContext context);
 
         #endregion
 

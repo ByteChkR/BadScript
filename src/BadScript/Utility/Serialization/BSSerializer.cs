@@ -52,26 +52,62 @@ namespace BadScript.Utility.Serialization
 
         public static BSExpression[] Deserialize( Stream s )
         {
-            BSSerializedHeader header = ReadHeader( s );
+            BSSerializedHeader header = ReadHeader( s);
 
-            if ( ( header.SerializerHints & BSSerializerHints.Compressed ) != 0 )
+            if ( ( header.SerializerHints & BSSerializerHints.NoStringCache ) == 0 )
             {
-                s = new GZipStream( s, CompressionMode.Decompress );
-            }
+                long codeSectionEnd = s.DeserializeInt32();
+                long codeStart = s.Position;
 
-            return s.DeserializeBlock();
+                s.Position = codeSectionEnd;
+                
+                BSSerializerContext context = BSSerializerContext.Deserialize(s);
+                if (s.Length != s.Position)
+                {
+                    throw new BSSerializerException("Context is not located at the end of the file. Invalid File!");
+                }
+
+                s.Position = codeStart;
+
+                BSExpression[]exprs =  s.DeserializeBlock(context);
+
+                if ( codeSectionEnd != s.Position )
+                {
+                    throw new BSSerializerException( "Code section is not directly followed by Context. Invalid File!" );
+                }
+                return exprs;
+            }
+            
+            return s.DeserializeBlock(null);
         }
+
 
         public static void Serialize( BSExpression[] src, Stream s, BSSerializerHints hints )
         {
             WriteHeader( s, hints );
 
-            if ( ( hints & BSSerializerHints.Compressed ) != 0 )
+            BSSerializerContext context = null;
+            if ( ( hints & BSSerializerHints.NoStringCache ) == 0 )
             {
-                s = new GZipStream( s, CompressionLevel.Optimal );
+                context = new BSSerializerContext();
             }
 
-            s.SerializeBlock( src );
+
+            long codeSectionStart = s.Position;
+            if((hints & BSSerializerHints.NoStringCache) == 0)
+            {
+                s.SerializeInt32( 0 ); //Reserve Position for codeSectionEnd
+            }
+            s.SerializeBlock( src, context);
+            
+            if((hints & BSSerializerHints.NoStringCache) == 0)
+            {
+                long codeSectionEnd = s.Position;
+                s.Position = codeSectionStart;
+                s.SerializeInt32((int)codeSectionEnd);
+                s.Position = codeSectionEnd;
+                context?.Serialize(s);
+            }
         }
 
         public static void Serialize( BSExpression[] src, Stream s )
@@ -79,14 +115,14 @@ namespace BadScript.Utility.Serialization
             Serialize( src, s, BSSerializerHints.Default );
         }
 
-        internal static BSExpression[] DeserializeBlock( this Stream s )
+        internal static BSExpression[] DeserializeBlock( this Stream s, BSSerializerContext context)
         {
             int blockSize = s.DeserializeInt32();
             List < BSExpression > exprs = new List < BSExpression >();
 
             for ( int i = 0; i < blockSize; i++ )
             {
-                exprs.Add( DeserializeExpression( s ) );
+                exprs.Add( DeserializeExpression( s , context) );
             }
 
             return exprs.ToArray();
@@ -108,7 +144,7 @@ namespace BadScript.Utility.Serialization
             return ( decimal )BitConverter.ToDouble( b, 0 );
         }
 
-        internal static BSExpression DeserializeExpression( this Stream s )
+        internal static BSExpression DeserializeExpression( this Stream s, BSSerializerContext context)
         {
             BSCompiledExpressionCode code = s.DeserializeOpCode();
             BSExpressionSerializer c = s_Compilers.FirstOrDefault( x => x.CanDeserialize( code ) );
@@ -118,10 +154,10 @@ namespace BadScript.Utility.Serialization
                 throw new BSSerializerException( $"Can not find serializer for Expression Code '{code}'" );
             }
 
-            return c.Deserialize( code, s );
+            return c.Deserialize( code, s, context);
         }
 
-        internal static BSFunctionParameter[] DeserializeFunctionParameters( this Stream s )
+        internal static BSFunctionParameter[] DeserializeFunctionParameters( this Stream s, BSSerializerContext context)
         {
             int c = s.DeserializeInt32();
             BSFunctionParameter[] ret = new BSFunctionParameter[c];
@@ -129,7 +165,7 @@ namespace BadScript.Utility.Serialization
             for ( int i = 0; i < c; i++ )
             {
                 ret[i] = new BSFunctionParameter(
-                                                 s.DeserializeString(),
+                                                 s.DeserializeString(context),
                                                  s.DeserializeBool(),
                                                  s.DeserializeBool(),
                                                  s.DeserializeBool()
@@ -147,7 +183,7 @@ namespace BadScript.Utility.Serialization
             return BitConverter.ToInt32( cBuf, 0 );
         }
 
-        internal static Dictionary < BSExpression, BSExpression[] > DeserializeMap( this Stream s )
+        internal static Dictionary < BSExpression, BSExpression[] > DeserializeMap( this Stream s, BSSerializerContext context)
         {
             int c = s.DeserializeInt32();
 
@@ -155,14 +191,14 @@ namespace BadScript.Utility.Serialization
 
             for ( int i = 0; i < c; i++ )
             {
-                BSExpression k = s.DeserializeExpression();
-                map[k] = s.DeserializeBlock();
+                BSExpression k = s.DeserializeExpression(context);
+                map[k] = s.DeserializeBlock(context);
             }
 
             return map;
         }
 
-        internal static Dictionary < string, BSExpression > DeserializeNameMap( this Stream s )
+        internal static Dictionary < string, BSExpression > DeserializeNameMap( this Stream s, BSSerializerContext context)
         {
             int c = s.DeserializeInt32();
 
@@ -170,8 +206,8 @@ namespace BadScript.Utility.Serialization
 
             for ( int i = 0; i < c; i++ )
             {
-                string k = s.DeserializeString();
-                map[k] = s.DeserializeExpression();
+                string k = s.DeserializeString(context);
+                map[k] = s.DeserializeExpression(context);
             }
 
             return map;
@@ -187,8 +223,12 @@ namespace BadScript.Utility.Serialization
             return ( BSSerializerHints )s.ReadByte();
         }
 
-        internal static string DeserializeString( this Stream s )
+        internal static string DeserializeString( this Stream s, BSSerializerContext context)
         {
+            if (context != null)
+            {
+                return context.ResolveCached( s.DeserializeInt32() );
+            }
             int c = s.DeserializeInt32();
             byte[] sBuf = new byte[c];
             s.Read( sBuf, 0, sBuf.Length );
@@ -196,26 +236,26 @@ namespace BadScript.Utility.Serialization
             return Encoding.UTF8.GetString( sBuf );
         }
 
-        internal static string[] DeserializeStringArray( this Stream s )
+        internal static string[] DeserializeStringArray( this Stream s, BSSerializerContext context)
         {
             int count = s.DeserializeInt32();
             string[] arr = new string[count];
 
             for ( int i = 0; i < count; i++ )
             {
-                arr[i] = s.DeserializeString();
+                arr[i] = s.DeserializeString(context);
             }
 
             return arr;
         }
 
-        internal static void SerializeBlock( this Stream l, BSExpression[] src )
+        internal static void SerializeBlock( this Stream l, BSExpression[] src, BSSerializerContext context)
         {
             l.SerializeInt32( src.Length );
 
             foreach ( BSExpression bsExpression in src )
             {
-                l.SerializeExpression( bsExpression );
+                l.SerializeExpression( bsExpression, context);
             }
         }
 
@@ -230,7 +270,7 @@ namespace BadScript.Utility.Serialization
             l.Write( b, 0, b.Length );
         }
 
-        internal static void SerializeExpression( this Stream l, BSExpression expr )
+        internal static void SerializeExpression( this Stream l, BSExpression expr, BSSerializerContext context)
         {
             BSExpressionSerializer c = s_Compilers.FirstOrDefault( x => x.CanSerialize( expr ) );
 
@@ -239,16 +279,16 @@ namespace BadScript.Utility.Serialization
                 throw new BSSerializerException( $"Can not find serializer for Expression '{expr.GetType()}'" );
             }
 
-            c.Serialize( expr, l );
+            c.Serialize( expr, l, context );
         }
 
-        internal static void SerializeFunctionParameters( this Stream l, BSFunctionParameter[] args )
+        internal static void SerializeFunctionParameters( this Stream l, BSFunctionParameter[] args, BSSerializerContext context)
         {
             l.SerializeInt32( args.Length );
 
             foreach ( BSFunctionParameter bsFunctionParameter in args )
             {
-                l.SerializeString( bsFunctionParameter.Name );
+                l.SerializeString( bsFunctionParameter.Name, context );
                 l.SerializeBool( bsFunctionParameter.NotNull );
                 l.SerializeBool( bsFunctionParameter.IsOptional );
                 l.SerializeBool( bsFunctionParameter.IsArgArray );
@@ -261,25 +301,25 @@ namespace BadScript.Utility.Serialization
             l.Write( b, 0, b.Length );
         }
 
-        internal static void SerializeMap( this Stream l, Dictionary < BSExpression, BSExpression[] > map )
+        internal static void SerializeMap( this Stream l, Dictionary < BSExpression, BSExpression[] > map, BSSerializerContext context)
         {
             l.SerializeInt32( map.Count );
 
             foreach ( KeyValuePair < BSExpression, BSExpression[] > keyValuePair in map )
             {
-                l.SerializeExpression( keyValuePair.Key );
-                l.SerializeBlock( keyValuePair.Value );
+                l.SerializeExpression( keyValuePair.Key, context);
+                l.SerializeBlock( keyValuePair.Value, context);
             }
         }
 
-        internal static void SerializeNameMap( this Stream l, Dictionary < string, BSExpression > map )
+        internal static void SerializeNameMap( this Stream l, Dictionary < string, BSExpression > map, BSSerializerContext context)
         {
             l.SerializeInt32( map.Count );
 
             foreach ( KeyValuePair < string, BSExpression > keyValuePair in map )
             {
-                l.SerializeString( keyValuePair.Key );
-                l.SerializeExpression( keyValuePair.Value );
+                l.SerializeString( keyValuePair.Key, context);
+                l.SerializeExpression( keyValuePair.Value, context);
             }
         }
 
@@ -293,21 +333,28 @@ namespace BadScript.Utility.Serialization
             l.Write( new[] { ( byte )hint }, 0, 1 );
         }
 
-        internal static void SerializeString( this Stream l, string str )
+        internal static void SerializeString( this Stream l, string str, BSSerializerContext context)
         {
+            if ( context != null )
+            {
+                l.SerializeInt32( context.AddCached( str ) );
+
+                return;
+            }
+
             byte[] b = Encoding.UTF8.GetBytes( str );
             byte[] bl = BitConverter.GetBytes( b.Length );
             l.Write( bl, 0, bl.Length );
             l.Write( b, 0, b.Length );
         }
 
-        internal static void SerializeStringArray( this Stream s, string[] arr )
+        internal static void SerializeStringArray( this Stream s, string[] arr, BSSerializerContext context)
         {
             s.SerializeInt32( arr.Length );
 
             foreach ( string s1 in arr )
             {
-                s.SerializeString( s1 );
+                s.SerializeString( s1, context);
             }
         }
 
@@ -315,14 +362,14 @@ namespace BadScript.Utility.Serialization
 
         #region Private
 
-        private static BSSerializedHeader ReadHeader( Stream s )
+        private static BSSerializedHeader ReadHeader( Stream s)
         {
             BSSerializedHeader header = new BSSerializedHeader();
             header.Magic = new byte[4];
             s.Read( header.Magic, 0, 4 );
 
             header.SerializerHints = s.DeserializeSHint();
-            header.BSSerializerFormatVersion = s.DeserializeString();
+            header.BSSerializerFormatVersion = s.DeserializeString(null);
 
             if ( !header.IsValidHeader )
             {
@@ -338,7 +385,7 @@ namespace BadScript.Utility.Serialization
 
             s.Write( header.Magic, 0, header.Magic.Length );
             s.SerializeSHint( header.SerializerHints );
-            s.SerializeString( header.BSSerializerFormatVersion );
+            s.SerializeString( header.BSSerializerFormatVersion, null );
         }
 
         #endregion

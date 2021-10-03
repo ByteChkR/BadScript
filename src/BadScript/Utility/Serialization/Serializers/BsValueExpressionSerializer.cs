@@ -25,7 +25,7 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSValueExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
             if ( code == BSCompiledExpressionCode.ValueNull )
             {
@@ -37,7 +37,7 @@ namespace BadScript.Utility.Serialization.Serializers
             }
             else if ( code == BSCompiledExpressionCode.ValueString )
             {
-                return new BSValueExpression( SourcePosition.Unknown, s.DeserializeString() );
+                return new BSValueExpression( SourcePosition.Unknown, s.DeserializeString(context) );
             }
             else if ( code == BSCompiledExpressionCode.ValueBoolean )
             {
@@ -50,14 +50,14 @@ namespace BadScript.Utility.Serialization.Serializers
                                                  );
         }
 
-        public override void Serialize( BSExpression e, Stream b )
+        public override void Serialize( BSExpression e, Stream b, BSSerializerContext context)
         {
             BSValueExpression expr = ( BSValueExpression )e;
 
             if ( expr.SourceValue is string s )
             {
                 b.SerializeOpCode( BSCompiledExpressionCode.ValueString );
-                b.SerializeString( s );
+                b.SerializeString( s, context );
             }
             else if ( expr.SourceValue is decimal d )
             {

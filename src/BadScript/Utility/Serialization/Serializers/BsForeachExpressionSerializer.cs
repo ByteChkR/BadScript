@@ -21,23 +21,23 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSForeachExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
             int vCount = s.DeserializeInt32();
             string[] vars = new string[vCount];
 
             for ( int i = 0; i < vCount; i++ )
             {
-                vars[i] = s.DeserializeString();
+                vars[i] = s.DeserializeString(context);
             }
 
-            BSExpression enumerator = s.DeserializeExpression();
-            BSExpression[] block = s.DeserializeBlock();
+            BSExpression enumerator = s.DeserializeExpression(context);
+            BSExpression[] block = s.DeserializeBlock(context);
 
             return new BSForeachExpression( SourcePosition.Unknown, vars, enumerator, block );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSForeachExpression expr = ( BSForeachExpression )e;
             ret.SerializeOpCode( BSCompiledExpressionCode.ForEachExpr );
@@ -45,11 +45,11 @@ namespace BadScript.Utility.Serialization.Serializers
 
             foreach ( string exprVar in expr.Vars )
             {
-                ret.SerializeString( exprVar );
+                ret.SerializeString( exprVar, context);
             }
 
-            ret.SerializeExpression( expr.Enumerator );
-            ret.SerializeBlock( expr.Block );
+            ret.SerializeExpression( expr.Enumerator, context);
+            ret.SerializeBlock( expr.Block, context);
         }
 
         #endregion

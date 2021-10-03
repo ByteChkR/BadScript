@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 using BadScript.Common.Expressions;
@@ -22,20 +23,20 @@ namespace BadScript.Utility.Serialization.Serializers
             return expr is BSIfExpression;
         }
 
-        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s )
+        public override BSExpression Deserialize( BSCompiledExpressionCode code, Stream s, BSSerializerContext context)
         {
-            Dictionary < BSExpression, BSExpression[] > map = s.DeserializeMap();
-            BSExpression[] elseBlock = s.DeserializeBlock();
+            Dictionary < BSExpression, BSExpression[] > map = s.DeserializeMap(context);
+            BSExpression[] elseBlock = s.DeserializeBlock(context);
 
             return new BSIfExpression( SourcePosition.Unknown, map, elseBlock );
         }
 
-        public override void Serialize( BSExpression e, Stream ret )
+        public override void Serialize( BSExpression e, Stream ret, BSSerializerContext context)
         {
             BSIfExpression expr = ( BSIfExpression )e;
             ret.SerializeOpCode( BSCompiledExpressionCode.IfExpr );
-            ret.SerializeMap( expr.ConditionMap );
-            ret.SerializeBlock( expr.ElseBlock ?? new BSExpression[0] );
+            ret.SerializeMap( expr.ConditionMap , context);
+            ret.SerializeBlock( expr.ElseBlock ?? Array.Empty < BSExpression >(), context );
         }
 
         #endregion
