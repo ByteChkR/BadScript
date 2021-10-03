@@ -13,4 +13,4 @@ Returns a BS Object representing the Json Object
 Returns the Json String representation of the specified BSObject
 
 
-[List of All Interfaces](./Interfaces.md)
+[List of All Interfaces](./../Interfaces.md)

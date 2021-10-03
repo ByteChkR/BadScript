@@ -54,4 +54,4 @@ Removes an active hook from the target
 Removes all hooks from the target
 
 
-[List of All Interfaces](./Interfaces.md)
+[List of All Interfaces](./../Interfaces.md)

@@ -73,4 +73,4 @@ returns true if the string is digits only
 returns the formatted string using C# `string.format()`
 
 
-[List of All Interfaces](./Interfaces.md)
+[List of All Interfaces](./../Interfaces.md)

@@ -64,4 +64,4 @@ If Alpha is not specified the color will be fully opaque
 Enum that defines the possible flips a bitmap can do.
 
 
-[List of All Interfaces](./Interfaces.md)
+[List of All Interfaces](./../Interfaces.md)

@@ -19,4 +19,4 @@ Creates a C# Type Instance with the specified name and a constructor with the fi
 Returns a C# Type object containing all static members
 
 
-[List of All Interfaces](./Interfaces.md)
+[List of All Interfaces](./../Interfaces.md)

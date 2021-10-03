@@ -35,4 +35,4 @@ Returns the current foreground color
 Returns the current background color
 
 
-[List of All Interfaces](./Interfaces.md)
+[List of All Interfaces](./../Interfaces.md)

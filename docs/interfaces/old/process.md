@@ -27,4 +27,4 @@ Halts the Current Thread until the process has exited.
 ### start(file, args)
 Starts the specified Process with the Specified arguments
 
-[List of All Interfaces](./Interfaces.md)
+[List of All Interfaces](./../Interfaces.md)
