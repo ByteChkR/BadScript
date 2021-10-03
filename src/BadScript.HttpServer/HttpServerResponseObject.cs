@@ -2,11 +2,11 @@
 using System.Text;
 using System.Threading.Tasks;
 
-using BadScript.Common.Exceptions;
-using BadScript.Common.Expressions;
-using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
-using BadScript.Common.Types.References;
+using BadScript.Exceptions;
+using BadScript.Parser.Expressions;
+using BadScript.Types;
+using BadScript.Types.Implementations;
+using BadScript.Types.References;
 
 using Ceen;
 

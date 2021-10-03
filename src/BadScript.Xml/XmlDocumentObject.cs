@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using System.Xml;
 
-using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
+using BadScript.Types;
+using BadScript.Types.Implementations;
 
 namespace BadScript.Xml
 {

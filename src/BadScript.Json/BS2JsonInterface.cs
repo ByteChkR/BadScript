@@ -1,6 +1,6 @@
-﻿using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
-using BadScript.Interfaces;
+﻿using BadScript.Interfaces;
+using BadScript.Types;
+using BadScript.Types.Implementations;
 
 namespace BadScript.Json
 {

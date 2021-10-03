@@ -5,27 +5,25 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-using BadScript.Common;
-using BadScript.Common.Exceptions;
-using BadScript.Common.Expressions;
-using BadScript.Common.Namespaces;
-using BadScript.Common.Runtime;
-using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
-using BadScript.Common.Types.References;
+using BadScript.Exceptions;
 using BadScript.Interfaces;
-using BadScript.Settings;
-using BadScript.Utility;
-using BadScript.Utility.Optimization;
-using BadScript.Utility.Serialization;
-using BadScript.Utility.Validators;
+using BadScript.Namespaces;
+using BadScript.Optimization;
+using BadScript.Parser;
+using BadScript.Parser.Expressions;
+using BadScript.Scopes;
+using BadScript.Serialization;
+using BadScript.Types;
+using BadScript.Types.Implementations;
+using BadScript.Types.References;
+using BadScript.Validators;
 
 namespace BadScript
 {
 
     /// <summary>
-    /// BSEngine is the root object of every BS Runtime Instance.
-    /// BSEngine ties together the Parsing and the Execution of Scripts into a single class.
+    ///     BSEngine is the root object of every BS Runtime Instance.
+    ///     BSEngine ties together the Parsing and the Execution of Scripts into a single class.
     /// </summary>
     public class BSEngine
     {
@@ -39,30 +37,32 @@ namespace BadScript
         private readonly List < ABSScriptInterface > m_Interfaces;
 
         /// <summary>
-        /// The namespace Root for all namespaces defined in scripts.
-        /// When a type gets defined outside a namespace, they are saved in this namespace.
+        ///     The namespace Root for all namespaces defined in scripts.
+        ///     When a type gets defined outside a namespace, they are saved in this namespace.
         /// </summary>
         public BSNamespaceRoot NamespaceRoot { get; }
 
         /// <summary>
-        /// Contains settings for the BSParser used when parsing scripts
+        ///     Contains settings for the BSParser used when parsing scripts
         /// </summary>
         public BSParserSettings ParserSettings { get; }
 
         /// <summary>
-        /// Contains the names of all available ABSScriptInterface instances
+        ///     Contains the names of all available ABSScriptInterface instances
         /// </summary>
         public string[] InterfaceNames => m_Interfaces.Select( x => x.Name ).ToArray();
 
         #region Public
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="parserSettings">Settings for the BSParser instance</param>
         /// <param name="startObjects">Static data that is readonly and is available at all Scope Levels</param>
         /// <param name="interfaces">Available Interfaces</param>
-        /// <param name="gTable">Optional Global Table Definition. Can be used to add default elements before the BSEngine gets created.</param>
+        /// <param name="gTable">
+        ///     Optional Global Table Definition. Can be used to add default elements before the BSEngine gets
+        ///     created.
+        /// </param>
         public BSEngine(
             BSParserSettings parserSettings,
             Dictionary < string, ABSObject > startObjects,
@@ -110,7 +110,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Creates an Executable BSExpression Tree from the BSBinary Format
+        ///     Creates an Executable BSExpression Tree from the BSBinary Format
         /// </summary>
         /// <param name="bin">Binary Data</param>
         /// <returns>Expression Tree</returns>
@@ -124,7 +124,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Creates an Executable BSExpression Tree from a serialized file
+        ///     Creates an Executable BSExpression Tree from a serialized file
         /// </summary>
         /// <param name="file">Path to File</param>
         /// <returns>Expression Tree</returns>
@@ -135,7 +135,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Adds an Interface to the list of available interfaces
+        ///     Adds an Interface to the list of available interfaces
         /// </summary>
         /// <param name="i"></param>
         public void AddInterface( ABSScriptInterface i )
@@ -144,7 +144,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Returns the Global Table for this engine instance
+        ///     Returns the Global Table for this engine instance
         /// </summary>
         /// <returns></returns>
         public ABSTable GetGlobalTable()
@@ -158,7 +158,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a Binary
+        ///     Loads and Executes a Binary
         /// </summary>
         /// <param name="bin">Binary Data</param>
         /// <param name="scope">The Scope that the Execution will take place in</param>
@@ -172,7 +172,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a Binary
+        ///     Loads and Executes a Binary
         /// </summary>
         /// <param name="bin">Binary Data</param>
         /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
@@ -185,7 +185,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a Binary
+        ///     Loads and Executes a Binary
         /// </summary>
         /// <param name="bin">Binary Data</param>
         /// <param name="scope">The Scope that the Execution will take place in</param>
@@ -197,8 +197,9 @@ namespace BadScript
         {
             return LoadScript( ParseBinary( bin ), scope, args, isBenchmark );
         }
+
         /// <summary>
-        /// Loads and Executes a Binary
+        ///     Loads and Executes a Binary
         /// </summary>
         /// <param name="bin">Binary Data</param>
         /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
@@ -209,8 +210,9 @@ namespace BadScript
         {
             return LoadScript( ParseBinary( bin ), args, isBenchmark );
         }
+
         /// <summary>
-        /// Loads and Executes a Binary
+        ///     Loads and Executes a Binary
         /// </summary>
         /// <param name="bin">Binary Data</param>
         /// <param name="isBenchmark">Display Execution Time</param>
@@ -220,8 +222,9 @@ namespace BadScript
         {
             return LoadScript( ParseBinary( bin ), isBenchmark );
         }
+
         /// <summary>
-        /// Loads and Executes a File
+        ///     Loads and Executes a File
         /// </summary>
         /// <param name="path">File Path</param>
         /// <param name="scope">The Scope that the Execution will take place in</param>
@@ -240,7 +243,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a File
+        ///     Loads and Executes a File
         /// </summary>
         /// <param name="path">File Path</param>
         /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
@@ -258,7 +261,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a File
+        ///     Loads and Executes a File
         /// </summary>
         /// <param name="path">File Path</param>
         /// <param name="scope">The Scope that the Execution will take place in</param>
@@ -277,7 +280,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a File
+        ///     Loads and Executes a File
         /// </summary>
         /// <param name="path">File Path</param>
         /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
@@ -295,7 +298,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a File
+        ///     Loads and Executes a File
         /// </summary>
         /// <param name="path">File Path</param>
         /// <param name="isBenchmark">Display Execution Time</param>
@@ -312,7 +315,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads an interface and returns the loaded table.
+        ///     Loads an interface and returns the loaded table.
         /// </summary>
         /// <param name="key">Interface Key</param>
         /// <param name="t">Optional Table Instance that the interface is loaded in</param>
@@ -343,7 +346,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes an BSExpression Tree
+        ///     Loads and Executes an BSExpression Tree
         /// </summary>
         /// <param name="exprs">The Expressions to Execute</param>
         /// <param name="isBenchmark">Display Execution Time</param>
@@ -355,7 +358,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes an BSExpression Tree
+        ///     Loads and Executes an BSExpression Tree
         /// </summary>
         /// <param name="exprs">The Expressions to Execute</param>
         /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
@@ -372,7 +375,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes an BSExpression Tree
+        ///     Loads and Executes an BSExpression Tree
         /// </summary>
         /// <param name="exprs">The Expressions to Execute</param>
         /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
@@ -385,7 +388,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes an BSExpression Tree
+        ///     Loads and Executes an BSExpression Tree
         /// </summary>
         /// <param name="exprs">The Expressions to Execute</param>
         /// <param name="scope">The Scope that the Execution will take place in</param>
@@ -404,7 +407,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes an BSExpression Tree
+        ///     Loads and Executes an BSExpression Tree
         /// </summary>
         /// <param name="exprs">The Expressions to Execute</param>
         /// <param name="scope">The Scope that the Execution will take place in</param>
@@ -453,7 +456,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a script from source
+        ///     Loads and Executes a script from source
         /// </summary>
         /// <param name="src">The Source to Execute</param>
         /// <param name="scope">The Scope that the Execution will take place in</param>
@@ -467,7 +470,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a script from source
+        ///     Loads and Executes a script from source
         /// </summary>
         /// <param name="src">The Source to Execute</param>
         /// <param name="scope">The Scope that the Execution will take place in</param>
@@ -481,7 +484,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a script from source
+        ///     Loads and Executes a script from source
         /// </summary>
         /// <param name="src">The Source to Execute</param>
         /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
@@ -494,7 +497,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a script from source
+        ///     Loads and Executes a script from source
         /// </summary>
         /// <param name="src">The Source to Execute</param>
         /// <param name="args">Startup Arguments(available as 'args' inside the script)</param>
@@ -507,7 +510,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Loads and Executes a script from source
+        ///     Loads and Executes a script from source
         /// </summary>
         /// <param name="src">The Source to Execute</param>
         /// <param name="isBenchmark">Display Execution Time</param>
@@ -519,7 +522,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Parses a BS Expression Tree from file
+        ///     Parses a BS Expression Tree from file
         /// </summary>
         /// <param name="path">File path</param>
         /// <returns></returns>
@@ -530,7 +533,7 @@ namespace BadScript
         }
 
         /// <summary>
-        /// Parses a BS Expression Tree from source
+        ///     Parses a BS Expression Tree from source
         /// </summary>
         /// <param name="script">The source to parse</param>
         /// <returns></returns>

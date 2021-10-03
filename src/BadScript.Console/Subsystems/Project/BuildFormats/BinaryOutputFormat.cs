@@ -1,8 +1,8 @@
 ﻿using System.IO;
 
-using BadScript.Common;
 using BadScript.Console.Subsystems.Project.DataObjects;
-using BadScript.Utility.Serialization;
+using BadScript.Parser;
+using BadScript.Serialization;
 
 namespace BadScript.Console.Subsystems.Project.BuildFormats
 {

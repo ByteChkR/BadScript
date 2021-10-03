@@ -1,7 +1,7 @@
-﻿using BadScript.Common;
-using BadScript.Common.Expressions;
-using BadScript.Common.Expressions.Implementations.Block;
-using BadScript.Common.Types;
+﻿using BadScript.Parser;
+using BadScript.Parser.Expressions;
+using BadScript.Parser.Expressions.Implementations.Block;
+using BadScript.Types;
 
 namespace BadScript.Console.Preprocessor.Directives
 {

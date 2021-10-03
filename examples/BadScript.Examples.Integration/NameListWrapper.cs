@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-using BadScript.Common.Expressions.Implementations.Block.ForEach;
-using BadScript.Common.Types.Implementations;
+using BadScript.Parser.Expressions.Implementations.Block.ForEach;
+using BadScript.Types.Implementations;
 
 namespace BadScript.Examples.Integration
 {

@@ -2,7 +2,6 @@
 using System.Linq;
 
 using BadScript.ConsoleUtils;
-using BadScript.Settings;
 
 namespace BadScript.Examples.SimpleConsole
 {
@@ -17,7 +16,7 @@ namespace BadScript.Examples.SimpleConsole
             Console.WriteLine( "Creating Script Engine" );
             BSEngineSettings settings = BSEngineSettings.MakeDefault();
 
-            settings.Interfaces.Add( new ConsoleApi() ); //Add the Console API so we can write things
+            settings.Interfaces.Add( new BSConsoleInterface() ); //Add the Console API so we can write things
 
             return settings.Build();
         }

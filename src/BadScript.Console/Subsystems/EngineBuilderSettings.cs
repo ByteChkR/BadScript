@@ -8,14 +8,14 @@ using BadScript.Core;
 using BadScript.Http;
 using BadScript.HttpServer;
 using BadScript.Imaging;
+using BadScript.Interfaces.Versioning;
 using BadScript.IO;
 using BadScript.Json;
 using BadScript.Math;
+using BadScript.Parser;
 using BadScript.Process;
-using BadScript.Settings;
+using BadScript.Reflection;
 using BadScript.StringUtils;
-using BadScript.Utils;
-using BadScript.Utils.Reflection;
 using BadScript.Xml;
 using BadScript.Zip;
 
@@ -51,29 +51,29 @@ namespace BadScript.Console.Subsystems
             BSEngineSettings es =
                 BSEngineSettings.MakeDefault( new BSParserSettings { AllowOptimization = AllowOptimizations } );
 
-            es.Interfaces.Add( new BadScriptCoreApi() );
-            es.Interfaces.Add( new ConsoleApi() );
-            es.Interfaces.Add( new ConsoleColorApi() );
+            es.Interfaces.Add( new BSCoreInterface() );
+            es.Interfaces.Add( new BSConsoleInterface() );
+            es.Interfaces.Add( new BSConsoleColorInterface() );
             es.Interfaces.Add( new BS2JsonInterface() );
             es.Interfaces.Add( new Json2BSInterface() );
             es.Interfaces.Add( new BSFileSystemInterface() );
             es.Interfaces.Add( new BSFileSystemPathInterface( AppDomain.CurrentDomain.BaseDirectory ) );
-            es.Interfaces.Add( new BSMathApi() );
-            es.Interfaces.Add( new HttpApi() );
-            es.Interfaces.Add( new HttpServerApi() );
-            es.Interfaces.Add( new ProcessApi() );
-            es.Interfaces.Add( new StringUtilsApi() );
-            es.Interfaces.Add( new ZipApi() );
-            es.Interfaces.Add( new ImagingApi() );
-            es.Interfaces.Add( new VersionToolsInterface() );
-            es.Interfaces.Add( new XmlInterface() );
+            es.Interfaces.Add( new BSMathInterface() );
+            es.Interfaces.Add( new BSHttpInterface() );
+            es.Interfaces.Add( new BSHttpServerInterface() );
+            es.Interfaces.Add( new BSProcessInterface() );
+            es.Interfaces.Add( new BSStringInterface() );
+            es.Interfaces.Add( new BSZipInterface() );
+            es.Interfaces.Add( new BSDrawingInterface() );
+            es.Interfaces.Add( new BSVersioningInterface() );
+            es.Interfaces.Add( new BSXmlInterface() );
             es.Interfaces.Add( BSReflectionInterface.Instance );
 
             string[] incDirs = IncludeDirectories.ToArray();
 
-            if ( Directory.Exists(EngineBuilderDirectories.Instance.IncludeDirectory ) )
+            if ( Directory.Exists( EngineBuilderDirectories.Instance.IncludeDirectory ) )
             {
-                es.IncludeDirectories.Add(EngineBuilderDirectories.Instance.IncludeDirectory );
+                es.IncludeDirectories.Add( EngineBuilderDirectories.Instance.IncludeDirectory );
             }
 
             if ( incDirs.Length != 0 )

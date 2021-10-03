@@ -26,66 +26,66 @@ namespace BadScript.Console
         {
             if ( args.Length > 0 && args[0] == "project" )
             {
-                return Parser.Default.
-                              ParseArguments < ProjectCreatorSettings, ProjectBuilderSettings >(
-                                   args.Skip( 1 ).ToArray()
-                                  ).
-                              MapResult(
-                                        ( ProjectCreatorSettings o ) =>
-                                        {
-                                            if ( !o.NoLogo )
-                                            {
-                                                PrintHeaderInfo();
-                                            }
+                return CommandLine.Parser.Default.
+                                   ParseArguments < ProjectCreatorSettings, ProjectBuilderSettings >(
+                                        args.Skip( 1 ).ToArray()
+                                       ).
+                                   MapResult(
+                                             ( ProjectCreatorSettings o ) =>
+                                             {
+                                                 if ( !o.NoLogo )
+                                                 {
+                                                     PrintHeaderInfo();
+                                                 }
 
-                                            return ProjectCreator.Create( o );
-                                        },
-                                        ( ProjectBuilderSettings o ) =>
-                                        {
-                                            if ( !o.NoLogo )
-                                            {
-                                                PrintHeaderInfo();
-                                            }
+                                                 return ProjectCreator.Create( o );
+                                             },
+                                             ( ProjectBuilderSettings o ) =>
+                                             {
+                                                 if ( !o.NoLogo )
+                                                 {
+                                                     PrintHeaderInfo();
+                                                 }
 
-                                            return ProjectBuilder.Build( o );
-                                        },
-                                        HandleError
-                                       );
+                                                 return ProjectBuilder.Build( o );
+                                             },
+                                             HandleError
+                                            );
             }
 
-            return Parser.Default.
-                          ParseArguments < ScriptRunnerSettings, ScriptCompilerSettings,
-                              IncludeManagerSettings >( args ).
-                          MapResult(
-                                    ( ScriptRunnerSettings o ) =>
-                                    {
-                                        if ( !o.NoLogo )
-                                        {
-                                            PrintHeaderInfo();
-                                        }
+            return CommandLine.Parser.Default.
+                               ParseArguments < ScriptRunnerSettings, ScriptCompilerSettings,
+                                   IncludeManagerSettings >( args ).
+                               MapResult(
+                                         ( ScriptRunnerSettings o ) =>
+                                         {
+                                             if ( !o.NoLogo )
+                                             {
+                                                 PrintHeaderInfo();
+                                             }
 
-                                        return ScriptRunner.Run( o );
-                                    },
-                                    ( ScriptCompilerSettings o ) =>
-                                    {
-                                        if ( !o.NoLogo )
-                                        {
-                                            PrintHeaderInfo();
-                                        }
+                                             return ScriptRunner.Run( o );
+                                         },
+                                         ( ScriptCompilerSettings o ) =>
+                                         {
+                                             if ( !o.NoLogo )
+                                             {
+                                                 PrintHeaderInfo();
+                                             }
 
-                                        return ScriptCompiler.Compile( o );
-                                    },
-                                    ( IncludeManagerSettings o ) =>
-                                    {
-                                        if ( !o.NoLogo )
-                                        {
-                                            PrintHeaderInfo();
-                                        }
+                                             return ScriptCompiler.Compile( o );
+                                         },
+                                         ( IncludeManagerSettings o ) =>
+                                         {
+                                             if ( !o.NoLogo )
+                                             {
+                                                 PrintHeaderInfo();
+                                             }
 
-                                        return IncludeManager.Process( o );
-                                    },
-                                    HandleError
-                                   );
+                                             return IncludeManager.Process( o );
+                                         },
+                                         HandleError
+                                        );
         }
 
         private static void PrintHeaderInfo()

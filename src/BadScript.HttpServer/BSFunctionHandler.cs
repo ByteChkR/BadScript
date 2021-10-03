@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-using BadScript.Common.Types;
+using BadScript.Types;
 
 using Ceen;
 

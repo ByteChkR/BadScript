@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 
 namespace BadScript.Console.Subsystems.Project.DataObjects
 {
-    
 
     public class ProjectSettings : ReflectedObject
     {

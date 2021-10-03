@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using BadScript.Common;
-using BadScript.Common.Expressions;
-using BadScript.Common.Expressions.Implementations.Access;
-using BadScript.Common.Expressions.Implementations.Block;
-using BadScript.Common.Expressions.Implementations.Value;
+using BadScript.Parser;
+using BadScript.Parser.Expressions;
+using BadScript.Parser.Expressions.Implementations.Access;
+using BadScript.Parser.Expressions.Implementations.Block;
+using BadScript.Parser.Expressions.Implementations.Value;
 
 namespace BadScript.Console.Preprocessor.Directives
 {

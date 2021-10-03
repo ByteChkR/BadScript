@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-using BadScript.Common.Expressions;
 using BadScript.Console.Logging;
 using BadScript.Console.Preprocessor;
 using BadScript.Console.Subsystems.Project.BuildFormats;
@@ -150,24 +149,29 @@ namespace BadScript.Console.Subsystems.Project
 
             if ( t.OutputFormat != "none" )
             {
-                ConsoleWriter.LogLine("\tFinding Included Files...");
+                ConsoleWriter.LogLine( "\tFinding Included Files..." );
                 string source = GenerateIncludeFiles( s, t, referencedFiles );
 
-                ConsoleWriter.LogLine("\tRunning Preprocessor...");
+                ConsoleWriter.LogLine( "\tRunning Preprocessor..." );
 
                 string dirs = "";
 
                 if ( s.PreprocessorDirectives != null )
-                    dirs += s.ResolveValue(s.PreprocessorDirectives,t.Name);
+                {
+                    dirs += s.ResolveValue( s.PreprocessorDirectives, t.Name );
+                }
 
                 if ( t.PreprocessorDirectives != null )
-                    dirs += " " + s.ResolveValue(t.PreprocessorDirectives, t.Name);
+                {
+                    dirs += " " + s.ResolveValue( t.PreprocessorDirectives, t.Name );
+                }
+
                 string src = SourcePreprocessor.Preprocess(
                                                            source,
-                                                            dirs
+                                                           dirs
                                                           );
 
-                ConsoleWriter.LogLine("\tProcessing Source...");
+                ConsoleWriter.LogLine( "\tProcessing Source..." );
                 outFile = ProcessGeneratedFile( s, t, src );
             }
             else

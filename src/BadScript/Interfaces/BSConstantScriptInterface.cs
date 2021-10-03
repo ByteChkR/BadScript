@@ -1,6 +1,6 @@
 ﻿using System;
 
-using BadScript.Common.Types;
+using BadScript.Types;
 
 namespace BadScript.Interfaces
 {

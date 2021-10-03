@@ -1,26 +1,30 @@
 ﻿using System.IO;
 
-using BadScript.Console.Subsystems.Project;
-using BadScript.Utils;
+using BadScript.Settings;
 
 namespace BadScript.Console.Preprocessor
 {
 
-    public class SourcePreprocessorDirectories : SimpleSingleton <SourcePreprocessorDirectories>
+    public class SourcePreprocessorDirectories : SimpleSingleton < SourcePreprocessorDirectories >
     {
 
-        public string PreprocessorDirectory => Path.Combine(BSConsoleDirectories.Instance.DataDirectory, "preprocessor");
-        public string PreprocessorIncludeDirectory =>
-            Path.Combine(PreprocessorDirectory, "include");
-        public string PreprocessorDirectiveDirectory =>
-            Path.Combine(PreprocessorDirectory, "directives");
+        public string PreprocessorDirectory =>
+            Path.Combine( BSConsoleDirectories.Instance.DataDirectory, "preprocessor" );
+
+        public string PreprocessorIncludeDirectory => Path.Combine( PreprocessorDirectory, "include" );
+
+        public string PreprocessorDirectiveDirectory => Path.Combine( PreprocessorDirectory, "directives" );
+
+        #region Public
 
         public SourcePreprocessorDirectories()
         {
-            Directory.CreateDirectory(PreprocessorDirectory);
-            Directory.CreateDirectory(PreprocessorIncludeDirectory);
-            Directory.CreateDirectory(PreprocessorDirectiveDirectory);
+            Directory.CreateDirectory( PreprocessorDirectory );
+            Directory.CreateDirectory( PreprocessorIncludeDirectory );
+            Directory.CreateDirectory( PreprocessorDirectiveDirectory );
         }
+
+        #endregion
 
     }
 

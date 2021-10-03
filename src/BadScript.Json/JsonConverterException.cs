@@ -1,4 +1,4 @@
-﻿using BadScript.Common.Exceptions;
+﻿using BadScript.Exceptions;
 
 namespace BadScript.Json
 {

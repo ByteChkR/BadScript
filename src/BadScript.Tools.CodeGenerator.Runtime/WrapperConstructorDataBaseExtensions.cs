@@ -1,4 +1,4 @@
-﻿using BadScript.Common.Types;
+﻿using BadScript.Types;
 
 namespace BadScript.Tools.CodeGenerator.Runtime
 {

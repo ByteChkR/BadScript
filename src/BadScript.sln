@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Imaging", "BadScr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.HttpServer", "BadScript.HttpServer\BadScript.HttpServer.csproj", "{90439F93-CB50-4A00-BAF8-BE43DBDCA6C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Utils", "BadScript.Utils\BadScript.Utils.csproj", "{987106A0-3A16-480C-9C87-02710411623C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Xml", "BadScript.Xml\BadScript.Xml.csproj", "{72233620-6ECE-40A3-AE24-BD2B718E9876}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DFA44281-F750-4974-B763-79ED0AF76D4C}"
@@ -45,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Tests", "BadScrip
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{2D485240-A235-48C8-B695-BA989CE4E417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Console", "BadScript.Console\BadScript.Console.csproj", "{059EA3BF-D8CC-4797-ABB4-9E09BAB7F052}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Console", "BadScript.Console\BadScript.Console.csproj", "{059EA3BF-D8CC-4797-ABB4-9E09BAB7F052}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,10 +99,6 @@ Global
 		{90439F93-CB50-4A00-BAF8-BE43DBDCA6C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90439F93-CB50-4A00-BAF8-BE43DBDCA6C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90439F93-CB50-4A00-BAF8-BE43DBDCA6C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{987106A0-3A16-480C-9C87-02710411623C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{987106A0-3A16-480C-9C87-02710411623C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{987106A0-3A16-480C-9C87-02710411623C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{987106A0-3A16-480C-9C87-02710411623C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{72233620-6ECE-40A3-AE24-BD2B718E9876}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{72233620-6ECE-40A3-AE24-BD2B718E9876}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72233620-6ECE-40A3-AE24-BD2B718E9876}.Release|Any CPU.ActiveCfg = Release|Any CPU

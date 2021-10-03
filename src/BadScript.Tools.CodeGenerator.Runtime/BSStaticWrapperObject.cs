@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using BadScript.Common.Exceptions;
-using BadScript.Common.Expressions;
-using BadScript.Common.Expressions.Implementations.Block.ForEach;
-using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
-using BadScript.Common.Types.References;
+using BadScript.Exceptions;
+using BadScript.Parser.Expressions;
+using BadScript.Parser.Expressions.Implementations.Block.ForEach;
+using BadScript.Types;
+using BadScript.Types.Implementations;
+using BadScript.Types.References;
 
 namespace BadScript.Tools.CodeGenerator.Runtime
 {

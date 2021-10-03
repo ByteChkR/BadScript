@@ -9,7 +9,6 @@ namespace BadScript.Console.Subsystems.Project
     public static class ProjectCreator
     {
 
-
         #region Public
 
         public static int Create( ProjectCreatorSettings settings )
@@ -68,7 +67,7 @@ namespace BadScript.Console.Subsystems.Project
 
         private static string GetTemplate( string template )
         {
-            string dir = Path.Combine(ProjectSystemDirectories.Instance.TemplateDirectory, template );
+            string dir = Path.Combine( ProjectSystemDirectories.Instance.TemplateDirectory, template );
 
             return dir;
         }

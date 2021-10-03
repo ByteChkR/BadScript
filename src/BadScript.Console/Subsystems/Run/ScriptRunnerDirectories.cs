@@ -1,12 +1,11 @@
-﻿using System.IO;
-
-using BadScript.Utils;
+﻿using BadScript.Settings;
 
 namespace BadScript.Console.Subsystems.Run
 {
 
-    public class ScriptRunnerDirectories : SimpleSingleton <ScriptRunnerDirectories>
+    public class ScriptRunnerDirectories : SimpleSingleton < ScriptRunnerDirectories >
     {
+
     }
 
 }

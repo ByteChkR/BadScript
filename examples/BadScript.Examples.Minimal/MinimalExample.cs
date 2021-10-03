@@ -1,7 +1,6 @@
 ﻿using System;
 
-using BadScript.Common.Types;
-using BadScript.Settings;
+using BadScript.Types;
 
 namespace BadScript.Examples.Minimal
 {

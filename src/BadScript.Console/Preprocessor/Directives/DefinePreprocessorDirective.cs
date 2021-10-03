@@ -1,5 +1,5 @@
-﻿using BadScript.Common;
-using BadScript.Common.Expressions;
+﻿using BadScript.Parser;
+using BadScript.Parser.Expressions;
 
 namespace BadScript.Console.Preprocessor.Directives
 {
@@ -7,18 +7,24 @@ namespace BadScript.Console.Preprocessor.Directives
     public class DefinePreprocessorDirective : SourcePreprocessorDirective
     {
 
-        public DefinePreprocessorDirective() : base("#define") { }
+        #region Public
 
-        public override string Process(BSParser p, SourcePreprocessorContext ctx)
+        public DefinePreprocessorDirective() : base( "#define" )
         {
-            p.SetPosition(p.GetPosition() + Name.Length); //Skip #define
+        }
 
-            BSExpression expr = p.Parse(int.MaxValue);
+        public override string Process( BSParser p, SourcePreprocessorContext ctx )
+        {
+            p.SetPosition( p.GetPosition() + Name.Length ); //Skip #define
 
-            expr.Execute(ctx.RuntimeScope);
+            BSExpression expr = p.Parse( int.MaxValue );
+
+            expr.Execute( ctx.RuntimeScope );
 
             return string.Empty;
         }
+
+        #endregion
 
     }
 

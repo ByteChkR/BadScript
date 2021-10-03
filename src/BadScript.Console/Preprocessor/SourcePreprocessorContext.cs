@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using BadScript.Common.Runtime;
+using BadScript.Scopes;
 
 namespace BadScript.Console.Preprocessor
 {
@@ -9,10 +9,16 @@ namespace BadScript.Console.Preprocessor
     {
 
         public BSEngine ScriptEngine { get; }
+
         public BSScope RuntimeScope { get; }
+
         public string OriginalSource { get; set; }
+
         public string DirectivesNames { get; }
-        public List<SourcePreprocessorDirective> Directives { get; }
+
+        public List < SourcePreprocessorDirective > Directives { get; }
+
+        #region Public
 
         public SourcePreprocessorContext(
             BSEngine engine,
@@ -24,7 +30,18 @@ namespace BadScript.Console.Preprocessor
                                                                             src,
                                                                             directiveNames,
                                                                             directives
-                                                                           ) { }
+                                                                           )
+        {
+        }
+
+        public SourcePreprocessorContext CreateSubContext( string src )
+        {
+            return new SourcePreprocessorContext( ScriptEngine, RuntimeScope, src, DirectivesNames, Directives );
+        }
+
+        #endregion
+
+        #region Private
 
         private SourcePreprocessorContext(
             BSEngine engine,
@@ -37,11 +54,10 @@ namespace BadScript.Console.Preprocessor
             OriginalSource = src;
             DirectivesNames = directiveNames;
             RuntimeScope = scope;
-            Directives = new List<SourcePreprocessorDirective>(directives);
+            Directives = new List < SourcePreprocessorDirective >( directives );
         }
 
-        public SourcePreprocessorContext CreateSubContext( string src ) =>
-            new SourcePreprocessorContext( ScriptEngine, RuntimeScope, src, DirectivesNames, Directives );
+        #endregion
 
     }
 

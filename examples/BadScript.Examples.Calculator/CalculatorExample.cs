@@ -1,9 +1,8 @@
 ﻿using System;
 
-using BadScript.Common.Expressions;
-using BadScript.Common.Runtime;
-using BadScript.Common.Types;
-using BadScript.Settings;
+using BadScript.Parser.Expressions;
+using BadScript.Scopes;
+using BadScript.Types;
 
 namespace BadScript.Examples.Calculator
 {

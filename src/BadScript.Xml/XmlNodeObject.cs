@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
 
-using BadScript.Common.Exceptions;
-using BadScript.Common.Expressions;
-using BadScript.Common.Types;
-using BadScript.Common.Types.Implementations;
-using BadScript.Common.Types.References;
-using BadScript.Utility.Reflection;
+using BadScript.Exceptions;
+using BadScript.Parser.Expressions;
+using BadScript.Reflection;
+using BadScript.Types;
+using BadScript.Types.Implementations;
+using BadScript.Types.References;
 
 namespace BadScript.Xml
 {

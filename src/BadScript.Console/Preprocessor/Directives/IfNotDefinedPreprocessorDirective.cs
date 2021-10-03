@@ -1,7 +1,7 @@
-﻿using BadScript.Common;
-using BadScript.Common.Expressions;
-using BadScript.Common.Expressions.Implementations.Block;
-using BadScript.Common.Types;
+﻿using BadScript.Parser;
+using BadScript.Parser.Expressions;
+using BadScript.Parser.Expressions.Implementations.Block;
+using BadScript.Types;
 
 namespace BadScript.Console.Preprocessor.Directives
 {
@@ -9,25 +9,29 @@ namespace BadScript.Console.Preprocessor.Directives
     public class IfNotDefinedPreprocessorDirective : SourcePreprocessorDirective
     {
 
-        public IfNotDefinedPreprocessorDirective() : base("#ifndef") { }
+        #region Public
 
-        public override string Process(BSParser p, SourcePreprocessorContext ctx)
+        public IfNotDefinedPreprocessorDirective() : base( "#ifndef" )
+        {
+        }
+
+        public override string Process( BSParser p, SourcePreprocessorContext ctx )
         {
             int pos = p.GetPosition() + Name.Length;
-            p.SetPosition(pos); //Skip #define
+            p.SetPosition( pos ); //Skip #define
             p.ReadWhitespaceAndNewLine();
             string def = p.GetNextWord();
 
             p.ReadWhitespaceAndNewLine();
             string block = p.ParseBlock();
-            block = SourcePreprocessor.Preprocess(block, ctx.CreateSubContext(block));
+            block = SourcePreprocessor.Preprocess( block, ctx.CreateSubContext( block ) );
 
-            BSParser sp = new BSParser(block, ctx.OriginalSource, p.GetPosition());
-            BSExpression blockExpr = new BSBlockExpression(sp.ParseToEnd());
+            BSParser sp = new BSParser( block, ctx.OriginalSource, p.GetPosition() );
+            BSExpression blockExpr = new BSBlockExpression( sp.ParseToEnd() );
 
-            if (!ctx.RuntimeScope.Has(def))
+            if ( !ctx.RuntimeScope.Has( def ) )
             {
-                blockExpr.Execute(ctx.RuntimeScope);
+                blockExpr.Execute( ctx.RuntimeScope );
 
                 ABSObject o = ctx.RuntimeScope.Return;
 
@@ -37,7 +41,7 @@ namespace BadScript.Console.Preprocessor.Directives
             return "";
         }
 
-
+        #endregion
 
     }
 

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 
 using BadScript.Console.Logging;
-using BadScript.Utility.Serialization;
+using BadScript.Serialization;
 
 namespace BadScript.Console.Subsystems.Compile
 {

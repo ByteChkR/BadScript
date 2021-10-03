@@ -2,21 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using BadScript.Common.Expressions;
-using BadScript.Common.Types;
 using BadScript.ConsoleUtils;
 using BadScript.Core;
 using BadScript.Http;
 using BadScript.HttpServer;
 using BadScript.Imaging;
+using BadScript.Interfaces.Versioning;
 using BadScript.IO;
 using BadScript.Json;
 using BadScript.Math;
+using BadScript.Parser.Expressions;
 using BadScript.Process;
-using BadScript.Settings;
+using BadScript.Serialization;
 using BadScript.StringUtils;
-using BadScript.Utility.Serialization;
-using BadScript.Utils;
+using BadScript.Types;
 using BadScript.Xml;
 using BadScript.Zip;
 
@@ -35,57 +34,57 @@ namespace BadScript.Tests
         #region Public
 
         [Test]
-        [TestCaseSource(nameof(TestFiles))]
-        public void RunTest(string key)
+        [TestCaseSource( nameof( TestFiles ) )]
+        public void RunTest( string key )
         {
             string file = m_Files[key];
-            BSExpression[] expressions = m_Engine.ParseFile(file);
+            BSExpression[] expressions = m_Engine.ParseFile( file );
             MemoryStream ms = new MemoryStream();
-            BSSerializer.Serialize(expressions, ms);
+            BSSerializer.Serialize( expressions, ms );
             ms.Position = 0;
 
-            expressions = BSSerializer.Deserialize(ms);
+            expressions = BSSerializer.Deserialize( ms );
 
-            ABSObject o = m_Engine.LoadScript(expressions);
-            Assert.IsTrue(o.ConvertBool());
+            ABSObject o = m_Engine.LoadScript( expressions );
+            Assert.IsTrue( o.ConvertBool() );
         }
 
         [Test]
-        [TestCaseSource(nameof(TestFiles))]
-        public void RunTestUncached(string key)
+        [TestCaseSource( nameof( TestFiles ) )]
+        public void RunTestUncached( string key )
         {
             string file = m_Files[key];
-            BSExpression[] expressions = m_Engine.ParseFile(file);
+            BSExpression[] expressions = m_Engine.ParseFile( file );
             MemoryStream ms = new MemoryStream();
-            BSSerializer.Serialize(expressions, ms, BSSerializerHints.NoStringCache);
+            BSSerializer.Serialize( expressions, ms, BSSerializerHints.NoStringCache );
             ms.Position = 0;
 
-            expressions = BSSerializer.Deserialize(ms);
+            expressions = BSSerializer.Deserialize( ms );
 
-            ABSObject o = m_Engine.LoadScript(expressions);
-            Assert.IsTrue(o.ConvertBool());
+            ABSObject o = m_Engine.LoadScript( expressions );
+            Assert.IsTrue( o.ConvertBool() );
         }
 
         [SetUp]
         public void Setup()
         {
             BSEngineSettings es = BSEngineSettings.MakeDefault();
-            es.Interfaces.Add( new BadScriptCoreApi() );
-            es.Interfaces.Add( new ConsoleApi() );
-            es.Interfaces.Add( new ConsoleColorApi() );
+            es.Interfaces.Add( new BSCoreInterface() );
+            es.Interfaces.Add( new BSConsoleInterface() );
+            es.Interfaces.Add( new BSConsoleColorInterface() );
             es.Interfaces.Add( new BS2JsonInterface() );
             es.Interfaces.Add( new Json2BSInterface() );
             es.Interfaces.Add( new BSFileSystemInterface() );
             es.Interfaces.Add( new BSFileSystemPathInterface( AppDomain.CurrentDomain.BaseDirectory ) );
-            es.Interfaces.Add( new BSMathApi() );
-            es.Interfaces.Add( new HttpApi() );
-            es.Interfaces.Add( new HttpServerApi() );
-            es.Interfaces.Add( new ProcessApi() );
-            es.Interfaces.Add( new StringUtilsApi() );
-            es.Interfaces.Add( new ZipApi() );
-            es.Interfaces.Add( new ImagingApi() );
-            es.Interfaces.Add( new VersionToolsInterface() );
-            es.Interfaces.Add( new XmlInterface() );
+            es.Interfaces.Add( new BSMathInterface() );
+            es.Interfaces.Add( new BSHttpInterface() );
+            es.Interfaces.Add( new BSHttpServerInterface() );
+            es.Interfaces.Add( new BSProcessInterface() );
+            es.Interfaces.Add( new BSStringInterface() );
+            es.Interfaces.Add( new BSZipInterface() );
+            es.Interfaces.Add( new BSDrawingInterface() );
+            es.Interfaces.Add( new BSVersioningInterface() );
+            es.Interfaces.Add( new BSXmlInterface() );
             m_Engine = es.Build();
         }
 

@@ -13,6 +13,7 @@ namespace BadScript.Console.Subsystems.Project.DataObjects
 
         public string OutputFile =
             "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%";
+
         public string PreprocessorDirectives = "";
         public List < string > Include = new();
         public string SubTarget = "";
