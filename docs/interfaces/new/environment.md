@@ -2,6 +2,7 @@
 ## Functions:
 - Function Signature: '`function defaultOp(opKey, args..)`'
 - Function Signature: '`function createScope()/createScope(parentScope)`'
+- Function Signature: '`function resetScope(scope)`'
 - Function Signature: '`function loadScopedString(scope, str, args..)/loadScopedString(rootTable, str, args..)`'
 - Function Signature: '`function loadScopedBenchmark(scope, str, args..)/loadScopedBenchmark(rootTable, str, args..)`'
 - Function Signature: '`function addPreprocessor(ppName, func)`'

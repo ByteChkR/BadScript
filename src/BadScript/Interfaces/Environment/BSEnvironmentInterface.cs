@@ -34,11 +34,20 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject( "createScope" ),
+                              new BSObject("createScope"),
                               new BSFunction(
                                              "function createScope()/createScope(parentScope)",
                                              m_Instance.CreateScope,
                                              0,
+                                             1
+                                            )
+                             );
+
+            env.InsertElement(
+                              new BSObject("resetScope"),
+                              new BSFunction(
+                                             "function resetScope(scope)",
+                                             m_Instance.ResetScope,
                                              1
                                             )
                              );

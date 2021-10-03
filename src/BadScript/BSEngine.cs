@@ -569,7 +569,14 @@ namespace BadScript
 
             return BSObject.Null;
         }
+        internal ABSObject ResetScope(ABSObject[] args)
+        {
+            BSScope scope = (BSScope)((BSObject)args[0].ResolveReference()).GetInternalObject();
 
+            scope.ResetFlag();
+
+            return BSObject.Null;
+        }
         internal ABSObject CreateScope( ABSObject[] args )
         {
             BSScope scope;

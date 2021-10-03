@@ -28,7 +28,7 @@
         "References": [],
         "PreEvents": [],
         "PostEvents": [
-          "%BS_EXEC% --nologo -f %Target.OutputFile%"
+          "%BS_EXEC% run --nologo -f %Target.OutputFile%"
         ],
         "PreprocessorDirectives": ""
       },

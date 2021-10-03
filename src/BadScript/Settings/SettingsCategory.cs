@@ -59,7 +59,7 @@ namespace BadScript.Settings
             return r;
         }
 
-        public SettingsCategory FindCategory( string categoryName )
+        public SettingsCategory FindCategory( string categoryName, bool createIfNotFound)
         {
             string[] parts = categoryName.Split( '.' );
             SettingsCategory current = this;
@@ -73,6 +73,10 @@ namespace BadScript.Settings
                 else if ( i == 0 && parts[i] == current.Name )
                 {
                 }
+                else if (createIfNotFound)
+                {
+                    current = current.AddCategory(parts[i]);
+                }
                 else
                 {
                     throw new BSSettingsException( "Can not Find Settings: " + categoryName );
@@ -82,7 +86,7 @@ namespace BadScript.Settings
             return current;
         }
 
-        public SettingsPair FindSetting( string settingName )
+        public SettingsPair FindSetting( string settingName, bool createIfNotFound )
         {
             string[] parts = settingName.Split( '.' );
             SettingsCategory current = this;
@@ -96,13 +100,19 @@ namespace BadScript.Settings
                 else if ( i == 0 && parts[i] == current.Name )
                 {
                 }
+                else if (createIfNotFound && i != parts.Length - 1)
+                {
+                    current = current.AddCategory(parts[i]);
+                }
                 else
                 {
                     throw new BSSettingsException( "Can not Find Settings: " + settingName );
                 }
             }
 
-            return current.GetSetting( parts[parts.Length - 1] );
+            if ( createIfNotFound )
+                return current.GetSetting( parts[parts.Length - 1], "" );
+            return current.GetSetting( parts[parts.Length - 1]);
         }
 
         public SettingsCategory GetCategory( string name )

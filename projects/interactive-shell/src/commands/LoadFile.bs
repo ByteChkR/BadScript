@@ -1,0 +1,27 @@
+namespace InteractiveShell.Console.Command
+{
+	fs = environment.loadInterface("fs", {})
+	using InteractiveShell.Console
+	class LoadFileCommand : ConsoleCommand
+	{
+		function LoadFileCommand() : base("load") { }
+
+		function RunCommand(!args)
+		{
+			foreach arg in args
+			{
+				print("Loading File: " + arg)
+				o = Console._shell.RunCommand(fs.readAll(arg))
+				if(o.IsError)
+				{
+					print("Plugin Returned: " + o.ToString())
+				}
+			}
+		}
+
+		function ToString()
+		{
+			return "'load' : Load a Text File."
+		}
+	}
+}

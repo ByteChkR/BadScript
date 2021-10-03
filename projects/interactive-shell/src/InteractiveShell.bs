@@ -1,0 +1,60 @@
+
+namespace InteractiveShell.Internal
+{
+	class CommandReturn
+	{
+		IsError = false
+		ReturnValue = null
+		function CommandReturn(!isError, returnValue)
+		{
+			#ASSERT_BOOL(isError)
+
+			IsError = isError
+			if(IsError && returnValue == null)
+			{
+				error("Return value must be set to error code if IsError is true")
+			}
+			ReturnValue = returnValue
+		}
+
+		function ToString()
+		{
+			if(IsError)
+			{
+				return "ERROR: " + debug(ReturnValue)
+			}
+			
+			return "SUCCESS: " + debug(ReturnValue)
+		}
+	}
+
+	class InteractiveShell
+	{
+		_scope = null
+		function InteractiveShell()
+		{
+			ResetScope()
+		}
+
+		function ResetScope()
+		{
+			_scope = environment.createScope()
+		}
+
+		function RunCommand(!command)
+		{
+			#ASSERT_STRING(command)
+			
+			try
+			{
+				ret = environment.loadScopedString(_scope, command)
+				environment.resetScope(_scope)
+				return new CommandReturn(false, ret)
+			}
+			catch(e)
+			{
+				return new CommandReturn(true, e)
+			}
+		}
+	}
+}

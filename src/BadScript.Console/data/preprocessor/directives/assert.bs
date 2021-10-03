@@ -8,8 +8,6 @@
 
 #macro ASSERT_INTERFACE_AVAILABLE(NAME)
 {
-	#ASSERT_DEFINED(environment)
-	#ASSERT_TABLE(environment)
 	if(!environment.hasInterface("NAME"))
 	{
 		error("Assertion Failed. Interface NAME is not available")

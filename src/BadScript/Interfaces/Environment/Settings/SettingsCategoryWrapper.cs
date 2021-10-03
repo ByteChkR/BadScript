@@ -131,26 +131,26 @@ namespace BadScript.Interfaces.Environment.Settings
                                {
                                    "FindCategory", new BSFunctionReference(
                                                                            new BSFunction(
-                                                                                "function FindCategory(name)",
+                                                                                "function FindCategory(name)/FindCategory(name, create)",
                                                                                 objects => new SettingsCategoryWrapper(
                                                                                      m_Category.FindCategory(
-                                                                                          objects[0].ConvertString()
+                                                                                          objects[0].ConvertString(), objects.Length==2 && objects[1].ConvertBool()
                                                                                          )
                                                                                     ),
-                                                                                1
+                                                                                1,2
                                                                                )
                                                                           )
                                },
                                {
                                    "FindSetting", new BSFunctionReference(
                                                                           new BSFunction(
-                                                                               "function FindSetting(name)",
+                                                                               "function FindSetting(name)/FindSetting(name, create)",
                                                                                objects => new SettingsPairWrapper(
                                                                                     m_Category.FindSetting(
-                                                                                         objects[0].ConvertString()
+                                                                                         objects[0].ConvertString(), objects.Length==2 && objects[1].ConvertBool()
                                                                                         )
                                                                                    ),
-                                                                               1
+                                                                               1,2
                                                                               )
                                                                          )
                                },

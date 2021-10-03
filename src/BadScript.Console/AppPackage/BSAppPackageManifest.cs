@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace BadScript.Console.AppPackage
 {
@@ -13,6 +14,22 @@ namespace BadScript.Console.AppPackage
         public string RuntimeMinVersion;
         public string RuntimeMaxVersion;
         public string[] RequiredInterfaces;
+
+        public string GetTempDirectory()
+        {
+           string dir= Path.Combine( BSAppPackageDirectories.Instance.AppTempDirectory, AppName );
+           Directory.CreateDirectory( dir );
+
+           return dir;
+        }
+
+        public string GetPersistentDirectory()
+        {
+            string dir = Path.Combine(BSAppPackageDirectories.Instance.AppPersistentDirectory, AppName);
+            Directory.CreateDirectory(dir);
+
+            return dir;
+        }
 
         public static BSAppPackageManifest CreateDefault()
         {

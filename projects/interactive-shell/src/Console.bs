@@ -1,0 +1,165 @@
+namespace InteractiveShell.Console
+{
+	using InteractiveShell.Internal
+
+	#ASSERT_INTERFACE_AVAILABLE(string)
+
+	string = environment.loadInterface("string")
+
+	class ConsoleCommand
+	{
+		Name = null
+		Console = null
+		function ConsoleCommand(!name)
+		{
+			Name = name
+		}
+
+		function RunCommand(!args)
+		{
+		}
+
+	}
+
+	class Console
+	{
+		_prefix = null
+		_shell = null
+		_commands = null
+		_currentStr = null
+		_exitLoop = false
+		_writeReturn = true
+		function Console(!prefix)
+		{
+			_prefix = prefix ?? ""
+			_shell = new InteractiveShell()
+			_commands = []
+			_currentStr = ""
+			LoadPlugins()
+		}
+
+		function AddCommand(!cmd)
+		{
+			#ASSERT_TYPE(cmd)
+
+			if(!cmd.IsInstanceOf("ConsoleCommand"))
+			{
+				error(cmd + "has to inherit from ConsoleCommand")
+			}
+
+			cmd.Console = this
+			print("New Command: " + cmd.ToString())
+			_commands.add(cmd)
+		}
+
+		function RunCommand(argLine)
+		{
+			#ASSERT_STRING(argLine)
+			cmdArgs = string.split(argLine, " ")
+			if(cmdArgs.size() == 0)
+			{
+				return false
+			}
+
+			cmdName = cmdArgs[0]
+			cmdArgs.removeAt(0)
+			foreach cmd in _commands
+			{
+				if(cmd.Name == cmdName)
+				{
+					print("Found Command: "	+ cmd.Name)
+					cmd.RunCommand(cmdArgs)
+					return true
+				}
+			}
+
+			return false
+
+		}
+
+		function Exit()
+		{
+			_exitLoop = true
+		}
+
+		function Clear()
+		{
+			_currentStr = ""
+		}
+
+		function Execute(argLine)
+		{
+			#ASSERT_STRING(argLine)
+
+			
+			execute = false
+			if(!string.endsWith(argLine, "\\"))
+			{
+				_currentStr += argLine
+				execute = true
+			}
+			else
+			{
+				_currentStr += string.remove(argLine, string.length(argLine) - 1, 1)
+			}
+
+			if(execute)
+			{
+				o = _shell.RunCommand(_currentStr)
+				if(_writeReturn || o.IsError)
+				{
+					print("Returned: " + o.ToString())
+				}
+				_currentStr = ""
+			}
+			
+		}
+
+		function Loop()
+		{
+			_exitLoop = false
+			while(!_exitLoop)
+			{
+				write(_prefix)
+				cmd = read()
+				Run(cmd)
+			}
+		}
+
+		function Run(argLine)
+		{
+			#ASSERT_STRING(argLine)
+			if(!RunCommand(argLine))
+			{
+				Execute(argLine)
+			}			
+		}
+
+
+		function LoadPlugins()
+		{
+			fs = environment.loadInterface("fs", {})
+			path = environment.loadInterface("path", {})
+
+			pluginPath = path.combine(app.Manifest.PersistentPath, "plugins")
+			fs.createDir(pluginPath)
+
+			files = fs.getFiles(pluginPath, "*.bs", true)
+			print("Loading " + files.size() + " Plugins")
+			foreach file in files
+			{
+				name = path.getFileName(file)
+				print("Loading Plugin: " + name)
+				try
+				{
+					environment.loadString(fs.readAll(file), this)
+				}
+				catch(e)
+				{
+					print("Loading Plugin: " + name + " Failed!(" + e.message + ")")
+				}
+			}
+		}
+	}
+
+}

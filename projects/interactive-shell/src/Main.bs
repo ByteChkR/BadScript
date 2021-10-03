@@ -1,0 +1,15 @@
+
+
+function main()
+{
+	console = new Console("ISH>")
+	console.AddCommand(new ExitCommand())
+	console.AddCommand(new ClearCommand())
+	console.AddCommand(new ListCommand())
+	console.AddCommand(new ResetCommand())
+	console.AddCommand(new WriteReturnCommand())
+	console.AddCommand(new LoadFileCommand())
+	console.Loop()
+}
+
+main()

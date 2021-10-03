@@ -1,0 +1,19 @@
+namespace InteractiveShell.Console.Commands
+{
+	using InteractiveShell.Console
+	class ResetCommand : ConsoleCommand
+	{
+		function ResetCommand() : base("list") { }
+
+		function RunCommand(!args)
+		{
+			print("Resetting Scope..")
+			Console.Reset()
+		}
+
+		function ToString()
+		{
+			return "'reset' : Reset Console Scope."
+		}
+	}
+}

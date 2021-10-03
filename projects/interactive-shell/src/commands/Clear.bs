@@ -1,0 +1,21 @@
+namespace InteractiveShell.Console.Commands
+{
+	using InteractiveShell.Console
+	class ClearCommand : ConsoleCommand
+	{
+		function ClearCommand() : base("clear") { }
+	
+
+		function RunCommand(!args)
+		{
+			print("Clearing Input Buffer")
+			Console.Clear()
+		}
+
+
+		function ToString()
+		{
+			return "'clear' : Clear Written Script."
+		}
+	}
+}

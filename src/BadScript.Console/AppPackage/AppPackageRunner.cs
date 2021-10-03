@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
 using BadScript.Console.Logging;
@@ -40,6 +41,9 @@ namespace BadScript.Console.AppPackage
 
                 return -1;
             }
+
+            if ( Directory.Exists( package.Manifest.GetTempDirectory() ) )
+                Directory.Delete( package.Manifest.GetTempDirectory() );
 
             ConsoleWriter.SuccessLine( $"App Terminated with Return: {o}" );
 

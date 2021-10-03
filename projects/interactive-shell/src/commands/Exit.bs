@@ -1,0 +1,19 @@
+namespace InteractiveShell.Console.Commands
+{
+	using InteractiveShell.Console
+	class ExitCommand : ConsoleCommand
+	{
+		function ExitCommand() : base("exit") { }
+
+		function RunCommand(!args)
+		{
+			print("Exiting Interactive Shell")
+			Console.Exit()
+		}
+
+		function ToString()
+		{
+			return "'exit' : Exit Interactive Shell."
+		}
+	}
+}
