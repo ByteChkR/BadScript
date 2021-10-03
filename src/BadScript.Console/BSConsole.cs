@@ -7,6 +7,7 @@ using BadScript.Console.Subsystems.Compile;
 using BadScript.Console.Subsystems.Include;
 using BadScript.Console.Subsystems.Project;
 using BadScript.Console.Subsystems.Run;
+using BadScript.Interfaces.Environment.Settings;
 
 using CommandLine;
 
@@ -25,86 +26,95 @@ namespace BadScript.Console
 
         private static int Main( string[] args )
         {
+            BSSettings.BsRoot.LoadFromDirectory( BSConsoleDirectories.Instance.SettingsDirectory );
+            int ret = 0;
+
             if ( args.Length > 0 && args[0] == "project" )
             {
-                return CommandLine.Parser.Default.
-                                   ParseArguments < ProjectCreatorSettings, ProjectBuilderSettings >(
-                                        args.Skip( 1 ).ToArray()
-                                       ).
-                                   MapResult(
-                                             ( ProjectCreatorSettings o ) =>
-                                             {
-                                                 if ( !o.NoLogo )
-                                                 {
-                                                     PrintHeaderInfo();
-                                                 }
+                ret = CommandLine.Parser.Default.
+                                  ParseArguments < ProjectCreatorSettings, ProjectBuilderSettings >(
+                                       args.Skip( 1 ).ToArray()
+                                      ).
+                                  MapResult(
+                                            ( ProjectCreatorSettings o ) =>
+                                            {
+                                                if ( !o.NoLogo )
+                                                {
+                                                    PrintHeaderInfo();
+                                                }
 
-                                                 return ProjectCreator.Create( o );
-                                             },
-                                             ( ProjectBuilderSettings o ) =>
-                                             {
-                                                 if ( !o.NoLogo )
-                                                 {
-                                                     PrintHeaderInfo();
-                                                 }
+                                                return ProjectCreator.Create( o );
+                                            },
+                                            ( ProjectBuilderSettings o ) =>
+                                            {
+                                                if ( !o.NoLogo )
+                                                {
+                                                    PrintHeaderInfo();
+                                                }
 
-                                                 return ProjectBuilder.Build( o );
-                                             },
-                                             HandleError
-                                            );
+                                                return ProjectBuilder.Build( o );
+                                            },
+                                            HandleError
+                                           );
+            }
+            else
+            {
+                ret = CommandLine.Parser.Default.
+                                  ParseArguments < ScriptRunnerSettings, ScriptCompilerSettings,
+                                      IncludeManagerSettings, AppPackageRunnerSettings, AppBuilderSettings >( args ).
+                                  MapResult(
+                                            ( ScriptRunnerSettings o ) =>
+                                            {
+                                                if ( !o.NoLogo )
+                                                {
+                                                    PrintHeaderInfo();
+                                                }
+
+                                                return ScriptRunner.Run( o );
+                                            },
+                                            ( ScriptCompilerSettings o ) =>
+                                            {
+                                                if ( !o.NoLogo )
+                                                {
+                                                    PrintHeaderInfo();
+                                                }
+
+                                                return ScriptCompiler.Compile( o );
+                                            },
+                                            ( IncludeManagerSettings o ) =>
+                                            {
+                                                if ( !o.NoLogo )
+                                                {
+                                                    PrintHeaderInfo();
+                                                }
+
+                                                return IncludeManager.Process( o );
+                                            },
+                                            ( AppPackageRunnerSettings o ) =>
+                                            {
+                                                if ( !o.NoLogo )
+                                                {
+                                                    PrintHeaderInfo();
+                                                }
+
+                                                return AppPackageRunner.RunPackage( o );
+                                            },
+                                            ( AppBuilderSettings o ) =>
+                                            {
+                                                if ( !o.NoLogo )
+                                                {
+                                                    PrintHeaderInfo();
+                                                }
+
+                                                return AppBuilder.Build( o );
+                                            },
+                                            HandleError
+                                           );
             }
 
-            return CommandLine.Parser.Default.
-                               ParseArguments < ScriptRunnerSettings, ScriptCompilerSettings,
-                                   IncludeManagerSettings, AppPackageRunnerSettings, AppBuilderSettings >( args ).
-                               MapResult(
-                                         ( ScriptRunnerSettings o ) =>
-                                         {
-                                             if ( !o.NoLogo )
-                                             {
-                                                 PrintHeaderInfo();
-                                             }
+            BSSettings.BsRoot.SaveToDirectory( BSConsoleDirectories.Instance.SettingsDirectory );
 
-                                             return ScriptRunner.Run( o );
-                                         },
-                                         ( ScriptCompilerSettings o ) =>
-                                         {
-                                             if ( !o.NoLogo )
-                                             {
-                                                 PrintHeaderInfo();
-                                             }
-
-                                             return ScriptCompiler.Compile( o );
-                                         },
-                                         (IncludeManagerSettings o) =>
-                                         {
-                                             if (!o.NoLogo)
-                                             {
-                                                 PrintHeaderInfo();
-                                             }
-
-                                             return IncludeManager.Process(o);
-                                         },
-                                         (AppPackageRunnerSettings o) =>
-                                         {
-                                             if (!o.NoLogo)
-                                             {
-                                                 PrintHeaderInfo();
-                                             }
-
-                                             return AppPackageRunner.RunPackage(o);
-                                         },
-                                         (AppBuilderSettings o) =>
-                                         {
-                                             if (!o.NoLogo)
-                                             {
-                                                 PrintHeaderInfo();
-                                             }
-
-                                             return AppBuilder.Build(o);
-                                         },
-                                         HandleError
-                                        );
+            return ret;
         }
 
         private static void PrintHeaderInfo()

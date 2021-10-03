@@ -11,6 +11,7 @@ namespace BadScript.Console
 
         public string DataDirectory => Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "data" );
 
+        public string SettingsDirectory => Path.Combine( DataDirectory, "settings" );
         #region Public
 
         public BSConsoleDirectories()
