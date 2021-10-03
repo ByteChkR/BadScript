@@ -1,4 +1,4 @@
 var namespace_bad_script_1_1_zip =
 [
-    [ "ZipApi", "class_bad_script_1_1_zip_1_1_zip_api.html", "class_bad_script_1_1_zip_1_1_zip_api" ]
+    [ "BSZipInterface", "class_bad_script_1_1_zip_1_1_b_s_zip_interface.html", "class_bad_script_1_1_zip_1_1_b_s_zip_interface" ]
 ];

@@ -1,5 +1,5 @@
 var namespace_bad_script_1_1_string_utils =
 [
-    [ "StringUtilsApi", "class_bad_script_1_1_string_utils_1_1_string_utils_api.html", "class_bad_script_1_1_string_utils_1_1_string_utils_api" ],
-    [ "StringUtilsApiExtensions", "class_bad_script_1_1_string_utils_1_1_string_utils_api_extensions.html", "class_bad_script_1_1_string_utils_1_1_string_utils_api_extensions" ]
+    [ "BSStringInterface", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface.html", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface" ],
+    [ "BSStringInterfaceExtensions", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface_extensions.html", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface_extensions" ]
 ];

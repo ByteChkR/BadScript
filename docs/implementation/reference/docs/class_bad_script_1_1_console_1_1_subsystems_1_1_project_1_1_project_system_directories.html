@@ -94,7 +94,7 @@ Inheritance diagram for BadScript.Console.Subsystems.Project.ProjectSystemDirect
  <div class="center">
   <img src="class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_project_system_directories.png" usemap="#BadScript.Console.Subsystems.Project.ProjectSystemDirectories_map" alt=""/>
   <map id="BadScript.Console.Subsystems.Project.ProjectSystemDirectories_map" name="BadScript.Console.Subsystems.Project.ProjectSystemDirectories_map">
-<area href="class_bad_script_1_1_utils_1_1_simple_singleton.html" alt="BadScript.Utils.SimpleSingleton&lt; ProjectSystemDirectories &gt;" shape="rect" coords="0,0,377,24"/>
+<area href="class_bad_script_1_1_settings_1_1_simple_singleton.html" alt="BadScript.Settings.SimpleSingleton&lt; ProjectSystemDirectories &gt;" shape="rect" coords="0,0,377,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -103,76 +103,30 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a4bb7144ed29ff44a7c62e29d6da56b0c"><td class="memItemLeft" align="right" valign="top"><a id="a4bb7144ed29ff44a7c62e29d6da56b0c"></a>
 string&#160;</td><td class="memItemRight" valign="bottom"><b>ProjectSystemDirectory</b> =&gt; Path.Combine( BSConsoleDirectories.Instance.DataDirectory, &quot;project&quot; )</td></tr>
 <tr class="separator:a4bb7144ed29ff44a7c62e29d6da56b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53ec68fc6eef20834e6f1d8aca1c9e5f"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><b>TemplateDirectory</b></td></tr>
+<tr class="memitem:a53ec68fc6eef20834e6f1d8aca1c9e5f"><td class="memItemLeft" align="right" valign="top"><a id="a53ec68fc6eef20834e6f1d8aca1c9e5f"></a>
+string&#160;</td><td class="memItemRight" valign="bottom"><b>TemplateDirectory</b> =&gt; Path.Combine( ProjectSystemDirectory, &quot;templates&quot; )</td></tr>
 <tr class="separator:a53ec68fc6eef20834e6f1d8aca1c9e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9b7d83ed3d66a0b5af6904df9cbb2e3"><td class="memItemLeft" align="right" valign="top"><a id="af9b7d83ed3d66a0b5af6904df9cbb2e3"></a>
 string&#160;</td><td class="memItemRight" valign="bottom"><b>PreprocessorDirectory</b> =&gt; Path.Combine( ProjectSystemDirectory, &quot;preprocessor&quot; )</td></tr>
 <tr class="separator:af9b7d83ed3d66a0b5af6904df9cbb2e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae80f95d8c447646e42e82b8d8d95cc81"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><b>PreprocessorIncludeDirectory</b></td></tr>
+<tr class="memitem:ae80f95d8c447646e42e82b8d8d95cc81"><td class="memItemLeft" align="right" valign="top"><a id="ae80f95d8c447646e42e82b8d8d95cc81"></a>
+string&#160;</td><td class="memItemRight" valign="bottom"><b>PreprocessorIncludeDirectory</b> =&gt; Path.Combine( PreprocessorDirectory, &quot;include&quot; )</td></tr>
 <tr class="separator:ae80f95d8c447646e42e82b8d8d95cc81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79c503e7b7659530d04f93eddd633002"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><b>PreprocessorDirectiveDirectory</b></td></tr>
+<tr class="memitem:a79c503e7b7659530d04f93eddd633002"><td class="memItemLeft" align="right" valign="top"><a id="a79c503e7b7659530d04f93eddd633002"></a>
+string&#160;</td><td class="memItemRight" valign="bottom"><b>PreprocessorDirectiveDirectory</b> =&gt; Path.Combine( PreprocessorDirectory, &quot;directives&quot; )</td></tr>
 <tr class="separator:a79c503e7b7659530d04f93eddd633002"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_static_methods_class_bad_script_1_1_utils_1_1_simple_singleton"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_class_bad_script_1_1_utils_1_1_simple_singleton')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="class_bad_script_1_1_utils_1_1_simple_singleton.html">BadScript.Utils.SimpleSingleton&lt; ProjectSystemDirectories &gt;</a></td></tr>
-<tr class="memitem:af464f919bf7b8464db0a55c2e97d42e0 inherit pub_static_methods_class_bad_script_1_1_utils_1_1_simple_singleton"><td class="memItemLeft" align="right" valign="top"><a id="af464f919bf7b8464db0a55c2e97d42e0"></a>
+<tr class="inherit_header pub_static_methods_class_bad_script_1_1_settings_1_1_simple_singleton"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_class_bad_script_1_1_settings_1_1_simple_singleton')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="class_bad_script_1_1_settings_1_1_simple_singleton.html">BadScript.Settings.SimpleSingleton&lt; ProjectSystemDirectories &gt;</a></td></tr>
+<tr class="memitem:a3211caf6f72aff10e065d22335f62c8c inherit pub_static_methods_class_bad_script_1_1_settings_1_1_simple_singleton"><td class="memItemLeft" align="right" valign="top"><a id="a3211caf6f72aff10e065d22335f62c8c"></a>
 static T&#160;</td><td class="memItemRight" valign="bottom"><b>InitializeIfNull</b> ()</td></tr>
-<tr class="separator:af464f919bf7b8464db0a55c2e97d42e0 inherit pub_static_methods_class_bad_script_1_1_utils_1_1_simple_singleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_static_attribs_class_bad_script_1_1_utils_1_1_simple_singleton"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_class_bad_script_1_1_utils_1_1_simple_singleton')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="class_bad_script_1_1_utils_1_1_simple_singleton.html">BadScript.Utils.SimpleSingleton&lt; ProjectSystemDirectories &gt;</a></td></tr>
-<tr class="memitem:a680eafb5aca97e83994e20b2e057d24a inherit pub_static_attribs_class_bad_script_1_1_utils_1_1_simple_singleton"><td class="memItemLeft" align="right" valign="top"><a id="a680eafb5aca97e83994e20b2e057d24a"></a>
+<tr class="separator:a3211caf6f72aff10e065d22335f62c8c inherit pub_static_methods_class_bad_script_1_1_settings_1_1_simple_singleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_class_bad_script_1_1_settings_1_1_simple_singleton"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_class_bad_script_1_1_settings_1_1_simple_singleton')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="class_bad_script_1_1_settings_1_1_simple_singleton.html">BadScript.Settings.SimpleSingleton&lt; ProjectSystemDirectories &gt;</a></td></tr>
+<tr class="memitem:af8ec0a33530b7627578ebc1b53e1dffe inherit pub_static_attribs_class_bad_script_1_1_settings_1_1_simple_singleton"><td class="memItemLeft" align="right" valign="top"><a id="af8ec0a33530b7627578ebc1b53e1dffe"></a>
 static T&#160;</td><td class="memItemRight" valign="bottom"><b>Instance</b></td></tr>
-<tr class="separator:a680eafb5aca97e83994e20b2e057d24a inherit pub_static_attribs_class_bad_script_1_1_utils_1_1_simple_singleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:af8ec0a33530b7627578ebc1b53e1dffe inherit pub_static_attribs_class_bad_script_1_1_settings_1_1_simple_singleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a79c503e7b7659530d04f93eddd633002"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79c503e7b7659530d04f93eddd633002">&#9670;&nbsp;</a></span>PreprocessorDirectiveDirectory</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">string BadScript.Console.Subsystems.Project.ProjectSystemDirectories.PreprocessorDirectiveDirectory</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=&gt;</div>
-<div class="line">            Path.Combine(PreprocessorDirectory, <span class="stringliteral">&quot;directives&quot;</span>)</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="ae80f95d8c447646e42e82b8d8d95cc81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae80f95d8c447646e42e82b8d8d95cc81">&#9670;&nbsp;</a></span>PreprocessorIncludeDirectory</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">string BadScript.Console.Subsystems.Project.ProjectSystemDirectories.PreprocessorIncludeDirectory</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=&gt;</div>
-<div class="line">            Path.Combine(PreprocessorDirectory, <span class="stringliteral">&quot;include&quot;</span>)</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a53ec68fc6eef20834e6f1d8aca1c9e5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53ec68fc6eef20834e6f1d8aca1c9e5f">&#9670;&nbsp;</a></span>TemplateDirectory</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">string BadScript.Console.Subsystems.Project.ProjectSystemDirectories.TemplateDirectory</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=&gt;</div>
-<div class="line">            Path.Combine(ProjectSystemDirectory, <span class="stringliteral">&quot;templates&quot;</span>)</div>
-</div><!-- fragment -->
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/BadScript.Console/Subsystems/Project/ProjectSystemDirectories.cs</li>
 </ul>

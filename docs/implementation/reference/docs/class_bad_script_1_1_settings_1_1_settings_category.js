@@ -1,0 +1,28 @@
+var class_bad_script_1_1_settings_1_1_settings_category =
+[
+    [ "SettingsCategory", "class_bad_script_1_1_settings_1_1_settings_category.html#a767efc2d123c8282cd065939d71ade3f", null ],
+    [ "AddCategory", "class_bad_script_1_1_settings_1_1_settings_category.html#a0dbca92f64f3d99aa275dc2396c33166", null ],
+    [ "AddCategory", "class_bad_script_1_1_settings_1_1_settings_category.html#a96d6aadaeb8e98a8738abc6b35b143f9", null ],
+    [ "CreateRoot", "class_bad_script_1_1_settings_1_1_settings_category.html#aa264d9363a953c1dc8acbcddb887c80e", null ],
+    [ "FindCategory", "class_bad_script_1_1_settings_1_1_settings_category.html#ab784861761c322eb33dd39bad714d41e", null ],
+    [ "FindSetting", "class_bad_script_1_1_settings_1_1_settings_category.html#a003f900ddbf2d4d26423e04ae543a023", null ],
+    [ "GetCategory", "class_bad_script_1_1_settings_1_1_settings_category.html#a85eeecf946f7f0427511631dd389b2b7", null ],
+    [ "GetEnumerator", "class_bad_script_1_1_settings_1_1_settings_category.html#a8c2a1c34905dc62cc880d5596006585c", null ],
+    [ "GetEnumerator", "class_bad_script_1_1_settings_1_1_settings_category.html#a43ed0f45dd127cb3e030cacde0aeacec", null ],
+    [ "GetEnumerator", "class_bad_script_1_1_settings_1_1_settings_category.html#adf77fcec49e7710547c95d17b0f1eefa", null ],
+    [ "GetSetting", "class_bad_script_1_1_settings_1_1_settings_category.html#a2df210e37286dd43df5369ec8a8604b5", null ],
+    [ "GetSetting", "class_bad_script_1_1_settings_1_1_settings_category.html#a878416f1dbc369a4c91da417268bf881", null ],
+    [ "HasCategory", "class_bad_script_1_1_settings_1_1_settings_category.html#a7cc55944d463b421e222d67b9e33e340", null ],
+    [ "HasSetting", "class_bad_script_1_1_settings_1_1_settings_category.html#a9a36a69dc2bfa7e15011416d77f806f4", null ],
+    [ "SetSetting", "class_bad_script_1_1_settings_1_1_settings_category.html#a84bb70a5aa03a17e11e22a7a80cdbde6", null ],
+    [ "ToString", "class_bad_script_1_1_settings_1_1_settings_category.html#a2655580af8a794d9c3bf42bdadff71a0", null ],
+    [ "FullName", "class_bad_script_1_1_settings_1_1_settings_category.html#a24b3068d27c684a8963458f5ff7fddb7", null ],
+    [ "IsPersistent", "class_bad_script_1_1_settings_1_1_settings_category.html#a40065acbb23e78cab2f26c617f20ce0f", null ],
+    [ "m_Parent", "class_bad_script_1_1_settings_1_1_settings_category.html#ad8acd6d71f74135eaf26583070e1ede9", null ],
+    [ "m_Settings", "class_bad_script_1_1_settings_1_1_settings_category.html#a60b82be6c0655fc6440dc76718e49bfa", null ],
+    [ "m_SubCategories", "class_bad_script_1_1_settings_1_1_settings_category.html#a28a33025d85b8491ad836af22762d790", null ],
+    [ "Name", "class_bad_script_1_1_settings_1_1_settings_category.html#a1f46374e040affd11c6cefb65d276057", null ],
+    [ "OnCategoryAdd", "class_bad_script_1_1_settings_1_1_settings_category.html#a346897bbe5be6b52a7a699ee7c5b2095", null ],
+    [ "OnSettingsAdd", "class_bad_script_1_1_settings_1_1_settings_category.html#ab8a0250bd236d90262c95e9e8aeba9c5", null ],
+    [ "OnSettingsChanged", "class_bad_script_1_1_settings_1_1_settings_category.html#a1c0cfbf76bed411e76aada3184a802eb", null ]
+];

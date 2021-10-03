@@ -1,16 +1,14 @@
 var searchData=
 [
-  ['classtests_238',['ClassTests',['../class_bad_script_1_1_tests_1_1_class_tests.html',1,'BadScript::Tests']]],
-  ['clear_239',['Clear',['../class_bad_script_1_1_common_1_1_types_1_1_a_b_s_array.html#af276c3ca1f180f170ed14168f7d52a16',1,'BadScript.Common.Types.ABSArray.Clear()'],['../class_bad_script_1_1_common_1_1_types_1_1_a_b_s_table.html#a9bf0d0601a4e932584a000ffa981fcf1',1,'BadScript.Common.Types.ABSTable.Clear()'],['../class_bad_script_1_1_common_1_1_types_1_1_implementations_1_1_b_s_table.html#ad7a41b2107ab3d3781164a563284dbfb',1,'BadScript.Common.Types.Implementations.BSTable.Clear()']]],
-  ['clearhooks_240',['ClearHooks',['../class_bad_script_1_1_common_1_1_types_1_1_b_s_function.html#a97244699206e6bb0add254240959622f',1,'BadScript::Common::Types::BSFunction']]],
-  ['consoleapi_241',['ConsoleApi',['../class_bad_script_1_1_console_utils_1_1_console_api.html',1,'BadScript::ConsoleUtils']]],
-  ['consolecolorapi_242',['ConsoleColorApi',['../class_bad_script_1_1_console_utils_1_1_console_color_api.html',1,'BadScript::ConsoleUtils']]],
-  ['consolewriter_243',['ConsoleWriter',['../class_bad_script_1_1_console_1_1_logging_1_1_console_writer.html',1,'BadScript::Console::Logging']]],
-  ['containstype_244',['ContainsType',['../class_bad_script_1_1_common_1_1_namespaces_1_1_b_s_namespace.html#ac7652f3bfcb955af776fdba314b91ea2',1,'BadScript.Common.Namespaces.BSNamespace.ContainsType()'],['../class_bad_script_1_1_common_1_1_namespaces_1_1_b_s_namespace_root.html#ab0a58d2dfbb3160512c746178708b77a',1,'BadScript.Common.Namespaces.BSNamespaceRoot.ContainsType()']]],
-  ['convertbool_245',['ConvertBool',['../class_bad_script_1_1_common_1_1_types_1_1_a_b_s_object.html#a55a665e5e6f87e37ab270bcf03e3707c',1,'BadScript::Common::Types::ABSObject']]],
-  ['convertdecimal_246',['ConvertDecimal',['../class_bad_script_1_1_common_1_1_types_1_1_a_b_s_object.html#ac456aaad54db3b7e4bdae01b1b152cce',1,'BadScript::Common::Types::ABSObject']]],
-  ['convertstring_247',['ConvertString',['../class_bad_script_1_1_common_1_1_types_1_1_a_b_s_object.html#ace96e24a2d775e437ed516afce6fe44c',1,'BadScript::Common::Types::ABSObject']]],
-  ['crc_248',['Crc',['../class_bad_script_1_1_i_o_1_1_crc.html',1,'BadScript::IO']]],
-  ['customfunctionpreprocessordirective_249',['CustomFunctionPreprocessorDirective',['../class_bad_script_1_1_console_1_1_preprocessor_1_1_directives_1_1_custom_function_preprocessor_directive.html',1,'BadScript::Console::Preprocessor::Directives']]],
-  ['custommacropreprocessordirective_250',['CustomMacroPreprocessorDirective',['../class_bad_script_1_1_console_1_1_preprocessor_1_1_directives_1_1_custom_macro_preprocessor_directive.html',1,'BadScript::Console::Preprocessor::Directives']]]
+  ['classtests_252',['ClassTests',['../class_bad_script_1_1_tests_1_1_class_tests.html',1,'BadScript::Tests']]],
+  ['clear_253',['Clear',['../class_bad_script_1_1_types_1_1_a_b_s_array.html#ad667f929dae8cac9bcbefefa6276fcc6',1,'BadScript.Types.ABSArray.Clear()'],['../class_bad_script_1_1_types_1_1_a_b_s_table.html#a4dd587acc7f3f265a070260d0a6bd574',1,'BadScript.Types.ABSTable.Clear()'],['../class_bad_script_1_1_types_1_1_implementations_1_1_b_s_table.html#a1078c8686bf74a86b0f3b336f96157e2',1,'BadScript.Types.Implementations.BSTable.Clear()']]],
+  ['clearhooks_254',['ClearHooks',['../class_bad_script_1_1_types_1_1_b_s_function.html#ad45d6246a997b3170aab1f1de52cda4a',1,'BadScript::Types::BSFunction']]],
+  ['consolewriter_255',['ConsoleWriter',['../class_bad_script_1_1_console_1_1_logging_1_1_console_writer.html',1,'BadScript::Console::Logging']]],
+  ['containstype_256',['ContainsType',['../class_bad_script_1_1_namespaces_1_1_b_s_namespace.html#a71cf42260dd01642a8aeee8021492c36',1,'BadScript.Namespaces.BSNamespace.ContainsType()'],['../class_bad_script_1_1_namespaces_1_1_b_s_namespace_root.html#a6edc9fc3a26c0771b99396e2b30fe64f',1,'BadScript.Namespaces.BSNamespaceRoot.ContainsType()']]],
+  ['convertbool_257',['ConvertBool',['../class_bad_script_1_1_types_1_1_a_b_s_object.html#a2bf9b141aec522c68a9506446ac97982',1,'BadScript::Types::ABSObject']]],
+  ['convertdecimal_258',['ConvertDecimal',['../class_bad_script_1_1_types_1_1_a_b_s_object.html#a3986e8bdab7bb2ed2b200e57584bb0ed',1,'BadScript::Types::ABSObject']]],
+  ['convertstring_259',['ConvertString',['../class_bad_script_1_1_types_1_1_a_b_s_object.html#ad0b10706b9810c9ec6786fa1c9318df4',1,'BadScript::Types::ABSObject']]],
+  ['crc_260',['Crc',['../class_bad_script_1_1_i_o_1_1_crc.html',1,'BadScript::IO']]],
+  ['customfunctionpreprocessordirective_261',['CustomFunctionPreprocessorDirective',['../class_bad_script_1_1_console_1_1_preprocessor_1_1_directives_1_1_custom_function_preprocessor_directive.html',1,'BadScript::Console::Preprocessor::Directives']]],
+  ['custommacropreprocessordirective_262',['CustomMacroPreprocessorDirective',['../class_bad_script_1_1_console_1_1_preprocessor_1_1_directives_1_1_custom_macro_preprocessor_directive.html',1,'BadScript::Console::Preprocessor::Directives']]]
 ];

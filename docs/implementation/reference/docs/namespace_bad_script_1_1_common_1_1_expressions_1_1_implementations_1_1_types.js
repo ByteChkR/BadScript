@@ -1,7 +1,0 @@
-var namespace_bad_script_1_1_common_1_1_expressions_1_1_implementations_1_1_types =
-[
-    [ "BSClassExpression", "class_bad_script_1_1_common_1_1_expressions_1_1_implementations_1_1_types_1_1_b_s_class_expression.html", "class_bad_script_1_1_common_1_1_expressions_1_1_implementations_1_1_types_1_1_b_s_class_expression" ],
-    [ "BSNamespaceExpression", "class_bad_script_1_1_common_1_1_expressions_1_1_implementations_1_1_types_1_1_b_s_namespace_expression.html", "class_bad_script_1_1_common_1_1_expressions_1_1_implementations_1_1_types_1_1_b_s_namespace_expression" ],
-    [ "BSNewInstanceExpression", "class_bad_script_1_1_common_1_1_expressions_1_1_implementations_1_1_types_1_1_b_s_new_instance_expression.html", "class_bad_script_1_1_common_1_1_expressions_1_1_implementations_1_1_types_1_1_b_s_new_instance_expression" ],
-    [ "BSUsingExpression", "class_bad_script_1_1_common_1_1_expressions_1_1_implementations_1_1_types_1_1_b_s_using_expression.html", "class_bad_script_1_1_common_1_1_expressions_1_1_implementations_1_1_types_1_1_b_s_using_expression" ]
-];

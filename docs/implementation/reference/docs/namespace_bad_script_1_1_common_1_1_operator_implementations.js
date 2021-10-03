@@ -1,6 +1,0 @@
-var namespace_bad_script_1_1_common_1_1_operator_implementations =
-[
-    [ "Implementations", "namespace_bad_script_1_1_common_1_1_operator_implementations_1_1_implementations.html", "namespace_bad_script_1_1_common_1_1_operator_implementations_1_1_implementations" ],
-    [ "ABSOperatorImplementation", "class_bad_script_1_1_common_1_1_operator_implementations_1_1_a_b_s_operator_implementation.html", "class_bad_script_1_1_common_1_1_operator_implementations_1_1_a_b_s_operator_implementation" ],
-    [ "BSOperatorImplementation", "class_bad_script_1_1_common_1_1_operator_implementations_1_1_b_s_operator_implementation.html", "class_bad_script_1_1_common_1_1_operator_implementations_1_1_b_s_operator_implementation" ]
-];

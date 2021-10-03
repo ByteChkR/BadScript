@@ -1,7 +1,0 @@
-var class_bad_script_1_1_utility_1_1_serialization_1_1_serializers_1_1_bs_enumerable_function_definition_expression_serializer =
-[
-    [ "CanDeserialize", "class_bad_script_1_1_utility_1_1_serialization_1_1_serializers_1_1_bs_enumerable_function_definition_expression_serializer.html#a930746edc77b519aedbd1f4cb2a402ef", null ],
-    [ "CanSerialize", "class_bad_script_1_1_utility_1_1_serialization_1_1_serializers_1_1_bs_enumerable_function_definition_expression_serializer.html#abbab51d50284ea5b5acd109ed02b0831", null ],
-    [ "Deserialize", "class_bad_script_1_1_utility_1_1_serialization_1_1_serializers_1_1_bs_enumerable_function_definition_expression_serializer.html#ae60270af54422342501e15d2fdb87413", null ],
-    [ "Serialize", "class_bad_script_1_1_utility_1_1_serialization_1_1_serializers_1_1_bs_enumerable_function_definition_expression_serializer.html#addea45a838a70da8f2951f3d0d831803", null ]
-];

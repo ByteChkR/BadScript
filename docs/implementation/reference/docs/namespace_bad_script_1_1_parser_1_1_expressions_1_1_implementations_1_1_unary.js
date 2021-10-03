@@ -1,0 +1,4 @@
+var namespace_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_unary =
+[
+    [ "BSUnaryExpression", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_unary_1_1_b_s_unary_expression.html", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_unary_1_1_b_s_unary_expression" ]
+];

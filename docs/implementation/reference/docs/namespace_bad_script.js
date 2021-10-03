@@ -1,9 +1,9 @@
 var namespace_bad_script =
 [
-    [ "Common", "namespace_bad_script_1_1_common.html", "namespace_bad_script_1_1_common" ],
     [ "Console", "namespace_bad_script_1_1_console.html", "namespace_bad_script_1_1_console" ],
     [ "ConsoleUtils", "namespace_bad_script_1_1_console_utils.html", "namespace_bad_script_1_1_console_utils" ],
     [ "Core", "namespace_bad_script_1_1_core.html", "namespace_bad_script_1_1_core" ],
+    [ "Exceptions", "namespace_bad_script_1_1_exceptions.html", "namespace_bad_script_1_1_exceptions" ],
     [ "Http", "namespace_bad_script_1_1_http.html", "namespace_bad_script_1_1_http" ],
     [ "HttpServer", "namespace_bad_script_1_1_http_server.html", "namespace_bad_script_1_1_http_server" ],
     [ "Imaging", "namespace_bad_script_1_1_imaging.html", "namespace_bad_script_1_1_imaging" ],
@@ -11,15 +11,22 @@ var namespace_bad_script =
     [ "IO", "namespace_bad_script_1_1_i_o.html", "namespace_bad_script_1_1_i_o" ],
     [ "Json", "namespace_bad_script_1_1_json.html", "namespace_bad_script_1_1_json" ],
     [ "Math", "namespace_bad_script_1_1_math.html", "namespace_bad_script_1_1_math" ],
+    [ "Namespaces", "namespace_bad_script_1_1_namespaces.html", "namespace_bad_script_1_1_namespaces" ],
+    [ "Optimization", "namespace_bad_script_1_1_optimization.html", "namespace_bad_script_1_1_optimization" ],
+    [ "Parser", "namespace_bad_script_1_1_parser.html", "namespace_bad_script_1_1_parser" ],
     [ "Process", "namespace_bad_script_1_1_process.html", "namespace_bad_script_1_1_process" ],
+    [ "Reflection", "namespace_bad_script_1_1_reflection.html", "namespace_bad_script_1_1_reflection" ],
+    [ "Scopes", "namespace_bad_script_1_1_scopes.html", "namespace_bad_script_1_1_scopes" ],
+    [ "Serialization", "namespace_bad_script_1_1_serialization.html", "namespace_bad_script_1_1_serialization" ],
     [ "Settings", "namespace_bad_script_1_1_settings.html", "namespace_bad_script_1_1_settings" ],
     [ "StringUtils", "namespace_bad_script_1_1_string_utils.html", "namespace_bad_script_1_1_string_utils" ],
     [ "Testing", "namespace_bad_script_1_1_testing.html", "namespace_bad_script_1_1_testing" ],
     [ "Tests", "namespace_bad_script_1_1_tests.html", "namespace_bad_script_1_1_tests" ],
     [ "Tools", "namespace_bad_script_1_1_tools.html", "namespace_bad_script_1_1_tools" ],
-    [ "Utility", "namespace_bad_script_1_1_utility.html", "namespace_bad_script_1_1_utility" ],
-    [ "Utils", "namespace_bad_script_1_1_utils.html", "namespace_bad_script_1_1_utils" ],
+    [ "Types", "namespace_bad_script_1_1_types.html", "namespace_bad_script_1_1_types" ],
+    [ "Validators", "namespace_bad_script_1_1_validators.html", "namespace_bad_script_1_1_validators" ],
     [ "Xml", "namespace_bad_script_1_1_xml.html", "namespace_bad_script_1_1_xml" ],
     [ "Zip", "namespace_bad_script_1_1_zip.html", "namespace_bad_script_1_1_zip" ],
-    [ "BSEngine", "class_bad_script_1_1_b_s_engine.html", "class_bad_script_1_1_b_s_engine" ]
+    [ "BSEngine", "class_bad_script_1_1_b_s_engine.html", "class_bad_script_1_1_b_s_engine" ],
+    [ "BSEngineSettings", "class_bad_script_1_1_b_s_engine_settings.html", "class_bad_script_1_1_b_s_engine_settings" ]
 ];

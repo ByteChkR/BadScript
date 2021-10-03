@@ -1,6 +1,7 @@
 var namespace_bad_script_1_1_settings =
 [
-    [ "BSEngineSettings", "class_bad_script_1_1_settings_1_1_b_s_engine_settings.html", "class_bad_script_1_1_settings_1_1_b_s_engine_settings" ],
-    [ "BSParserSettings", "class_bad_script_1_1_settings_1_1_b_s_parser_settings.html", "class_bad_script_1_1_settings_1_1_b_s_parser_settings" ],
-    [ "BSSettings", "class_bad_script_1_1_settings_1_1_b_s_settings.html", "class_bad_script_1_1_settings_1_1_b_s_settings" ]
+    [ "SettingsCategory", "class_bad_script_1_1_settings_1_1_settings_category.html", "class_bad_script_1_1_settings_1_1_settings_category" ],
+    [ "SettingsLogWriter", "class_bad_script_1_1_settings_1_1_settings_log_writer.html", "class_bad_script_1_1_settings_1_1_settings_log_writer" ],
+    [ "SettingsPair", "class_bad_script_1_1_settings_1_1_settings_pair.html", "class_bad_script_1_1_settings_1_1_settings_pair" ],
+    [ "SimpleSingleton", "class_bad_script_1_1_settings_1_1_simple_singleton.html", "class_bad_script_1_1_settings_1_1_simple_singleton" ]
 ];
