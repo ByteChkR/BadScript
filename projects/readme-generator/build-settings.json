@@ -48,7 +48,7 @@
         ]
       },
       {
-        "Name": "publishrelease",
+        "Name": "release",
         "OutputFormat": "none",
         "OutputFile": "%SubTarget.OutputFile%",
         "PreprocessorDirectives": "",
