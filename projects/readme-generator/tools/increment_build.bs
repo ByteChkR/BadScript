@@ -1,0 +1,10 @@
+versionChangeString = "(~){yyyy}.(~){MM}.(~){dd}.+"
+versioning = environment.loadInterface("versioning")
+json = environment.loadInterface("json")
+fs = environment.loadInterface("fs")
+file = json.fromJson(fs.readAll("./build-settings.json"))
+v = versioning.parse(file.AppInfo.Version)
+vNew = v.change(versionChangeString)
+print(v + " => " + vNew)
+file.AppInfo.Version = vNew.toString()
+fs.writeAll("./build-settings.json", json.toJson(file))

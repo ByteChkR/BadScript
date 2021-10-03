@@ -54,7 +54,7 @@ namespace BadScript.Common.Types
             {
                 if ( !s_Stacks.ContainsKey( Thread.CurrentThread ) )
                 {
-                    return new string[0];
+                    return Array.Empty < string >();
                 }
 
                 return s_Stacks[Thread.CurrentThread].Select( x => x.DebugData ).ToArray();

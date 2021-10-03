@@ -1,7 +1,7 @@
 {
   "AppInfo": {
-    "Name": "App",
-    "Version": "0.0.0.1"
+    "Name": "readme-generator",
+    "Version": "2021.10.3.7"
   },
   "BuildTargets": {
     "Targets": [
@@ -9,6 +9,7 @@
         "Name": "build",
         "OutputFormat": "text",
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "PreprocessorDirectives": "",
         "Include": [
           "./src/*.bs",
           "%BS_DIR%data/preprocessor/directives/*.bs"
@@ -18,24 +19,23 @@
         "PreEvents": [
           "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
         ],
-        "PostEvents": [],
-        "PreprocessorDirectives": ""
+        "PostEvents": []
       },
       {
         "Name": "run",
         "OutputFormat": "none",
         "OutputFile": "%SubTarget.OutputFile%",
+        "PreprocessorDirectives": "",
         "Include": [],
         "SubTarget": "build",
         "References": [],
         "PreEvents": [],
         "PostEvents": [
-          "%BS_EXEC% --nologo -f %Target.OutputFile%"
-        ],
-        "PreprocessorDirectives": ""
+          "%BS_EXEC% run --nologo -f %Target.OutputFile% -a ../../docs/interfaces/new"
+        ]
       }
     ]
   },
-  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\"",
-  "ReferenceResolvers": {}
+  "ReferenceResolvers": {},
+  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\""
 }

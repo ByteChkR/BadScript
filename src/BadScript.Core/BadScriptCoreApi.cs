@@ -276,6 +276,27 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
+                               new BSObject("isLiteral"),
+                               new BSFunction(
+                                              "function isLiteral(obj)",
+                                              (args) =>
+                                              {
+                                                  ABSObject arg = args[0].ResolveReference();
+
+                                                  if (arg.TryConvertString(out string _)||
+                                                      arg.TryConvertDecimal(out decimal _) ||
+                                                      arg.TryConvertBool(out bool _))
+                                                  {
+                                                      return BSObject.True;
+                                                  }
+
+                                                  return BSObject.False;
+                                              },
+                                              1
+                                             )
+                              );
+
+            root.InsertElement(
                                new BSObject("isString"),
                                new BSFunction(
                                               "function isString(obj)",

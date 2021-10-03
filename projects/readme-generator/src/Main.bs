@@ -1,0 +1,189 @@
+
+outputDir = "./output"
+if(args.size() == 1)
+{
+	outputDir = args[0]
+}
+
+knownItems = []
+fs = environment.loadInterface("fs", {})
+path = environment.loadInterface("path", {})
+function knowsItem(item)
+{
+	foreach	v in knownItems
+	{
+		if(item == v)
+		{
+			return true
+		}
+	}
+	return false
+}
+
+function repeatChar(char, count)
+{
+	ret = ""
+	for i = 0 while< count
+	{
+		ret += char
+	}
+	return ret
+}
+
+function writeArrayContent(arr)
+{
+	return debug(arr)
+}
+
+function writeArray(key, arr)
+{
+	return "Property '" + key + "' with default value ```js\n" + writeArrayContent(arr) + "\n```\n"
+}
+
+function writeTableContent(table)
+{
+	return debug(table)
+}
+
+function writeTable(key, table)
+{
+	return "Property '" + key + "' with default value ```js\n" + writeTableContent(table) + "\n```\n"
+}
+
+function writeTypeContent(type)
+{
+	return debug(type)
+}
+
+function writeType(key, type)
+{
+	return "Property '" + key + "' with default value ```js\n" + writeTypeContent(type) + "\n```\n"
+}
+
+
+function writeFunction(fnc)
+{
+	return "Function Signature: '`" + debug(fnc) + "`'"
+}
+
+
+function writeLiteralContent(value)
+{
+	return value
+}
+function writeLiteral(key, value)
+{
+	return "Property '`" + key + "`' with default value '`" + value + "`'\n"
+}
+
+
+function makeSection(key, value, depth)
+{
+	header = repeatChar("#", depth) + " " + key + "\n"
+	body = ""
+
+	if(isArray(value))
+	{
+		body = writeArray(key, value)
+	}
+	else if(isTable(value))
+	{
+		body = makeReadme(key, value, depth + 1)
+	}
+	else if(isType(value))
+	{
+		body = writeType(key, value)
+	}
+	else
+	{
+		print("Can not Generate Readme for '" + key + "' = '" + debug(value) + "'")
+	}
+
+	footer = "\n______\n"
+
+	return "\n" + header + body + footer
+}
+
+function makeReadme(name, table, depth)
+{
+	if(knowsItem(table))
+	{
+		return "\n<RECURSION: " + name + ">\n"
+	}
+	knownItems.add(table)
+	header = repeatChar("#", depth) + " `" + name + "` Documentation"
+	rm = "\n"
+	literalData = {}
+	funcData = {}
+	foreach (k,v) in table
+	{
+		else if(isTable(v))
+		{
+			rm += makeReadme(k, v, depth + 1)
+		}
+		else if(isLiteral(v))
+		{
+			literalData[k] = v
+		}
+		else if(isFunction(v))
+		{
+			funcData[k] = v
+		}
+		else
+		{
+			rm += makeSection(k, v, depth + 1)
+		}
+	}
+
+	props = repeatChar("#", depth + 1) + " Properties:"
+	hasProps = false
+	foreach (k, v) in literalData
+	{
+		hasProps = true
+		line = "\n- `" + k + " = " + v + "`"
+		props += line
+	}
+	props += "\n"
+
+	funcs = repeatChar("#", depth + 1) + " Functions:"
+	hasFuncs = false
+	foreach (k, v) in funcData
+	{
+		hasFuncs = true
+		line = "\n- " + writeFunction(v)
+		funcs += line
+	}
+	funcs += "\n"
+
+	rs = ""
+
+	if(hasFuncs)
+	{
+		rs += funcs
+	}
+
+	if(hasProps)
+	{
+		rs += props
+	}
+	return header + "\n" + rs + "\n" + rm
+}
+
+function makeInterfaceReadme(iface)
+{
+	print("Generating Docs for " + iface)
+	interface = environment.loadInterface(iface, {})
+	str = makeReadme(iface, interface, 1)
+	fs.writeAll(path.combine(outputDir, iface + ".md"), str)
+}
+
+if(!fs.exists(outputDir))
+{
+	fs.createDir(outputDir)
+}
+
+interfaces = environment.getInterfaceNames()
+foreach	iface in interfaces
+{
+	makeInterfaceReadme(iface)
+}

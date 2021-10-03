@@ -1,0 +1,26 @@
+# `string` Documentation
+## Functions:
+- Function Signature: '`function toNumber(str)/`'
+- Function Signature: '`function trim(str)/`'
+- Function Signature: '`function trimEnd(str)/`'
+- Function Signature: '`function trimStart(str)/`'
+- Function Signature: '`function split(str, split0, split1, split2, ...)`'
+- Function Signature: '`function substr(str, start)/substr(str, start, length)`'
+- Function Signature: '`function charAt(str, index)`'
+- Function Signature: '`function endsWith(str, end)`'
+- Function Signature: '`function startsWith(str, start)`'
+- Function Signature: '`function indexOf(str, searchStr)`'
+- Function Signature: '`function insert(str, index, s)`'
+- Function Signature: '`function lastIndexOf(str, searchStr)`'
+- Function Signature: '`function remove(str, start, length)`'
+- Function Signature: '`function replace(str, old, new)`'
+- Function Signature: '`function toArray(str)`'
+- Function Signature: '`function toUpper(str)`'
+- Function Signature: '`function length(str)`'
+- Function Signature: '`function isWhiteSpace(str)`'
+- Function Signature: '`function isLetter(str)`'
+- Function Signature: '`function isDigit(str)`'
+- Function Signature: '`function toLower(str)`'
+- Function Signature: '`function format(formatStr, arg0, arg1, ...)`'
+
+
