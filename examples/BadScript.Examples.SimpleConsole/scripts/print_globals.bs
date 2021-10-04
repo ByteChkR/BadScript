@@ -1,4 +1,4 @@
 foreach k in __G //Global Table is __G in all scopes
 {
-	print(k)
+	Console.WriteLine(k)
 }

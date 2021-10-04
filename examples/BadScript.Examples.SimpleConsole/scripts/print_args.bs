@@ -1,5 +1,5 @@
-print("Argument Count: " + args.size())
+Console.WriteLine("Argument Count: " + args.size())
 foreach arg in args
 {
-	print(arg)
+	Console.WriteLine(arg)
 }
