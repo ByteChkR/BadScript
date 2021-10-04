@@ -48,7 +48,6 @@ namespace BadScript.Console.Preprocessor.Directives
             BSFunctionDefinitionExpression expr = p.ParseFunction(
                                                                   false,
                                                                   s => SourcePreprocessor.Preprocess(
-                                                                       s,
                                                                        ctx.CreateSubContext( s )
                                                                       )
                                                                  );

@@ -1,0 +1,60 @@
+namespace System.Enumerables.Tests
+{
+	using System.Enumerables
+	Math = Environment.LoadInterface("Math")
+
+	counter = 0
+	sum = 0
+	foreach i in new Range(1, 5)
+	{
+		counter += 1
+		sum += i
+	}
+
+	#ASSERT_EQUALS(counter, 5)
+	#ASSERT_EQUALS(sum, 15)
+
+	Console.WriteLine("Passed Range Check")
+
+	counter = 0
+	foreach i in new Repeat(69)
+	{
+		#ASSERT_EQUALS(i , 69)
+
+		counter += 1
+
+		if(counter == 69)
+		{
+			break
+		}
+	}
+
+
+	Console.WriteLine("Passed Repeat Check")
+
+	foreach i in new EvenNumbers(-100, 100)
+	{
+		mod = i % 2
+		#ASSERT_EQUALS(mod, 0)
+	}
+
+	Console.WriteLine("Passed Even Numbers Check")
+
+	foreach i in new OddNumbers(-100, 100)
+	{
+		mod = Math.Abs(i % 2)
+		#ASSERT_EQUALS(mod, 1)
+	}
+
+	Console.WriteLine("Passed Odd Numbers Check")
+
+	counter = 0
+	foreach i in new PrimeNumbers(10, 20)
+	{
+		counter += 1
+	}
+
+	#ASSERT_EQUALS(counter, 4)
+
+	Console.WriteLine("Passed Prime Numbers Check")
+}

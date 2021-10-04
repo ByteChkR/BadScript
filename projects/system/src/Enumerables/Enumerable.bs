@@ -1,0 +1,15 @@
+namespace System.Enumerables
+{
+	class Enumerable
+	{
+		function MoveNext()
+		{
+			Environment.Error( GetType() + " does not override MoveNext()")
+		}
+
+		function GetCurrent()
+		{
+			Environment.Error( GetType() + " does not override GetCurrent()")
+		}
+	}
+}

@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "System",
-    "Version": "2021.9.29.1"
+    "Version": "2021.10.4.0"
   },
   "BuildTargets": {
     "Targets": [
@@ -11,6 +11,7 @@
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
         "Include": [
           "./src/*.bs",
+          "./src/Enumerables/*.bs",
           "%BS_DIR%data/preprocessor/directives/*.bs"
         ],
         "SubTarget": "",
@@ -27,6 +28,7 @@
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
         "Include": [
           "./tests/*.bs",
+          "./src/Enumerables/*.bs",
           "./src/*.bs",
           "%BS_DIR%data/preprocessor/directives/*.bs"
         ],

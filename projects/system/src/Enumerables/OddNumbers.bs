@@ -1,0 +1,44 @@
+namespace System.Enumerables
+{
+	class OddNumbers : Enumerable
+	{
+		_current = null
+		_end = 0
+		_start = 0
+		function OddNumbers(!start, !end)
+		{
+			#ASSERT_NUMBER(start)
+			#ASSERT_NUMBER(end)
+
+			_start = start
+			_end = end
+
+			isOdd = _start % 2
+			if( isOdd != 1 )
+			{
+				_current = _start - 1
+			}			
+		}
+
+		function MoveNext()
+		{
+			if(_current == null)
+			{
+				_current = _start
+				return true
+			}
+			_current += 2
+			return _current <= _end
+		}
+
+		function GetCurrent()
+		{
+			return _current
+		}
+
+		function ToString()
+		{
+			return "EvenNumbers Enumerable(" + _start + " - " + _end + ")"
+		}
+	}
+}

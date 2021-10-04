@@ -1,0 +1,37 @@
+namespace System.Enumerables
+{
+	class Range : Enumerable
+	{
+		_current = null
+		_end = 0
+		_start = 0
+		function Range(!start, !end)
+		{
+			#ASSERT_NUMBER(start)
+			#ASSERT_NUMBER(end)
+
+			_start = start
+			_end = end
+		}
+		function MoveNext()
+		{
+			if(_current == null)
+			{
+				_current = _start
+				return true
+			}
+			_current += 1
+			return _current <= _end
+		}
+
+		function GetCurrent()
+		{
+			return _current
+		}
+
+		function ToString()
+		{
+			return "Range Enumerable(" + _start + " - " + _end + ")"
+		}
+	}
+}

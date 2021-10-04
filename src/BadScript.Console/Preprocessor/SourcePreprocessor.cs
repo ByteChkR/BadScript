@@ -55,16 +55,16 @@ namespace BadScript.Console.Preprocessor
             SourcePreprocessorContext ctx =
                 new SourcePreprocessorContext( CreateEngine(), source, directives, s_Directives );
 
-            return Preprocess( source, ctx );
+            return Preprocess( ctx );
         }
 
-        public static string Preprocess( string source, SourcePreprocessorContext ctx )
+        public static string Preprocess( SourcePreprocessorContext ctx )
         {
             ctx.ScriptEngine.LoadSource( ctx.DirectivesNames, ctx.RuntimeScope, Array.Empty < ABSObject >() );
 
             int current = 0;
 
-            while ( current < source.Length )
+            while ( current < ctx.OriginalSource.Length )
             {
                 ( SourcePreprocessorDirective dir, int next ) = FindNext( ctx, current );
 
@@ -85,6 +85,7 @@ namespace BadScript.Console.Preprocessor
                 ctx.OriginalSource = ctx.OriginalSource.Remove( next, inLength ).Insert( next, output );
 
                 current = next;
+
             }
 
             return ctx.OriginalSource;

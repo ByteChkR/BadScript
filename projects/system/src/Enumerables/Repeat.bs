@@ -1,0 +1,26 @@
+namespace System.Enumerables
+{
+	class Repeat : Enumerable
+	{
+		_obj = 0
+		function Repeat(obj)
+		{
+
+			_obj = obj
+		}
+		function MoveNext()
+		{
+			return true
+		}
+
+		function GetCurrent()
+		{
+			return _obj
+		}
+
+		function ToString()
+		{
+			return "Repeat Enumerable(" + _obj + ")"
+		}
+	}
+}
