@@ -60,9 +60,12 @@ namespace BadScript.Parser.OperatorImplementations
 
         public static void AddImplementation( string functionName, ABSOperatorImplementation o )
         {
-            s_KeyMapping[o.OperatorKey] = functionName;
+            if(functionName!=null)
+                s_KeyMapping[o.OperatorKey] = functionName;
             m_Implementations.Add( o );
         }
+
+        public static bool HasKey( string key ) => s_KeyMapping.ContainsKey( key );
 
         public static ABSOperatorImplementation ResolveImplementation(
             string key,
@@ -71,7 +74,7 @@ namespace BadScript.Parser.OperatorImplementations
         {
             ABSObject firstO = args.First();
 
-            if ( allowOverrides && AllowOperatorOverrides )
+            if ( allowOverrides && AllowOperatorOverrides && HasKey(key) )
             {
                 string opImplName = ResolveKey( key );
 
