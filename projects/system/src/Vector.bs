@@ -2,7 +2,7 @@
 
 namespace System.Vectors
 {
-	math = environment.loadInterface("math", {})
+	Math = Environment.LoadInterface("Math", {})
 	class Vector4
 	{
 		X = 0
@@ -51,7 +51,7 @@ namespace System.Vectors
 
 		function Magnitude()
 		{
-			return math.sqrt(SqrMagnitude())
+			return Math.Sqrt(SqrMagnitude())
 		}
 
 		function Normalized()
@@ -61,34 +61,34 @@ namespace System.Vectors
 
 		function op_Addition(other)
 		{
-			if(isType(other))
+			if(IsType(other))
 			{
 				return Add(other)
 			}
 			else
 			{
-				print(debug(other))
-				error("Can only Add a Vector with a Vector.")
+				Console.WriteLine(Debug(other))
+				Error("Can only Add a Vector with a Vector.")
 			}
 		}
 
 		function op_Subtraction(other)
 		{
-			if(isType(other))
+			if(IsType(other))
 			{
 				return Sub(other)
 			}
 			else
 			{
-				error("Can only Add a Vector with a Vector.")
+				Error("Can only Add a Vector with a Vector.")
 			}
 		}
 
 		function op_Multiply(other)
 		{
-			if(isType(other))
+			if(IsType(other))
 			{
-				error("Can not Multiply Two Vectors. Right side has to be scalar")
+				Error("Can not Multiply Two Vectors. Right side has to be scalar")
 			}
 			else
 			{
@@ -98,9 +98,9 @@ namespace System.Vectors
 
 		function op_Division(other)
 		{
-			if(isType(other))
+			if(IsType(other))
 			{
-				error("Can not Multiply Two Vectors. Right side has to be scalar")
+				Error("Can not Multiply Two Vectors. Right side has to be scalar")
 			}
 			else
 			{
@@ -110,7 +110,7 @@ namespace System.Vectors
 
 		function op_Equality(other)
 		{
-			if(isType(other))
+			if(IsType(other))
 			{
 				return	X == other.X &&
 						Y == other.Y &&

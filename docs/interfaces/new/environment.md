@@ -1,18 +1,18 @@
-# `environment` Documentation
+# `Environment` Documentation
 ## Functions:
-- Function Signature: '`function defaultOp(opKey, args..)`'
-- Function Signature: '`function createScope()/createScope(parentScope)`'
-- Function Signature: '`function resetScope(scope)`'
-- Function Signature: '`function loadScopedString(scope, str, args..)/loadScopedString(rootTable, str, args..)`'
-- Function Signature: '`function loadScopedBenchmark(scope, str, args..)/loadScopedBenchmark(rootTable, str, args..)`'
-- Function Signature: '`function addPreprocessor(ppName, func)`'
-- Function Signature: '`function loadString(str)`'
-- Function Signature: '`function loadBenchmark(str)`'
-- Function Signature: '`function loadInterface(key)/loadInterface(key, root)`'
-- Function Signature: '`function getInterfaceNames()`'
-- Function Signature: '`function hasInterface(interfaceName)`'
-- Function Signature: '`function isLiteral(v)`'
+- Function Signature: '`function DefaultOp(opKey, args..)`'
+- Function Signature: '`function CreateScope()/CreateScope(parentScope)`'
+- Function Signature: '`function ResetScope(scope)`'
+- Function Signature: '`function LoadScopedString(scope, str, args..)/LoadScopedString(rootTable, str, args..)`'
+- Function Signature: '`function LoadScopedBenchmark(scope, str, args..)/LoadScopedBenchmark(rootTable, str, args..)`'
+- Function Signature: '`function AddPreprocessor(ppName, func)`'
+- Function Signature: '`function LoadString(str)`'
+- Function Signature: '`function LoadBenchmark(str)`'
+- Function Signature: '`function LoadInterface(key)/LoadInterface(key, root)`'
+- Function Signature: '`function GetInterfaceNames()`'
+- Function Signature: '`function HasInterface(interfaceName)`'
+- Function Signature: '`function IsLiteral(v)`'
 ## Properties:
-- `settings = bs`
+- `Settings = bs`
 
 

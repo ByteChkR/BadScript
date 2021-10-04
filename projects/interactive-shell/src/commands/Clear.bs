@@ -1,15 +1,15 @@
 namespace InteractiveShell.Console.Commands
 {
 	using InteractiveShell.Console
-	class ClearCommand : ConsoleCommand
+	class ClearCommand : InteractiveShellConsoleCommand
 	{
 		function ClearCommand() : base("clear") { }
 	
 
 		function RunCommand(!args)
 		{
-			print("Clearing Input Buffer")
-			Console.Clear()
+			Console.WriteLine("Clearing Input Buffer")
+			Instance.Clear()
 		}
 
 

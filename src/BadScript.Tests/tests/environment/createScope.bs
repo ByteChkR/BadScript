@@ -1,2 +1,2 @@
-scope = environment.createScope()
+scope = Environment.CreateScope()
 return scope != null

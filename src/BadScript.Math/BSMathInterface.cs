@@ -11,7 +11,7 @@ namespace BadScript.Math
 
         #region Public
 
-        public BSMathInterface() : base( "math" )
+        public BSMathInterface() : base( "Math" )
         {
         }
 
@@ -30,9 +30,9 @@ namespace BadScript.Math
             ret.InsertElement( new BSObject( "E" ), new BSObject( ( decimal )System.Math.E ) );
 
             ret.InsertElement(
-                              new BSObject( "sin" ),
+                              new BSObject( "Sin" ),
                               new BSFunction(
-                                             "function sin(n)",
+                                             "function Sin(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -48,9 +48,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "cos" ),
+                              new BSObject( "Cos" ),
                               new BSFunction(
-                                             "function cos(n)",
+                                             "function Cos(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -66,9 +66,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "tan" ),
+                              new BSObject( "Tan" ),
                               new BSFunction(
-                                             "function tan(n)",
+                                             "function Tan(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -84,9 +84,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "sinh" ),
+                              new BSObject( "Sinh" ),
                               new BSFunction(
-                                             "function sinh(n)",
+                                             "function Sinh(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -102,9 +102,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "cosh" ),
+                              new BSObject( "Cosh" ),
                               new BSFunction(
-                                             "function cosh(n)",
+                                             "function Cosh(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -120,9 +120,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "tanh" ),
+                              new BSObject( "Tanh" ),
                               new BSFunction(
-                                             "function tanh(n)",
+                                             "function Tanh(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -138,9 +138,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "asin" ),
+                              new BSObject( "Asin" ),
                               new BSFunction(
-                                             "function asin(n)",
+                                             "function Asin(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -156,9 +156,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "acos" ),
+                              new BSObject( "Acos" ),
                               new BSFunction(
-                                             "function acos(n)",
+                                             "function Acos(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -174,9 +174,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "atan" ),
+                              new BSObject( "Atan" ),
                               new BSFunction(
-                                             "function atan(n)",
+                                             "function Atan(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -192,9 +192,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "atan2" ),
+                              new BSObject( "Atan2" ),
                               new BSFunction(
-                                             "function atan2(x, y)",
+                                             "function Atan2(x, y)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -213,9 +213,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "log" ),
+                              new BSObject( "Log" ),
                               new BSFunction(
-                                             "function log(n, newBase)",
+                                             "function Log(n, newBase)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -243,9 +243,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "abs" ),
+                              new BSObject( "Abs" ),
                               new BSFunction(
-                                             "function abs(n)",
+                                             "function Abs(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -261,9 +261,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "ceiling" ),
+                              new BSObject( "Ceiling" ),
                               new BSFunction(
-                                             "function ceiling(n)",
+                                             "function Ceiling(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -279,9 +279,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "floor" ),
+                              new BSObject( "Floor" ),
                               new BSFunction(
-                                             "function floor(n)",
+                                             "function Floor(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -297,9 +297,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "exp" ),
+                              new BSObject( "Exp" ),
                               new BSFunction(
-                                             "function exp(n)",
+                                             "function Exp(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -315,9 +315,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "log10" ),
+                              new BSObject( "Log10" ),
                               new BSFunction(
-                                             "function log10(n)",
+                                             "function Log10(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -333,9 +333,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "sign" ),
+                              new BSObject( "Sign" ),
                               new BSFunction(
-                                             "function sign(n)",
+                                             "function Sign(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -351,9 +351,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "min" ),
+                              new BSObject( "Min" ),
                               new BSFunction(
-                                             "function min(x, y)",
+                                             "function Min(x, y)",
                                              args =>
                                              {
                                                  return new BSObject(
@@ -372,9 +372,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "max" ),
+                              new BSObject("Max"),
                               new BSFunction(
-                                             "function max(x, y)",
+                                             "function Max(x, y)",
                                              args =>
                                              {
                                                  return new BSObject(
@@ -393,9 +393,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "pow" ),
+                              new BSObject( "Pow" ),
                               new BSFunction(
-                                             "function pow(x, y)",
+                                             "function Pow(x, y)",
                                              args =>
                                              {
                                                  return new BSObject(
@@ -414,9 +414,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "sqrt" ),
+                              new BSObject( "Sqrt" ),
                               new BSFunction(
-                                             "function sqrt(n)",
+                                             "function Sqrt(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -432,9 +432,9 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject( "truncate" ),
+                              new BSObject( "Truncate" ),
                               new BSFunction(
-                                             "function truncate(n)",
+                                             "function Truncate(n)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -449,7 +449,7 @@ namespace BadScript.Math
                                             )
                              );
 
-            ret.InsertElement( new BSObject( "isPrime" ), new BSFunction( "function isPrime(num)", PrimeTest, 1 ) );
+            ret.InsertElement( new BSObject( "IsPrime" ), new BSFunction( "function IsPrime(num)", PrimeTest, 1 ) );
         }
 
         private static ABSObject PrimeTest( ABSObject[] arg )

@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "interactive-shell",
-    "Version": "2021.10.3.7"
+    "Version": "2021.10.4.10"
   },
   "BuildTargets": {
     "Targets": [

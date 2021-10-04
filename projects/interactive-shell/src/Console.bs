@@ -2,15 +2,15 @@ namespace InteractiveShell.Console
 {
 	using InteractiveShell.Internal
 
-	#ASSERT_INTERFACE_AVAILABLE(string)
+	#ASSERT_INTERFACE_AVAILABLE(String)
 
-	string = environment.loadInterface("string")
+	String = Environment.LoadInterface("String")
 
-	class ConsoleCommand
+	class InteractiveShellConsoleCommand
 	{
 		Name = null
-		Console = null
-		function ConsoleCommand(!name)
+		Instance = null
+		function InteractiveShellConsoleCommand(!name)
 		{
 			Name = name
 		}
@@ -21,7 +21,7 @@ namespace InteractiveShell.Console
 
 	}
 
-	class Console
+	class InteractiveShellConsole
 	{
 		_prefix = null
 		_shell = null
@@ -29,7 +29,7 @@ namespace InteractiveShell.Console
 		_currentStr = null
 		_exitLoop = false
 		_writeReturn = true
-		function Console(!prefix)
+		function InteractiveShellConsole(!prefix)
 		{
 			_prefix = prefix ?? ""
 			_shell = new InteractiveShell()
@@ -42,32 +42,32 @@ namespace InteractiveShell.Console
 		{
 			#ASSERT_TYPE(cmd)
 
-			if(!cmd.IsInstanceOf("ConsoleCommand"))
+			if(!cmd.IsInstanceOf("InteractiveShellConsoleCommand"))
 			{
 				error(cmd + "has to inherit from ConsoleCommand")
 			}
 
-			cmd.Console = this
-			print("New Command: " + cmd.ToString())
-			_commands.add(cmd)
+			cmd.Instance = this
+			Console.WriteLine("New Command: " + cmd.ToString())
+			_commands.Add(cmd)
 		}
 
 		function RunCommand(argLine)
 		{
 			#ASSERT_STRING(argLine)
-			cmdArgs = string.split(argLine, " ")
-			if(cmdArgs.size() == 0)
+			cmdArgs = String.Split(argLine, " ")
+			if(cmdArgs.Size() == 0)
 			{
 				return false
 			}
 
 			cmdName = cmdArgs[0]
-			cmdArgs.removeAt(0)
+			cmdArgs.RemoveAt(0)
 			foreach cmd in _commands
 			{
 				if(cmd.Name == cmdName)
 				{
-					print("Found Command: "	+ cmd.Name)
+					Console.WriteLine("Found Command: "	+ cmd.Name)
 					cmd.RunCommand(cmdArgs)
 					return true
 				}
@@ -93,14 +93,14 @@ namespace InteractiveShell.Console
 
 			
 			execute = false
-			if(!string.endsWith(argLine, "\\"))
+			if(!String.EndsWith(argLine, "\\"))
 			{
 				_currentStr += argLine
 				execute = true
 			}
 			else
 			{
-				_currentStr += string.remove(argLine, string.length(argLine) - 1, 1)
+				_currentStr += String.Remove(argLine, String.length(argLine) - 1, 1)
 			}
 
 			if(execute)
@@ -108,7 +108,7 @@ namespace InteractiveShell.Console
 				o = _shell.RunCommand(_currentStr)
 				if(_writeReturn || o.IsError)
 				{
-					print("Returned: " + o.ToString())
+					Console.WriteLine("Returned: " + o.ToString())
 				}
 				_currentStr = ""
 			}
@@ -120,8 +120,8 @@ namespace InteractiveShell.Console
 			_exitLoop = false
 			while(!_exitLoop)
 			{
-				write(_prefix)
-				cmd = read()
+				Console.Write(_prefix)
+				cmd = Console.ReadLine()
 				Run(cmd)
 			}
 		}
@@ -138,25 +138,25 @@ namespace InteractiveShell.Console
 
 		function LoadPlugins()
 		{
-			fs = environment.loadInterface("fs", {})
-			path = environment.loadInterface("path", {})
+			FileSystem = Environment.LoadInterface("FileSystem", {})
+			Path = Environment.LoadInterface("Path", {})
 
-			pluginPath = path.combine(app.Manifest.PersistentPath, "plugins")
-			fs.createDir(pluginPath)
+			pluginPath = Path.Combine(App.Manifest.PersistentPath, "plugins")
+			FileSystem.CreateDir(pluginPath)
 
-			files = fs.getFiles(pluginPath, "*.bs", true)
-			print("Loading " + files.size() + " Plugins")
+			files = FileSystem.GetFiles(pluginPath, "*.bs", true)
+			Console.WriteLine("Loading " + files.Size() + " Plugins")
 			foreach file in files
 			{
-				name = path.getFileName(file)
-				print("Loading Plugin: " + name)
+				name = Path.GetFileName(file)
+				Console.WriteLine("Loading Plugin: " + name)
 				try
 				{
-					environment.loadString(fs.readAll(file), this)
+					Environment.LoadString(FileSystem.ReadAll(file), this)
 				}
 				catch(e)
 				{
-					print("Loading Plugin: " + name + " Failed!(" + e.message + ")")
+					Console.WriteLine("Loading Plugin: " + name + " Failed!(" + e.message + ")")
 				}
 			}
 		}

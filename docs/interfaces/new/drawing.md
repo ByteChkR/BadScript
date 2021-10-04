@@ -1,11 +1,11 @@
-# `drawing` Documentation
+# `Drawing` Documentation
 ## Functions:
-- Function Signature: '`function loadImage(data)`'
-- Function Signature: '`function createImage(width, height)`'
-- Function Signature: '`function color(a, r, g, b)/color(r, g, b)`'
+- Function Signature: '`function LoadImage(data)`'
+- Function Signature: '`function CreateImage(width, height)`'
+- Function Signature: '`function Color(a, r, g, b)/Color(r, g, b)`'
 
 
-## `rotateFlipType` Documentation
+## `RotateFlipType` Documentation
 ### Properties:
 - `Rotate180FlipXY = 0`
 - `RotateNoneFlipNone = 0`

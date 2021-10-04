@@ -26,9 +26,9 @@ namespace BadScript.Reflection
         public override void AddApi( ABSTable root )
         {
             root.InsertElement(
-                               new BSObject( "create" ),
+                               new BSObject( "Create" ),
                                new BSFunction(
-                                              "function create(typename, args0, args...)",
+                                              "function Create(typename, args0, args...)",
                                               a => Find( a[0].ConvertString() ).Create( a.Skip( 1 ).ToArray() ),
                                               1,
                                               int.MaxValue
@@ -36,8 +36,8 @@ namespace BadScript.Reflection
                               );
 
             root.InsertElement(
-                               new BSObject( "getType" ),
-                               new BSFunction( "function getType(typename)", a => Find( a[0].ConvertString() ), 1 )
+                               new BSObject( "GetType" ),
+                               new BSFunction( "function GetType(typename)", a => Find( a[0].ConvertString() ), 1 )
                               );
         }
 
@@ -120,7 +120,7 @@ namespace BadScript.Reflection
 
         #region Private
 
-        private BSReflectionInterface() : base( "reflection" )
+        private BSReflectionInterface() : base( "Reflection" )
         {
         }
 

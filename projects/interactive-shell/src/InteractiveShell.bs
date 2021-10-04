@@ -12,7 +12,7 @@ namespace InteractiveShell.Internal
 			IsError = isError
 			if(IsError && returnValue == null)
 			{
-				error("Return value must be set to error code if IsError is true")
+				Error("Return value must be set to Error code if IsError is true")
 			}
 			ReturnValue = returnValue
 		}
@@ -21,10 +21,10 @@ namespace InteractiveShell.Internal
 		{
 			if(IsError)
 			{
-				return "ERROR: " + debug(ReturnValue)
+				return "ERROR: " + Debug(ReturnValue)
 			}
 			
-			return "SUCCESS: " + debug(ReturnValue)
+			return "SUCCESS: " + Debug(ReturnValue)
 		}
 	}
 
@@ -38,7 +38,7 @@ namespace InteractiveShell.Internal
 
 		function ResetScope()
 		{
-			_scope = environment.createScope()
+			_scope = Environment.CreateScope()
 		}
 
 		function RunCommand(!command)
@@ -47,8 +47,8 @@ namespace InteractiveShell.Internal
 			
 			try
 			{
-				ret = environment.loadScopedString(_scope, command)
-				environment.resetScope(_scope)
+				ret = Environment.LoadScopedString(_scope, command)
+				Environment.ResetScope(_scope)
 				return new CommandReturn(false, ret)
 			}
 			catch(e)

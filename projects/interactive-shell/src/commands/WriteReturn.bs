@@ -1,15 +1,15 @@
 namespace InteractiveShell.Console.Commands
 {
 	using InteractiveShell.Console
-	class WriteReturnCommand : ConsoleCommand
+	class WriteReturnCommand : InteractiveShellConsoleCommand
 	{
 		function WriteReturnCommand() : base("write-return") { }
 
 		function RunCommand(!args)
 		{
-			Console._writeReturn = !Console._writeReturn
+			Instance._writeReturn = !Instance._writeReturn
 			
-			print("Write Return: " + Console._writeReturn)
+			Console.WriteLine("Write Return: " + Instance._writeReturn)
 		}
 
 		function ToString()

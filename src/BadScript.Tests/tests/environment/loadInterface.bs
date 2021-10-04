@@ -1,2 +1,2 @@
-env = environment.loadInterface("environment")
-return env != null && isTable(env)
+env = Environment.LoadInterface("Environment")
+return env != null && IsTable(env)

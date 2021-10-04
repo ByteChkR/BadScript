@@ -1,6 +1,6 @@
-# `zip` Documentation
+# `Zip` Documentation
 ## Functions:
-- Function Signature: '`createFromDirectory(sourceDir, destinationFile)`'
-- Function Signature: '`extractToDirectory(sourceFile, destinationDir)`'
+- Function Signature: '`CreateFromDirectory(sourceDir, destinationFile)`'
+- Function Signature: '`ExtractToDirectory(sourceFile, destinationDir)`'
 
 

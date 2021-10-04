@@ -351,10 +351,10 @@ namespace BadScript.Types
             m_Func = func;
             m_Properties = new();
 
-            m_Properties["invoke"] = new BSCachedFunction(
+            m_Properties["Invoke"] = new BSCachedFunction(
                                                           () => new BSFunctionReference(
                                                                new BSFunction(
-                                                                              "function invoke(args)/invoke(args, execHooks)",
+                                                                              "function Invoke(args)/Invoke(args, execHooks)",
                                                                               x =>
                                                                               {
                                                                                   if ( x.Length == 1 )
@@ -378,32 +378,32 @@ namespace BadScript.Types
                                                               )
                                                          );
 
-            m_Properties["hook"] =
+            m_Properties["Hook"] =
                 new BSCachedFunction(
                                      () => new BSFunctionReference(
                                                                    new BSFunction(
-                                                                        "function hook(hookFunc)",
+                                                                        "function Hook(hookFunc)",
                                                                         HookFunction,
                                                                         1
                                                                        )
                                                                   )
                                     );
 
-            m_Properties["releaseHook"] =
+            m_Properties["ReleaseHook"] =
                 new BSCachedFunction(
                                      () => new BSFunctionReference(
                                                                    new BSFunction(
-                                                                        "function releaseHook(hookFunc)",
+                                                                        "function ReleaseHook(hookFunc)",
                                                                         ReleaseHookFunction,
                                                                         1
                                                                        )
                                                                   )
                                     );
 
-            m_Properties["releaseHooks"] = new BSCachedFunction(
+            m_Properties["ReleaseHooks"] = new BSCachedFunction(
                                                                 () => new BSFunctionReference(
                                                                      new BSFunction(
-                                                                          "function releaseHook()",
+                                                                          "function ReleaseHook()",
                                                                           ReleaseHooksFunction,
                                                                           0
                                                                          )

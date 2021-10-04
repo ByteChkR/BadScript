@@ -14,7 +14,7 @@ namespace BadScript.IO
 
         #region Public
 
-        public BSFileSystemInterface() : base( "fs" )
+        public BSFileSystemInterface() : base( "FileSystem" )
         {
         }
 
@@ -51,9 +51,9 @@ namespace BadScript.IO
         private static void GenerateFSApi( ABSTable ret )
         {
             ret.InsertElement(
-                              new BSObject( "exists" ),
+                              new BSObject( "Exists" ),
                               new BSFunction(
-                                             "function exists(path)",
+                                             "function Exists(path)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -70,9 +70,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "setCurrentDir" ),
+                              new BSObject( "SetCurrentDir" ),
                               new BSFunction(
-                                             "function setCurrentDir(path)",
+                                             "function SetCurrentDir(path)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -87,9 +87,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "getFiles" ),
+                              new BSObject( "GetFiles" ),
                               new BSFunction(
-                                             "function getFiles(path)/getFiles(path, searchPattern)/getFiles(path, searchPattern, recurse)",
+                                             "function GetFiles(path)/GetFiles(path, searchPattern)/GetFiles(path, searchPattern, recurse)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -130,9 +130,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "getDirectories" ),
+                              new BSObject( "GetDirectories" ),
                               new BSFunction(
-                                             "function getDirectories(path)/getDirectories(path, searchPattern)/getDirectories(path, searchPattern, recurse)",
+                                             "function GetDirectories(path)/GetDirectories(path, searchPattern)/GetDirectories(path, searchPattern, recurse)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -173,9 +173,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "getCurrentDir" ),
+                              new BSObject( "GetCurrentDir" ),
                               new BSFunction(
-                                             "function getCurrentDir()",
+                                             "function GetCurrentDir()",
                                              args =>
                                              {
                                                  return new BSObject(
@@ -187,9 +187,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "isDir" ),
+                              new BSObject( "IsDir" ),
                               new BSFunction(
-                                             "function isDir(path)",
+                                             "function IsDir(path)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -205,9 +205,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "isFile" ),
+                              new BSObject("IsFile"),
                               new BSFunction(
-                                             "function isFile(path)",
+                                             "function IsFile(path)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -223,9 +223,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "createDir" ),
+                              new BSObject( "CreateDir" ),
                               new BSFunction(
-                                             "function createDir(path)",
+                                             "function CreateDir(path)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -239,9 +239,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "copy" ),
+                              new BSObject( "Copy" ),
                               new BSFunction(
-                                             "function copy(source, destination)",
+                                             "function Copy(source, destination)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -265,9 +265,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "move" ),
+                              new BSObject( "Move" ),
                               new BSFunction(
-                                             "function move(source, destination)",
+                                             "function Move(source, destination)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -290,9 +290,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "delete" ),
+                              new BSObject( "Delete" ),
                               new BSFunction(
-                                             "function delete(path)|function delete(path, recurse)",
+                                             "function Delete(path)|function Delete(path, recurse)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -320,18 +320,18 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "crc" ),
+                              new BSObject( "Crc" ),
                               new BSFunction(
-                                             "function crc(path)",
+                                             "function Crc(path)",
                                              GetCheckSum,
                                              1
                                             )
                              );
 
             ret.InsertElement(
-                              new BSObject( "open" ),
+                              new BSObject( "Open" ),
                               new BSFunction(
-                                             "function open(path)",
+                                             "function Open(path)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -351,9 +351,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "writeAll" ),
+                              new BSObject( "WriteAll" ),
                               new BSFunction(
-                                             "function writeAll(path, data)",
+                                             "function WriteAll(path, data)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
@@ -370,9 +370,9 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject( "readAll" ),
+                              new BSObject( "ReadAll" ),
                               new BSFunction(
-                                             "function readAll(path, data)",
+                                             "function ReadAll(path, data)",
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();

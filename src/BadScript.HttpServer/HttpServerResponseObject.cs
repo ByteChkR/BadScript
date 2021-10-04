@@ -38,28 +38,28 @@ namespace BadScript.HttpServer
                                               pos,
                                               new Dictionary < ABSObject, ABSObject >
                                               {
-                                                  { new BSObject( "headers" ), new BSTable( pos, headers ) },
+                                                  { new BSObject( "Headers" ), new BSTable( pos, headers ) },
                                                   {
-                                                      new BSObject( "addHeader" ), new BSFunction(
-                                                           "function addHeader(key, value)",
+                                                      new BSObject( "AddHeader" ), new BSFunction(
+                                                           "function AddHeader(key, value)",
                                                            ResponseAddHeader,
                                                            2
                                                           )
                                                   },
                                                   {
-                                                      new BSObject( "redirect" ),
-                                                      new BSFunction( "function redirect(url)", ResponseRedirect, 1 )
+                                                      new BSObject( "Redirect" ),
+                                                      new BSFunction( "function Redirect(url)", ResponseRedirect, 1 )
                                                   },
                                                   {
-                                                      new BSObject( "writeBody" ), new BSFunction(
-                                                           "function writeBody(bodyStr)",
+                                                      new BSObject( "WriteBody" ), new BSFunction(
+                                                           "function WriteBody(bodyStr)",
                                                            ResponseWriteBody,
                                                            1
                                                           )
                                                   },
                                                   {
-                                                      new BSObject( "setStatus" ), new BSFunction(
-                                                           "function setStatus(statusCode)/setStatus(statusCode, message)",
+                                                      new BSObject( "SetStatus" ), new BSFunction(
+                                                           "function SetStatus(statusCode)/SetStatus(statusCode, message)",
                                                            SetStatusCode,
                                                            1,
                                                            2

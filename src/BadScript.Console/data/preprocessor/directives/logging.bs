@@ -1,15 +1,15 @@
 #define TAG = "[PREPROCESSOR]"
 #custom LOG(!message)
 {
-	print(TAG + "[LOG]" + message)
+	Console.WriteLine(TAG + "[LOG]" + message)
 }
 
 #custom WARN(!message)
 {
-	print(TAG + "[WARN]" + message)
+	Console.WriteLine(TAG + "[WARN]" + message)
 }
 
 #custom ERROR(!message)
 {
-	error(TAG + "[WARN]" + message)
+	Console.WriteLine(TAG + "[WARN]" + message)
 }

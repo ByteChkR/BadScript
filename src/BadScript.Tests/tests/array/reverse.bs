@@ -3,5 +3,5 @@ a = [
 	2
 ]
 
-a.reverse()
+a.Reverse()
 return a[0] == 2 && a[1] == 1

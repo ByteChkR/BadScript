@@ -18,28 +18,28 @@ namespace BadScript.Imaging
 
         #region Public
 
-        public BSDrawingInterface() : base( "drawing" )
+        public BSDrawingInterface() : base( "Drawing" )
         {
         }
 
         public override void AddApi( ABSTable root )
         {
             root.InsertElement(
-                               new BSObject( "loadImage" ),
-                               new BSFunction( "function loadImage(data)", LoadImageApi, 1, 1 )
+                               new BSObject( "LoadImage" ),
+                               new BSFunction("function LoadImage(data)", LoadImageApi, 1, 1 )
                               );
 
             root.InsertElement(
-                               new BSObject( "createImage" ),
-                               new BSFunction( "function createImage(width, height)", CreateEmptyBitmapApi, 2, 2 )
+                               new BSObject( "CreateImage" ),
+                               new BSFunction( "function CreateImage(width, height)", CreateEmptyBitmapApi, 2, 2 )
                               );
 
             root.InsertElement(
-                               new BSObject( "color" ),
-                               new BSFunction( "function color(a, r, g, b)/color(r, g, b)", CreateColorApi, 3, 4 )
+                               new BSObject( "Color" ),
+                               new BSFunction( "function Color(a, r, g, b)/Color(r, g, b)", CreateColorApi, 3, 4 )
                               );
 
-            root.InsertElement( new BSObject( "rotateFlipType" ), BSTable.FromEnum < RotateFlipType >() );
+            root.InsertElement( new BSObject( "RotateFlipType" ), BSTable.FromEnum < RotateFlipType >() );
         }
 
         #endregion
@@ -128,38 +128,38 @@ namespace BadScript.Imaging
             BSTable table = new BSTable( SourcePosition.Unknown );
 
             table.InsertElement(
-                                new BSObject( "getWidth" ),
-                                new BSFunction( "function getWidth()", x => BitmapWidthApi( bmp ), 0 )
+                                new BSObject( "GetWidth" ),
+                                new BSFunction("function GetWidth()", x => BitmapWidthApi( bmp ), 0 )
                                );
 
             table.InsertElement(
-                                new BSObject( "getHeight" ),
-                                new BSFunction( "function getHeight()", x => BitmapHeightApi( bmp ), 0 )
+                                new BSObject( "GetHeight" ),
+                                new BSFunction("function GetHeight()", x => BitmapHeightApi( bmp ), 0 )
                                );
 
             table.InsertElement(
-                                new BSObject( "setPixel" ),
-                                new BSFunction( "function setPixel(x, y, value)", x => BitmapSetPixelApi( bmp, x ), 3 )
+                                new BSObject( "SetPixel" ),
+                                new BSFunction("function SetPixel(x, y, value)", x => BitmapSetPixelApi( bmp, x ), 3 )
                                );
 
             table.InsertElement(
-                                new BSObject( "getPixel" ),
-                                new BSFunction( "function getPixel(x, y)", x => BitmapGetPixelApi( bmp, x ), 2 )
+                                new BSObject( "GetPixel" ),
+                                new BSFunction("function GetPixel(x, y)", x => BitmapGetPixelApi( bmp, x ), 2 )
                                );
 
             table.InsertElement(
-                                new BSObject( "rotateFlip" ),
-                                new BSFunction( "function rotateFlip()", x => BitmapRotateFlip( bmp, x ), 1 )
+                                new BSObject( "RotateFlip" ),
+                                new BSFunction("function RotateFlip()", x => BitmapRotateFlip( bmp, x ), 1 )
                                );
 
             table.InsertElement(
-                                new BSObject( "serialize" ),
-                                new BSFunction( "function serialize()", x => BitmapSerializeApi( bmp, x ), 0, 0 )
+                                new BSObject( "Serialize" ),
+                                new BSFunction("function Serialize()", x => BitmapSerializeApi( bmp, x ), 0, 0 )
                                );
 
             table.InsertElement(
-                                new BSObject( "dispose" ),
-                                new BSFunction( "function dispose()", x => BitmapDisposeApi( bmp ), 0, 0 )
+                                new BSObject( "Dispose" ),
+                                new BSFunction( "function Dispose()", x => BitmapDisposeApi( bmp ), 0, 0 )
                                );
 
             return table;

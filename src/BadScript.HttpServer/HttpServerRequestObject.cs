@@ -46,13 +46,13 @@ namespace BadScript.HttpServer
                                               pos,
                                               new Dictionary < ABSObject, ABSObject >
                                               {
-                                                  { new BSObject( "headers" ), new BSTable( pos, headers ) },
+                                                  { new BSObject( "Headers" ), new BSTable( pos, headers ) },
                                                   {
-                                                      new BSObject( "uri" ),
+                                                      new BSObject( "Uri" ),
                                                       new BSObject( m_Request.RawHttpRequestLine.ToString() )
                                                   },
                                                   {
-                                                      new BSObject( "acceptTypes" ), new BSArray(
+                                                      new BSObject( "AcceptTypes" ), new BSArray(
                                                            ( m_Request.GetAcceptLanguages().
                                                                        Select( x => x.ToString() ) ??
                                                              new string[0] ).Select(
@@ -61,18 +61,18 @@ namespace BadScript.HttpServer
                                                           )
                                                   },
                                                   {
-                                                      new BSObject( "contentLength" ),
+                                                      new BSObject( "ContentLength" ),
                                                       new BSObject( ( decimal )m_Request.ContentLength )
                                                   },
                                                   {
-                                                      new BSObject( "contentType" ),
+                                                      new BSObject( "ContentType" ),
                                                       new BSObject( m_Request.ContentType )
                                                   },
-                                                  { new BSObject( "httpMethod" ), new BSObject( m_Request.Method ) },
-                                                  { new BSObject( "query" ), new BSTable( pos, queryTable ) },
+                                                  { new BSObject( "HttpMethod" ), new BSObject( m_Request.Method ) },
+                                                  { new BSObject( "Query" ), new BSTable( pos, queryTable ) },
                                                   {
-                                                      new BSObject( "readBody" ),
-                                                      new BSFunction( "function readBody()", RequestReadBody, 0 )
+                                                      new BSObject( "ReadBody" ),
+                                                      new BSFunction( "function ReadBody()", RequestReadBody, 0 )
                                                   },
                                               }
                                              );

@@ -11,7 +11,7 @@ namespace BadScript.Interfaces.Versioning
 
         #region Public
 
-        public BSVersioningInterface() : base( "versioning", MakeInterface )
+        public BSVersioningInterface() : base( "Versioning", MakeInterface )
         {
         }
 
@@ -43,21 +43,21 @@ namespace BadScript.Interfaces.Versioning
         private static void MakeInterface( ABSTable obj )
         {
             obj.InsertElement(
-                              new BSObject( "parse" ),
-                              new BSFunction( "function parse(versionStr)", ParseVersion, 1 )
+                              new BSObject( "Parse" ),
+                              new BSFunction("function Parse(versionStr)", ParseVersion, 1 )
                              );
 
             obj.InsertElement(
-                              new BSObject( "create" ),
-                              new BSFunction( "function create(major, minor, revision, build)", CreateVersion, 4 )
+                              new BSObject( "Create" ),
+                              new BSFunction("function Create(major, minor, revision, build)", CreateVersion, 4 )
                              );
 
             obj.InsertElement(
-                              new BSObject( "runtimeVersion" ),
+                              new BSObject( "RuntimeVersion" ),
                               new BSVersionObject( typeof( BSEngine ).Assembly.GetName().Version )
                              );
 
-            obj.InsertElement( new BSObject( "calVer" ), new BSFunction( "function calVer(build)", CreateCalVer, 1 ) );
+            obj.InsertElement( new BSObject( "CalVer" ), new BSFunction("function CalVer(build)", CreateCalVer, 1 ) );
         }
 
         private static ABSObject ParseVersion( ABSObject[] arg )

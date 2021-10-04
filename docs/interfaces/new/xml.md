@@ -1,5 +1,5 @@
-# `xml` Documentation
+# `Xml` Documentation
 ## Functions:
-- Function Signature: '`function createDoc(str)`'
+- Function Signature: '`function CreateDoc(str)`'
 
 

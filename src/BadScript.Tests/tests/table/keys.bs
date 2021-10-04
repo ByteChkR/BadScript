@@ -2,6 +2,6 @@ t = {
 	a = 1
 }
 
-k = keys(t)
+k = Keys(t)
 
 return k[0] == "a"

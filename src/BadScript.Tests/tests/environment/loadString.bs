@@ -1,2 +1,2 @@
 str = "return true"
-return environment.loadString(str)
+return Environment.LoadString(str)

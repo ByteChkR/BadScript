@@ -12,15 +12,15 @@ namespace BadScript.Process
 
         #region Public
 
-        public BSProcessInterface() : base( "process" )
+        public BSProcessInterface() : base( "Process" )
         {
         }
 
         public override void AddApi( ABSTable proc )
         {
             proc.InsertElement(
-                               new BSObject( "start" ),
-                               new BSFunction( "function start(file, args)", StartProcess, 2 )
+                               new BSObject( "Start" ),
+                               new BSFunction( "function Start(file, args)", StartProcess, 2 )
                               );
         }
 
@@ -67,36 +67,36 @@ namespace BadScript.Process
             System.Diagnostics.Process p = System.Diagnostics.Process.Start( start, procArgs );
 
             t.InsertElement(
-                            new BSObject( "hasExited" ),
+                            new BSObject( "HasExited" ),
                             new BSFunction(
-                                           "function hasExited()",
+                                           "function HasExited()",
                                            x => ProcHasExited( p ),
                                            0
                                           )
                            );
 
             t.InsertElement(
-                            new BSObject( "exitCode" ),
+                            new BSObject( "ExitCode" ),
                             new BSFunction(
-                                           "function exitCode()",
+                                           "function ExitCode()",
                                            x => ProcExitCode( p ),
                                            0
                                           )
                            );
 
             t.InsertElement(
-                            new BSObject( "abort" ),
+                            new BSObject( "Abort" ),
                             new BSFunction(
-                                           "function abort()",
+                                           "function Abort()",
                                            x => ProcAbort( p ),
                                            0
                                           )
                            );
 
             t.InsertElement(
-                            new BSObject( "waitForExit" ),
+                            new BSObject( "WaitForExit" ),
                             new BSFunction(
-                                           "function waitForExit()/function waitForExit(timeMS)",
+                                           "function WaitForExit()/function WaitForExit(timeMS)",
                                            x => ProcWaitForExit( p, x.Length != 0 ? x[0] : null ),
                                            0,
                                            1

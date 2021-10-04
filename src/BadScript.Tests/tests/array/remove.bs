@@ -2,5 +2,5 @@ a = [
 	1
 ]
 
-a.remove(1)
-return a.size() == 0
+a.Remove(1)
+return a.Size() == 0

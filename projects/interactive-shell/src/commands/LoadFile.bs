@@ -1,8 +1,8 @@
 namespace InteractiveShell.Console.Command
 {
-	fs = environment.loadInterface("fs", {})
+	FileSystem = Environment.LoadInterface("FileSystem", {})
 	using InteractiveShell.Console
-	class LoadFileCommand : ConsoleCommand
+	class LoadFileCommand : InteractiveShellConsoleCommand
 	{
 		function LoadFileCommand() : base("load") { }
 
@@ -10,11 +10,11 @@ namespace InteractiveShell.Console.Command
 		{
 			foreach arg in args
 			{
-				print("Loading File: " + arg)
-				o = Console._shell.RunCommand(fs.readAll(arg))
+				Console.WriteLine("Loading File: " + arg)
+				o = Instance._shell.RunCommand(FileSystem.ReadAll(arg))
 				if(o.IsError)
 				{
-					print("Plugin Returned: " + o.ToString())
+					Console.WriteLine("Plugin Returned: " + o.ToString())
 				}
 			}
 		}

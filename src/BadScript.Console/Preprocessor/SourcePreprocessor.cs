@@ -99,7 +99,7 @@ namespace BadScript.Console.Preprocessor
             settings.IncludeDirectories.Clear();
             settings.IncludeDirectories.Add( ProjectSystemDirectories.Instance.PreprocessorIncludeDirectory );
 
-            settings.Interfaces.Add( new BSConsoleInterface() );
+            settings.Interfaces.Add( new BSSystemConsoleInterface() );
             settings.Interfaces.Add( new BSCoreInterface() );
             settings.Interfaces.Add( new BSHttpInterface() );
             settings.Interfaces.Add( new Json2BSInterface() );

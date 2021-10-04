@@ -26,7 +26,7 @@ namespace BadScript.Console.AppPackage
                                                           );
 
             es.Interfaces.Add( new BSAppPackageInterface( package ) );
-            es.ActiveInterfaces.Add( "app" );
+            es.ActiveInterfaces.Add( "App" );
 
             BSEngine engine = es.Build();
             ABSObject o;

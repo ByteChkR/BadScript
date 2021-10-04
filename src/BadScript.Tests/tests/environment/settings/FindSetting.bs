@@ -1,6 +1,6 @@
 try
 {
-	root = environment.settings
+	root = Environment.Settings
 	pair = root.FindSetting("runtime.version")
 	return true
 }

@@ -1,8 +1,8 @@
 #macro LOAD_INTERFACE(NAME)
 {
 	#ASSERT_INTERFACE_AVAILABLE(NAME)
-	if(!hasKey(__SELF, "NAME"))
+	if(!HasKey(__SELF, "NAME"))
 	{
-		NAME = environment.loadInterface("NAME")
+		NAME = Environment.LoadInterface("NAME")
 	}
 }

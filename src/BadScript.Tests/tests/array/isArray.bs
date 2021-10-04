@@ -1,2 +1,2 @@
 a = []
-return isArray(a)
+return IsArray(a)

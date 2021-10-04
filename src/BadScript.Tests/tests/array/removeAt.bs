@@ -2,5 +2,5 @@ a = [
 	1
 ]
 
-a.removeAt(0)
-return a.size() == 0
+a.RemoveAt(0)
+return a.Size() == 0

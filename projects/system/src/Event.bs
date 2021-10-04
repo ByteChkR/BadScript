@@ -23,30 +23,30 @@ namespace System
 
 		function AddListener(event)
 		{
-			if(isFunction(event))
+			if(IsFunction(event))
 			{
-				_listeners.add(event)
+				_listeners.Add(event)
 				return this
 			}
-			error("Can not add '" + debug(event) + "' to Event Handler")
+			error("Can not add '" + Debug(event) + "' to Event Handler")
 		}
 
 		function RemoveListener(event)
 		{
-			if(isFunction(event))
+			if(IsFunction(event))
 			{
-				_listeners.remove(event)
+				_listeners.Remove(event)
 				return this
 			}
-			error("Can not remove '" + debug(event) + "' from Event Handler")
+			error("Can not remove '" + Debug(event) + "' from Event Handler")
 		}
 
 		function Invoke(*args)
 		{
 
-			if(args.size() != _argcount)
+			if(args.Size() != _argcount)
 			{
-				error("Invalid Argument Count. Expected: " + _argcount + " but got " + args.size())
+				Error("Invalid Argument Count. Expected: " + _argcount + " but got " + args.Size())
 				return null
 			}
 			if(_collectReturns)
@@ -54,20 +54,20 @@ namespace System
 				r = []
 				foreach subscriber in _listeners
 				{
-					sr = subscriber.invoke(args)
-					r.add(sr)
+					sr = subscriber.Invoke(args)
+					r.Add(sr)
 				}
 				return r
 			}
 
 			foreach subscriber in _listeners
 			{
-				subscriber.invoke(args)
+				subscriber.Invoke(args)
 			}
 			return null
 		}
 
-		function ClearListeners() => _listeners.clear()
+		function ClearListeners() => _listeners.Clear()
 		op_SelfAddition = AddListener
 		op_SelfSubtraction = RemoveListener
 		op_Invoke = Invoke

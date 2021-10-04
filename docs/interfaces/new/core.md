@@ -1,27 +1,27 @@
-# `core` Documentation
+# `Core` Documentation
 ## Functions:
-- Function Signature: '`function size(table/array)`'
-- Function Signature: '`function keys(table)`'
-- Function Signature: '`function values(table)`'
-- Function Signature: '`function error(obj)`'
-- Function Signature: '`function debug(obj)`'
-- Function Signature: '`function isArray(obj)`'
-- Function Signature: '`function isFunction(obj)`'
-- Function Signature: '`function lock(array/table)`'
-- Function Signature: '`function hasKey(table, key)`'
-- Function Signature: '`function isTable(obj)`'
-- Function Signature: '`function isType(obj)`'
-- Function Signature: '`function isLiteral(obj)`'
-- Function Signature: '`function isString(obj)`'
-- Function Signature: '`function isNumber(obj)`'
-- Function Signature: '`function isBoolean(obj)`'
-- Function Signature: '`function escape(str)`'
-- Function Signature: '`function sleep(ms)`'
+- Function Signature: '`function Size(table/array)`'
+- Function Signature: '`function Keys(table)`'
+- Function Signature: '`function Values(table)`'
+- Function Signature: '`function Error(obj)`'
+- Function Signature: '`function Debug(obj)`'
+- Function Signature: '`function IsArray(obj)`'
+- Function Signature: '`function IsFunction(obj)`'
+- Function Signature: '`function Lock(array/table)`'
+- Function Signature: '`function HasKey(table, key)`'
+- Function Signature: '`function IsTable(obj)`'
+- Function Signature: '`function IsType(obj)`'
+- Function Signature: '`function IsLiteral(obj)`'
+- Function Signature: '`function IsString(obj)`'
+- Function Signature: '`function IsNumber(obj)`'
+- Function Signature: '`function IsBoolean(obj)`'
+- Function Signature: '`function Escape(str)`'
+- Function Signature: '`function Sleep(ms)`'
 
 
-## `base64` Documentation
+## `Base64` Documentation
 ### Functions:
-- Function Signature: '`function to(dataArray)`'
-- Function Signature: '`function from(str)`'
+- Function Signature: '`function To(dataArray)`'
+- Function Signature: '`function From(str)`'
 
 

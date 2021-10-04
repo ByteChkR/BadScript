@@ -1,13 +1,13 @@
 namespace System
 {
-	#ASSERT_INTERFACE_AVAILABLE(string)
+	#ASSERT_INTERFACE_AVAILABLE(String)
 
-	string = environment.loadInterface("string")
+	String = Environment.LoadInterface("String")
 
-	class String
+	class Str
 	{
 		_str = null
-		function String(!str)
+		function Str(!str)
 		{
 			#ASSERT_STRING(str)
 
@@ -16,115 +16,115 @@ namespace System
 
 		function Length()
 		{
-			return string.length(_str)
+			return String.Length(_str)
 		}
 
-		function Substring(start, length)
+		function SubString(start, length)
 		{
-			return new String(string.substr(_str, start, length))
+			return new Str(String.Substr(_str, start, length))
 		}
 
 		function Remove(start, length)
 		{
-			return new String(string.remove(_str, start, length))
+			return new Str(String.Remove(_str, start, length))
 		}
 
 		function ToNumber()
 		{
-			return string.toNumber(_str)
+			return String.ToNumber(_str)
 		}
 
 		function Trim()
 		{
-			return new String(string.trim(_str))
+			return new Str(String.Trim(_str))
 		}
 
 		function TrimStart()
 		{
-			return new String(string.trimStart(_str))
+			return new Str(String.TrimStart(_str))
 		}
 
 
 		function TrimEnd()
 		{
-			return new String(string.trimEnd(_str))
+			return new Str(String.TrimEnd(_str))
 		}
 
 		function Split(*splits)
 		{
-			strs = string.split(_str, splits)
+			strs = String.Split(_str, splits)
 			for i = 0 while< strs.size()
 			{
-				strs[i] = new String(strs[i])
+				strs[i] = new Str(strs[i])
 			}
 			return strs
 		}
 
 		function CharAt(i)
 		{
-			return new String(string.charAt(_str, i))
+			return new Str(String.CharAt(_str, i))
 		}
 
 		function EndsWith(str)
 		{
-			return string.endsWith(_str, str)
+			return String.EndsWith(_str, str)
 		}
 		function StartsWith(str)
 		{
-			return string.startsWith(_str, str)
+			return String.StartsWith(_str, str)
 		}
 
 		function IndexOf(searchStr)
 		{
-			return string.indexOf(_str, searchStr)
+			return String.IndexOf(_str, searchStr)
 		}
 
 		function Insert(i, str)
 		{
-			return new String(string.insert(_str, i, str))
+			return new Str(String.Insert(_str, i, str))
 		}
 
 		function LastIndexOf(searchStr)
 		{
-			return string.lastIndexOf(_str, searchStr)
+			return String.LastIndexOf(_str, searchStr)
 		}
 
 		function Replace(oldStr, newStr)
 		{
-			return new String(string.replace(_str, oldStr, newStr))
+			return new Str(String.Replace(_str, oldStr, newStr))
 		}
 
 		function ToArray()
 		{
-			return string.toArray(_str)
+			return String.ToArray(_str)
 		}
 
 		function IsLetter(?i)
 		{
 			i = i ?? 0
-			return string.isLetter(CharAt(i))
+			return String.IsLetter(CharAt(i))
 		}
 		function IsWhiteSpace(?i)
 		{
 			i = i ?? 0
-			return string.isWhiteSpace(CharAt(i))
+			return String.IsWhiteSpace(CharAt(i))
 		}
 		function IsDigit(?i)
 		{
 			i = i ?? 0
-			return string.isDigit(CharAt(i))
+			return String.IsDigit(CharAt(i))
 		}
 
 		function ToLower()
 		{
-			return new String(string.toLower(_str))
+			return new Str(String.ToLower(_str))
 		}
 
 		function Format(*args)
 		{
-			args.insert(0, _str)
+			args.Insert(0, _str)
 
-			return new String(string.format.invoke(args, true))
+			return new Str(String.Format.Invoke(args, true))
 		}
 
 		function op_ArrayAccess(i)
@@ -141,16 +141,16 @@ namespace System
 
 		function op_Equality(other)
 		{
-			if(environment.defaultOp("==", other, null))
+			if(Environment.DefaultOp("==", other, null))
 			{
 				return false
 			}
 
-			if(isString(other))
+			if(IsString(other))
 			{
 				return _str == other
 			}
-			if(isType(other))
+			if(IsType(other))
 			{
 				return other.IsInstanceOf(this)
 			}
@@ -167,20 +167,20 @@ namespace System
 		{
 			if(other == null)
 			{
-				return new String(_str + "NULL")
+				return new Str(_str + "NULL")
 			}
-			else if(isString(other))
+			else if(IsString(other))
 			{
-				return new String(_str + other)
+				return new Str(_str + other)
 			}
-			else if(isType(other))
+			else if(IsType(other))
 			{
 				if(other.IsInstanceOf(this))
 				{
-					return new String(_str + other.ToString())
+					return new Str(_str + other.ToString())
 				}
 			}
-			error("Can not Apply 'op_Addition' to string and object " + other)
+			Error("Can not Apply 'op_Addition' to String and object " + other)
 			return null
 		}
 

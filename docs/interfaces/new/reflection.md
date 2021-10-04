@@ -1,6 +1,6 @@
-# `reflection` Documentation
+# `Reflection` Documentation
 ## Functions:
-- Function Signature: '`function create(typename, args0, args...)`'
-- Function Signature: '`function getType(typename)`'
+- Function Signature: '`function Create(typename, args0, args...)`'
+- Function Signature: '`function GetType(typename)`'
 
 

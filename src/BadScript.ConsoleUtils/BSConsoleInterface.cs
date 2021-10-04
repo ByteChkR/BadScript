@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 
+using BadScript.Exceptions;
 using BadScript.Interfaces;
 using BadScript.Types;
 using BadScript.Types.Implementations;
@@ -33,7 +35,7 @@ namespace BadScript.ConsoleUtils
             ReadLine = read;
         }
 
-        public BSConsoleInterface( bool addDefaultHandlers = true ) : base( "console" )
+        public BSConsoleInterface( bool addDefaultHandlers = true ) : base( "Console" )
         {
             if ( addDefaultHandlers )
             {
@@ -47,9 +49,9 @@ namespace BadScript.ConsoleUtils
         public override void AddApi( ABSTable root )
         {
             root.InsertElement(
-                               new BSObject( "print" ),
+                               new BSObject( "WriteLine" ),
                                new BSFunction(
-                                              "function print(obj)",
+                                              "function WriteLine(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -63,9 +65,9 @@ namespace BadScript.ConsoleUtils
                               );
 
             root.InsertElement(
-                               new BSObject( "write" ),
+                               new BSObject( "Write" ),
                                new BSFunction(
-                                              "function write(obj)",
+                                              "function Write(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -79,18 +81,18 @@ namespace BadScript.ConsoleUtils
                               );
 
             root.InsertElement(
-                               new BSObject( "read" ),
+                               new BSObject( "ReadLine" ),
                                new BSFunction(
-                                              "function read()",
+                                              "function ReadLine()",
                                               ( args ) => ReadLine?.Invoke() ?? BSObject.Null,
                                               0
                                              )
                               );
 
             root.InsertElement(
-                               new BSObject( "clear" ),
+                               new BSObject( "Clear" ),
                                new BSFunction(
-                                              "function clear()",
+                                              "function ReadLine()",
                                               ( args ) =>
                                               {
                                                   Clear?.Invoke();

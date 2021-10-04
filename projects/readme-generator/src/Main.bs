@@ -1,18 +1,18 @@
 
 outputDir = "./output"
-if(args.size() == 1)
+if(args.Size() == 1)
 {
 	outputDir = args[0]
 }
 else
 {
-	print("No Output Directory Specified")
+	Console.WriteLine("No Output Directory Specified")
 	return -1
 }
 
 knownItems = []
-fs = environment.loadInterface("fs", {})
-path = environment.loadInterface("path", {})
+FileSystem = Environment.LoadInterface("FileSystem", {})
+Path = Environment.LoadInterface("Path", {})
 function knowsItem(item)
 {
 	foreach	v in knownItems
@@ -37,38 +37,38 @@ function repeatChar(char, count)
 
 function writeArrayContent(arr)
 {
-	return debug(arr)
+	return Debug(arr)
 }
 
 function writeArray(key, arr)
 {
-	return "Property '" + key + "' with default value ```js\n" + writeArrayContent(arr) + "\n```\n"
+	return "Property '" + key + "' with default value \n```js\n" + writeArrayContent(arr) + "\n```\n"
 }
 
 function writeTableContent(table)
 {
-	return debug(table)
+	return Debug(table)
 }
 
 function writeTable(key, table)
 {
-	return "Property '" + key + "' with default value ```js\n" + writeTableContent(table) + "\n```\n"
+	return "Property '" + key + "' with default value \n```js\n" + writeTableContent(table) + "\n```\n"
 }
 
 function writeTypeContent(type)
 {
-	return debug(type)
+	return Debug(type)
 }
 
 function writeType(key, type)
 {
-	return "Property '" + key + "' with default value ```js\n" + writeTypeContent(type) + "\n```\n"
+	return "Property '" + key + "' with default value \n```js\n" + writeTypeContent(type) + "\n```\n"
 }
 
 
 function writeFunction(fnc)
 {
-	return "Function Signature: '`" + debug(fnc) + "`'"
+	return "Function Signature: '`" + Debug(fnc) + "`'"
 }
 
 
@@ -87,21 +87,21 @@ function makeSection(key, value, depth)
 	header = repeatChar("#", depth) + " " + key + "\n"
 	body = ""
 
-	if(isArray(value))
+	if(IsArray(value))
 	{
 		body = writeArray(key, value)
 	}
-	else if(isTable(value))
+	else if(IsTable(value))
 	{
 		body = makeReadme(key, value, depth + 1)
 	}
-	else if(isType(value))
+	else if(IsType(value))
 	{
 		body = writeType(key, value)
 	}
 	else
 	{
-		print("Can not Generate Readme for '" + key + "' = '" + debug(value) + "'")
+		Console.WriteLine("Can not Generate Readme for '" + key + "' = '" + Debug(value) + "'")
 	}
 
 	footer = "\n______\n"
@@ -115,28 +115,36 @@ function makeReadme(name, table, depth)
 	{
 		return "\n<RECURSION: " + name + ">\n"
 	}
-	knownItems.add(table)
+	knownItems.Add(table)
 	header = repeatChar("#", depth) + " `" + name + "` Documentation"
 	rm = "\n"
 	literalData = {}
 	funcData = {}
-	foreach (k,v) in table
+	foreach k in table
 	{
-		else if(isTable(v))
+		try
 		{
-			rm += makeReadme(k, v, depth + 1)
+			v = table[k]
+			if(IsTable(v))
+			{
+				rm += makeReadme(k, v, depth + 1)
+			}
+			else if(IsLiteral(v))
+			{
+				literalData[k] = v
+			}
+			else if(IsFunction(v))
+			{
+				funcData[k] = v
+			}
+			else
+			{
+				rm += makeSection(k, v, depth + 1)
+			}
 		}
-		else if(isLiteral(v))
+		catch(e)
 		{
-			literalData[k] = v
-		}
-		else if(isFunction(v))
-		{
-			funcData[k] = v
-		}
-		else
-		{
-			rm += makeSection(k, v, depth + 1)
+			Console.WriteLine("Error: " + Debug(e))
 		}
 	}
 
@@ -176,18 +184,18 @@ function makeReadme(name, table, depth)
 
 function makeInterfaceReadme(iface)
 {
-	print("Generating Docs for " + iface)
-	interface = environment.loadInterface(iface, {})
+	Console.WriteLine("Generating Docs for " + iface)
+	interface = Environment.LoadInterface(iface, {})
 	str = makeReadme(iface, interface, 1)
-	fs.writeAll(path.combine(outputDir, iface + ".md"), str)
+	FileSystem.WriteAll(Path.Combine(outputDir, iface + ".md"), str)
 }
 
-if(!fs.exists(outputDir))
+if(!FileSystem.Exists(outputDir))
 {
-	fs.createDir(outputDir)
+	FileSystem.CreateDir(outputDir)
 }
 
-interfaces = environment.getInterfaceNames()
+interfaces = Environment.GetInterfaceNames()
 foreach	iface in interfaces
 {
 	makeInterfaceReadme(iface)

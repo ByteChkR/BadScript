@@ -15,16 +15,16 @@ namespace BadScript.StringUtils
 
         #region Public
 
-        public BSStringInterface() : base( "string" )
+        public BSStringInterface() : base( "String" )
         {
         }
 
         public override void AddApi( ABSTable apiRoot )
         {
             apiRoot.InsertElement(
-                                  "toNumber",
+                                  "ToNumber",
                                   MakeFunction(
-                                               "function toNumber(str)/",
+                                               "function ToNumber(str)/",
                                                x => new BSObject( decimal.Parse( x[0].ConvertString().Trim() ) ),
                                                1,
                                                1
@@ -32,9 +32,9 @@ namespace BadScript.StringUtils
                                  );
 
             apiRoot.InsertElement(
-                                  "trim",
+                                  "Trim",
                                   MakeFunction(
-                                               "function trim(str)/",
+                                               "function Trim(str)/",
                                                x => new BSObject( x[0].ConvertString().Trim() ),
                                                1,
                                                1
@@ -42,9 +42,9 @@ namespace BadScript.StringUtils
                                  );
 
             apiRoot.InsertElement(
-                                  "trimEnd",
+                                  "TrimEnd",
                                   MakeFunction(
-                                               "function trimEnd(str)/",
+                                               "function TrimEnd(str)/",
                                                x => new BSObject( x[0].ConvertString().TrimEnd() ),
                                                1,
                                                1
@@ -52,9 +52,9 @@ namespace BadScript.StringUtils
                                  );
 
             apiRoot.InsertElement(
-                                  "trimStart",
+                                  "TrimStart",
                                   MakeFunction(
-                                               "function trimStart(str)/",
+                                               "function TrimStart(str)/",
                                                x => new BSObject( x[0].ConvertString().TrimEnd() ),
                                                1,
                                                1
@@ -62,9 +62,9 @@ namespace BadScript.StringUtils
                                  );
 
             apiRoot.InsertElement(
-                                  "split",
+                                  "Split",
                                   MakeFunction(
-                                               "function split(str, split0, split1, split2, ...)",
+                                               "function Split(str, split0, split1, split2, ...)",
                                                Split,
                                                1,
                                                int.MaxValue
@@ -72,100 +72,100 @@ namespace BadScript.StringUtils
                                  );
 
             apiRoot.InsertElement(
-                                  "substr",
-                                  MakeFunction( "function substr(str, start)/substr(str, start, length)", Substr, 2, 3 )
+                                  "Substr",
+                                  MakeFunction( "function Substr(str, start)/substr(str, start, length)", Substr, 2, 3 )
                                  );
 
             //charAt(str, index)
             apiRoot.InsertElement(
-                                  "charAt",
-                                  MakeFunction( "function charAt(str, index)", CharAt, 2, 2 )
+                                  "CharAt",
+                                  MakeFunction( "function CharAt(str, index)", CharAt, 2, 2 )
                                  );
 
             //end/startsWith(str, start)
             apiRoot.InsertElement(
-                                  "endsWith",
-                                  MakeFunction( "function endsWith(str, end)", EndsWith, 2, 2 )
+                                  "EndsWith",
+                                  MakeFunction( "function EndsWith(str, end)", EndsWith, 2, 2 )
                                  );
 
             apiRoot.InsertElement(
-                                  "startsWith",
+                                  "StartsWith",
                                   MakeFunction( "function startsWith(str, start)", StartsWith, 2, 2 )
                                  );
 
             //indexOf(str, searchStr)/indexOf(str, searchStr, start)
             apiRoot.InsertElement(
-                                  "indexOf",
-                                  MakeFunction( "function indexOf(str, searchStr)", IndexOf, 2, 2 )
+                                  "IndexOf",
+                                  MakeFunction("function IndexOf(str, searchStr)", IndexOf, 2, 2 )
                                  );
 
             //insert(str, 
             apiRoot.InsertElement(
-                                  "insert",
-                                  MakeFunction( "function insert(str, index, s)", Insert, 3, 3 )
+                                  "Insert",
+                                  MakeFunction("function Insert(str, index, s)", Insert, 3, 3 )
                                  );
 
             //lastIndexOf(str, searchStr)/lastIndexOf(str, searchStr, start)
             apiRoot.InsertElement(
-                                  "lastIndexOf",
-                                  MakeFunction( "function lastIndexOf(str, searchStr)", LastIndexOf, 2, 2 )
+                                  "LastIndexOf",
+                                  MakeFunction("function LastIndexOf(str, searchStr)", LastIndexOf, 2, 2 )
                                  );
 
             //remove
             apiRoot.InsertElement(
-                                  "remove",
-                                  MakeFunction( "function remove(str, start, length)", Remove, 3, 3 )
+                                  "Remove",
+                                  MakeFunction("function Remove(str, start, length)", Remove, 3, 3 )
                                  );
 
             //replace
             apiRoot.InsertElement(
-                                  "replace",
-                                  MakeFunction( "function replace(str, old, new)", Replace, 3, 3 )
+                                  "Replace",
+                                  MakeFunction("function Replace(str, old, new)", Replace, 3, 3 )
                                  );
 
             //toArray
             apiRoot.InsertElement(
-                                  "toArray",
-                                  MakeFunction( "function toArray(str)", ToArray, 1, 1 )
+                                  "ToArray",
+                                  MakeFunction( "function ToArray(str)", ToArray, 1, 1 )
                                  );
 
             //toUpper
             apiRoot.InsertElement(
-                                  "toUpper",
-                                  MakeFunction( "function toUpper(str)", ToUpper, 1, 1 )
+                                  "ToUpper",
+                                  MakeFunction( "function ToUpper(str)", ToUpper, 1, 1 )
                                  );
 
             apiRoot.InsertElement(
-                                  "length",
-                                  MakeFunction( "function length(str)", StringGetLength, 1, 1 )
+                                  "Length",
+                                  MakeFunction( "function Length(str)", StringGetLength, 1, 1 )
                                  );
 
             apiRoot.InsertElement(
-                                  "isWhiteSpace",
-                                  MakeFunction( "function isWhiteSpace(str)", StringIsWhiteSpace, 1, 1 )
+                                  "IsWhiteSpace",
+                                  MakeFunction("function IsWhiteSpace(str)", StringIsWhiteSpace, 1, 1 )
                                  );
 
             apiRoot.InsertElement(
-                                  "isLetter",
-                                  MakeFunction( "function isLetter(str)", StringIsLetter, 1, 1 )
+                                  "IsLetter",
+                                  MakeFunction("function IsLetter(str)", StringIsLetter, 1, 1 )
                                  );
 
             apiRoot.InsertElement(
-                                  "isDigit",
-                                  MakeFunction( "function isDigit(str)", StringIsDigit, 1, 1 )
+                                  "IsDigit",
+                                  MakeFunction("function IsDigit(str)", StringIsDigit, 1, 1 )
                                  );
 
             //toLower
 
             apiRoot.InsertElement(
-                                  "toLower",
-                                  MakeFunction( "function toLower(str)", ToLower, 1, 1 )
+                                  "ToLower",
+                                  MakeFunction("function ToLower(str)", ToLower, 1, 1 )
                                  );
 
             apiRoot.InsertElement(
-                                  "format",
+                                  "Format",
                                   new BSFunction(
-                                                 "function format(formatStr, arg0, arg1, ...)",
+                                                 "function Format(formatStr, arg0, arg1, ...)",
                                                  args =>
                                                  {
                                                      ABSObject format = args[0].ResolveReference();

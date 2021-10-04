@@ -9,14 +9,23 @@ namespace BadScript.Interfaces
 
         #region Public
 
-        public static void InsertElement( this ABSTable t, string key, ABSObject value )
+        public static void InsertElement(this ABSTable t, string key, ABSObject value)
         {
-            t.InsertElement( new BSObject( key ), value );
+            t.InsertElement(new BSObject(key), value);
         }
 
-        public static void InsertElement( this ABSTable t, string key, string value )
+        public static void InsertElement(this ABSTable t, string key, string value)
         {
-            t.InsertElement( new BSObject( key ), new BSObject( value ) );
+            t.InsertElement(new BSObject(key), new BSObject(value));
+        }
+        public static void SetRawElement(this ABSTable t, string key, ABSObject value)
+        {
+            t.SetRawElement(new BSObject(key), value);
+        }
+
+        public static void SetRawElement(this ABSTable t, string key, string value)
+        {
+            t.SetRawElement(new BSObject(key), new BSObject(value));
         }
 
         #endregion

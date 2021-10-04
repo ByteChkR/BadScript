@@ -3,4 +3,4 @@ t = {
 	b = 2
 }
 
-return size(t) == 2
+return Size(t) == 2

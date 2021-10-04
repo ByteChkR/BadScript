@@ -45,8 +45,7 @@ namespace BadScript.Tests
         {
             BSEngineSettings es = BSEngineSettings.MakeDefault();
             es.Interfaces.Add( new BSCoreInterface() );
-            es.Interfaces.Add( new BSConsoleInterface() );
-            es.Interfaces.Add( new BSConsoleColorInterface() );
+            es.Interfaces.Add(new BSSystemConsoleInterface());
             es.Interfaces.Add( new BS2JsonInterface() );
             es.Interfaces.Add( new Json2BSInterface() );
             es.Interfaces.Add( new BSFileSystemInterface() );

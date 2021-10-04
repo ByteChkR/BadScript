@@ -2,7 +2,7 @@ a = [
 	1
 ]
 
-lock(a)
+Lock(a)
 
 try
 {

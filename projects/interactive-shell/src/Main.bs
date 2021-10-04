@@ -2,7 +2,7 @@
 
 function main()
 {
-	console = new Console("ISH>")
+	console = new InteractiveShellConsole("ISH>")
 	console.AddCommand(new ExitCommand())
 	console.AddCommand(new ClearCommand())
 	console.AddCommand(new ListCommand())

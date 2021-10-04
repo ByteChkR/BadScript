@@ -1,1 +1,1 @@
-return environment.hasInterface("environment")
+return Environment.HasInterface("Environment")

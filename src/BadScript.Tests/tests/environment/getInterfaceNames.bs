@@ -1,2 +1,2 @@
-a = environment.getInterfaceNames()
-return isArray(a)
+a = Environment.GetInterfaceNames()
+return IsArray(a)

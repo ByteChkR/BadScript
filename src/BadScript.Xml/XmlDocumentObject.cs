@@ -15,8 +15,8 @@ namespace BadScript.Xml
         public XmlDocumentObject( XmlDocument node ) : base( node )
         {
             m_Properties.Add(
-                             "toString",
-                             new BSFunctionReference( new BSFunction( "function toString()", DocToString, 0 ) )
+                             "ToString",
+                             new BSFunctionReference( new BSFunction("function ToString()", DocToString, 0 ) )
                             );
         }
 

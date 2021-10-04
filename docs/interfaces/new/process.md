@@ -1,5 +1,5 @@
-# `process` Documentation
+# `Process` Documentation
 ## Functions:
-- Function Signature: '`function start(file, args)`'
+- Function Signature: '`function Start(file, args)`'
 
 

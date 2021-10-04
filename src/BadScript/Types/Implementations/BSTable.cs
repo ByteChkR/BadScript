@@ -105,6 +105,13 @@ namespace BadScript.Types.Implementations
             return key != null ? m_InnerTable[key] : BSObject.Null;
         }
 
+        public override void SetRawElement( ABSObject k, ABSObject o )
+        {
+            ABSObject key = m_InnerTable.Keys.FirstOrDefault(x => x.Equals(k)) ?? k;
+            m_InnerTable[key] = o;
+
+        }
+
         public override bool HasElement( ABSObject i )
         {
             ABSObject key = m_InnerTable.Keys.FirstOrDefault( x => x.Equals( i ) ) ?? i;

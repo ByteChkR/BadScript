@@ -5,24 +5,24 @@ namespace System.Logging
 	{
 		function Write(obj)
 		{
-			error("No implementation for 'Logger.Write' in type " + GetType())
+			Error("No implementation for 'Logger.Write' in type " + GetType())
 		}
 
 		function WriteLine(obj)
 		{
-			error("No implementation for 'Logger.WriteLine' in type " + GetType())
+			Error("No implementation for 'Logger.WriteLine' in type " + GetType())
 		}
 
 		function Clear()
 		{
-			error("No implementation for 'Logger.Clear' in type " + GetType())
+			Error("No implementation for 'Logger.Clear' in type " + GetType())
 		}
 	}
 
 	class ConsoleLogger : Logger
 	{
-		function Write(obj) => write(obj)
-		function WriteLine(obj) => print(obj)
-		function Clear() => clear()
+		function Write(obj) => Console.Write(obj)
+		function WriteLine(obj) => Console.WriteLine(obj)
+		function Clear() => Console.Clear()
 	}
 }

@@ -13,25 +13,25 @@ namespace BadScript.Zip
 
         #region Public
 
-        public BSZipInterface() : base( "zip" )
+        public BSZipInterface() : base( "Zip" )
         {
         }
 
         public override void AddApi( ABSTable t )
         {
             t.InsertElement(
-                            new BSObject( "createFromDirectory" ),
+                            new BSObject( "CreateFromDirectory" ),
                             new BSFunction(
-                                           "createFromDirectory(sourceDir, destinationFile)",
+                                           "CreateFromDirectory(sourceDir, destinationFile)",
                                            CreateFromFolder,
                                            2
                                           )
                            );
 
             t.InsertElement(
-                            new BSObject( "extractToDirectory" ),
+                            new BSObject( "ExtractToDirectory" ),
                             new BSFunction(
-                                           "extractToDirectory(sourceFile, destinationDir)",
+                                           "ExtractToDirectory(sourceFile, destinationDir)",
                                            ExtractToFolder,
                                            2
                                           )

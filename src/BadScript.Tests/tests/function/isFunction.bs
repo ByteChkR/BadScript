@@ -3,4 +3,4 @@ function f()
 	
 }
 
-return isFunction(f)
+return IsFunction(f)

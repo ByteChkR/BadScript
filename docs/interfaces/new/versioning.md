@@ -1,9 +1,9 @@
-# `versioning` Documentation
+# `Versioning` Documentation
 ## Functions:
-- Function Signature: '`function parse(versionStr)`'
-- Function Signature: '`function create(major, minor, revision, build)`'
-- Function Signature: '`function calVer(build)`'
+- Function Signature: '`function Parse(versionStr)`'
+- Function Signature: '`function Create(major, minor, revision, build)`'
+- Function Signature: '`function CalVer(build)`'
 ## Properties:
-- `runtimeVersion = 2021.9.30.1`
+- `RuntimeVersion = 2021.9.30.1`
 
 

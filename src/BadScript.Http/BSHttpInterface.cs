@@ -18,35 +18,35 @@ namespace BadScript.Http
 
         #region Public
 
-        public BSHttpInterface() : base( "http" )
+        public BSHttpInterface() : base( "Http" )
         {
         }
 
         public override void AddApi( ABSTable t )
         {
             t.InsertElement(
-                            new BSObject( "get" ),
-                            new BSFunction( "function get(url)/get(url, headers)", Get, 1, 2 )
+                            new BSObject( "Get" ),
+                            new BSFunction("function Get(url)/Get(url, headers)", Get, 1, 2 )
                            );
 
             t.InsertElement(
-                            new BSObject( "post" ),
-                            new BSFunction( "function post(url, body)", Post, 2 )
+                            new BSObject( "Post" ),
+                            new BSFunction("function Post(url, body)", Post, 2 )
                            );
 
             t.InsertElement(
-                            new BSObject( "downloadFile" ),
+                            new BSObject( "DownloadFile" ),
                             new BSFunction( "function downloadFile(url, destination)", DownloadFile, 2 )
                            );
 
             t.InsertElement(
-                            new BSObject( "downloadString" ),
-                            new BSFunction( "function downloadString(url)", DownloadString, 1 )
+                            new BSObject( "DownloadString" ),
+                            new BSFunction( "function DownloadString(url)", DownloadString, 1 )
                            );
 
             t.InsertElement(
-                            new BSObject( "createUri" ),
-                            new BSFunction( "function createUri(url)", CreateUri, 1 )
+                            new BSObject( "CreateUri" ),
+                            new BSFunction( "function CreateUri(url)", CreateUri, 1 )
                            );
         }
 

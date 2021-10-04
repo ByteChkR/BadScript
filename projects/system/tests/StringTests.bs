@@ -3,8 +3,8 @@ namespace System.Tests
 {
 	using System
 
-	hello = new String("Hello")
-	world = new String(" World")
+	hello = new Str("Hello")
+	world = new Str(" World")
 
 	
 	arrPass = hello[0] == "H"

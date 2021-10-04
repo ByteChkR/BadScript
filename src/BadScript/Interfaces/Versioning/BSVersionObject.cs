@@ -87,18 +87,18 @@ namespace BadScript.Interfaces.Versioning
         private void LoadProperties()
         {
             m_Properties = new Dictionary < string, ABSReference >();
-            m_Properties.Add( "major", new BSReflectionReference( GetMajor, null ) );
-            m_Properties.Add( "minor", new BSReflectionReference( GetMinor, null ) );
-            m_Properties.Add( "majorRevision", new BSReflectionReference( GetMajorRevision, null ) );
-            m_Properties.Add( "minorRevision", new BSReflectionReference( GetMinorRevision, null ) );
-            m_Properties.Add( "revision", new BSReflectionReference( GetRevision, null ) );
-            m_Properties.Add( "build", new BSReflectionReference( GetBuild, null ) );
+            m_Properties.Add( "Major", new BSReflectionReference( GetMajor, null ) );
+            m_Properties.Add("Minor", new BSReflectionReference( GetMinor, null ) );
+            m_Properties.Add("MajorRevision", new BSReflectionReference( GetMajorRevision, null ) );
+            m_Properties.Add("MinorRevision", new BSReflectionReference( GetMinorRevision, null ) );
+            m_Properties.Add( "Revision", new BSReflectionReference( GetRevision, null ) );
+            m_Properties.Add( "Build", new BSReflectionReference( GetBuild, null ) );
 
             m_Properties.Add(
-                             "toString",
+                             "ToString",
                              new BSFunctionReference(
                                                      new BSFunction(
-                                                                    "function toString()",
+                                                                    "function ToString()",
                                                                     x => new BSObject( m_InternalObject.ToString() ),
                                                                     0
                                                                    )
@@ -106,8 +106,8 @@ namespace BadScript.Interfaces.Versioning
                             );
 
             m_Properties.Add(
-                             "change",
-                             new BSFunctionReference( new BSFunction( "function change(changeStr)", ChangeVersion, 1 ) )
+                             "Change",
+                             new BSFunctionReference( new BSFunction("function Change(changeStr)", ChangeVersion, 1 ) )
                             );
 
             m_Properties.Add(

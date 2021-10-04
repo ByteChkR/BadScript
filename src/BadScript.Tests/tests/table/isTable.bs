@@ -1,2 +1,2 @@
 t = {}
-return isTable(t)
+return IsTable(t)

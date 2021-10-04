@@ -28,7 +28,7 @@ namespace BadScript.Console.AppPackage
         private readonly BSAppPackage m_Package;
         #region Public
 
-        public BSAppPackageInterface( BSAppPackage p ) : base( "app" )
+        public BSAppPackageInterface( BSAppPackage p ) : base( "App" )
         {
             m_Package = p;
 

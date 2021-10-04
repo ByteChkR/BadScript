@@ -1,27 +1,27 @@
-#define fs = environment.loadInterface("fs", {})
-#define http = environment.loadInterface("http", {})
+#define FileSystem = Environment.LoadInterface("FileSystem", {})
+#define Http = Environment.LoadInterface("Http", {})
 #custom INCLUDE_IO(!file)
 {
-	if(fs.exists(file))
+	if(FileSystem.Exists(file))
 	{
-		return fs.readAll(file)
+		return FileSystem.ReadAll(file)
 	}
 	else
 	{
-		error("Can not Include File: " + file)
+		Error("Can not Include File: " + file)
 		return ""
 	}
 }
 #custom INCLUDE_WEB(!url)
 {
-	response = http.get(url)
-	if(response.status == 100)
+	response = Http.Get(url)
+	if(response.Status == 100)
 	{
-		return response.body
+		return response.Body
 	}
 	else
 	{
-		error("Can not Get File '" + url + "' Error Code: " + response.status)
+		Error("Can not Get File '" + url + "' Error Code: " + response.Status)
 		return ""
 	}
 }

@@ -10,14 +10,14 @@ namespace BadScript.Json
 
         #region Public
 
-        public Json2BSInterface() : base( "json" )
+        public Json2BSInterface() : base( "Json" )
         {
         }
 
         public override void AddApi( ABSTable root )
         {
-            BSFunction f = new BSFunction( "function fromJson(jsonStr)", Json2BS.Convert, 1 );
-            root.InsertElement( new BSObject( "fromJson" ), f );
+            BSFunction f = new BSFunction( "function FromJson(jsonStr)", Json2BS.Convert, 1 );
+            root.InsertElement( new BSObject("FromJson"), f );
         }
 
         #endregion

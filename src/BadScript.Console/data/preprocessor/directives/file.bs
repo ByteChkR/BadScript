@@ -1,7 +1,7 @@
 #macro LOAD_SCRIPT(PATH)
 {
 	#ASSERT_EXISTS(PATH)
-	#LOAD_INTERFACE(fs)
-	#LOAD_INTERFACE(environment)
-	environment.loadString(fs.readAll(PATH))
+	#LOAD_INTERFACE(FileSystem)
+	#LOAD_INTERFACE(Environment)
+	Environment.LoadString(FileSystem.ReadAll(PATH))
 }

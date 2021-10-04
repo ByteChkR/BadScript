@@ -1,6 +1,6 @@
 try
 {
-	root = environment.settings
+	root = Environment.Settings
 	cat = root.FindCategory("runtime")
 	return true
 }

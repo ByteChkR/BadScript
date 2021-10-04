@@ -45,7 +45,13 @@ namespace BadScript.Types
         /// </summary>
         /// <param name="k">The Key</param>
         /// <returns></returns>
-        public abstract ABSObject GetRawElement( ABSObject k );
+        public abstract ABSObject GetRawElement(ABSObject k);
+        /// <summary>
+        ///     Gets an element with the specified key
+        /// </summary>
+        /// <param name="k">The Key</param>
+        /// <returns></returns>
+        public abstract void SetRawElement(ABSObject k, ABSObject o);
 
         /// <summary>
         ///     Returns true if an element with the specified key exists

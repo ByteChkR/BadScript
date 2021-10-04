@@ -2,5 +2,5 @@ a = [
 	1
 ]
 
-a.clear()
-return a.size() == 0
+a.Clear()
+return a.Size() == 0

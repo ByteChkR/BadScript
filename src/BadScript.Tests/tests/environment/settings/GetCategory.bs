@@ -1,4 +1,4 @@
-root = environment.settings
+root = Environment.Settings
 test = root.AddCategory("test")
 get = root.GetCategory("test")
 return get.Name == test.Name

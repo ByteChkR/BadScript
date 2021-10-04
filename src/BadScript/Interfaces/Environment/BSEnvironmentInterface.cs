@@ -16,7 +16,7 @@ namespace BadScript.Interfaces.Environment
 
         #region Public
 
-        public BSEnvironmentInterface( BSEngine instance ) : base( "environment" )
+        public BSEnvironmentInterface( BSEngine instance ) : base( "Environment" )
         {
             m_Instance = instance;
         }
@@ -24,9 +24,9 @@ namespace BadScript.Interfaces.Environment
         public override void AddApi( ABSTable env )
         {
             env.InsertElement(
-                              new BSObject( "defaultOp" ),
+                              new BSObject( "DefaultOp" ),
                               new BSFunction(
-                                             "function defaultOp(opKey, args..)",
+                                             "function DefaultOp(opKey, args..)",
                                              ExecuteDefaultOperator,
                                              1,
                                              int.MaxValue
@@ -34,9 +34,9 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject("createScope"),
+                              new BSObject("CreateScope"),
                               new BSFunction(
-                                             "function createScope()/createScope(parentScope)",
+                                             "function CreateScope()/CreateScope(parentScope)",
                                              m_Instance.CreateScope,
                                              0,
                                              1
@@ -44,18 +44,18 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject("resetScope"),
+                              new BSObject("ResetScope"),
                               new BSFunction(
-                                             "function resetScope(scope)",
+                                             "function ResetScope(scope)",
                                              m_Instance.ResetScope,
                                              1
                                             )
                              );
 
             env.InsertElement(
-                              new BSObject( "loadScopedString" ),
+                              new BSObject( "LoadScopedString" ),
                               new BSFunction(
-                                             "function loadScopedString(scope, str, args..)/loadScopedString(rootTable, str, args..)",
+                                             "function LoadScopedString(scope, str, args..)/LoadScopedString(rootTable, str, args..)",
                                              m_Instance.LoadStringScopedApi,
                                              2,
                                              int.MaxValue
@@ -63,9 +63,9 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject( "loadScopedBenchmark" ),
+                              new BSObject("LoadScopedBenchmark"),
                               new BSFunction(
-                                             "function loadScopedBenchmark(scope, str, args..)/loadScopedBenchmark(rootTable, str, args..)",
+                                             "function LoadScopedBenchmark(scope, str, args..)/LoadScopedBenchmark(rootTable, str, args..)",
                                              m_Instance.LoadStringScopedBenchmarkApi,
                                              2,
                                              int.MaxValue
@@ -73,28 +73,28 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject( "addPreprocessor" ),
+                              new BSObject( "AddPreprocessor" ),
                               new BSFunction(
-                                             "function addPreprocessor(ppName, func)",
+                                             "function AddPreprocessor(ppName, func)",
                                              m_Instance.AddPreprocessorApi,
                                              2
                                             )
                              );
 
             env.InsertElement(
-                              new BSObject( "loadString" ),
-                              new BSFunction( "function loadString(str)", m_Instance.LoadStringApi, 1, int.MaxValue )
+                              new BSObject( "LoadString" ),
+                              new BSFunction("function LoadString(str)", m_Instance.LoadStringApi, 1, int.MaxValue )
                              );
 
             env.InsertElement(
-                              new BSObject( "loadBenchmark" ),
-                              new BSFunction( "function loadBenchmark(str)", m_Instance.LoadStringApi, 1, int.MaxValue )
+                              new BSObject( "LoadBenchmark" ),
+                              new BSFunction("function LoadBenchmark(str)", m_Instance.LoadStringApi, 1, int.MaxValue )
                              );
 
             env.InsertElement(
-                              new BSObject( "loadInterface" ),
+                              new BSObject( "LoadInterface" ),
                               new BSFunction(
-                                             "function loadInterface(key)/loadInterface(key, root)",
+                                             "function LoadInterface(key)/LoadInterface(key, root)",
                                              m_Instance.LoadInterfaceApi,
                                              1,
                                              2
@@ -102,21 +102,21 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject( "getInterfaceNames" ),
-                              new BSFunction( "function getInterfaceNames()", m_Instance.GetInterfaceNamesApi, 0, 0 )
+                              new BSObject( "GetInterfaceNames" ),
+                              new BSFunction( "function GetInterfaceNames()", m_Instance.GetInterfaceNamesApi, 0, 0 )
                              );
 
             env.InsertElement(
-                              new BSObject( "hasInterface" ),
-                              new BSFunction( "function hasInterface(interfaceName)", m_Instance.HasInterfaceName, 1 )
+                              new BSObject( "HasInterface" ),
+                              new BSFunction( "function HasInterface(interfaceName)", m_Instance.HasInterfaceName, 1 )
                              );
 
-            env.InsertElement( new BSObject( "settings" ), new SettingsCategoryWrapper( BSSettings.BsRoot ) );
+            env.InsertElement( new BSObject( "Settings" ), new SettingsCategoryWrapper( BSSettings.BsRoot ) );
 
             env.InsertElement(
-                              new BSObject( "isLiteral" ),
+                              new BSObject( "IsLiteral" ),
                               new BSFunction(
-                                             "function isLiteral(v)",
+                                             "function IsLiteral(v)",
                                              objects =>
                                              {
                                                  ABSObject o = objects[0].ResolveReference();

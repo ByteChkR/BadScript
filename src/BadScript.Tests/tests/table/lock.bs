@@ -2,7 +2,7 @@ t = {
 	a = 1
 }
 
-lock(t)
+Lock(t)
 
 try
 {

@@ -1,6 +1,6 @@
-# `json` Documentation
+# `Json` Documentation
 ## Functions:
-- Function Signature: '`function toJson(jsonStr)`'
-- Function Signature: '`function fromJson(jsonStr)`'
+- Function Signature: '`function ToJson(jsonStr)`'
+- Function Signature: '`function FromJson(jsonStr)`'
 
 

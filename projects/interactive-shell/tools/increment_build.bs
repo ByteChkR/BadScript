@@ -1,10 +1,14 @@
 versionChangeString = "(~){yyyy}.(~){MM}.(~){dd}.+"
-versioning = environment.loadInterface("versioning")
-json = environment.loadInterface("json")
-fs = environment.loadInterface("fs")
-file = json.fromJson(fs.readAll("./build-settings.json"))
-v = versioning.parse(file.AppInfo.Version)
-vNew = v.change(versionChangeString)
-print(v + " => " + vNew)
-file.AppInfo.Version = vNew.toString()
-fs.writeAll("./build-settings.json", json.toJson(file))
+
+Versioning = Environment.LoadInterface("Versioning")
+Json = Environment.LoadInterface("Json")
+FileSystem = Environment.LoadInterface("FileSystem")
+
+file = Json.FromJson(FileSystem.ReadAll("./build-settings.Json"))
+
+v = Versioning.Parse(file.AppInfo.Version)
+vNew = v.Change(versionChangeString)
+Console.WriteLine(v + " => " + vNew)
+
+file.AppInfo.Version = vNew.ToString()
+FileSystem.WriteAll("./build-settings.Json", Json.ToJson(file))

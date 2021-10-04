@@ -218,8 +218,8 @@ namespace BadScript.Types.Implementations
 
             m_Functions = new Dictionary < string, BSFunction >();
 
-            m_Functions["clear"] = new BSFunction(
-                                                  "function clear()",
+            m_Functions["Clear"] = new BSFunction(
+                                                  "function Clear()",
                                                   objects =>
                                                   {
                                                       m_InnerArray.Clear();
@@ -229,14 +229,14 @@ namespace BadScript.Types.Implementations
                                                   0
                                                  );
 
-            m_Functions["size"] = new BSFunction(
-                                                 "function size()",
+            m_Functions["Size"] = new BSFunction(
+                                                 "function Size()",
                                                  objects => new BSObject( ( decimal )m_InnerArray.Count ),
                                                  0
                                                 );
 
-            m_Functions["add"] = new BSFunction(
-                                                "function add(obj0, obj1, obj2, ...)",
+            m_Functions["Add"] = new BSFunction(
+                                                "function Add(obj0, obj1, obj2, ...)",
                                                 objects =>
                                                 {
                                                     m_InnerArray.AddRange(
@@ -249,8 +249,8 @@ namespace BadScript.Types.Implementations
                                                 int.MaxValue
                                                );
 
-            m_Functions["remove"] = new BSFunction(
-                                                   "function remove(obj0, obj1, obj2, ...)",
+            m_Functions["Remove"] = new BSFunction(
+                                                   "function Remove(obj0, obj1, obj2, ...)",
                                                    objects =>
                                                    {
                                                        foreach ( ABSObject absObject in objects )
@@ -264,8 +264,8 @@ namespace BadScript.Types.Implementations
                                                    int.MaxValue
                                                   );
 
-            m_Functions["removeAt"] = new BSFunction(
-                                                     "function removeAt(index0, index1, index2, ...)",
+            m_Functions["RemoveAt"] = new BSFunction(
+                                                     "function RemoveAt(index0, index1, index2, ...)",
                                                      objects =>
                                                      {
                                                          foreach ( ABSObject absObject in objects )
@@ -279,8 +279,8 @@ namespace BadScript.Types.Implementations
                                                      int.MaxValue
                                                     );
 
-            m_Functions["swap"] = new BSFunction(
-                                                 "function swap(idx1, idx2)",
+            m_Functions["Swap"] = new BSFunction(
+                                                 "function Swap(idx1, idx2)",
                                                  objects =>
                                                  {
                                                      int i0 = ( int )objects[0].ConvertDecimal();
@@ -297,8 +297,8 @@ namespace BadScript.Types.Implementations
                                                  2
                                                 );
 
-            m_Functions["reverse"] = new BSFunction(
-                                                    "function reverse()",
+            m_Functions["Reverse"] = new BSFunction(
+                                                    "function Reverse()",
                                                     objects =>
                                                     {
                                                         m_InnerArray.Reverse();
@@ -308,7 +308,7 @@ namespace BadScript.Types.Implementations
                                                     0
                                                    );
 
-            m_Functions["contentEquals"] = new BSFunction( "function contentEquals(array)", ArrayContentEquals, 1 );
+            m_Functions["ContentEquals"] = new BSFunction("function ContentEquals(array)", ArrayContentEquals, 1 );
         }
 
         private ABSObject ArrayContentEquals( ABSObject[] arg )

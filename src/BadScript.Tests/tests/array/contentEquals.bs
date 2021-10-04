@@ -8,4 +8,4 @@ b = [
 	2
 ]
 
-return a.contentEquals(b)
+return a.ContentEquals(b)

@@ -4,4 +4,4 @@ global class Test
 }
 
 t = new Test()
-return t != null && isType(t)
+return t != null && IsType(t)

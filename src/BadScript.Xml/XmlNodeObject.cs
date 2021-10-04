@@ -26,47 +26,47 @@ namespace BadScript.Xml
             m_Node = node;
 
             m_Properties.Add(
-                             "parentNode",
+                             "ParentNode",
                              new BSReflectionReference( () => new XmlNodeObject( m_Node.ParentNode ), null )
                             );
 
             m_Properties.Add(
-                             "firstChild",
+                             "FirstChild",
                              new BSReflectionReference( () => new XmlNodeObject( m_Node.FirstChild ), null )
                             );
 
             m_Properties.Add(
-                             "findChild",
-                             new BSFunctionReference( new BSFunction( "function findChild(name)", FindChildByName, 1 ) )
+                             "FindChild",
+                             new BSFunctionReference( new BSFunction("function FindChild(name)", FindChildByName, 1 ) )
                             );
 
             m_Properties.Add(
-                             "lastChild",
+                             "LastChild",
                              new BSReflectionReference( () => new XmlNodeObject( m_Node.LastChild ), null )
                             );
 
             m_Properties.Add(
-                             "nextSibling",
+                             "NextSibling",
                              new BSReflectionReference( () => new XmlNodeObject( m_Node.NextSibling ), null )
                             );
 
             m_Properties.Add(
-                             "previousSibling",
+                             "PreviousSibling",
                              new BSReflectionReference( () => new XmlNodeObject( m_Node.PreviousSibling ), null )
                             );
 
             m_Properties.Add(
-                             "childCount",
+                             "ChildCount",
                              new BSReflectionReference( () => new BSObject( ( decimal )m_Node.ChildNodes.Count ), null )
                             );
 
             m_Properties.Add(
-                             "childAt",
-                             new BSFunctionReference( new BSFunction( "function childAt(index)", ChildAt, 1 ) )
+                             "ChildAt",
+                             new BSFunctionReference( new BSFunction("function ChildAt(index)", ChildAt, 1 ) )
                             );
 
             m_Properties.Add(
-                             "value",
+                             "Value",
                              new BSReflectionReference(
                                                        () => new BSObject( m_Node.Value ),
                                                        o => m_Node.Value = o.ConvertString()
@@ -74,17 +74,17 @@ namespace BadScript.Xml
                             );
 
             m_Properties.Add(
-                             "innerText",
+                             "InnerText",
                              new BSReflectionReference(
                                                        () => new BSObject( m_Node.InnerText ),
                                                        o => m_Node.InnerText = o.ConvertString()
                                                       )
                             );
 
-            m_Properties.Add( "name", new BSReflectionReference( () => new BSObject( m_Node.Name ), null ) );
+            m_Properties.Add( "Name", new BSReflectionReference( () => new BSObject( m_Node.Name ), null ) );
 
             m_Properties.Add(
-                             "hasChildNodes",
+                             "HasChildNodes",
                              new BSReflectionReference(
                                                        () => m_Node.HasChildNodes ? BSObject.True : BSObject.False,
                                                        null

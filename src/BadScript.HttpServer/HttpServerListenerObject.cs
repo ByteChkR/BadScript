@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
+using BadScript.Reflection;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
@@ -47,21 +48,15 @@ namespace BadScript.HttpServer
                                               new Dictionary < ABSObject, ABSObject >
                                               {
                                                   {
-                                                      new BSObject( "stop" ),
-                                                      new BSFunction( "function stop()", args => StopListener(), 0 )
+                                                      new BSObject( "Stop" ),
+                                                      new BSFunction( "function Stop()", args => StopListener(), 0 )
                                                   },
                                                   {
-                                                      new BSObject( "start" ),
-                                                      new BSFunction( "function start()", args => StartListener(), 0 )
+                                                      new BSObject( "Start" ),
+                                                      new BSFunction( "function Start()", args => StartListener(), 0 )
                                                   },
                                                   {
-                                                      new BSObject( "isRunning" ), new BSFunction(
-                                                           "function isRunning()",
-                                                           objects => m_Listener == null
-                                                                          ? BSObject.False
-                                                                          : BSObject.True,
-                                                           0
-                                                          )
+                                                      new BSObject( "IsRunning" ), new BSReflectionReference(() => m_Listener == null ? BSObject.False : BSObject.True, null)
                                                   }
                                               }
                                              );

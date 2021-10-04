@@ -1,16 +1,16 @@
 namespace InteractiveShell.Console.Commands
 {
 	using InteractiveShell.Console
-	class ListCommand : ConsoleCommand
+	class ListCommand : InteractiveShellConsoleCommand
 	{
 		function ListCommand() : base("list") { }
 
 		function RunCommand(!args)
 		{
-			print("Available Commands:")
-			foreach cmd in Console._commands
+			Console.WriteLine("Available Commands:")
+			foreach cmd in Instance._commands
 			{
-				print("\t- " + cmd.ToString())
+				Console.WriteLine("\t- " + cmd.ToString())
 			}
 		}
 

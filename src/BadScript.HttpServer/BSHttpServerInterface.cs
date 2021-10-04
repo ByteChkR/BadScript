@@ -25,22 +25,22 @@ namespace BadScript.HttpServer
 
         #region Public
 
-        public BSHttpServerInterface() : base( "http-server" )
+        public BSHttpServerInterface() : base( "HttpServer" )
         {
         }
 
         public override void AddApi( ABSTable root )
         {
             root.InsertElement(
-                               new BSObject( "createListener" ),
-                               new BSFunction( "function createListener(config)", CreateListener, 1 )
+                               new BSObject( "CreateListener" ),
+                               new BSFunction( "function CreateListener(config)", CreateListener, 1 )
                               );
 
             BSTable statusCodes = EnumBuilder < HttpStatusCode >.Build();
             statusCodes.Lock();
 
             root.InsertElement(
-                               new BSObject( "statusCodes" ),
+                               new BSObject( "StatusCodes" ),
                                statusCodes
                               );
         }

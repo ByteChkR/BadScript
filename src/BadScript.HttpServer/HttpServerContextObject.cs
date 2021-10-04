@@ -30,12 +30,12 @@ namespace BadScript.HttpServer
                                               new Dictionary < ABSObject, ABSObject >
                                               {
                                                   {
-                                                      new BSObject( "request" ),
-                                                      new BSFunction( "function request()", ContextGetRequest, 0 )
+                                                      new BSObject( "Request" ),
+                                                      new BSFunction( "function Request()", ContextGetRequest, 0 )
                                                   },
                                                   {
-                                                      new BSObject( "response" ),
-                                                      new BSFunction( "function response()", ContextGetResponse, 0 )
+                                                      new BSObject( "Response" ),
+                                                      new BSFunction( "function Response()", ContextGetResponse, 0 )
                                                   }
                                               }
                                              );

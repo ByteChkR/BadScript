@@ -3,4 +3,4 @@ t = {
 	b = 2
 }
 
-return hasKey(t, "a")
+return HasKey(t, "a")

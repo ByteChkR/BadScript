@@ -1,2 +1,2 @@
 str = "return true"
-return environment.loadBenchmark(str)
+return Environment.LoadBenchmark(str)

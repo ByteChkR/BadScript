@@ -3,4 +3,4 @@ a = [
 	2
 ]
 
-return a.size() == 2
+return a.Size() == 2

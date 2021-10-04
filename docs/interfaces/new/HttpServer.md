@@ -1,9 +1,9 @@
-# `http-server` Documentation
+# `HttpServer` Documentation
 ## Functions:
-- Function Signature: '`function createListener(config)`'
+- Function Signature: '`function CreateListener(config)`'
 
 
-## `statusCodes` Documentation
+## `StatusCodes` Documentation
 ### Properties:
 - `Continue = 100`
 - `SwitchingProtocols = 101`

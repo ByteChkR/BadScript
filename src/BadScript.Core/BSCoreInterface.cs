@@ -20,16 +20,16 @@ namespace BadScript.Core
 
         #region Public
 
-        public BSCoreInterface() : base( "core" )
+        public BSCoreInterface() : base( "Core" )
         {
         }
 
         public override void AddApi( ABSTable root )
         {
             root.InsertElement(
-                               new BSObject( "size" ),
+                               new BSObject( "Size" ),
                                new BSFunction(
-                                              "function size(table/array)",
+                                              "function Size(table/array)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -57,9 +57,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "keys" ),
+                               new BSObject( "Keys" ),
                                new BSFunction(
-                                              "function keys(table)",
+                                              "function Keys(table)",
                                               objects =>
                                               {
                                                   ABSObject a = objects[0].ResolveReference();
@@ -81,9 +81,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "values" ),
+                               new BSObject( "Values" ),
                                new BSFunction(
-                                              "function values(table)",
+                                              "function Values(table)",
                                               objects =>
                                               {
                                                   ABSObject a = objects[0].ResolveReference();
@@ -105,9 +105,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "error" ),
+                               new BSObject( "Error" ),
                                new BSFunction(
-                                              "function error(obj)",
+                                              "function Error(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -119,9 +119,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "debug" ),
+                               new BSObject( "Debug" ),
                                new BSFunction(
-                                              "function debug(obj)",
+                                              "function Debug(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -137,9 +137,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isArray" ),
+                               new BSObject( "IsArray" ),
                                new BSFunction(
-                                              "function isArray(obj)",
+                                              "function IsArray(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -156,9 +156,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isFunction" ),
+                               new BSObject("IsFunction"),
                                new BSFunction(
-                                              "function isFunction(obj)",
+                                              "function IsFunction(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -175,9 +175,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "lock" ),
+                               new BSObject( "Lock" ),
                                new BSFunction(
-                                              "function lock(array/table)",
+                                              "function Lock(array/table)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -198,9 +198,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "hasKey" ),
+                               new BSObject( "HasKey" ),
                                new BSFunction(
-                                              "function hasKey(table, key)",
+                                              "function HasKey(table, key)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -239,9 +239,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isTable" ),
+                               new BSObject( "IsTable" ),
                                new BSFunction(
-                                              "function isTable(obj)",
+                                              "function IsTable(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -258,9 +258,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isType" ),
+                               new BSObject( "IsType" ),
                                new BSFunction(
-                                              "function isType(obj)",
+                                              "function IsType(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -277,9 +277,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isLiteral" ),
+                               new BSObject( "IsLiteral" ),
                                new BSFunction(
-                                              "function isLiteral(obj)",
+                                              "function IsLiteral(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -298,9 +298,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isString" ),
+                               new BSObject( "IsString" ),
                                new BSFunction(
-                                              "function isString(obj)",
+                                              "function IsString(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -317,9 +317,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isNumber" ),
+                               new BSObject( "IsNumber" ),
                                new BSFunction(
-                                              "function isNumber(obj)",
+                                              "function IsNumber(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -336,9 +336,9 @@ namespace BadScript.Core
                               );
 
             root.InsertElement(
-                               new BSObject( "isBoolean" ),
+                               new BSObject( "IsBoolean" ),
                                new BSFunction(
-                                              "function isBoolean(obj)",
+                                              "function IsBoolean(obj)",
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
@@ -354,30 +354,30 @@ namespace BadScript.Core
                                              )
                               );
 
-            root.InsertElement( new BSObject( "escape" ), new BSFunction( "function escape(str)", EscapeString, 1 ) );
+            root.InsertElement( new BSObject( "Escape" ), new BSFunction( "function Escape(str)", EscapeString, 1 ) );
 
             root.InsertElement(
-                               new BSObject( "base64" ),
+                               new BSObject( "Base64" ),
                                new BSTable(
                                            SourcePosition.Unknown,
                                            new Dictionary < ABSObject, ABSObject >
                                            {
                                                {
-                                                   new BSObject( "to" ),
-                                                   new BSFunction( "function to(dataArray)", ToBase64, 1 )
+                                                   new BSObject( "To" ),
+                                                   new BSFunction( "function To(dataArray)", ToBase64, 1 )
                                                },
                                                {
-                                                   new BSObject( "from" ),
-                                                   new BSFunction( "function from(str)", FromBase64, 1 )
+                                                   new BSObject( "From" ),
+                                                   new BSFunction( "function From(str)", FromBase64, 1 )
                                                },
                                            }
                                           )
                               );
 
             root.InsertElement(
-                               new BSObject( "sleep" ),
+                               new BSObject( "Sleep" ),
                                new BSFunction(
-                                              "function sleep(ms)",
+                                              "function Sleep(ms)",
                                               ( args ) =>
                                               {
                                                   if ( args[0].TryConvertDecimal( out decimal lD ) )

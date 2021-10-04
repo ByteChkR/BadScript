@@ -12,14 +12,14 @@ namespace BadScript.Xml
 
         #region Public
 
-        public BSXmlInterface() : base( "xml" )
+        public BSXmlInterface() : base( "Xml" )
         {
         }
 
         public override void AddApi( ABSTable root )
         {
-            BSFunction toXml = new BSFunction( "function createDoc(str)", FromXml, 1 );
-            root.InsertElement( new BSObject( "createDoc" ), toXml );
+            BSFunction toXml = new BSFunction( "function CreateDoc(str)", FromXml, 1 );
+            root.InsertElement( new BSObject("CreateDoc"), toXml );
         }
 
         #endregion

@@ -1,15 +1,15 @@
-# `path` Documentation
+# `Path` Documentation
 ## Functions:
-- Function Signature: '`function getAppPath()`'
-- Function Signature: '`function getFullPath(path)`'
-- Function Signature: '`function getDirectoryName(path)`'
-- Function Signature: '`function getFileName(path)`'
-- Function Signature: '`function getFileNameWithoutExtension(path)`'
-- Function Signature: '`function getExtension(path)`'
-- Function Signature: '`function getRandomFileName()`'
-- Function Signature: '`function getTempFileName()`'
-- Function Signature: '`function getTempPath()`'
-- Function Signature: '`function hasExtension(path)`'
-- Function Signature: '`function combine(path0, path1, ...)`'
+- Function Signature: '`function GetAppPath()`'
+- Function Signature: '`function GetFullPath(path)`'
+- Function Signature: '`function GetDirectoryName(path)`'
+- Function Signature: '`function GetFileName(path)`'
+- Function Signature: '`function GetFileNameWithoutExtension(path)`'
+- Function Signature: '`function GetExtension(path)`'
+- Function Signature: '`function GetRandomFileName()`'
+- Function Signature: '`function GetTempFileName()`'
+- Function Signature: '`function GetTempPath()`'
+- Function Signature: '`function HasExtension(path)`'
+- Function Signature: '`function Combine(path0, path1, ...)`'
 
 

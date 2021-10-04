@@ -49,8 +49,8 @@ namespace BadScript
         public static BSEngineSettings MakeDefault( BSParserSettings parserSettings = null )
         {
             BSEngineSettings s = new BSEngineSettings( parserSettings ?? BSParserSettings.Default );
-            s.ActiveInterfaces.Add( "#core" );
-            s.ActiveInterfaces.Add( "#console" );
+            s.ActiveInterfaces.Add( "#Core" );
+            s.ActiveInterfaces.Add( "Console" );
 
             return s;
         }
@@ -68,7 +68,7 @@ namespace BadScript
             if ( addEnvironmentApi )
             {
                 instance.AddInterface( new BSEnvironmentInterface( instance ) );
-                instance.LoadInterface( "environment" );
+                instance.LoadInterface( "Environment" );
             }
 
             foreach ( string includeDir in IncludeDirectories )
