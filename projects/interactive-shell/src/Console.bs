@@ -97,11 +97,13 @@ namespace InteractiveShell.Console
 			if(!String.EndsWith(argLine, "\\"))
 			{
 				_currentStr += argLine
+				_currentStr += "\n"
 				execute = true
 			}
 			else
 			{
 				_currentStr += String.Remove(argLine, String.Length(argLine) - 1, 1)
+				_currentStr += "\n"
 			}
 
 			if(execute)
