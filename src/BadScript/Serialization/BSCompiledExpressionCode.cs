@@ -33,7 +33,7 @@
         NewClassExpr,
         NamespaceDefExpr,
         UsingDefExpr,
-
+        CustomNamedExpression
     }
 
 }

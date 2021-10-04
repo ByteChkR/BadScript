@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 using BadScript.ConsoleUtils;
 using BadScript.Parser;
@@ -10,6 +11,8 @@ using BadScript.Parser.OperatorImplementations;
 using BadScript.Parser.Operators;
 using BadScript.Parser.Operators.Implementations;
 using BadScript.Scopes;
+using BadScript.Serialization;
+using BadScript.Serialization.Serializers;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
@@ -53,7 +56,7 @@ namespace BadScript.Examples.SimpleCustomExpression
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
-            return "Range Enumerator";
+            return $"Range Enumerator({m_Start}..{m_End})";
         }
 
         public override void SetProperty( string propertyName, ABSObject obj )
@@ -97,70 +100,4 @@ namespace BadScript.Examples.SimpleCustomExpression
 
     }
 
-
-
-    public class BSRangeCustomOperatorImplementation: ABSOperatorImplementation
-    {
-
-        public BSRangeCustomOperatorImplementation(  ) : base( ".." )
-        {
-        }
-
-        public override bool IsCorrectImplementation( ABSObject[] args )
-        {
-            return args.Length == 2 &&
-                   args[0].TryConvertDecimal( out decimal _ ) &&
-                   args[1].TryConvertDecimal( out decimal _ );
-        }
-
-        protected override ABSObject Execute( ABSObject[] args )
-        {
-            decimal dStart = args[0].ConvertDecimal();
-            decimal dEnd = args[1].ConvertDecimal();
-
-            return new BSRangeEnumerableObject(args[0].Position, (int)dStart, (int)dEnd);
-        }
-
-    }
-
-    internal class SimpleCustomExpressionExample
-    {
-
-
-        private static BSEngine CreateEngine()
-        {
-            Console.WriteLine("Creating Script Engine");
-            BSEngineSettings settings = BSEngineSettings.MakeDefault();
-
-            settings.Interfaces.Add(new BSSystemConsoleInterface()); //Add the Console API so we can write things
-
-            return settings.Build();
-        }
-
-        private static void Main(string[] args)
-        {
-            //Create an entry in the Operator Precedence Table.
-            BSOperatorPreceedenceTable.Set( new BSBinaryOperator( 3, //The Operator precedence
-                                                                  "..", //The Operator that gets matched
-                                                                  "op_Range", //The Signature Name
-                                                                  2 ) //The Argument Count
-                                           );
-
-            BSOperatorImplementationResolver.AddImplementation( null, //Optional Mapping. If set to "op_Range", tables can override this custom operator implementation with their own.
-                                                                new BSRangeCustomOperatorImplementation() //Add the Custom implementation.
-                                                               );
-
-            BSEngine engine = CreateEngine();
-
-            string source = @"
-                foreach i in 0..10 //Using the Custom Range Operator
-                {
-                    Console.WriteLine(i)
-                }
-";
-
-            engine.LoadSource( source );
-
-        }
-    }
 }
