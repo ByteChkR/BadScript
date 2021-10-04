@@ -17,6 +17,7 @@ namespace InteractiveShell.Console
 
 		function RunCommand(!args)
 		{
+			Environment.Error("Command '" + Name + "' does not implement 'InteractiveShellConsoleCommand.RunCommand(!args)'")
 		}
 
 	}
@@ -100,7 +101,7 @@ namespace InteractiveShell.Console
 			}
 			else
 			{
-				_currentStr += String.Remove(argLine, String.length(argLine) - 1, 1)
+				_currentStr += String.Remove(argLine, String.Length(argLine) - 1, 1)
 			}
 
 			if(execute)

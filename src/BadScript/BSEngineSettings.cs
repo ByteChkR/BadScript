@@ -49,8 +49,9 @@ namespace BadScript
         public static BSEngineSettings MakeDefault( BSParserSettings parserSettings = null )
         {
             BSEngineSettings s = new BSEngineSettings( parserSettings ?? BSParserSettings.Default );
-            s.ActiveInterfaces.Add( "#Core" );
-            s.ActiveInterfaces.Add( "Console" );
+            s.ActiveInterfaces.Add("Convert");
+            s.ActiveInterfaces.Add("Console");
+            s.ActiveInterfaces.Add("Collection");
 
             return s;
         }

@@ -2,7 +2,7 @@ t = {
 	a = 1
 }
 
-Lock(t)
+Collection.Lock(t)
 
 try
 {

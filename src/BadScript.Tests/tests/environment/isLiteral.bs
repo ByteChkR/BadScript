@@ -1,2 +1,2 @@
 v = 1
-return Environment.IsLiteral(v)
+return Convert.IsLiteral(v)

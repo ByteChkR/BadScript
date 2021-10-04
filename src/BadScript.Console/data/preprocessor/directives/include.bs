@@ -21,7 +21,7 @@
 	}
 	else
 	{
-		Error("Can not Get File '" + url + "' Error Code: " + response.Status)
+		Environment.Error("Can not Get File '" + url + "' Error Code: " + response.Status)
 		return ""
 	}
 }

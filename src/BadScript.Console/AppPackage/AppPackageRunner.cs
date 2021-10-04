@@ -22,11 +22,12 @@ namespace BadScript.Console.AppPackage
                 EngineBuilderSettings.CreateEngineSettings(
                                                            false,
                                                            Array.Empty < string >(),
-                                                           package.Manifest.RequiredInterfaces
+                                                           Array.Empty<string>()
                                                           );
 
             es.Interfaces.Add( new BSAppPackageInterface( package ) );
             es.ActiveInterfaces.Add( "App" );
+            es.ActiveInterfaces.AddRange( package.Manifest.RequiredInterfaces );
 
             BSEngine engine = es.Build();
             ABSObject o;

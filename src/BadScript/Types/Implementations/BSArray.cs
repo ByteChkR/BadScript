@@ -152,7 +152,6 @@ namespace BadScript.Types.Implementations
 
                 List < string > keyLines =
                     new List < string >( bsObject.SafeToString( doneList ).Split( '\n' ) ).
-                        Select( x => x.Trim() ).
                         Where( x => !string.IsNullOrEmpty( x ) ).
                         ToList();
 

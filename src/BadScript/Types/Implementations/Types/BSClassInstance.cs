@@ -117,7 +117,6 @@ namespace BadScript.Types.Implementations.Types
                                                                  new[] { '\n' },
                                                                  StringSplitOptions.RemoveEmptyEntries
                                                                 ).
-                                                           Select( x => x.Trim() ).
                                                            Where( x => !string.IsNullOrEmpty( x ) ).
                                                            ToList();
 
@@ -126,7 +125,6 @@ namespace BadScript.Types.Implementations.Types
                                                                    new[] { '\n' },
                                                                    StringSplitOptions.RemoveEmptyEntries
                                                                   ).
-                                                             Select( x => x.Trim() ).
                                                              Where( x => !string.IsNullOrEmpty( x ) ).
                                                              ToList();
 

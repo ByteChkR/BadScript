@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
+using BadScript.Exceptions;
 using BadScript.Interfaces.Environment.Settings;
 using BadScript.Parser.OperatorImplementations;
 using BadScript.Types;
@@ -114,23 +117,61 @@ namespace BadScript.Interfaces.Environment
             env.InsertElement( new BSObject( "Settings" ), new SettingsCategoryWrapper( BSSettings.BsRoot ) );
 
             env.InsertElement(
-                              new BSObject( "IsLiteral" ),
+                              new BSObject("Error"),
                               new BSFunction(
-                                             "function IsLiteral(v)",
-                                             objects =>
+                                             "function Error(obj)",
+                                             (args) =>
                                              {
-                                                 ABSObject o = objects[0].ResolveReference();
+                                                 ABSObject arg = args[0].ResolveReference();
 
-                                                 if ( o is BSObject bso )
-                                                 {
-                                                     return bso.IsLiteral ? BSObject.True : BSObject.False;
-                                                 }
-
-                                                 return BSObject.False;
+                                                 throw new BSRuntimeException(arg.Position, arg.ToString());
                                              },
                                              1
                                             )
                              );
+
+            env.InsertElement(
+                              new BSObject("Sleep"),
+                              new BSFunction(
+                                             "function Sleep(ms)",
+                                             (args) =>
+                                             {
+                                                 if (args[0].TryConvertDecimal(out decimal lD))
+                                                 {
+                                                     Thread.Sleep((int)lD);
+
+                                                     return BSObject.Null;
+                                                 }
+
+                                                 throw new BSInvalidTypeException(
+                                                      args[0].Position,
+                                                      "Invalid Sleep Time",
+                                                      args[0],
+                                                      "number"
+                                                     );
+                                             },
+                                             1
+                                            )
+                             );
+
+            env.InsertElement(
+                              new BSObject("Debug"),
+                              new BSFunction(
+                                             "function Debug(obj)",
+                                             (args) =>
+                                             {
+                                                 ABSObject arg = args[0].ResolveReference();
+
+                                                 return new BSObject(
+                                                                     arg.SafeToString(
+                                                                          new Dictionary<ABSObject, string>()
+                                                                         )
+                                                                    );
+                                             },
+                                             1
+                                            )
+                             );
+
         }
 
         #endregion

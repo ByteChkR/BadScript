@@ -1,2 +1,2 @@
 a = Environment.GetInterfaceNames()
-return IsArray(a)
+return Convert.IsArray(a)

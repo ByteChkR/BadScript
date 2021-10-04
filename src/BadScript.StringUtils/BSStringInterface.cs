@@ -18,18 +18,17 @@ namespace BadScript.StringUtils
         public BSStringInterface() : base( "String" )
         {
         }
+        private ABSObject EscapeString(ABSObject[] arg)
+        {
+            string str = arg[0].ConvertString();
 
+            return new BSObject(Uri.EscapeDataString(str));
+        }
         public override void AddApi( ABSTable apiRoot )
         {
-            apiRoot.InsertElement(
-                                  "ToNumber",
-                                  MakeFunction(
-                                               "function ToNumber(str)/",
-                                               x => new BSObject( decimal.Parse( x[0].ConvertString().Trim() ) ),
-                                               1,
-                                               1
-                                              )
-                                 );
+            apiRoot.InsertElement(new BSObject("Escape"), new BSFunction("function Escape(str)", EscapeString, 1));
+
+            
 
             apiRoot.InsertElement(
                                   "Trim",

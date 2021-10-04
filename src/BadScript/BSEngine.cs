@@ -32,7 +32,7 @@ namespace BadScript
             new List < BSExpressionValidator > { new BSFunctionReturnExpressionValidator() };
 
         private readonly Dictionary < string, ABSObject > m_Preprocessors;
-        private readonly ABSTable m_StaticData;
+        //private readonly ABSTable m_StaticData;
         private readonly ABSTable m_GlobalTable;
         private readonly List < ABSScriptInterface > m_Interfaces;
 
@@ -66,8 +66,7 @@ namespace BadScript
         public BSEngine(
             BSParserSettings parserSettings,
             Dictionary < string, ABSObject > startObjects,
-            List < ABSScriptInterface > interfaces,
-            Dictionary < string, ABSObject > gTable = null )
+            List < ABSScriptInterface > interfaces)
         {
             NamespaceRoot = new BSNamespaceRoot();
             ParserSettings = parserSettings;
@@ -83,28 +82,7 @@ namespace BadScript
                     buildScriptEngineRuntimeObject.Value;
             }
 
-            BSTable sd = new BSTable( SourcePosition.Unknown, staticData );
-
-            sd.Lock();
-            m_StaticData = sd;
-
-            if ( gTable == null )
-            {
-                m_GlobalTable = new BSTable( SourcePosition.Unknown );
-            }
-            else
-            {
-                Dictionary < ABSObject, ABSObject > globalTable =
-                    new Dictionary < ABSObject, ABSObject >();
-
-                foreach ( KeyValuePair < string, ABSObject > buildScriptEngineRuntimeObject in gTable )
-                {
-                    globalTable[new BSObject( SourcePosition.Unknown, buildScriptEngineRuntimeObject.Key )] =
-                        buildScriptEngineRuntimeObject.Value;
-                }
-
-                m_GlobalTable = new BSTable( SourcePosition.Unknown, globalTable );
-            }
+            m_GlobalTable = new BSTable(SourcePosition.Unknown, staticData);
 
             m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
         }
@@ -602,11 +580,7 @@ namespace BadScript
             {
                 return m_GlobalTable.GetElement( name );
             }
-
-            if ( m_StaticData.HasElement( name ) )
-            {
-                return m_StaticData.GetElement( name );
-            }
+            
 
             throw new BSRuntimeException( name.Position, $"Can not Resolve name: '{name.SafeToString()}'" );
         }
@@ -619,7 +593,7 @@ namespace BadScript
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         internal bool HasElement( ABSObject name )
         {
-            return m_GlobalTable.HasElement( name ) || m_StaticData.HasElement( name );
+            return m_GlobalTable.HasElement( name );
         }
 
         internal ABSObject HasInterfaceName( ABSObject[] arg )

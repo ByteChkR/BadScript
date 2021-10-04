@@ -5,8 +5,9 @@ using System.Linq;
 using BadScript.Console.Preprocessor.Directives;
 using BadScript.Console.Subsystems.Project;
 using BadScript.ConsoleUtils;
-using BadScript.Core;
 using BadScript.Http;
+using BadScript.Interfaces.Collection;
+using BadScript.Interfaces.Convert;
 using BadScript.IO;
 using BadScript.Json;
 using BadScript.Math;
@@ -100,7 +101,8 @@ namespace BadScript.Console.Preprocessor
             settings.IncludeDirectories.Add( ProjectSystemDirectories.Instance.PreprocessorIncludeDirectory );
 
             settings.Interfaces.Add( new BSSystemConsoleInterface() );
-            settings.Interfaces.Add( new BSCoreInterface() );
+            settings.Interfaces.Add(new BSCollectionInterface());
+            settings.Interfaces.Add(new BSConvertInterface());
             settings.Interfaces.Add( new BSHttpInterface() );
             settings.Interfaces.Add( new Json2BSInterface() );
             settings.Interfaces.Add( new BS2JsonInterface() );

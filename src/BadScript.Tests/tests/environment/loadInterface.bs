@@ -1,2 +1,2 @@
 env = Environment.LoadInterface("Environment")
-return env != null && IsTable(env)
+return env != null && Convert.IsTable(env)

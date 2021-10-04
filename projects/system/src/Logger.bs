@@ -5,17 +5,17 @@ namespace System.Logging
 	{
 		function Write(obj)
 		{
-			Error("No implementation for 'Logger.Write' in type " + GetType())
+			Environment.Error("No implementation for 'Logger.Write' in type " + GetType())
 		}
 
 		function WriteLine(obj)
 		{
-			Error("No implementation for 'Logger.WriteLine' in type " + GetType())
+			Environment.Error("No implementation for 'Logger.WriteLine' in type " + GetType())
 		}
 
 		function Clear()
 		{
-			Error("No implementation for 'Logger.Clear' in type " + GetType())
+			Environment.Error("No implementation for 'Logger.Clear' in type " + GetType())
 		}
 	}
 

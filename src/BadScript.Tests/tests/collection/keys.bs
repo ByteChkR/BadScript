@@ -2,6 +2,6 @@ t = {
 	a = 1
 }
 
-k = Keys(t)
+k = Collection.Keys(t)
 
 return k[0] == "a"

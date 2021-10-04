@@ -12,7 +12,7 @@ namespace InteractiveShell.Internal
 			IsError = isError
 			if(IsError && returnValue == null)
 			{
-				Error("Return value must be set to Error code if IsError is true")
+				Environment.Error("Return value must be set to Error code if IsError is true")
 			}
 			ReturnValue = returnValue
 		}
@@ -21,10 +21,10 @@ namespace InteractiveShell.Internal
 		{
 			if(IsError)
 			{
-				return "ERROR: " + Debug(ReturnValue)
+				return "ERROR: " + Environment.Debug(ReturnValue)
 			}
 			
-			return "SUCCESS: " + Debug(ReturnValue)
+			return "SUCCESS: " + Environment.Debug(ReturnValue)
 		}
 	}
 

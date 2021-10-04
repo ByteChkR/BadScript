@@ -23,22 +23,22 @@ namespace System
 
 		function AddListener(event)
 		{
-			if(IsFunction(event))
+			if(Convert.IsFunction(event))
 			{
 				_listeners.Add(event)
 				return this
 			}
-			error("Can not add '" + Debug(event) + "' to Event Handler")
+			Environment.Error("Can not add '" + Debug(event) + "' to Event Handler")
 		}
 
 		function RemoveListener(event)
 		{
-			if(IsFunction(event))
+			if(Convert.IsFunction(event))
 			{
 				_listeners.Remove(event)
 				return this
 			}
-			error("Can not remove '" + Debug(event) + "' from Event Handler")
+			Environment.Error("Can not remove '" + Debug(event) + "' from Event Handler")
 		}
 
 		function Invoke(*args)
@@ -46,7 +46,7 @@ namespace System
 
 			if(args.Size() != _argcount)
 			{
-				Error("Invalid Argument Count. Expected: " + _argcount + " but got " + args.Size())
+				Environment.Error("Invalid Argument Count. Expected: " + _argcount + " but got " + args.Size())
 				return null
 			}
 			if(_collectReturns)

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 
 using BadScript.ConsoleUtils;
-using BadScript.Core;
 using BadScript.Http;
 using BadScript.HttpServer;
 using BadScript.Imaging;
+using BadScript.Interfaces.Collection;
+using BadScript.Interfaces.Convert;
 using BadScript.Interfaces.Versioning;
 using BadScript.IO;
 using BadScript.Json;
@@ -44,7 +45,8 @@ namespace BadScript.Tests
         public void Setup()
         {
             BSEngineSettings es = BSEngineSettings.MakeDefault();
-            es.Interfaces.Add( new BSCoreInterface() );
+            es.Interfaces.Add(new BSCollectionInterface());
+            es.Interfaces.Add(new BSConvertInterface());
             es.Interfaces.Add( new BSSystemConsoleInterface() );
             es.Interfaces.Add( new BS2JsonInterface() );
             es.Interfaces.Add( new Json2BSInterface() );

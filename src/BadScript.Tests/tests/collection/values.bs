@@ -3,5 +3,5 @@ t = {
 	b = 2
 }
 
-v = Values(t)
+v = Collection.Values(t)
 return v[0] == 1 && v[1] == 2

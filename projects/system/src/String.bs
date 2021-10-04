@@ -31,7 +31,7 @@ namespace System
 
 		function ToNumber()
 		{
-			return String.ToNumber(_str)
+			return Convert.ToNumber(_str)
 		}
 
 		function Trim()
@@ -146,11 +146,11 @@ namespace System
 				return false
 			}
 
-			if(IsString(other))
+			if(Convert.IsString(other))
 			{
 				return _str == other
 			}
-			if(IsType(other))
+			if(Convert.IsType(other))
 			{
 				return other.IsInstanceOf(this)
 			}
@@ -169,18 +169,18 @@ namespace System
 			{
 				return new Str(_str + "NULL")
 			}
-			else if(IsString(other))
+			else if(Convert.IsString(other))
 			{
 				return new Str(_str + other)
 			}
-			else if(IsType(other))
+			else if(Convert.IsType(other))
 			{
 				if(other.IsInstanceOf(this))
 				{
 					return new Str(_str + other.ToString())
 				}
 			}
-			Error("Can not Apply 'op_Addition' to String and object " + other)
+			Environment.Error("Can not Apply 'op_Addition' to String and object " + other)
 			return null
 		}
 

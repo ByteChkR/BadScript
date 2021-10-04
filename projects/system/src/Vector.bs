@@ -61,34 +61,34 @@ namespace System.Vectors
 
 		function op_Addition(other)
 		{
-			if(IsType(other))
+			if(Convert.IsType(other))
 			{
 				return Add(other)
 			}
 			else
 			{
 				Console.WriteLine(Debug(other))
-				Error("Can only Add a Vector with a Vector.")
+				Environment.Error("Can only Add a Vector with a Vector.")
 			}
 		}
 
 		function op_Subtraction(other)
 		{
-			if(IsType(other))
+			if(Convert.IsType(other))
 			{
 				return Sub(other)
 			}
 			else
 			{
-				Error("Can only Add a Vector with a Vector.")
+				Environment.Error("Can only Add a Vector with a Vector.")
 			}
 		}
 
 		function op_Multiply(other)
 		{
-			if(IsType(other))
+			if(Convert.IsType(other))
 			{
-				Error("Can not Multiply Two Vectors. Right side has to be scalar")
+				Environment.Error("Can not Multiply Two Vectors. Right side has to be scalar")
 			}
 			else
 			{
@@ -98,9 +98,9 @@ namespace System.Vectors
 
 		function op_Division(other)
 		{
-			if(IsType(other))
+			if(Convert.IsType(other))
 			{
-				Error("Can not Multiply Two Vectors. Right side has to be scalar")
+				Environment.Error("Can not Multiply Two Vectors. Right side has to be scalar")
 			}
 			else
 			{
@@ -110,7 +110,7 @@ namespace System.Vectors
 
 		function op_Equality(other)
 		{
-			if(IsType(other))
+			if(Convert.IsType(other))
 			{
 				return	X == other.X &&
 						Y == other.Y &&

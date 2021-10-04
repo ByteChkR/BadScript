@@ -37,7 +37,7 @@ function repeatChar(char, count)
 
 function writeArrayContent(arr)
 {
-	return Debug(arr)
+	return Environment.Debug(arr)
 }
 
 function writeArray(key, arr)
@@ -47,7 +47,7 @@ function writeArray(key, arr)
 
 function writeTableContent(table)
 {
-	return Debug(table)
+	return Environment.Debug(table)
 }
 
 function writeTable(key, table)
@@ -57,7 +57,7 @@ function writeTable(key, table)
 
 function writeTypeContent(type)
 {
-	return Debug(type)
+	return Environment.Debug(type)
 }
 
 function writeType(key, type)
@@ -68,7 +68,7 @@ function writeType(key, type)
 
 function writeFunction(fnc)
 {
-	return "Function Signature: '`" + Debug(fnc) + "`'"
+	return "Function Signature: '`" + Environment.Debug(fnc) + "`'"
 }
 
 
@@ -87,21 +87,21 @@ function makeSection(key, value, depth)
 	header = repeatChar("#", depth) + " " + key + "\n"
 	body = ""
 
-	if(IsArray(value))
+	if(Convert.IsArray(value))
 	{
 		body = writeArray(key, value)
 	}
-	else if(IsTable(value))
+	else if(Convert.IsTable(value))
 	{
 		body = makeReadme(key, value, depth + 1)
 	}
-	else if(IsType(value))
+	else if(Convert.IsType(value))
 	{
 		body = writeType(key, value)
 	}
 	else
 	{
-		Console.WriteLine("Can not Generate Readme for '" + key + "' = '" + Debug(value) + "'")
+		Console.WriteLine("Can not Generate Readme for '" + key + "' = '" + Environment.Debug(value) + "'")
 	}
 
 	footer = "\n______\n"
@@ -125,15 +125,15 @@ function makeReadme(name, table, depth)
 		try
 		{
 			v = table[k]
-			if(IsTable(v))
+			if(Convert.IsTable(v))
 			{
 				rm += makeReadme(k, v, depth + 1)
 			}
-			else if(IsLiteral(v))
+			else if(Convert.IsLiteral(v))
 			{
 				literalData[k] = v
 			}
-			else if(IsFunction(v))
+			else if(Convert.IsFunction(v))
 			{
 				funcData[k] = v
 			}
@@ -144,7 +144,7 @@ function makeReadme(name, table, depth)
 		}
 		catch(e)
 		{
-			Console.WriteLine("Error: " + Debug(e))
+			Console.WriteLine("Error: " + Environment.Debug(e))
 		}
 	}
 

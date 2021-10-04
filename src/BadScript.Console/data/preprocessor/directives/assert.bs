@@ -1,8 +1,8 @@
 #macro ASSERT_DEFINED(VAR)
 {
-	if(!HasKey(__SELF, "VAR"))
+	if(!Collection.HasKey(__SELF, "VAR"))
 	{
-		Error("Assertion Failed. VAR is not Defined")
+		Environment.Error("Assertion Failed. VAR is not Defined")
 	}
 }
 
@@ -10,7 +10,7 @@
 {
 	if(!Environment.HasInterface("NAME"))
 	{
-		Error("Assertion Failed. Interface NAME is not available")
+		Environment.Error("Assertion Failed. Interface NAME is not available")
 	}
 }
 
@@ -18,7 +18,7 @@
 {
 	if(LEFT != RIGHT)
 	{
-		Error("Assertion Failed. left is not equal to right. Actual Left: '" + LEFT + "' Actual Right: '" + RIGHT + "'")
+		Environment.Error("Assertion Failed. left is not equal to right. Actual Left: '" + LEFT + "' Actual Right: '" + RIGHT + "'")
 	}
 }
 
@@ -26,7 +26,7 @@
 {
 	if(VAR != null)
 	{
-		Error("Assertion Failed. var is not NULL. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not NULL. Actual Value: " + VAR)
 	}
 }
 
@@ -34,16 +34,16 @@
 {
 	if(VAR == null)
 	{
-		Error("Assertion Failed. var is NULL.")
+		Environment.Error("Assertion Failed. var is NULL.")
 	}
 }
 
 #macro ASSERT_BOOL(VAR)
 {
 	#ASSERT_NOT_NULL(VAR)
-	if(!IsBoolean(VAR))
+	if(!Convert.IsBoolean(VAR))
 	{
-		Error("Assertion Failed. var is not a boolean. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not a boolean. Actual Value: " + VAR)
 	}
 }
 
@@ -52,7 +52,7 @@
 	#ASSERT_BOOL(VAR)
 	if(!VAR)
 	{
-		Error("Assertion Failed. var is not true. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not true. Actual Value: " + VAR)
 	}
 }
 #macro ASSERT_FALSE(VAR)
@@ -60,61 +60,61 @@
 	#ASSERT_BOOL(VAR)
 	if(!VAR)
 	{
-		Error("Assertion Failed. var is not true. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not true. Actual Value: " + VAR)
 	}
 }
 
 #macro ASSERT_STRING(VAR)
 {
 	#ASSERT_NOT_NULL(VAR)
-	if(!IsString(VAR))
+	if(!Convert.IsString(VAR))
 	{
-		Error("Assertion Failed. var is not a string. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not a string. Actual Value: " + VAR)
 	}
 }
 
 #macro ASSERT_NUMBER(VAR)
 {
 	#ASSERT_NOT_NULL(VAR)
-	if(!IsNumber(VAR))
+	if(!Convert.IsNumber(VAR))
 	{
-		Error("Assertion Failed. var is not a number. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not a number. Actual Value: " + VAR)
 	}
 }
 
 #macro ASSERT_ARRAY(VAR)
 {
 	#ASSERT_NOT_NULL(VAR)
-	if(!IsArray(VAR))
+	if(!Convert.IsArray(VAR))
 	{
-		Error("Assertion Failed. var is not an Array. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not an Array. Actual Value: " + VAR)
 	}
 }
 
 #macro ASSERT_TABLE(VAR)
 {
 	#ASSERT_NOT_NULL(VAR)
-	if(!IsTable(VAR))
+	if(!Convert.IsTable(VAR))
 	{
-		Error("Assertion Failed. var is not a Table. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not a Table. Actual Value: " + VAR)
 	}
 }
 
 #macro ASSERT_TYPE(VAR)
 {
 	#ASSERT_NOT_NULL(VAR)
-	if(!IsType(VAR))
+	if(!Convert.IsType(VAR))
 	{
-		Error("Assertion Failed. var is not a Type. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not a Type. Actual Value: " + VAR)
 	}
 }
 
 #macro ASSERT_FUNCTION(VAR)
 {
 	#ASSERT_NOT_NULL(VAR)
-	if(!IsFunction(VAR))
+	if(!Convert.IsFunction(VAR))
 	{
-		Error("Assertion Failed. var is not a Type. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. var is not a Type. Actual Value: " + VAR)
 	}
 }
 
@@ -125,6 +125,6 @@
 
 	if(!FileSystem.Exists(FILE))
 	{
-		Error("Assertion Failed. The file does not exist.")
+		Environment.Error("Assertion Failed. The file does not exist.")
 	}
 }

@@ -1,0 +1,6 @@
+t = {
+	a = 1,
+	b = 2
+}
+
+return Collection.HasKey(t, "a")
