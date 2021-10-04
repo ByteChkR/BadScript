@@ -11,7 +11,9 @@
 - Function Signature: '`function LoadInterface(key)/LoadInterface(key, root)`'
 - Function Signature: '`function GetInterfaceNames()`'
 - Function Signature: '`function HasInterface(interfaceName)`'
-- Function Signature: '`function IsLiteral(v)`'
+- Function Signature: '`function Error(obj)`'
+- Function Signature: '`function Sleep(ms)`'
+- Function Signature: '`function Debug(obj)`'
 ## Properties:
 - `Settings = bs`
 

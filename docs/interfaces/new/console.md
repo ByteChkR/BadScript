@@ -9,17 +9,17 @@
 - Function Signature: '`function ResetColor()`'
 - Function Signature: '`function ReadKey(intercept)`'
 ## Properties:
-- `ForeColor = 7`
-- `BackColor = 0`
+- `ForeColor = 6`
+- `BackColor = 5`
 - `BufferWidth = 120`
-- `BufferHeight = 30`
+- `BufferHeight = 3000`
 - `WindowWidth = 120`
-- `WindowHeight = 30`
-- `LargestWindowWidth = 1904`
-- `LargestWindowHeight = 62`
+- `WindowHeight = 3000`
+- `LargestWindowWidth = 192`
+- `LargestWindowHeight = 63`
 - `CursorSize = 25`
 - `CursorLeft = 0`
-- `CursorTop = 7`
+- `CursorTop = 8`
 - `WindowLeft = 0`
 - `WindowTop = 0`
 - `Title = Windows PowerShell`

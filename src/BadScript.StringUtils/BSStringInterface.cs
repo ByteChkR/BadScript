@@ -89,7 +89,7 @@ namespace BadScript.StringUtils
 
             apiRoot.InsertElement(
                                   "StartsWith",
-                                  MakeFunction( "function startsWith(str, start)", StartsWith, 2, 2 )
+                                  MakeFunction("function StartsWith(str, start)", StartsWith, 2, 2 )
                                  );
 
             //indexOf(str, searchStr)/indexOf(str, searchStr, start)
