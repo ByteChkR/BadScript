@@ -66,6 +66,8 @@ project make -t build
 ## Project Build Settings
 The Project Information gets stored in the file `build-settings.json` in the root of the project directory.
 
+[App Template Build Settings Example](https://github.com/ByteChkR/BadScript/blob/master/src/BadScript.Console/data/project/templates/app/build-settings.json)
+
 ### App Info
 Contains the Name and Version of the Project
 ```json
