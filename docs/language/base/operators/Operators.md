@@ -8,7 +8,7 @@
 - [op_GreaterThan(>)](./GreaterThan.md)
 - [op_GreaterThanOrEqual(>=)](./GreaterThanOrEqual.md)
 - [op_And(&&)](./And.md)
-- [op_Or(||)](./Or.md)
+- [op_Or(\|\|)](./Or.md)
 - [op_ExclusiveOr(^)](./ExclusiveOr.md)
 - [op_LogicalNot(!)](./LogicalNot.md)
 - [op_SelfAnd(&&)](./And.md)

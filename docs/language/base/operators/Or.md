@@ -1,4 +1,4 @@
-# Logical Or Operator(||)
+# Logical Or Operator(\|\|)
 
 Returns True if any of left or right are true
 
