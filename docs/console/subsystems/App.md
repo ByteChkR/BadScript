@@ -3,13 +3,14 @@
 Runs an app package
 
 [Readme Generator App Project](https://github.com/ByteChkR/BadScript/tree/master/projects/readme-generator)
+
 [Interactive Shell App Project](https://github.com/ByteChkR/BadScript/tree/master/projects/interactive-shell)
 
 [App Packages](https://github.com/ByteChkR/BadScript/tree/master/docs/projects)
 
 ## Required Arguments
 - `Input App`
-	- Specifies a app that will be executed.
+	- Specifies an app that will be executed.
 
 ## Optional Arguments
 - `-a/--args [arg0] [arg1] ...`
