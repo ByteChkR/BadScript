@@ -35,7 +35,7 @@ Execute the Script `MyScript.bs` with startup arguments.
 bs run -f MyScript.bs -a Argument0 Argument1
 ```
 
-Execute the Script `MyScript.bs` with the [`FileSystem`](../../interfaces/new/FileSystem.bs) Interface loaded by default.
+Execute the Script `MyScript.bs` with the [`FileSystem`](../../interfaces/new/FileSystem.md) Interface loaded by default.
 ```
 bs run -f MyScript.bs --interfaces Convert Console Collection FileSystem
 ```
