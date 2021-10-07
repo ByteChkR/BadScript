@@ -14,7 +14,7 @@ using BadScript.Types.References.Implementations;
 namespace BadScript.Types.Implementations
 {
 
-    public class BSArray : ABSArray, IEnumerable < IForEachIteration >
+    public sealed class BSArray : ABSArray, IEnumerable < IForEachIteration >
     {
 
         private bool m_Locked = false;
@@ -195,7 +195,7 @@ namespace BadScript.Types.Implementations
 
         public override bool TryConvertDecimal( out decimal d )
         {
-            d = 0;
+            d = decimal.Zero;
 
             return false;
         }

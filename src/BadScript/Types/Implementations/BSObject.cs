@@ -9,9 +9,7 @@ namespace BadScript.Types.Implementations
 
     public class BSObject : ABSObject, IBSWrappedObject
     {
-
         public static readonly BSObject Null = new BSObject( null );
-
         public static readonly BSObject True = new BSObject( true );
         public static readonly BSObject False = new BSObject( false );
 
@@ -114,14 +112,14 @@ namespace BadScript.Types.Implementations
 
         public override bool TryConvertDecimal( out decimal d )
         {
-            d = 0;
-
             if ( m_InternalObject is decimal dV )
             {
                 d = dV;
 
                 return true;
             }
+
+            d = decimal.Zero;
 
             return false;
         }

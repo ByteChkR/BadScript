@@ -10,6 +10,7 @@ using BadScript.Parser.OperatorImplementations.Implementations.Math.Self;
 using BadScript.Parser.OperatorImplementations.Implementations.Relational;
 using BadScript.Types;
 using BadScript.Types.References;
+using BadScript.Types.Implementations;
 
 namespace BadScript.Parser.OperatorImplementations
 {
@@ -74,7 +75,8 @@ namespace BadScript.Parser.OperatorImplementations
         {
             ABSObject firstO = args.First();
 
-            if ( allowOverrides && AllowOperatorOverrides && HasKey(key) )
+            if (!(BSEngineSettings.ENABLE_CORE_FAST_TRACK && firstO is BSObject o && o.IsLiteral) 
+                && allowOverrides && AllowOperatorOverrides && HasKey(key) )
             {
                 string opImplName = ResolveKey( key );
 

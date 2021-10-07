@@ -12,9 +12,9 @@ namespace BadScript.Testing
 
         public static void Main( string[] args )
         {
-            string file = "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\PreprocessorTest.bs";
+            string file = "D:\\Users\\Tim\\Documents\\BadScript\\src\\BadScript.Testing\\PerformanceTest.bs";
 
-            System.Console.WriteLine( SourcePreprocessor.Preprocess( File.ReadAllText( file ), "DEBUG=true" ) );
+            
         }
 
         #endregion

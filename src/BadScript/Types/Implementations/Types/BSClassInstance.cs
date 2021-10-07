@@ -14,7 +14,7 @@ using BadScript.Types.References;
 namespace BadScript.Types.Implementations.Types
 {
 
-    public class BSClassInstance : ABSObject, IEnumerable < IForEachIteration >
+    public sealed class BSClassInstance : ABSObject, IEnumerable < IForEachIteration >
     {
 
         public readonly string Name;

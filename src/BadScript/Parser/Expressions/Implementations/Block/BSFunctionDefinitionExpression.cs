@@ -46,30 +46,29 @@ namespace BadScript.Parser.Expressions.Implementations.Block
             }
         }
 
-        public static ABSObject InvokeBlockFunction(
+        public static void ApplyFunctionArguments(
             BSScope scope,
-            BSExpression[] block,
             BSFunctionParameter[] argNames,
-            ABSObject[] arg )
+            ABSObject[] arg)
         {
-            for ( int i = 0; i < argNames.Length; i++ )
+            for (int i = 0; i < argNames.Length; i++)
             {
                 BSFunctionParameter p = argNames[i];
 
-                if ( p.IsArgArray )
+                if (p.IsArgArray)
                 {
-                    BSArray a = new BSArray( arg );
-                    scope.AddLocalVar( p.Name, a );
+                    BSArray a = new BSArray(arg);
+                    scope.AddLocalVar(p.Name, a);
 
                     break;
                 }
 
-                if ( arg.Length <= i && !p.IsOptional )
+                if (arg.Length <= i && !p.IsOptional)
                 {
-                    throw new BSRuntimeException( "Missing Argument: " + p.Name );
+                    throw new BSRuntimeException("Missing Argument: " + p.Name);
                 }
 
-                if ( p.NotNull && ( arg.Length <= i || arg[i].IsNull ) )
+                if (p.NotNull && (arg.Length <= i || arg[i].IsNull))
                 {
                     throw new BSRuntimeException(
                                                  arg[i].Position,
@@ -77,9 +76,17 @@ namespace BadScript.Parser.Expressions.Implementations.Block
                                                 );
                 }
 
-                scope.AddLocalVar( p.Name, arg.Length <= i ? BSObject.Null : arg[i] );
+                scope.AddLocalVar(p.Name, arg.Length <= i ? BSObject.Null : arg[i]);
             }
+        }
 
+        public static ABSObject InvokeBlockFunction(
+            BSScope scope,
+            BSExpression[] block,
+            BSFunctionParameter[] argNames,
+            ABSObject[] arg )
+        {
+            ApplyFunctionArguments( scope, argNames, arg );
             foreach ( BSExpression buildScriptExpression in block )
             {
                 buildScriptExpression.Execute( scope );

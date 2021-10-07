@@ -146,7 +146,7 @@ namespace BadScript.Types
 
         public override bool TryConvertDecimal(out decimal d)
         {
-            d = 0;
+            d = decimal.Zero;
 
             return false;
         }

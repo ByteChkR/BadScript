@@ -14,7 +14,7 @@ using BadScript.Types.References.Implementations;
 namespace BadScript.Types.Implementations
 {
 
-    public class BSTable : ABSTable, IEnumerable < IForEachIteration >
+    public sealed class BSTable : ABSTable, IEnumerable < IForEachIteration >
     {
 
         private readonly Dictionary < ABSObject, ABSObject > m_InnerTable =

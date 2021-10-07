@@ -28,20 +28,34 @@ namespace BadScript.Parser.Expressions.Implementations.Value
         public override ABSObject Execute( BSScope scope )
         {
             ABSObject obj = Left.Execute( scope );
-            ABSObject[] args = new ABSObject[Parameters.Length + 1];
-            args[0] = obj;
-
-            for ( int i = 1; i < args.Length; i++ )
+            if(BSEngineSettings.ENABLE_CORE_FAST_TRACK && obj is BSFunction f)
             {
-                args[i] = Parameters[i - 1].Execute( scope );
+                ABSObject[] args = new ABSObject[Parameters.Length];
+                for (int i = 0; i < args.Length; i++)
+                {
+                    args[i] = Parameters[i].Execute(scope);
+                }
+                return f.Invoke(args);
             }
+            else
+            {
+                ABSObject[] args = new ABSObject[Parameters.Length + 1];
+                args[0] = obj;
 
-            ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation( "()", args, true );
+                for (int i = 1; i < args.Length; i++)
+                {
+                    args[i] = Parameters[i - 1].Execute(scope);
+                }
 
-            return impl.ExecuteOperator( args );
+
+
+                ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation("()", args, true);
+
+                return impl.ExecuteOperator(args);
+            }
         }
 
-        #endregion
+#endregion
 
     }
 

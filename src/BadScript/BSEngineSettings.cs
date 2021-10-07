@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 using BadScript.Interfaces;
 using BadScript.Interfaces.Environment;
+
 using BadScript.Parser;
 using BadScript.Parser.Expressions;
 using BadScript.Types;
@@ -14,6 +16,7 @@ namespace BadScript
 
     public class BSEngineSettings
     {
+        public const bool ENABLE_CORE_FAST_TRACK = false;
 
         public readonly BSParserSettings ParserSettings;
         public readonly List < ABSScriptInterface > Interfaces;

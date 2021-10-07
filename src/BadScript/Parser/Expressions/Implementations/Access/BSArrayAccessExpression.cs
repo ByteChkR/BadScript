@@ -3,6 +3,7 @@ using BadScript.Parser.Expressions.Implementations.Binary;
 using BadScript.Parser.OperatorImplementations;
 using BadScript.Scopes;
 using BadScript.Types;
+using BadScript.Types.Implementations;
 using BadScript.Types.References;
 
 namespace BadScript.Parser.Expressions.Implementations.Access
@@ -28,6 +29,18 @@ namespace BadScript.Parser.Expressions.Implementations.Access
             ABSObject obj = Left.Execute( scope ).ResolveReference();
 
             ABSObject i = Right.Execute( scope ).ResolveReference();
+
+            if(BSEngineSettings.ENABLE_CORE_FAST_TRACK)
+            {
+                if(obj is BSArray arr)
+                {
+                    return arr.GetElement((int)i.ConvertDecimal());
+                }
+                if(obj is BSTable table)
+                {
+                    return table.GetElement(i);
+                }
+            }
 
             ABSOperatorImplementation impl =
                 BSOperatorImplementationResolver.ResolveImplementation( "[]", new[] { obj, i }, true );

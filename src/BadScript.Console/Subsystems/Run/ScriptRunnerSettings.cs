@@ -15,8 +15,10 @@ namespace BadScript.Console.Subsystems.Run
         [Option( 'a', "args", HelpText = "The start arguments that will be passed to the Files" )]
         public IEnumerable < string > Arguments { get; set; }
 
-        [Option( 'b', "benchmark", HelpText = "Display the Execution time." )]
+        [Option('b', "benchmark", HelpText = "Display the Execution time.")]
         public bool IsBenchmark { get; set; }
+        [Option("iterations", HelpText = "How often do the scripts get executed?", Default = 1)]
+        public int Iterations { get; set; }
 
     }
 

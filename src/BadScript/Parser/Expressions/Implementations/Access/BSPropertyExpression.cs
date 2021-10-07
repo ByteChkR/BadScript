@@ -2,6 +2,7 @@
 using BadScript.Scopes;
 using BadScript.Types;
 using BadScript.Types.Implementations;
+using BadScript.Types.Implementations.Types;
 
 namespace BadScript.Parser.Expressions.Implementations.Access
 {
@@ -28,7 +29,17 @@ namespace BadScript.Parser.Expressions.Implementations.Access
             if ( Left != null )
             {
                 ABSObject l = Left.Execute( scope );
-
+                if(BSEngineSettings.ENABLE_CORE_FAST_TRACK)
+                {
+                    if (l is BSArray||
+                        l is BSTable ||
+                        l is BSClassInstance ||
+                        l is BSFunction)
+                    {
+                        return l.GetProperty(Right);
+                    }
+                   
+                }
                 ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation(
                      ".",
                      new[] { l, new BSObject( Right ) },
