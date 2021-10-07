@@ -36,10 +36,6 @@ namespace BadScript.Parser.Expressions.Implementations.Access
                 {
                     return arr.GetElement((int)i.ConvertDecimal());
                 }
-                if(obj is BSTable table)
-                {
-                    return table.GetElement(i);
-                }
             }
 
             ABSOperatorImplementation impl =

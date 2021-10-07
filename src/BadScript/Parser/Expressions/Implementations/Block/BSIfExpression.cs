@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using BadScript.Scopes;
@@ -42,8 +43,8 @@ namespace BadScript.Parser.Expressions.Implementations.Block
                     ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                          funcScope,
                          keyValuePair.Value,
-                         new BSFunctionParameter[0],
-                         new ABSObject[0]
+                         Array.Empty < BSFunctionParameter >(),
+                         Array.Empty < ABSObject >()
                         );
 
                     if ( ret != null )
@@ -66,8 +67,8 @@ namespace BadScript.Parser.Expressions.Implementations.Block
                 ABSObject elseR = BSFunctionDefinitionExpression.InvokeBlockFunction(
                      elseScope,
                      ElseBlock,
-                     new BSFunctionParameter[0],
-                     new ABSObject[0]
+                     Array.Empty < BSFunctionParameter >(),
+                     Array.Empty < ABSObject >()
                     );
 
                 if ( elseR != null )

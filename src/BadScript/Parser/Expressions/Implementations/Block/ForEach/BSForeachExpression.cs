@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using BadScript.Exceptions;
 using BadScript.Scopes;
@@ -83,8 +84,8 @@ namespace BadScript.Parser.Expressions.Implementations.Block.ForEach
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                      foreachScope,
                      Block,
-                     new BSFunctionParameter[0],
-                     new ABSObject[0]
+                     Array.Empty < BSFunctionParameter >(),
+                     Array.Empty < ABSObject >()
                     );
 
                 if ( foreachScope.Flags == BSScopeFlags.Continue )
@@ -107,9 +108,9 @@ namespace BadScript.Parser.Expressions.Implementations.Block.ForEach
 
         private void Enumerate( BSScope scope, BSScope foreachScope, ABSObject moveNext, ABSObject getCurrent )
         {
-            while ( moveNext.Invoke( new ABSObject[0] ) != BSObject.False )
+            while ( moveNext.Invoke( Array.Empty < ABSObject >() ) != BSObject.False )
             {
-                ABSObject[] objs = { getCurrent.Invoke( new ABSObject[0] ) };
+                ABSObject[] objs = { getCurrent.Invoke( Array.Empty < ABSObject >() ) };
 
                 for ( int i = 0; i < Vars.Length; i++ )
                 {
@@ -119,8 +120,8 @@ namespace BadScript.Parser.Expressions.Implementations.Block.ForEach
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                      foreachScope,
                      Block,
-                     new BSFunctionParameter[0],
-                     new ABSObject[0]
+                     Array.Empty < BSFunctionParameter >(),
+                     Array.Empty < ABSObject >()
                     );
 
                 if ( foreachScope.Flags == BSScopeFlags.Continue )
@@ -153,8 +154,8 @@ namespace BadScript.Parser.Expressions.Implementations.Block.ForEach
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                      foreachScope,
                      Block,
-                     new BSFunctionParameter[0],
-                     new ABSObject[0]
+                     Array.Empty < BSFunctionParameter >(),
+                     Array.Empty < ABSObject >()
                     );
 
                 if ( foreachScope.Flags == BSScopeFlags.Continue )

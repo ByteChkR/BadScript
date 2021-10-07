@@ -1,4 +1,6 @@
-﻿using BadScript.Tools.CodeGenerator.Runtime.Attributes;
+﻿using System;
+
+using BadScript.Tools.CodeGenerator.Runtime.Attributes;
 
 namespace BadScript.Tools.CodeGenerator
 {
@@ -25,7 +27,7 @@ namespace BadScript.Tools.CodeGenerator
             StaticSource = staticSrc;
             GeneratedClass = generatedClass;
             StaticGeneratedClass = staticGeneratedClass;
-            Creators = creators ?? new BSWConstructorCreatorAttribute[0];
+            Creators = creators ?? Array.Empty < BSWConstructorCreatorAttribute >();
         }
 
         public string GetWrapperCode( string expr )

@@ -16,7 +16,11 @@ namespace BadScript.Interfaces.Environment.Settings
 
         private readonly SettingsCategory m_Category;
 
-        public override bool IsNull => false;
+        protected override int GetHashCodeImpl()
+        {
+            return m_Category.GetHashCode() ^ typeof(SettingsPairEnumerator).GetHashCode();
+        }
+        public override bool IsNull() => false;
 
         #region Public
 

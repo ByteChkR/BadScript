@@ -30,10 +30,17 @@ namespace BadScript.Types
             return !Equals( left, right );
         }
 
+        public override int GetHashCode()
+        {
+            return GetHashCodeImpl();
+        }
+
+        protected abstract int GetHashCodeImpl();
+
         /// <summary>
         ///     Returns true if the object is null
         /// </summary>
-        public abstract bool IsNull { get; }
+        public abstract bool IsNull();
 
         #region Public
 

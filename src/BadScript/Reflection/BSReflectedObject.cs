@@ -18,8 +18,12 @@ namespace BadScript.Reflection
         private readonly Dictionary < string, ABSReference > m_Members;
         private readonly object m_Instance;
 
-        public override bool IsNull => m_Instance == null;
+        public override bool IsNull() => m_Instance == null;
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_Instance?.GetHashCode() ?? 0;
+        }
         #region Public
 
         public BSReflectedObject( Dictionary < string, ABSReference > members, object instance ) :

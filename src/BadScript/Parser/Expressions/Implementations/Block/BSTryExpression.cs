@@ -41,8 +41,8 @@ namespace BadScript.Parser.Expressions.Implementations.Block
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                      tryScope,
                      TryBlock,
-                     new BSFunctionParameter[0],
-                     new ABSObject[0]
+                     Array.Empty < BSFunctionParameter >(),
+                     Array.Empty < ABSObject >()
                     );
 
                 if ( ret != null )
@@ -68,8 +68,8 @@ namespace BadScript.Parser.Expressions.Implementations.Block
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                      catchScope,
                      CatchBlock,
-                     new BSFunctionParameter[0],
-                     new ABSObject[0]
+                     Array.Empty < BSFunctionParameter >(),
+                     Array.Empty < ABSObject >()
                     );
 
                 if ( ret != null )

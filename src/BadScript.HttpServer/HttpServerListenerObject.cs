@@ -18,6 +18,10 @@ namespace BadScript.HttpServer
     public class HttpServerListenerObject : ABSObject
     {
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_Listener?.GetHashCode()??0 ^ m_InstanceFunctions.GetHashCode();
+        }
         private readonly BSTable m_InstanceFunctions;
         private Task m_Listener;
         private readonly CancellationTokenSource m_TokenSource;
@@ -26,7 +30,7 @@ namespace BadScript.HttpServer
         private readonly IPEndPoint m_EndPoint;
         private readonly bool m_UseSSL;
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         #region Public
 

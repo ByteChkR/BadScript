@@ -28,7 +28,7 @@ namespace BadScript.Console.Preprocessor.Directives
                 BSExpression expr = p.ParseInvocation( m_Function );
                 ABSObject o = expr.Execute( ctx.RuntimeScope );
 
-                return o == null || o.IsNull ? "" : o.ConvertString() + "\n";
+                return o == null || o.IsNull() ? "" : o.ConvertString() + "\n";
             }
 
             #endregion

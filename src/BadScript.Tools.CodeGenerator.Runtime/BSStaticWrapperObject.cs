@@ -18,12 +18,16 @@ namespace BadScript.Tools.CodeGenerator.Runtime
     public class BSStaticWrapperObject : ABSObject, IEnumerable < IForEachIteration >
     {
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_WrappedType.GetHashCode() ^ m_StaticProperties.GetHashCode();
+        }
         protected Dictionary < string, ABSReference > m_StaticProperties;
         private Type m_WrappedType;
 
         public string[] Properties => m_StaticProperties.Keys.ToArray();
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         #region Public
 

@@ -19,7 +19,13 @@ namespace BadScript.Parser.Expressions.Implementations.Block
         private readonly string m_DebugData;
         private readonly BSScope m_Scope;
 
-        public override bool IsNull => false;
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_DebugData.GetHashCode() ^ m_Block.GetHashCode();
+        }
+
+        public override bool IsNull() => false;
 
         #region Public
 

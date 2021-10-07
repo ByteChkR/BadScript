@@ -28,7 +28,7 @@ namespace BadScript.Console.Preprocessor.Directives
 
             ABSObject o = ctx.RuntimeScope.Return;
 
-            return o == null || o.IsNull ? "" : o.ConvertString() + "\n";
+            return o == null || o.IsNull() ? "" : o.ConvertString() + "\n";
         }
 
         #endregion

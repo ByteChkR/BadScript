@@ -40,7 +40,7 @@ namespace BadScript.Console.Preprocessor.Directives
 
             ABSObject o = aggrScope.Get( aggregateVar ).ResolveReference();
 
-            return o == null || o.IsNull ? "" : o.ConvertString() + "\n";
+            return o == null || o.IsNull() ? "" : o.ConvertString() + "\n";
         }
 
         #endregion

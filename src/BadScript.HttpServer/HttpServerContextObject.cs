@@ -13,11 +13,14 @@ namespace BadScript.HttpServer
 
     public class HttpServerContextObject : ABSObject
     {
-
+        protected override int GetHashCodeImpl()
+        {
+            return m_Context.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
+        }
         private readonly BSTable m_InstanceFunctions;
         private readonly IHttpContext m_Context;
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         #region Public
 

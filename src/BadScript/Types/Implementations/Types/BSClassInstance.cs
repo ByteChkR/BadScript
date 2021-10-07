@@ -16,7 +16,6 @@ namespace BadScript.Types.Implementations.Types
 
     public sealed class BSClassInstance : ABSObject, IEnumerable < IForEachIteration >
     {
-
         public readonly string Name;
         private readonly BSScope m_InstanceScope;
 
@@ -24,7 +23,7 @@ namespace BadScript.Types.Implementations.Types
 
         public BSScope InstanceScope => m_InstanceScope;
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         #region Public
 
@@ -54,6 +53,10 @@ namespace BadScript.Types.Implementations.Types
                                        );
 
             Name = name;
+        }
+        protected override int GetHashCodeImpl()
+        {
+            return Name.GetHashCode() ^ m_InstanceScope.GetHashCode();
         }
 
         public override bool Equals( ABSObject other )

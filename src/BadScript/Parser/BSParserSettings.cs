@@ -1,21 +1,21 @@
 ﻿namespace BadScript.Parser
 {
 
-    public class BSParserSettings
-    {
+    //public class BSParserSettings
+    //{
 
-        public bool AllowOptimization;
+    //    public bool AllowOptimization;
 
-        public static BSParserSettings Default => new BSParserSettings { AllowOptimization = true };
+    //    public static BSParserSettings Default => new BSParserSettings { AllowOptimization = true };
 
-        #region Public
+    //    #region Public
 
-        public BSParserSettings()
-        {
-        }
+    //    public BSParserSettings()
+    //    {
+    //    }
 
-        #endregion
+    //    #endregion
 
-    }
+    //}
 
 }

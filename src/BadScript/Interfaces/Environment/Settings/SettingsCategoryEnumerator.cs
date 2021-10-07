@@ -16,7 +16,7 @@ namespace BadScript.Interfaces.Environment.Settings
 
         private readonly SettingsCategory m_Category;
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         #region Public
 
@@ -25,6 +25,10 @@ namespace BadScript.Interfaces.Environment.Settings
             m_Category = cat;
         }
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_Category.GetHashCode() ^typeof(SettingsCategoryEnumerator).GetHashCode();
+        }
         public override bool Equals( ABSObject other )
         {
             return other is SettingsCategoryEnumerator w && w.m_Category == m_Category;

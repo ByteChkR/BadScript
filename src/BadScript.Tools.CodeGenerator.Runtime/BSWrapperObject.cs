@@ -17,11 +17,14 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
     public class BSWrapperObject < T > : ABSObject, IBSWrappedObject, IEnumerable < IForEachIteration >
     {
-
+        protected override int GetHashCodeImpl()
+        {
+            return m_InternalObject.GetHashCode() ^ m_Properties.GetHashCode();
+        }
         protected T m_InternalObject;
         protected Dictionary < string, ABSReference > m_Properties = new Dictionary < string, ABSReference >();
 
-        public override bool IsNull => m_InternalObject == null;
+        public override bool IsNull() => m_InternalObject == null;
 
         #region Public
 
@@ -48,9 +51,9 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                 return false;
             }
 
-            if ( IsNull )
+            if (IsNull())
             {
-                return other.IsNull;
+                return other.IsNull();
             }
 
             if ( other is BSWrapperObject < T > o )
@@ -79,7 +82,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override ABSReference GetProperty( string propertyName )
         {
-            if ( !IsNull && m_Properties.ContainsKey( propertyName ) )
+            if ( !IsNull() && m_Properties.ContainsKey( propertyName ) )
             {
                 return m_Properties[propertyName];
             }
@@ -89,7 +92,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override bool HasProperty( string propertyName )
         {
-            if ( IsNull )
+            if (IsNull())
             {
                 return false;
             }
@@ -111,7 +114,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
             doneList[this] = "{}";
 
-            if ( IsNull )
+            if (IsNull())
             {
                 return "NULL";
             }

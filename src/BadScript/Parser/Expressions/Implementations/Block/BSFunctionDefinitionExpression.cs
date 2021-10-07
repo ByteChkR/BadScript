@@ -68,7 +68,7 @@ namespace BadScript.Parser.Expressions.Implementations.Block
                     throw new BSRuntimeException("Missing Argument: " + p.Name);
                 }
 
-                if (p.NotNull && (arg.Length <= i || arg[i].IsNull))
+                if (p.NotNull && (arg.Length <= i || arg[i].IsNull()))
                 {
                     throw new BSRuntimeException(
                                                  arg[i].Position,

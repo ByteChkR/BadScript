@@ -42,17 +42,15 @@ namespace BadScript.Console.Subsystems
                )]
         public IEnumerable < string > ActiveInterfaces { get; set; }
 
-        [Option( "optimize", Default = null, HelpText = "If specified the Parser will optimize the parsed output." )]
-        public bool AllowOptimizations { get; set; }
 
         #region Public
 
         public BSEngineSettings CreateEngineSettings() =>
-            CreateEngineSettings( AllowOptimizations, IncludeDirectories.ToArray(), ActiveInterfaces.ToArray() );
-        public static BSEngineSettings CreateEngineSettings(bool allowOpt, string[] includeDirs, string[] activeInterfaces)
+            CreateEngineSettings( IncludeDirectories.ToArray(), ActiveInterfaces.ToArray() );
+        public static BSEngineSettings CreateEngineSettings(string[] includeDirs, string[] activeInterfaces)
         {
             BSEngineSettings es =
-                BSEngineSettings.MakeDefault( new BSParserSettings { AllowOptimization = allowOpt } );
+                BSEngineSettings.MakeDefault( );
 
             es.Interfaces.Add(new BSCollectionInterface());
             es.Interfaces.Add(new BSConvertInterface());

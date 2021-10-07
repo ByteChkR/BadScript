@@ -19,7 +19,11 @@ namespace BadScript.Interfaces.Environment.Settings
         private readonly SettingsCategoryEnumerator m_CategoryEnumerator;
         private readonly Dictionary < string, ABSReference > m_Properties;
 
-        public override bool IsNull => false;
+        protected override int GetHashCodeImpl()
+        {
+            return m_Category.GetHashCode() ^m_Properties.GetHashCode();
+        }
+        public override bool IsNull() => false;
 
         #region Public
 

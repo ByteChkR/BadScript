@@ -10,7 +10,7 @@ namespace BadScript.Types.References.Implementations
         private readonly int m_Key;
         private readonly bool m_ReadOnly;
 
-        public override bool IsNull => Get().IsNull;
+        public override bool IsNull() => Get().IsNull();
 
         #region Public
 
@@ -46,6 +46,10 @@ namespace BadScript.Types.References.Implementations
 
         #endregion
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_Key.GetHashCode() ^ m_SourceTable.GetHashCode();
+        }
     }
 
 }

@@ -17,9 +17,14 @@ namespace BadScript.Interfaces.Environment.Settings
         private readonly SettingsPair m_Pair;
         private readonly Dictionary < string, ABSReference > m_Properties;
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         #region Public
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Pair.GetHashCode() ^ m_Properties.GetHashCode();
+        }
 
         public SettingsPairWrapper( SettingsPair pair ) : base( SourcePosition.Unknown )
         {

@@ -21,8 +21,12 @@ namespace BadScript.Reflection
         private readonly Dictionary < string, ABSReference > m_StaticMembers;
         private readonly ConstructorInfo[] m_Constructors;
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_Type.GetHashCode();
+        }
         #region Public
 
         public BSReflectedType( Type t ) : base( SourcePosition.Unknown )

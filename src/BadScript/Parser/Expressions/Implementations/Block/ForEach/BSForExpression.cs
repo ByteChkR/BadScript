@@ -1,4 +1,6 @@
-﻿using BadScript.Scopes;
+﻿using System;
+
+using BadScript.Scopes;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
@@ -45,8 +47,8 @@ namespace BadScript.Parser.Expressions.Implementations.Block.ForEach
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(
                      forScope,
                      Block,
-                     new BSFunctionParameter[0],
-                     new ABSObject[0]
+                     Array.Empty < BSFunctionParameter >(),
+                     Array.Empty < ABSObject >()
                     );
 
                 if ( ret != null )

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,11 @@ namespace BadScript.HttpServer
         private readonly BSTable m_InstanceFunctions;
         private readonly IHttpRequest m_Request;
 
-        public override bool IsNull => false;
+        protected override int GetHashCodeImpl()
+        {
+            return m_Request.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
+        }
+        public override bool IsNull() => false;
 
         #region Public
 
@@ -55,7 +60,7 @@ namespace BadScript.HttpServer
                                                       new BSObject( "AcceptTypes" ), new BSArray(
                                                            ( m_Request.GetAcceptLanguages().
                                                                        Select( x => x.ToString() ) ??
-                                                             new string[0] ).Select(
+                                                             Array.Empty < string >() ).Select(
                                                                 x => new BSObject( x )
                                                                )
                                                           )

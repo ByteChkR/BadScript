@@ -9,6 +9,11 @@ namespace BadScript.Types.Implementations
 
         private readonly BSFunction m_Func;
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_Func.GetHashCode() ^ 397;
+        }
+
         #region Public
 
         public BSFunctionReference( BSFunction f ) : base( f.Position )

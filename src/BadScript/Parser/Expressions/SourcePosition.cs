@@ -4,24 +4,32 @@ using System.Linq;
 namespace BadScript.Parser.Expressions
 {
 
-    public struct SourcePosition
+    public readonly struct SourcePosition
     {
 
-        public string Source;
-        public string LineStr;
-        public int Line;
-        public int Collumn;
-        public int Position;
+        public readonly string Source;
+        public readonly string LineStr;
+        public readonly int Line;
+        public readonly int Collumn;
+        public readonly int Position;
 
-        public static SourcePosition Unknown =>
+        private SourcePosition( string src, string line, int lineNum, int col, int pos )
+        {
+            Source = src;
+            LineStr = line;
+            Line = lineNum;
+            Collumn = col;
+            Position = pos;
+        }
+        public static readonly SourcePosition Unknown =
             new SourcePosition
-            {
-                Source = "UNKNOWN",
-                LineStr = "UNKNOWN",
-                Line = 0,
-                Collumn = 0,
-                Position = 0
-            };
+            (
+                "UNKNOWN",
+                "UNKNOWN",
+                0,
+                0,
+                0
+            );
 
         public static SourcePosition GetCurrentLineInfo( string src, int pos )
         {
@@ -55,13 +63,13 @@ namespace BadScript.Parser.Expressions
             string r = src.Substring( textStart, Math.Min( nextNewLine, src.Length - textStart ) );
 
             return new SourcePosition
-                   {
-                       Source = src,
-                       LineStr = r.Trim(),
-                       Line = lineCount,
-                       Collumn = pos - lastNewLine,
-                       Position = pos
-                   };
+                   (
+                       src,
+                       r.Trim(),
+                       lineCount,
+                       pos - lastNewLine,
+                       pos
+                   );
         }
 
     }

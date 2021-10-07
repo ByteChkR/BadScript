@@ -14,10 +14,14 @@ namespace BadScript.Xml
     public class XmlNodeObject : ABSObject
     {
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_Node.GetHashCode() ^ m_Properties.GetHashCode();
+        }
         protected XmlNode m_Node;
         protected Dictionary < string, ABSReference > m_Properties = new Dictionary < string, ABSReference >();
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         #region Public
 

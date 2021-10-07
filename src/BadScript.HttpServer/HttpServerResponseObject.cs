@@ -15,11 +15,15 @@ namespace BadScript.HttpServer
 
     public class HttpServerResponseObject : ABSObject
     {
+        protected override int GetHashCodeImpl()
+        {
+            return m_Response.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
+        }
 
         private readonly BSTable m_InstanceFunctions;
         private IHttpResponse m_Response;
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         #region Public
 

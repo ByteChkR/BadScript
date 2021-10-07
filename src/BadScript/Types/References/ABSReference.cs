@@ -11,7 +11,7 @@ namespace BadScript.Types.References
     public abstract class ABSReference : ABSObject
     {
 
-        public override bool IsNull => Get().IsNull;
+        public override bool IsNull() => Get().IsNull();
 
         #region Public
 

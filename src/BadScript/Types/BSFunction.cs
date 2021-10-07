@@ -51,6 +51,12 @@ namespace BadScript.Types
         private Func < ABSObject[],
             ABSObject > m_Func;
 
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Func?.GetHashCode() ?? 0 ^ m_Properties.GetHashCode();
+        }
+
         /// <summary>
         ///     The Stacktrace of the Current Thread
         /// </summary>
@@ -85,7 +91,7 @@ namespace BadScript.Types
             }
         }
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         /// <summary>
         ///     The Stack Depth of the Current thread
@@ -248,7 +254,7 @@ namespace BadScript.Types
                 {
                     ABSObject o = bsFunction.Invoke( arr );
 
-                    if ( !o.IsNull )
+                    if ( !o.IsNull())
                     {
                         PopStack();
 

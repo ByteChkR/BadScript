@@ -20,8 +20,7 @@ namespace BadScript.Console.AppPackage
 
             BSEngineSettings es =
                 EngineBuilderSettings.CreateEngineSettings(
-                                                           false,
-                                                           Array.Empty < string >(),
+                                                           Array.Empty <string >(),
                                                            Array.Empty<string>()
                                                           );
 

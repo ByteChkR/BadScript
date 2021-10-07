@@ -17,7 +17,7 @@ namespace BadScript.Parser.OperatorImplementations.Implementations
             ABSObject lVal = arg[0];
             ABSObject rVal = arg[1];
 
-            return lVal.IsNull ? rVal : lVal;
+            return lVal.IsNull() ? rVal : lVal;
         }
 
         public override bool IsCorrectImplementation( ABSObject[] arg )

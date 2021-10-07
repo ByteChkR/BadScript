@@ -55,7 +55,6 @@ namespace BadScript.Parser.OperatorImplementations
 
         private static List < ABSOperatorImplementation > m_Implementations;
 
-        public static bool AllowOperatorOverrides { get; set; } = true;
 
         #region Public
 
@@ -75,8 +74,8 @@ namespace BadScript.Parser.OperatorImplementations
         {
             ABSObject firstO = args.First();
 
-            if (!(BSEngineSettings.ENABLE_CORE_FAST_TRACK && firstO is BSObject o && o.IsLiteral) 
-                && allowOverrides && AllowOperatorOverrides && HasKey(key) )
+            if (!(BSEngineSettings.ENABLE_CORE_FAST_TRACK && firstO is BSObject o && o.IsLiteral()) 
+                && allowOverrides && BSEngineSettings.ENABLE_OPERATOR_OVERRIDES && HasKey(key) )
             {
                 string opImplName = ResolveKey( key );
 

@@ -16,9 +16,13 @@ namespace BadScript
 
     public class BSEngineSettings
     {
-        public const bool ENABLE_CORE_FAST_TRACK = false;
 
-        public readonly BSParserSettings ParserSettings;
+        public const bool ENABLE_OPTIMIZE_CONST_EXPRESSIONS = true;
+        public const bool ENABLE_OPTIMIZER_WRITE_LOGS = false;
+        public const bool ENABLE_SERIALIZER_WRITE_LOGS = false;
+        public const bool ENABLE_OPERATOR_OVERRIDES = true;
+        public const bool ENABLE_CORE_FAST_TRACK = true;
+        
         public readonly List < ABSScriptInterface > Interfaces;
         public readonly List < string > ActiveInterfaces;
         public readonly List < string > IncludeDirectories;
@@ -41,17 +45,16 @@ namespace BadScript
 
         #region Public
 
-        public BSEngineSettings( BSParserSettings parserSettings )
+        public BSEngineSettings( )
         {
             Interfaces = new List < ABSScriptInterface >();
             ActiveInterfaces = new List < string >();
             IncludeDirectories = new List < string >();
-            ParserSettings = parserSettings;
         }
 
-        public static BSEngineSettings MakeDefault( BSParserSettings parserSettings = null )
+        public static BSEngineSettings MakeDefault()
         {
-            BSEngineSettings s = new BSEngineSettings( parserSettings ?? BSParserSettings.Default );
+            BSEngineSettings s = new BSEngineSettings();
             s.ActiveInterfaces.Add("Convert");
             s.ActiveInterfaces.Add("Console");
             s.ActiveInterfaces.Add("Collection");
@@ -62,7 +65,6 @@ namespace BadScript
         public BSEngine Build( bool addEnvironmentApi = true )
         {
             BSEngine instance = new BSEngine(
-                                             ParserSettings,
                                              GetInterfaceData( ActiveLocalInterfaces ),
                                              Interfaces
                                             );

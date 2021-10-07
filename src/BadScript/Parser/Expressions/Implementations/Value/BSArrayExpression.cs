@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using BadScript.Scopes;
 using BadScript.Types;
@@ -18,7 +19,7 @@ namespace BadScript.Parser.Expressions.Implementations.Value
 
         public BSArrayExpression( SourcePosition pos, BSExpression[] initExprs = null ) : base( pos )
         {
-            InitExpressions = initExprs ?? new BSExpression[0];
+            InitExpressions = initExprs ?? Array.Empty < BSExpression >();
         }
 
         public override ABSObject Execute( BSScope scope )

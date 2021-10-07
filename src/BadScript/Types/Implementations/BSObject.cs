@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
@@ -15,13 +16,11 @@ namespace BadScript.Types.Implementations
 
         protected readonly object m_InternalObject;
 
-        public override bool IsNull => m_InternalObject == null;
-
-        public bool IsLiteral =>
-            IsNull ||
-            m_InternalObject is decimal ||
-            m_InternalObject is string ||
-            m_InternalObject is bool;
+        public override bool IsNull() => m_InternalObject == null;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsLiteral() =>
+            IsNull() ||
+            m_InternalObject is decimal or string or bool;
 
         #region Public
 
@@ -34,6 +33,11 @@ namespace BadScript.Types.Implementations
             m_InternalObject = instance;
         }
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_InternalObject?.GetHashCode() ?? 0;
+        }
+
         public override bool Equals( ABSObject other )
         {
             if ( other == null )
@@ -41,9 +45,9 @@ namespace BadScript.Types.Implementations
                 return false;
             }
 
-            if ( IsNull )
+            if (IsNull())
             {
-                return other.IsNull;
+                return other.IsNull();
             }
 
             if ( other is BSObject oN )

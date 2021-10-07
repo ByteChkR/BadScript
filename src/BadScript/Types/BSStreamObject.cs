@@ -16,7 +16,12 @@ namespace BadScript.Types
         private readonly BSTable m_InstanceFunctions;
         private Stream m_Stream;
 
-        public override bool IsNull => false;
+        protected override int GetHashCodeImpl()
+        {
+            return m_Stream.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
+        }
+
+        public override bool IsNull() => false;
 
         #region Public
 

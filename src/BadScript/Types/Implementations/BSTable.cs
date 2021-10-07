@@ -22,7 +22,7 @@ namespace BadScript.Types.Implementations
 
         private bool m_Locked;
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         public override ABSArray Keys => new BSArray( m_InnerTable.Keys );
 
@@ -56,6 +56,12 @@ namespace BadScript.Types.Implementations
         public override void Clear()
         {
             m_InnerTable.Clear();
+        }
+
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_InnerTable.GetHashCode();
         }
 
         public override bool Equals( ABSObject other )
@@ -100,21 +106,21 @@ namespace BadScript.Types.Implementations
 
         public override ABSObject GetRawElement( ABSObject k )
         {
-            ABSObject key = m_InnerTable.Keys.FirstOrDefault( x => x.Equals( k ) );
+            ABSObject key = k.ResolveReference();
 
-            return key != null ? m_InnerTable[key] : BSObject.Null;
+            return m_InnerTable[key];
         }
 
         public override void SetRawElement( ABSObject k, ABSObject o )
         {
-            ABSObject key = m_InnerTable.Keys.FirstOrDefault(x => x.Equals(k)) ?? k;
+            ABSObject key = k.ResolveReference();
             m_InnerTable[key] = o;
 
         }
 
         public override bool HasElement( ABSObject i )
         {
-            ABSObject key = m_InnerTable.Keys.FirstOrDefault( x => x.Equals( i ) ) ?? i;
+            ABSObject key = i.ResolveReference();
 
             return m_InnerTable.ContainsKey( key );
         }
@@ -126,7 +132,7 @@ namespace BadScript.Types.Implementations
 
         public override void InsertElement( ABSObject k, ABSObject o )
         {
-            ABSObject key = m_InnerTable.Keys.FirstOrDefault( x => x.Equals( k ) ) ?? k;
+            ABSObject key = k.ResolveReference();
             m_InnerTable[key] = o.ResolveReference();
         }
 
@@ -142,8 +148,7 @@ namespace BadScript.Types.Implementations
 
         public override void RemoveElement( ABSObject k )
         {
-            ABSObject key = m_InnerTable.Keys.First( x => x.Equals( k ) );
-            m_InnerTable.Remove( key );
+            m_InnerTable.Remove( k.ResolveReference() );
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )

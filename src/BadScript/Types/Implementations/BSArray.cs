@@ -24,7 +24,7 @@ namespace BadScript.Types.Implementations
 
         public ABSObject[] Elements => m_InnerArray.ToArray();
 
-        public override bool IsNull => false;
+        public override bool IsNull() => false;
 
         #region Public
 
@@ -52,6 +52,10 @@ namespace BadScript.Types.Implementations
         {
         }
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_InnerArray.GetHashCode();
+        }
         public override bool Equals( ABSObject other )
         {
             return ReferenceEquals( this, other );

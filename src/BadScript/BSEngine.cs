@@ -42,10 +42,6 @@ namespace BadScript
         /// </summary>
         public BSNamespaceRoot NamespaceRoot { get; }
 
-        /// <summary>
-        ///     Contains settings for the BSParser used when parsing scripts
-        /// </summary>
-        public BSParserSettings ParserSettings { get; }
 
         /// <summary>
         ///     Contains the names of all available ABSScriptInterface instances
@@ -64,12 +60,10 @@ namespace BadScript
         ///     created.
         /// </param>
         public BSEngine(
-            BSParserSettings parserSettings,
             Dictionary < string, ABSObject > startObjects,
             List < ABSScriptInterface > interfaces)
         {
             NamespaceRoot = new BSNamespaceRoot();
-            ParserSettings = parserSettings;
             m_Interfaces = interfaces;
             m_Preprocessors = new Dictionary < string, ABSObject >();
 
@@ -332,7 +326,7 @@ namespace BadScript
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, bool isBenchmark = false )
         {
-            return LoadScript( exprs, new ABSObject[0], isBenchmark );
+            return LoadScript( exprs, Array.Empty < ABSObject >(), isBenchmark );
         }
 
         /// <summary>
@@ -347,7 +341,7 @@ namespace BadScript
         {
             return LoadScript(
                               exprs,
-                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ?? new ABSObject[0],
+                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ?? Array.Empty < ABSObject >(),
                               isBenchmark
                              );
         }
@@ -379,7 +373,7 @@ namespace BadScript
             return LoadScript(
                               exprs,
                               scope,
-                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ?? new ABSObject[0],
+                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ?? Array.Empty < ABSObject >(),
                               isBenchmark
                              );
         }
@@ -395,7 +389,7 @@ namespace BadScript
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
-            if ( ParserSettings.AllowOptimization )
+            if ( BSEngineSettings.ENABLE_OPTIMIZE_CONST_EXPRESSIONS)
             {
                 BSExpressionOptimizer.Optimize( exprs );
             }

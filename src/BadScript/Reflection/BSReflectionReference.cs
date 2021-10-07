@@ -14,6 +14,10 @@ namespace BadScript.Reflection
         private readonly Func < ABSObject > m_Getter;
         private readonly Action < ABSObject > m_Setter;
 
+        protected override int GetHashCodeImpl()
+        {
+            return m_Getter.GetHashCode() ^ (m_Setter?.GetHashCode() ?? 0);
+        }
         #region Public
 
         public BSReflectionReference( Func < ABSObject > get, Action < ABSObject > set ) : base(
