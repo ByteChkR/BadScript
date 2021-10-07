@@ -20,8 +20,6 @@ namespace BadScript.Examples.Integration
         private readonly BSFunction m_GreetFunction;
         private readonly ABSReference m_GreetReference;
 
-        public override bool IsNull => m_Object == null;
-
         #region Public
 
         public GreeterWrapper( Greeter obj ) : base( SourcePosition.Unknown )
@@ -33,7 +31,7 @@ namespace BadScript.Examples.Integration
                                                                   m_Object.Name
                                                                  ), //Getter. Wrap the string into a BSObject
                                                value => m_Object.Name =
-                                                            value.IsNull
+                                                            value.IsNull()
                                                                 ? null
                                                                 : value.
                                                                     ConvertString() //Setter. Convert and Assign Value.
@@ -85,6 +83,11 @@ namespace BadScript.Examples.Integration
             throw new BSRuntimeException( $"Can not Invoke Object '{this}'" );
         }
 
+        public override bool IsNull()
+        {
+            return m_Object == null;
+        }
+
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             //Unused in this Example.
@@ -120,6 +123,15 @@ namespace BadScript.Examples.Integration
             v = null;
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Object?.GetHashCode() ?? 0;
         }
 
         #endregion

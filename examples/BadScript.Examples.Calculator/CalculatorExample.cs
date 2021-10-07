@@ -24,7 +24,8 @@ namespace BadScript.Examples.Calculator
         {
             BSEngine engine = CreateEngine();
 
-            BSScope scope = new BSScope(engine); //Create a Scope that we can use to run our expression in
+            BSScope scope = new BSScope( engine ); //Create a Scope that we can use to run our expression in
+
             while ( true )
             {
                 Console.Write( "Enter Expression to Calculate: " );

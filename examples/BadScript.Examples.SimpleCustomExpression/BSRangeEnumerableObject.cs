@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 
-using BadScript.ConsoleUtils;
-using BadScript.Parser;
 using BadScript.Parser.Expressions;
 using BadScript.Parser.Expressions.Implementations.Block.ForEach;
-using BadScript.Parser.OperatorImplementations;
-using BadScript.Parser.Operators;
-using BadScript.Parser.Operators.Implementations;
-using BadScript.Scopes;
-using BadScript.Serialization;
-using BadScript.Serialization.Serializers;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
@@ -20,23 +11,31 @@ using BadScript.Types.References;
 namespace BadScript.Examples.SimpleCustomExpression
 {
 
-    public class BSRangeEnumerableObject : ABSObject, IEnumerable <IForEachIteration>
+    public class BSRangeEnumerableObject : ABSObject, IEnumerable < IForEachIteration >
     {
 
         private readonly int m_Start;
         private readonly int m_End;
-        public BSRangeEnumerableObject( SourcePosition pos,int start, int end) : base( pos )
+
+        #region Public
+
+        public BSRangeEnumerableObject( SourcePosition pos, int start, int end ) : base( pos )
         {
-            m_Start =start;
+            m_Start = start;
             m_End = end;
-
         }
-
-        public override bool IsNull => false;
 
         public override bool Equals( ABSObject other )
         {
-            return other is BSRangeEnumerableObject o && ReferenceEquals(this, o);
+            return other is BSRangeEnumerableObject o && ReferenceEquals( this, o );
+        }
+
+        public IEnumerator < IForEachIteration > GetEnumerator()
+        {
+            for ( int i = m_Start; i < m_End; i++ )
+            {
+                yield return new ForEachIteration( new BSObject( ( decimal )i ) );
+            }
         }
 
         public override ABSReference GetProperty( string propertyName )
@@ -52,6 +51,11 @@ namespace BadScript.Examples.SimpleCustomExpression
         public override ABSObject Invoke( ABSObject[] args )
         {
             throw new NotSupportedException();
+        }
+
+        public override bool IsNull()
+        {
+            return false;
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -85,18 +89,25 @@ namespace BadScript.Examples.SimpleCustomExpression
             return false;
         }
 
-        public IEnumerator < IForEachIteration > GetEnumerator()
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
         {
-            for ( int i = m_Start; i < m_End; i++ )
-            {
-                yield return new ForEachIteration( new BSObject( ( decimal )i ) );
-            }
+            return m_Start.GetHashCode() ^ m_End.GetHashCode();
         }
+
+        #endregion
+
+        #region Private
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
+
+        #endregion
 
     }
 
