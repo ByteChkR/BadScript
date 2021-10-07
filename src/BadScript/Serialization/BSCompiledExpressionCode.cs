@@ -23,7 +23,6 @@
         TryExpr,
         IfExpr,
         FunctionDefinitionExpr,
-        FunctionEnumerableDefinitionExpr,
         ForEachExpr,
         ForExpr,
         BinaryExpr,

@@ -1,0 +1,9 @@
+r = false
+function f(!?x)
+{
+	r = x == 2
+}
+
+f(2)
+
+return r

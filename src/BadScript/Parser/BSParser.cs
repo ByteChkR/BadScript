@@ -248,71 +248,7 @@ namespace BadScript.Parser
 
             throw new BSParserException( "Expected '('", this );
         }
-
-        public BSExpression ParseEnumerableFunction( bool isGlobal )
-        {
-            StringBuilder sb = new StringBuilder();
-            ReadWhitespaceAndNewLine();
-
-            string funcName;
-            int pos = m_CurrentPosition;
-
-            if ( IsWordStart() )
-            {
-                sb.Append( m_OriginalSource[m_CurrentPosition] );
-                m_CurrentPosition++;
-
-                while ( IsWordMiddle() )
-                {
-                    sb.Append( m_OriginalSource[m_CurrentPosition] );
-                    m_CurrentPosition++;
-                }
-
-                funcName = sb.ToString();
-            }
-            else
-            {
-                funcName = "";
-
-                if ( isGlobal )
-                {
-                    throw new BSParserException( "A global anonymous function is not allowed.", this );
-                }
-            }
-
-            ReadWhitespaceAndNewLine();
-            BSFunctionParameter[] args = ParseArgumentList();
-
-            ReadWhitespaceAndNewLine();
-
-            if ( Is( '=' ) && Is( 1, '>' ) )
-            {
-                m_CurrentPosition += 2;
-                ReadWhitespaceAndNewLine();
-
-                return new BSEnumerableFunctionDefinitionExpression(
-                                                                    CreateSourcePosition( pos ),
-                                                                    funcName,
-                                                                    isGlobal,
-                                                                    args,
-                                                                    new[] { Parse( int.MaxValue ) }
-                                                                   );
-            }
-
-            string block = ParseBlock();
-
-            BSParser p = new BSParser( block );
-
-            BSExpression[] b = p.ParseToEnd();
-
-            return new BSEnumerableFunctionDefinitionExpression(
-                                                                CreateSourcePosition( pos ),
-                                                                funcName,
-                                                                isGlobal,
-                                                                args,
-                                                                b
-                                                               );
-        }
+               
 
         public BSExpression ParseExpression( int start )
         {
@@ -976,12 +912,6 @@ namespace BadScript.Parser
             {
                 return ParseClass( isGlobal );
             }
-
-            if ( wordName == "enumerable" )
-            {
-                return ParseEnumerableFunction( isGlobal );
-            }
-
             if ( isGlobal )
             {
                 throw new BSParserException( "Expected 'function', 'class' or 'enumerable' after 'global'", this );

@@ -12,7 +12,7 @@ namespace BadScript.Tests.Interfaces.Environment
 
         public static string[] GenerateTestCases()
         {
-            return PopulateKeyMap( "/tests/interfaces/environment/" );
+            return PopulateKeyMap("/tests/passing/interfaces/environment/");
         }
 
         [Test]

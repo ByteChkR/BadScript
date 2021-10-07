@@ -12,7 +12,7 @@ namespace BadScript.Tests.Types
 
         public static string[] GenerateTestCases()
         {
-            return PopulateKeyMap( "/tests/types/boolean/" );
+            return PopulateKeyMap("/tests/passing/types/boolean/");
         }
 
         [Test]

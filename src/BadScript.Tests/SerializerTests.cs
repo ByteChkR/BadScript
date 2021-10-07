@@ -12,7 +12,7 @@ namespace BadScript.Tests
 
         public static string[] GenerateTestCases()
         {
-            return PopulateKeyMap( "/tests/" );
+            return PopulateKeyMap("/tests/passing/");
         }
 
         [Test]

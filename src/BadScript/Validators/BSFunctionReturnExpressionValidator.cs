@@ -127,10 +127,6 @@ namespace BadScript.Validators
                 {
                     Validate( fdef, fdef.Block, exceptions );
                 }
-                else if ( bsExpression is BSEnumerableFunctionDefinitionExpression efdef )
-                {
-                    Validate( efdef, efdef.Block, exceptions );
-                }
             }
 
             return info;

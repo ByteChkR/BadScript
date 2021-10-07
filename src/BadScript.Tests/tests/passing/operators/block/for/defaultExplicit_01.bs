@@ -1,0 +1,6 @@
+v = 0
+for i = 0 while< 10 step 1
+{
+	v = i
+}
+return v == 9

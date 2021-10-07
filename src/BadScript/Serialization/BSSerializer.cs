@@ -30,8 +30,6 @@ namespace BadScript.Serialization
                                                                                   new BsBlockExpressionSerializer(),
                                                                                   new BsTryExpressionSerializer(),
                                                                                   new BsIfExpressionSerializer(),
-                                                                                  new
-                                                                                      BsEnumerableFunctionDefinitionExpressionSerializer(),
                                                                                   new BsForeachExpressionSerializer(),
                                                                                   new BsForExpressionSerializer(),
                                                                                   new
