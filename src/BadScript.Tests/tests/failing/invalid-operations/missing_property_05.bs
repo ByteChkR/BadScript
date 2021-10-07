@@ -1,0 +1,7 @@
+class TestClass
+{
+	
+}
+
+c = new TestClass()
+a = c.a

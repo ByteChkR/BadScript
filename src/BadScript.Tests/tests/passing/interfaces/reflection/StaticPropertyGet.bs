@@ -1,0 +1,2 @@
+TestType = Reflection.GetType("TestType")
+return TestType.StaticProperty

@@ -1,0 +1,7 @@
+class MyClass
+{
+	
+}
+
+a = new MyClass()
+a()

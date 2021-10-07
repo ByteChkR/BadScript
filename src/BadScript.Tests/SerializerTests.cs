@@ -3,7 +3,9 @@ using System.IO;
 
 using BadScript.NUnit.Utils;
 using BadScript.Parser.Expressions;
+using BadScript.Reflection;
 using BadScript.Serialization;
+using BadScript.Tests.Interfaces.Reflection;
 using BadScript.Types;
 
 using NUnit.Framework;
@@ -19,6 +21,16 @@ namespace BadScript.Tests
         public static string[] GenerateTestCases()
         {
             return PopulateKeyMap("/tests/passing/");
+        }
+
+        protected override void SetUp( BSEngineSettings settings )
+        {
+            base.SetUp( settings );
+            BSReflectionInterface.Instance.AddType<ReflectionTests.TestType>();
+
+            settings.Interfaces.Add(BSReflectionInterface.Instance);
+            settings.ActiveInterfaces.Add(BSReflectionInterface.Instance.Name);
+
         }
 
         [Test]

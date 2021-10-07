@@ -1,0 +1,2 @@
+test = Reflection.Create("TestType", "MYVALUE")
+return test.InstanceProperty == "MYVALUE"

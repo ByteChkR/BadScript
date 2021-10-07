@@ -1,0 +1,2 @@
+test = Reflection.Create("TestType")
+return test.InstanceProperty == "Unset"

@@ -684,6 +684,14 @@
             "function() { }"
           ],
           "ReturnObjectAction": null
+        },
+        {
+          "Name": "TypeArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "class TestClass { }"
+          ],
+          "ReturnObjectAction": null
         }
       ]
     }
