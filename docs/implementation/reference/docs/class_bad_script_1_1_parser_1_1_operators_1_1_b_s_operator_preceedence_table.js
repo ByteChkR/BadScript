@@ -7,6 +7,9 @@ var class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table
     [ "Has", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html#aa6b514d1819deb24ad34f4553946bfdd", null ],
     [ "HasPostfix", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html#a0f75d0d20f1693b41fd7db4d9083ad61", null ],
     [ "HasPrefix", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html#a29fa92a9cd2499f2d210dcf59ed149f4", null ],
+    [ "Set", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html#a1e8e93603545577414521ea83fe6a82d", null ],
+    [ "SetPostfix", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html#aab9d118168493d3c9d35be69c375fb23", null ],
+    [ "SetPrefix", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html#adf08133142615b2fc098e3c35c6f7ec5", null ],
     [ "s_Operators", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html#a1fe906ce91d94784b38b789f8c36ccf8", null ],
     [ "s_PostfixOperators", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html#a46b5697c13435ff639ae649a58873970", null ],
     [ "s_PrefixOperators", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html#a44f83e62dbbaf69eee776e6168b69e9e", null ]

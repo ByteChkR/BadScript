@@ -4,6 +4,7 @@ var class_bad_script_1_1_string_utils_1_1_b_s_string_interface =
     [ "AddApi", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface.html#abd30cdb4eb6c12aa84fc194fe6e13bf2", null ],
     [ "CharAt", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface.html#a0fe676f0d0ea28a5e12317204e11d1c1", null ],
     [ "EndsWith", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface.html#a7b054df82af1c3308d31bdd1bda233ff", null ],
+    [ "EscapeString", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface.html#a446df8a0481ed1124a2f93f1d67ea223", null ],
     [ "IndexOf", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface.html#a933a936bdad532fcc3fd47fb1cc4eeee", null ],
     [ "Insert", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface.html#a8c4b105af73c692a23f4b348da48d8ea", null ],
     [ "LastIndexOf", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface.html#ab66829bfad01db239286a84303c5d279", null ],

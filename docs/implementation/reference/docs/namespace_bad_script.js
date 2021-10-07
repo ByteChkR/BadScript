@@ -2,7 +2,6 @@ var namespace_bad_script =
 [
     [ "Console", "namespace_bad_script_1_1_console.html", "namespace_bad_script_1_1_console" ],
     [ "ConsoleUtils", "namespace_bad_script_1_1_console_utils.html", "namespace_bad_script_1_1_console_utils" ],
-    [ "Core", "namespace_bad_script_1_1_core.html", "namespace_bad_script_1_1_core" ],
     [ "Exceptions", "namespace_bad_script_1_1_exceptions.html", "namespace_bad_script_1_1_exceptions" ],
     [ "Http", "namespace_bad_script_1_1_http.html", "namespace_bad_script_1_1_http" ],
     [ "HttpServer", "namespace_bad_script_1_1_http_server.html", "namespace_bad_script_1_1_http_server" ],

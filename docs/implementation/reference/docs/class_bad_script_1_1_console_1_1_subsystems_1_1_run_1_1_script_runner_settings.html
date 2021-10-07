@@ -110,6 +110,9 @@ IEnumerable&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:a265414fb8b8b1fb9ae4fa660266ba08a"><td class="memItemLeft" align="right" valign="top"><a id="a265414fb8b8b1fb9ae4fa660266ba08a"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsBenchmark</b><code> [get, set]</code></td></tr>
 <tr class="separator:a265414fb8b8b1fb9ae4fa660266ba08a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a771bac3d3503e88901dd620188e435d7"><td class="memItemLeft" align="right" valign="top"><a id="a771bac3d3503e88901dd620188e435d7"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>Iterations</b><code> [get, set]</code></td></tr>
+<tr class="separator:a771bac3d3503e88901dd620188e435d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header properties_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td colspan="2" onclick="javascript:toggleInherit('properties_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings.html">BadScript.Console.Subsystems.EngineBuilderSettings</a></td></tr>
 <tr class="memitem:a10e7193d333d0d557fb7919372559583 inherit properties_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memItemLeft" align="right" valign="top"><a id="a10e7193d333d0d557fb7919372559583"></a>
 IEnumerable&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>IncludeDirectories</b><code> [get, set]</code></td></tr>
@@ -117,9 +120,6 @@ IEnumerable&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:a0d67f65f8535eb4c5bd3f19fa95aa9b4 inherit properties_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memItemLeft" align="right" valign="top"><a id="a0d67f65f8535eb4c5bd3f19fa95aa9b4"></a>
 IEnumerable&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ActiveInterfaces</b><code> [get, set]</code></td></tr>
 <tr class="separator:a0d67f65f8535eb4c5bd3f19fa95aa9b4 inherit properties_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb59a2fd819b1f82806276d75576bae2 inherit properties_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memItemLeft" align="right" valign="top"><a id="acb59a2fd819b1f82806276d75576bae2"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>AllowOptimizations</b><code> [get, set]</code></td></tr>
-<tr class="separator:acb59a2fd819b1f82806276d75576bae2 inherit properties_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header properties_class_bad_script_1_1_console_1_1_b_s_console_settings"><td colspan="2" onclick="javascript:toggleInherit('properties_class_bad_script_1_1_console_1_1_b_s_console_settings')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="class_bad_script_1_1_console_1_1_b_s_console_settings.html">BadScript.Console.BSConsoleSettings</a></td></tr>
 <tr class="memitem:a99d3eac1ef54efbfc8dbb334508b0328 inherit properties_class_bad_script_1_1_console_1_1_b_s_console_settings"><td class="memItemLeft" align="right" valign="top"><a id="a99d3eac1ef54efbfc8dbb334508b0328"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>NoLogo</b><code> [get, set]</code></td></tr>
@@ -132,9 +132,9 @@ Additional Inherited Members</h2></td></tr>
 <a class="el" href="class_bad_script_1_1_b_s_engine_settings.html">BSEngineSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CreateEngineSettings</b> ()</td></tr>
 <tr class="separator:aba4404f43e5f52b5bbf3ebd386d1fa28 inherit pub_methods_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_methods_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings.html">BadScript.Console.Subsystems.EngineBuilderSettings</a></td></tr>
-<tr class="memitem:ade16e63b9239127c1472b3c0a65afedf inherit pub_static_methods_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memItemLeft" align="right" valign="top"><a id="ade16e63b9239127c1472b3c0a65afedf"></a>
-static <a class="el" href="class_bad_script_1_1_b_s_engine_settings.html">BSEngineSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CreateEngineSettings</b> (bool allowOpt, string[] includeDirs, string[] activeInterfaces)</td></tr>
-<tr class="separator:ade16e63b9239127c1472b3c0a65afedf inherit pub_static_methods_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7102b01f314ab4e09c0e0dfc3f1ebd19 inherit pub_static_methods_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memItemLeft" align="right" valign="top"><a id="a7102b01f314ab4e09c0e0dfc3f1ebd19"></a>
+static <a class="el" href="class_bad_script_1_1_b_s_engine_settings.html">BSEngineSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CreateEngineSettings</b> (string[] includeDirs, string[] activeInterfaces)</td></tr>
+<tr class="separator:a7102b01f314ab4e09c0e0dfc3f1ebd19 inherit pub_static_methods_class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_settings"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/BadScript.Console/Subsystems/Run/ScriptRunnerSettings.cs</li>

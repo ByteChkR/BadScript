@@ -1,6 +1,6 @@
 var class_bad_script_1_1_b_s_engine =
 [
-    [ "BSEngine", "class_bad_script_1_1_b_s_engine.html#a24ba6f644b1f0a0ef7160f915011c5d0", null ],
+    [ "BSEngine", "class_bad_script_1_1_b_s_engine.html#af79cb4341d09d3ddc5ec6d982c07ee25", null ],
     [ "AddInterface", "class_bad_script_1_1_b_s_engine.html#aca1257dc60f8537ec8b6e07e8be66b38", null ],
     [ "GetGlobalTable", "class_bad_script_1_1_b_s_engine.html#ae048e56e174aca26f5aa0318b670591b", null ],
     [ "HasInterface", "class_bad_script_1_1_b_s_engine.html#aabaecf1d5c98c78609cbbddc85cf10cf", null ],
@@ -36,8 +36,6 @@ var class_bad_script_1_1_b_s_engine =
     [ "m_GlobalTable", "class_bad_script_1_1_b_s_engine.html#a1a81b1aa756813bec310fa5716b8dc30", null ],
     [ "m_Interfaces", "class_bad_script_1_1_b_s_engine.html#a8df49a7d702cf99a5b7647bad3df6093", null ],
     [ "m_Preprocessors", "class_bad_script_1_1_b_s_engine.html#aea6786d717f0b9156a9f9cc2c034162e", null ],
-    [ "m_StaticData", "class_bad_script_1_1_b_s_engine.html#ad57d6c5e213a7feb3fd308d2a067caa3", null ],
     [ "s_Validators", "class_bad_script_1_1_b_s_engine.html#ae75e2b72615ba743a42dc5b207db8107", null ],
-    [ "NamespaceRoot", "class_bad_script_1_1_b_s_engine.html#ae7a7938cf17a157943c6719e4bbc994b", null ],
-    [ "ParserSettings", "class_bad_script_1_1_b_s_engine.html#aea90eb2a12583832e873cdde19b1b9db", null ]
+    [ "NamespaceRoot", "class_bad_script_1_1_b_s_engine.html#ae7a7938cf17a157943c6719e4bbc994b", null ]
 ];

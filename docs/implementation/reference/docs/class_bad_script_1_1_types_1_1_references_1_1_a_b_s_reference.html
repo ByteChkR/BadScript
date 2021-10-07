@@ -83,7 +83,6 @@ $(document).ready(function(){initNavTree('class_bad_script_1_1_types_1_1_referen
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="class_bad_script_1_1_types_1_1_references_1_1_a_b_s_reference-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -109,6 +108,9 @@ Inheritance diagram for BadScript.Types.References.ABSReference:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aeca4be3475cdd4d2d44abb953d128748"><td class="memItemLeft" align="right" valign="top">override bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_a_b_s_reference.html#aeca4be3475cdd4d2d44abb953d128748">IsNull</a> ()</td></tr>
+<tr class="memdesc:aeca4be3475cdd4d2d44abb953d128748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the object is null  <a href="class_bad_script_1_1_types_1_1_references_1_1_a_b_s_reference.html#aeca4be3475cdd4d2d44abb953d128748">More...</a><br /></td></tr>
+<tr class="separator:aeca4be3475cdd4d2d44abb953d128748"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac70990a28e154adf7e5c47ffe739c303"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_a_b_s_reference.html#ac70990a28e154adf7e5c47ffe739c303">Assign</a> (<a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html">ABSObject</a> obj)</td></tr>
 <tr class="memdesc:ac70990a28e154adf7e5c47ffe739c303"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigns a value to the element that this reference is pointing to  <a href="class_bad_script_1_1_types_1_1_references_1_1_a_b_s_reference.html#ac70990a28e154adf7e5c47ffe739c303">More...</a><br /></td></tr>
 <tr class="separator:ac70990a28e154adf7e5c47ffe739c303"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,6 +148,9 @@ override string&#160;</td><td class="memItemRight" valign="bottom"><b>ToString</
 <tr class="memdesc:a3ee14b728cc69cbb169327c5615b8f1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to convert the object into a string value  <a href="class_bad_script_1_1_types_1_1_references_1_1_a_b_s_reference.html#a3ee14b728cc69cbb169327c5615b8f1c">More...</a><br /></td></tr>
 <tr class="separator:a3ee14b728cc69cbb169327c5615b8f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_bad_script_1_1_types_1_1_a_b_s_object')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html">BadScript.Types.ABSObject</a></td></tr>
+<tr class="memitem:a3482152d401f663b63c3cadeb776fde1 inherit pub_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memItemLeft" align="right" valign="top"><a id="a3482152d401f663b63c3cadeb776fde1"></a>
+override int&#160;</td><td class="memItemRight" valign="bottom"><b>GetHashCode</b> ()</td></tr>
+<tr class="separator:a3482152d401f663b63c3cadeb776fde1 inherit pub_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bf9b141aec522c68a9506446ac97982 inherit pub_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html#a2bf9b141aec522c68a9506446ac97982">ConvertBool</a> ()</td></tr>
 <tr class="memdesc:a2bf9b141aec522c68a9506446ac97982 inherit pub_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the Object into a boolean  <a href="class_bad_script_1_1_types_1_1_a_b_s_object.html#a2bf9b141aec522c68a9506446ac97982">More...</a><br /></td></tr>
 <tr class="separator:a2bf9b141aec522c68a9506446ac97982 inherit pub_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,22 +167,15 @@ override bool&#160;</td><td class="memItemRight" valign="bottom"><b>Equals</b> (
 <tr class="memdesc:aedc22b1f9ce385e48d553560c9bef881 inherit pub_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a verbose string representation of this object  <a href="class_bad_script_1_1_types_1_1_a_b_s_object.html#aedc22b1f9ce385e48d553560c9bef881">More...</a><br /></td></tr>
 <tr class="separator:aedc22b1f9ce385e48d553560c9bef881 inherit pub_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a112ff936d2f7e0d8daee2c351a622a6b"><td class="memItemLeft" align="right" valign="top"><a id="a112ff936d2f7e0d8daee2c351a622a6b"></a>
-override bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsNull</b> =&gt; <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_a_b_s_reference.html#a1ed956b03de19745a50ded78c83ad46e">Get</a>().IsNull</td></tr>
-<tr class="separator:a112ff936d2f7e0d8daee2c351a622a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html">BadScript.Types.ABSObject</a></td></tr>
-<tr class="memitem:a5fe4b82111c3e9662cab04f5a51b35ab inherit pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="struct_bad_script_1_1_parser_1_1_expressions_1_1_source_position.html">SourcePosition</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html#a5fe4b82111c3e9662cab04f5a51b35ab">Position</a></td></tr>
-<tr class="memdesc:a5fe4b82111c3e9662cab04f5a51b35ab inherit pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Source Position(can be unknown)  <a href="class_bad_script_1_1_types_1_1_a_b_s_object.html#a5fe4b82111c3e9662cab04f5a51b35ab">More...</a><br /></td></tr>
-<tr class="separator:a5fe4b82111c3e9662cab04f5a51b35ab inherit pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a456ba0da4f007cc7138c5cd529cdfb12"><td class="memItemLeft" align="right" valign="top"><a id="a456ba0da4f007cc7138c5cd529cdfb12"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ABSReference</b> (<a class="el" href="struct_bad_script_1_1_parser_1_1_expressions_1_1_source_position.html">SourcePosition</a> pos)</td></tr>
 <tr class="separator:a456ba0da4f007cc7138c5cd529cdfb12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_class_bad_script_1_1_types_1_1_a_b_s_object')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html">BadScript.Types.ABSObject</a></td></tr>
+<tr class="memitem:a97fae8156846c3b0d57a575f19088a02 inherit pro_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memItemLeft" align="right" valign="top"><a id="a97fae8156846c3b0d57a575f19088a02"></a>
+abstract int&#160;</td><td class="memItemRight" valign="bottom"><b>GetHashCodeImpl</b> ()</td></tr>
+<tr class="separator:a97fae8156846c3b0d57a575f19088a02 inherit pro_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2f1e1d26b6ea4bc5642c52b786b4e0d inherit pro_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memItemLeft" align="right" valign="top"><a id="ae2f1e1d26b6ea4bc5642c52b786b4e0d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ABSObject</b> (<a class="el" href="struct_bad_script_1_1_parser_1_1_expressions_1_1_source_position.html">SourcePosition</a> pos)</td></tr>
 <tr class="separator:ae2f1e1d26b6ea4bc5642c52b786b4e0d inherit pro_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,10 +189,10 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b>
 <tr class="memitem:afca29b4723a2a44a8aff222d429c7e1e inherit pub_static_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memItemLeft" align="right" valign="top"><a id="afca29b4723a2a44a8aff222d429c7e1e"></a>
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html">ABSObject</a> left, <a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html">ABSObject</a> right)</td></tr>
 <tr class="separator:afca29b4723a2a44a8aff222d429c7e1e inherit pub_static_methods_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header properties_class_bad_script_1_1_types_1_1_a_b_s_object"><td colspan="2" onclick="javascript:toggleInherit('properties_class_bad_script_1_1_types_1_1_a_b_s_object')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html">BadScript.Types.ABSObject</a></td></tr>
-<tr class="memitem:abb6c40835760c9bc2461bd4abf89381d inherit properties_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memItemLeft" align="right" valign="top">abstract bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html#abb6c40835760c9bc2461bd4abf89381d">IsNull</a><code> [get]</code></td></tr>
-<tr class="memdesc:abb6c40835760c9bc2461bd4abf89381d inherit properties_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the object is null  <a href="class_bad_script_1_1_types_1_1_a_b_s_object.html#abb6c40835760c9bc2461bd4abf89381d">More...</a><br /></td></tr>
-<tr class="separator:abb6c40835760c9bc2461bd4abf89381d inherit properties_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html">BadScript.Types.ABSObject</a></td></tr>
+<tr class="memitem:a5fe4b82111c3e9662cab04f5a51b35ab inherit pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="struct_bad_script_1_1_parser_1_1_expressions_1_1_source_position.html">SourcePosition</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html#a5fe4b82111c3e9662cab04f5a51b35ab">Position</a></td></tr>
+<tr class="memdesc:a5fe4b82111c3e9662cab04f5a51b35ab inherit pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">Source Position(can be unknown)  <a href="class_bad_script_1_1_types_1_1_a_b_s_object.html#a5fe4b82111c3e9662cab04f5a51b35ab">More...</a><br /></td></tr>
+<tr class="separator:a5fe4b82111c3e9662cab04f5a51b35ab inherit pub_attribs_class_bad_script_1_1_types_1_1_a_b_s_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class used to Assign Values to variables </p>
@@ -231,7 +229,7 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_table_reference.html#a9ddc4448ac969051f55701bc87e89f20">BadScript.Types.References.Implementations.BSTableReference</a>, <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_array_reference.html#a2e5e3ed8f5dceec1069c5dc1998e6c3b">BadScript.Types.References.Implementations.BSArrayReference</a>, <a class="el" href="class_bad_script_1_1_types_1_1_implementations_1_1_b_s_function_reference.html#adea981deb3fb77b28f6c9a568ffac872">BadScript.Types.Implementations.BSFunctionReference</a>, and <a class="el" href="class_bad_script_1_1_reflection_1_1_b_s_reflection_reference.html#a9b0b676ea56326fef7ad6daac64c7f0f">BadScript.Reflection.BSReflectionReference</a>.</p>
+<p>Implemented in <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_table_reference.html#a9ddc4448ac969051f55701bc87e89f20">BadScript.Types.References.Implementations.BSTableReference</a>, <a class="el" href="class_bad_script_1_1_types_1_1_implementations_1_1_b_s_function_reference.html#adea981deb3fb77b28f6c9a568ffac872">BadScript.Types.Implementations.BSFunctionReference</a>, <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_array_reference.html#a2e5e3ed8f5dceec1069c5dc1998e6c3b">BadScript.Types.References.Implementations.BSArrayReference</a>, and <a class="el" href="class_bad_script_1_1_reflection_1_1_b_s_reflection_reference.html#a9b0b676ea56326fef7ad6daac64c7f0f">BadScript.Reflection.BSReflectionReference</a>.</p>
 
 </div>
 </div>
@@ -298,7 +296,7 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b>
 <p>Returns the Value of the Reference </p>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p>Implemented in <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_table_reference.html#a3b98c437c8946b5a1a6ff89f59a4ec7e">BadScript.Types.References.Implementations.BSTableReference</a>, <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_array_reference.html#ac7af6e9250f7dee0223261dca61b52c3">BadScript.Types.References.Implementations.BSArrayReference</a>, <a class="el" href="class_bad_script_1_1_types_1_1_implementations_1_1_b_s_function_reference.html#a297805e12b56c115da8861385b6bdae1">BadScript.Types.Implementations.BSFunctionReference</a>, and <a class="el" href="class_bad_script_1_1_reflection_1_1_b_s_reflection_reference.html#ad9d2f8172cf800832a3dc2142099718d">BadScript.Reflection.BSReflectionReference</a>.</p>
+<p>Implemented in <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_table_reference.html#a3b98c437c8946b5a1a6ff89f59a4ec7e">BadScript.Types.References.Implementations.BSTableReference</a>, <a class="el" href="class_bad_script_1_1_types_1_1_implementations_1_1_b_s_function_reference.html#a297805e12b56c115da8861385b6bdae1">BadScript.Types.Implementations.BSFunctionReference</a>, <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_array_reference.html#ac7af6e9250f7dee0223261dca61b52c3">BadScript.Types.References.Implementations.BSArrayReference</a>, and <a class="el" href="class_bad_script_1_1_reflection_1_1_b_s_reflection_reference.html#ad9d2f8172cf800832a3dc2142099718d">BadScript.Reflection.BSReflectionReference</a>.</p>
 
 </div>
 </div>
@@ -410,6 +408,37 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 <p>Implements <a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html#a2c490f248a4a6c37b02424f9d8e3e52b">BadScript.Types.ABSObject</a>.</p>
+
+</div>
+</div>
+<a id="aeca4be3475cdd4d2d44abb953d128748"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeca4be3475cdd4d2d44abb953d128748">&#9670;&nbsp;</a></span>IsNull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">override bool BadScript.Types.References.ABSReference.IsNull </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the object is null </p>
+
+<p>Implements <a class="el" href="class_bad_script_1_1_types_1_1_a_b_s_object.html#a764fa89ad1511058c0275a193a266529">BadScript.Types.ABSObject</a>.</p>
+
+<p>Reimplemented in <a class="el" href="class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_array_reference.html#a540a8cb22ea1ed7c4409e0fb1c1e83e7">BadScript.Types.References.Implementations.BSArrayReference</a>.</p>
 
 </div>
 </div>

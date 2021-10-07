@@ -8,6 +8,7 @@ var class_bad_script_1_1_types_1_1_a_b_s_table =
     [ "HasElement", "class_bad_script_1_1_types_1_1_a_b_s_table.html#a28e33312292c62c7fa68894591f6b6ad", null ],
     [ "InsertElement", "class_bad_script_1_1_types_1_1_a_b_s_table.html#aacdf4a75198dfe5cff7eb8785d28b79c", null ],
     [ "RemoveElement", "class_bad_script_1_1_types_1_1_a_b_s_table.html#a1a326977cb1d94692fc2b36253a18e25", null ],
+    [ "SetRawElement", "class_bad_script_1_1_types_1_1_a_b_s_table.html#a12b2d55fca41381365627213fb9ede23", null ],
     [ "Keys", "class_bad_script_1_1_types_1_1_a_b_s_table.html#a899e77c8b7bf4b4bf1494603235f0efe", null ],
     [ "Values", "class_bad_script_1_1_types_1_1_a_b_s_table.html#ae2d5dae40beff90362a6c04c2986557b", null ]
 ];

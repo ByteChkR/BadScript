@@ -5,6 +5,8 @@ var namespace_bad_script_1_1_tests =
     [ "BlockTests", "class_bad_script_1_1_tests_1_1_block_tests.html", "class_bad_script_1_1_tests_1_1_block_tests" ],
     [ "BooleanTests", "class_bad_script_1_1_tests_1_1_boolean_tests.html", "class_bad_script_1_1_tests_1_1_boolean_tests" ],
     [ "ClassTests", "class_bad_script_1_1_tests_1_1_class_tests.html", "class_bad_script_1_1_tests_1_1_class_tests" ],
+    [ "CollectionTests", "class_bad_script_1_1_tests_1_1_collection_tests.html", "class_bad_script_1_1_tests_1_1_collection_tests" ],
+    [ "ConvertTests", "class_bad_script_1_1_tests_1_1_convert_tests.html", "class_bad_script_1_1_tests_1_1_convert_tests" ],
     [ "EnvironmentTests", "class_bad_script_1_1_tests_1_1_environment_tests.html", "class_bad_script_1_1_tests_1_1_environment_tests" ],
     [ "FunctionTests", "class_bad_script_1_1_tests_1_1_function_tests.html", "class_bad_script_1_1_tests_1_1_function_tests" ],
     [ "MathTests", "class_bad_script_1_1_tests_1_1_math_tests.html", "class_bad_script_1_1_tests_1_1_math_tests" ],
