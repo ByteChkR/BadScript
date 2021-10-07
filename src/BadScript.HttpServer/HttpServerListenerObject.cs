@@ -18,10 +18,6 @@ namespace BadScript.HttpServer
     public class HttpServerListenerObject : ABSObject
     {
 
-        protected override int GetHashCodeImpl()
-        {
-            return m_Listener?.GetHashCode()??0 ^ m_InstanceFunctions.GetHashCode();
-        }
         private readonly BSTable m_InstanceFunctions;
         private Task m_Listener;
         private readonly CancellationTokenSource m_TokenSource;
@@ -29,8 +25,6 @@ namespace BadScript.HttpServer
         private readonly ServerConfig m_Config;
         private readonly IPEndPoint m_EndPoint;
         private readonly bool m_UseSSL;
-
-        public override bool IsNull() => false;
 
         #region Public
 
@@ -60,7 +54,13 @@ namespace BadScript.HttpServer
                                                       new BSFunction( "function Start()", args => StartListener(), 0 )
                                                   },
                                                   {
-                                                      new BSObject( "IsRunning" ), new BSReflectionReference(() => m_Listener == null ? BSObject.False : BSObject.True, null)
+                                                      new BSObject( "IsRunning" ),
+                                                      new BSReflectionReference(
+                                                                                () => m_Listener == null
+                                                                                    ? BSObject.False
+                                                                                    : BSObject.True,
+                                                                                null
+                                                                               )
                                                   }
                                               }
                                              );
@@ -84,6 +84,11 @@ namespace BadScript.HttpServer
         public override ABSObject Invoke( ABSObject[] args )
         {
             throw new BSRuntimeException( Position, "HTTP Server Objects can not be invoked" );
+        }
+
+        public override bool IsNull()
+        {
+            return false;
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -115,6 +120,15 @@ namespace BadScript.HttpServer
             v = $"HTTP Server('{m_Listener}')";
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Listener?.GetHashCode() ?? 0 ^ m_InstanceFunctions.GetHashCode();
         }
 
         #endregion

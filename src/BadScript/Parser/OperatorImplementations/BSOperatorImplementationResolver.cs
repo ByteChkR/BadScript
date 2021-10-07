@@ -9,8 +9,8 @@ using BadScript.Parser.OperatorImplementations.Implementations.Math;
 using BadScript.Parser.OperatorImplementations.Implementations.Math.Self;
 using BadScript.Parser.OperatorImplementations.Implementations.Relational;
 using BadScript.Types;
-using BadScript.Types.References;
 using BadScript.Types.Implementations;
+using BadScript.Types.References;
 
 namespace BadScript.Parser.OperatorImplementations
 {
@@ -55,17 +55,22 @@ namespace BadScript.Parser.OperatorImplementations
 
         private static List < ABSOperatorImplementation > m_Implementations;
 
-
         #region Public
 
         public static void AddImplementation( string functionName, ABSOperatorImplementation o )
         {
-            if(functionName!=null)
+            if ( functionName != null )
+            {
                 s_KeyMapping[o.OperatorKey] = functionName;
+            }
+
             m_Implementations.Add( o );
         }
 
-        public static bool HasKey( string key ) => s_KeyMapping.ContainsKey( key );
+        public static bool HasKey( string key )
+        {
+            return s_KeyMapping.ContainsKey( key );
+        }
 
         public static ABSOperatorImplementation ResolveImplementation(
             string key,
@@ -74,8 +79,10 @@ namespace BadScript.Parser.OperatorImplementations
         {
             ABSObject firstO = args.First();
 
-            if (!(BSEngineSettings.ENABLE_CORE_FAST_TRACK && firstO is BSObject o && o.IsLiteral()) 
-                && allowOverrides && BSEngineSettings.ENABLE_OPERATOR_OVERRIDES && HasKey(key) )
+            if ( !( BSEngineSettings.ENABLE_CORE_FAST_TRACK && firstO is BSObject o && o.IsLiteral() ) &&
+                 allowOverrides &&
+                 BSEngineSettings.ENABLE_OPERATOR_OVERRIDES &&
+                 HasKey( key ) )
             {
                 string opImplName = ResolveKey( key );
 

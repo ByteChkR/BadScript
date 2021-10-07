@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 
-using BadScript.Exceptions;
 using BadScript.Interfaces;
 using BadScript.Types;
 using BadScript.Types.Implementations;

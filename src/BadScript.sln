@@ -45,9 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.Console", "BadScr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{0DC4EF05-C0A5-4EC7-9909-D8FA908A09A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.NUnit.Utils", "BadScript.NUnit.Utils\BadScript.NUnit.Utils.csproj", "{49541D15-5AEF-44A1-A0C9-F327E913F61A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.NUnit.Utils", "BadScript.NUnit.Utils\BadScript.NUnit.Utils.csproj", "{49541D15-5AEF-44A1-A0C9-F327E913F61A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.UnitTests", "BadScript.UnitTests\BadScript.UnitTests.csproj", "{F6F343E4-B5B6-4402-B6A8-841DFFEFE1BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.UnitTests", "BadScript.UnitTests\BadScript.UnitTests.csproj", "{F6F343E4-B5B6-4402-B6A8-841DFFEFE1BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

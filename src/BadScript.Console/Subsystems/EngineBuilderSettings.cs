@@ -13,7 +13,6 @@ using BadScript.Interfaces.Versioning;
 using BadScript.IO;
 using BadScript.Json;
 using BadScript.Math;
-using BadScript.Parser;
 using BadScript.Process;
 using BadScript.Reflection;
 using BadScript.StringUtils;
@@ -42,18 +41,15 @@ namespace BadScript.Console.Subsystems
                )]
         public IEnumerable < string > ActiveInterfaces { get; set; }
 
-
         #region Public
 
-        public BSEngineSettings CreateEngineSettings() =>
-            CreateEngineSettings( IncludeDirectories.ToArray(), ActiveInterfaces.ToArray() );
-        public static BSEngineSettings CreateEngineSettings(string[] includeDirs, string[] activeInterfaces)
+        public static BSEngineSettings CreateEngineSettings( string[] includeDirs, string[] activeInterfaces )
         {
             BSEngineSettings es =
-                BSEngineSettings.MakeDefault( );
+                BSEngineSettings.MakeDefault();
 
-            es.Interfaces.Add(new BSCollectionInterface());
-            es.Interfaces.Add(new BSConvertInterface());
+            es.Interfaces.Add( new BSCollectionInterface() );
+            es.Interfaces.Add( new BSConvertInterface() );
             es.Interfaces.Add( new BSSystemConsoleInterface() );
             es.Interfaces.Add( new BS2JsonInterface() );
             es.Interfaces.Add( new Json2BSInterface() );
@@ -69,26 +65,29 @@ namespace BadScript.Console.Subsystems
             es.Interfaces.Add( new BSVersioningInterface() );
             es.Interfaces.Add( new BSXmlInterface() );
             es.Interfaces.Add( BSReflectionInterface.Instance );
-            
 
             if ( Directory.Exists( EngineBuilderDirectories.Instance.IncludeDirectory ) )
             {
                 es.IncludeDirectories.Add( EngineBuilderDirectories.Instance.IncludeDirectory );
             }
 
-            if (includeDirs.Length != 0 )
+            if ( includeDirs.Length != 0 )
             {
-                es.IncludeDirectories.AddRange(includeDirs);
+                es.IncludeDirectories.AddRange( includeDirs );
             }
 
-
-            if (activeInterfaces.Length != 0 )
+            if ( activeInterfaces.Length != 0 )
             {
                 es.ActiveInterfaces.Clear();
-                es.ActiveInterfaces.AddRange(activeInterfaces);
+                es.ActiveInterfaces.AddRange( activeInterfaces );
             }
 
             return es;
+        }
+
+        public BSEngineSettings CreateEngineSettings()
+        {
+            return CreateEngineSettings( IncludeDirectories.ToArray(), ActiveInterfaces.ToArray() );
         }
 
         #endregion

@@ -2,17 +2,17 @@ using BadScript.NUnit.Utils;
 
 using NUnit.Framework;
 
-namespace BadScript.Tests.Operators
+namespace BadScript.Tests.Types
 {
 
-    public class AssignmentTests : ABSUnitTest
+    public class ArrayTests : ABSUnitTest
     {
 
         #region Public
 
         public static string[] GenerateTestCases()
         {
-            return PopulateKeyMap( "/tests/operators/assignment/" );
+            return PopulateKeyMap( "/tests/types/array/" );
         }
 
         [Test]

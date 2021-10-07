@@ -24,8 +24,6 @@ namespace BadScript.Types.Implementations
 
         public ABSObject[] Elements => m_InnerArray.ToArray();
 
-        public override bool IsNull() => false;
-
         #region Public
 
         public BSArray( SourcePosition pos ) : this( pos, new List < ABSObject >() )
@@ -52,10 +50,6 @@ namespace BadScript.Types.Implementations
         {
         }
 
-        protected override int GetHashCodeImpl()
-        {
-            return m_InnerArray.GetHashCode();
-        }
         public override bool Equals( ABSObject other )
         {
             return ReferenceEquals( this, other );
@@ -124,6 +118,11 @@ namespace BadScript.Types.Implementations
         public override ABSObject Invoke( ABSObject[] args )
         {
             throw new BSRuntimeException( Position, $"Can not invoke '{this}'" );
+        }
+
+        public override bool IsNull()
+        {
+            return false;
         }
 
         public void Lock()
@@ -209,6 +208,15 @@ namespace BadScript.Types.Implementations
             v = null;
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_InnerArray.GetHashCode();
         }
 
         #endregion
@@ -311,7 +319,7 @@ namespace BadScript.Types.Implementations
                                                     0
                                                    );
 
-            m_Functions["ContentEquals"] = new BSFunction("function ContentEquals(array)", ArrayContentEquals, 1 );
+            m_Functions["ContentEquals"] = new BSFunction( "function ContentEquals(array)", ArrayContentEquals, 1 );
         }
 
         private ABSObject ArrayContentEquals( ABSObject[] arg )

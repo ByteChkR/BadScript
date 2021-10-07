@@ -1,6 +1,4 @@
-﻿using System;
-
-using BadScript.Exceptions;
+﻿using BadScript.Exceptions;
 
 namespace BadScript.Types.References.Implementations
 {
@@ -51,10 +49,14 @@ namespace BadScript.Types.References.Implementations
 
         #endregion
 
+        #region Protected
+
         protected override int GetHashCodeImpl()
         {
             return m_Key.GetHashCode() ^ m_SourceTable.GetHashCode();
         }
+
+        #endregion
 
     }
 

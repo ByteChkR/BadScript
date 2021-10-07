@@ -1,18 +1,12 @@
 ﻿using BadScript.Exceptions;
-using BadScript.Types.References;
 
-namespace BadScript.Types.Implementations
+namespace BadScript.Types.References.Implementations
 {
 
     public class BSFunctionReference : ABSReference
     {
 
         private readonly BSFunction m_Func;
-
-        protected override int GetHashCodeImpl()
-        {
-            return m_Func.GetHashCode() ^ 397;
-        }
 
         #region Public
 
@@ -29,6 +23,15 @@ namespace BadScript.Types.Implementations
         public override ABSObject Get()
         {
             return m_Func;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Func.GetHashCode() ^ 397;
         }
 
         #endregion

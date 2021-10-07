@@ -3,6 +3,7 @@ using System.Xml;
 
 using BadScript.Types;
 using BadScript.Types.Implementations;
+using BadScript.Types.References.Implementations;
 
 namespace BadScript.Xml
 {
@@ -16,7 +17,7 @@ namespace BadScript.Xml
         {
             m_Properties.Add(
                              "ToString",
-                             new BSFunctionReference( new BSFunction("function ToString()", DocToString, 0 ) )
+                             new BSFunctionReference( new BSFunction( "function ToString()", DocToString, 0 ) )
                             );
         }
 

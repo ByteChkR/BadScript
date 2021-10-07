@@ -85,7 +85,6 @@ namespace BadScript.Console.Preprocessor
                 ctx.OriginalSource = ctx.OriginalSource.Remove( next, inLength ).Insert( next, output );
 
                 current = next;
-
             }
 
             return ctx.OriginalSource;
@@ -102,8 +101,8 @@ namespace BadScript.Console.Preprocessor
             settings.IncludeDirectories.Add( ProjectSystemDirectories.Instance.PreprocessorIncludeDirectory );
 
             settings.Interfaces.Add( new BSSystemConsoleInterface() );
-            settings.Interfaces.Add(new BSCollectionInterface());
-            settings.Interfaces.Add(new BSConvertInterface());
+            settings.Interfaces.Add( new BSCollectionInterface() );
+            settings.Interfaces.Add( new BSConvertInterface() );
             settings.Interfaces.Add( new BSHttpInterface() );
             settings.Interfaces.Add( new Json2BSInterface() );
             settings.Interfaces.Add( new BS2JsonInterface() );

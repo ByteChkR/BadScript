@@ -11,11 +11,6 @@ namespace BadScript.Serialization
     public static class BSSerializer
     {
 
-        public static void AddSerializer( BSExpressionSerializer serializer )
-        {
-            s_Compilers.Add( serializer );
-        }
-        public static IEnumerable < BSExpressionSerializer > Compilers => s_Compilers;
         private static readonly List < BSExpressionSerializer > s_Compilers = new List < BSExpressionSerializer >
                                                                               {
                                                                                   new
@@ -48,7 +43,14 @@ namespace BadScript.Serialization
                                                                                   new BsNamespaceExpressionSerializer()
                                                                               };
 
+        public static IEnumerable < BSExpressionSerializer > Compilers => s_Compilers;
+
         #region Public
+
+        public static void AddSerializer( BSExpressionSerializer serializer )
+        {
+            s_Compilers.Add( serializer );
+        }
 
         public static BSExpression[] Deserialize( Stream s )
         {
@@ -119,8 +121,6 @@ namespace BadScript.Serialization
         {
             Serialize( src, s, BSSerializerHints.Default );
         }
-
-        
 
         #endregion
 

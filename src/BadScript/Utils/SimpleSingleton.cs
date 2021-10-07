@@ -1,4 +1,4 @@
-﻿namespace BadScript.Settings
+﻿namespace BadScript.Utils
 {
 
     public class SimpleSingleton < T > where T : SimpleSingleton < T >, new()

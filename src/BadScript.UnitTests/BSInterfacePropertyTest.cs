@@ -1,4 +1,4 @@
-﻿namespace BadScript.NUnit.Utils
+﻿namespace BadScript.UnitTests
 {
 
     public struct BSInterfacePropertyTest
@@ -16,6 +16,7 @@
                        ReturnObjectAction = ReturnObjectAction
                    };
         }
+
     }
 
 }

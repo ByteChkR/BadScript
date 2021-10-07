@@ -24,7 +24,7 @@ namespace BadScript.Console.Preprocessor.Directives
 
             p.ReadWhitespaceAndNewLine();
             string block = p.ParseBlock();
-            block = SourcePreprocessor.Preprocess(  ctx.CreateSubContext( block ) );
+            block = SourcePreprocessor.Preprocess( ctx.CreateSubContext( block ) );
 
             BSParser sp = new BSParser( block, ctx.OriginalSource, p.GetPosition() );
             BSExpression blockExpr = new BSBlockExpression( sp.ParseToEnd() );

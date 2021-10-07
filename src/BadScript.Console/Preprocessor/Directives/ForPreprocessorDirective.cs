@@ -32,7 +32,7 @@ namespace BadScript.Console.Preprocessor.Directives
             BSForExpression expr = p.ParseForExpression(
                                                         pos,
                                                         s => SourcePreprocessor.Preprocess(
-                                                             ctx.CreateSubContext(s)
+                                                             ctx.CreateSubContext( s )
                                                             )
                                                        );
 

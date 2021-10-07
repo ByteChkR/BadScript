@@ -26,12 +26,12 @@ namespace BadScript.Http
         {
             t.InsertElement(
                             new BSObject( "Get" ),
-                            new BSFunction("function Get(url)/Get(url, headers)", Get, 1, 2 )
+                            new BSFunction( "function Get(url)/Get(url, headers)", Get, 1, 2 )
                            );
 
             t.InsertElement(
                             new BSObject( "Post" ),
-                            new BSFunction("function Post(url, body)", Post, 2 )
+                            new BSFunction( "function Post(url, body)", Post, 2 )
                            );
 
             t.InsertElement(

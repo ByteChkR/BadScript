@@ -197,21 +197,6 @@ namespace BadScript.Parser.Operators
 
         #region Public
 
-        public static void Set(BSOperator op)
-        {
-            s_Operators.Add(op);
-        }
-
-        public static void SetPostfix(BSOperator op)
-        {
-            s_PostfixOperators.Add(op);
-        }
-
-        public static void SetPrefix(BSOperator op)
-        {
-            s_PrefixOperators.Add(op);
-        }
-
         public static BSOperator Get( int p, string key )
         {
             return Get( s_Operators, p, key );
@@ -240,6 +225,21 @@ namespace BadScript.Parser.Operators
         public static bool HasPrefix( int p, string k )
         {
             return s_PrefixOperators.Any( x => x.Preceedence <= p && x.OperatorKey == k );
+        }
+
+        public static void Set( BSOperator op )
+        {
+            s_Operators.Add( op );
+        }
+
+        public static void SetPostfix( BSOperator op )
+        {
+            s_PostfixOperators.Add( op );
+        }
+
+        public static void SetPrefix( BSOperator op )
+        {
+            s_PrefixOperators.Add( op );
         }
 
         #endregion

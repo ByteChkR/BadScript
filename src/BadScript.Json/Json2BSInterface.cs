@@ -17,7 +17,7 @@ namespace BadScript.Json
         public override void AddApi( ABSTable root )
         {
             BSFunction f = new BSFunction( "function FromJson(jsonStr)", Json2BS.Convert, 1 );
-            root.InsertElement( new BSObject("FromJson"), f );
+            root.InsertElement( new BSObject( "FromJson" ), f );
         }
 
         #endregion

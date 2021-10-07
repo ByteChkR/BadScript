@@ -9,6 +9,7 @@ using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
+using BadScript.Types.References.Implementations;
 
 namespace BadScript.Types
 {
@@ -45,20 +46,15 @@ namespace BadScript.Types
 
         private readonly (int min, int max) m_ParameterCount;
 
-        public int MinParameters => m_ParameterCount.min;
-        public int MaxParameters => m_ParameterCount.max;
-
         private readonly List < BSFunction > m_Hooks = new List < BSFunction >();
         private readonly Dictionary < string, BSCachedFunction > m_Properties;
 
         private Func < ABSObject[],
             ABSObject > m_Func;
 
+        public int MinParameters => m_ParameterCount.min;
 
-        protected override int GetHashCodeImpl()
-        {
-            return m_Func?.GetHashCode() ?? 0 ^ m_Properties.GetHashCode();
-        }
+        public int MaxParameters => m_ParameterCount.max;
 
         /// <summary>
         ///     The Stacktrace of the Current Thread
@@ -93,8 +89,6 @@ namespace BadScript.Types
                 return sb.ToString();
             }
         }
-
-        public override bool IsNull() => false;
 
         /// <summary>
         ///     The Stack Depth of the Current thread
@@ -257,7 +251,7 @@ namespace BadScript.Types
                 {
                     ABSObject o = bsFunction.Invoke( arr );
 
-                    if ( !o.IsNull())
+                    if ( !o.IsNull() )
                     {
                         PopStack();
 
@@ -265,7 +259,6 @@ namespace BadScript.Types
                     }
                 }
             }
-            
 
             ( int min, int max ) = m_ParameterCount;
 
@@ -287,6 +280,11 @@ namespace BadScript.Types
         public override ABSObject Invoke( ABSObject[] args )
         {
             return Invoke( args, true );
+        }
+
+        public override bool IsNull()
+        {
+            return false;
         }
 
         /// <summary>
@@ -333,6 +331,11 @@ namespace BadScript.Types
         #endregion
 
         #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Func?.GetHashCode() ?? 0 ^ m_Properties.GetHashCode();
+        }
 
         protected void SetFunc( Func < ABSObject[], ABSObject > func )
         {

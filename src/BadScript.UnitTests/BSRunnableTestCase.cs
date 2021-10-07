@@ -1,4 +1,4 @@
-﻿namespace BadScript.NUnit.Utils
+﻿namespace BadScript.UnitTests
 {
 
     public struct BSRunnableTestCase

@@ -21,15 +21,15 @@ namespace BadScript.Parser.Expressions
             Collumn = col;
             Position = pos;
         }
+
         public static readonly SourcePosition Unknown =
-            new SourcePosition
-            (
-                "UNKNOWN",
-                "UNKNOWN",
-                0,
-                0,
-                0
-            );
+            new SourcePosition(
+                               "UNKNOWN",
+                               "UNKNOWN",
+                               0,
+                               0,
+                               0
+                              );
 
         public static SourcePosition GetCurrentLineInfo( string src, int pos )
         {
@@ -62,14 +62,13 @@ namespace BadScript.Parser.Expressions
 
             string r = src.Substring( textStart, Math.Min( nextNewLine, src.Length - textStart ) );
 
-            return new SourcePosition
-                   (
-                       src,
-                       r.Trim(),
-                       lineCount,
-                       pos - lastNewLine,
-                       pos
-                   );
+            return new SourcePosition(
+                                      src,
+                                      r.Trim(),
+                                      lineCount,
+                                      pos - lastNewLine,
+                                      pos
+                                     );
         }
 
     }

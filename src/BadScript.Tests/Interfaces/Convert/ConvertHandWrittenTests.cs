@@ -2,17 +2,17 @@ using BadScript.NUnit.Utils;
 
 using NUnit.Framework;
 
-namespace BadScript.Tests.Operators
+namespace BadScript.Tests.Interfaces.Convert
 {
 
-    public class AssignmentTests : ABSUnitTest
+    public class ConvertHandWrittenTests : ABSUnitTest
     {
 
         #region Public
 
         public static string[] GenerateTestCases()
         {
-            return PopulateKeyMap( "/tests/operators/assignment/" );
+            return PopulateKeyMap( "/tests/interfaces/convert/" );
         }
 
         [Test]

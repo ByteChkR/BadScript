@@ -9,6 +9,7 @@ using BadScript.Parser.Expressions;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
+using BadScript.Types.References.Implementations;
 
 namespace BadScript.Reflection
 {
@@ -21,12 +22,6 @@ namespace BadScript.Reflection
         private readonly Dictionary < string, ABSReference > m_StaticMembers;
         private readonly ConstructorInfo[] m_Constructors;
 
-        public override bool IsNull() => false;
-
-        protected override int GetHashCodeImpl()
-        {
-            return m_Type.GetHashCode();
-        }
         #region Public
 
         public BSReflectedType( Type t ) : base( SourcePosition.Unknown )
@@ -93,6 +88,11 @@ namespace BadScript.Reflection
         public override ABSObject Invoke( ABSObject[] args )
         {
             throw new NotSupportedException( "Types can not be invoked." );
+        }
+
+        public override bool IsNull()
+        {
+            return false;
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -209,6 +209,15 @@ namespace BadScript.Reflection
             Populate( members, mis, o );
 
             return new BSReflectedObject( members, o );
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Type.GetHashCode();
         }
 
         #endregion

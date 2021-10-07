@@ -16,14 +16,13 @@ namespace BadScript.Types.Implementations.Types
 
     public sealed class BSClassInstance : ABSObject, IEnumerable < IForEachIteration >
     {
+
         public readonly string Name;
         private readonly BSScope m_InstanceScope;
 
         private readonly BSClassInstance m_BaseInstance;
 
         public BSScope InstanceScope => m_InstanceScope;
-
-        public override bool IsNull() => false;
 
         #region Public
 
@@ -53,10 +52,6 @@ namespace BadScript.Types.Implementations.Types
                                        );
 
             Name = name;
-        }
-        protected override int GetHashCodeImpl()
-        {
-            return Name.GetHashCode() ^ m_InstanceScope.GetHashCode();
         }
 
         public override bool Equals( ABSObject other )
@@ -92,6 +87,11 @@ namespace BadScript.Types.Implementations.Types
         public override ABSObject Invoke( ABSObject[] args )
         {
             throw new BSRuntimeException( Position, $"Can not invoke '{this}'" );
+        }
+
+        public override bool IsNull()
+        {
+            return false;
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -188,6 +188,15 @@ namespace BadScript.Types.Implementations.Types
             v = null;
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return Name.GetHashCode() ^ m_InstanceScope.GetHashCode();
         }
 
         #endregion

@@ -19,7 +19,7 @@ namespace BadScript.Xml
         public override void AddApi( ABSTable root )
         {
             BSFunction toXml = new BSFunction( "function CreateDoc(str)", FromXml, 1 );
-            root.InsertElement( new BSObject("CreateDoc"), toXml );
+            root.InsertElement( new BSObject( "CreateDoc" ), toXml );
         }
 
         #endregion

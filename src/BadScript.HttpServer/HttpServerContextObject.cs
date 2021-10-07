@@ -13,14 +13,9 @@ namespace BadScript.HttpServer
 
     public class HttpServerContextObject : ABSObject
     {
-        protected override int GetHashCodeImpl()
-        {
-            return m_Context.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
-        }
+
         private readonly BSTable m_InstanceFunctions;
         private readonly IHttpContext m_Context;
-
-        public override bool IsNull() => false;
 
         #region Public
 
@@ -64,6 +59,11 @@ namespace BadScript.HttpServer
             throw new BSRuntimeException( Position, "HTTPListenerContext Objects can not be invoked" );
         }
 
+        public override bool IsNull()
+        {
+            return false;
+        }
+
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return doneList[this] = m_Context?.ToString() ?? "NULL(HTTPListenerContext)";
@@ -93,6 +93,15 @@ namespace BadScript.HttpServer
             v = $"HTTPListenerContext('{m_Context}')";
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Context.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
         }
 
         #endregion

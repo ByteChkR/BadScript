@@ -22,8 +22,6 @@ namespace BadScript.Types.Implementations
 
         private bool m_Locked;
 
-        public override bool IsNull() => false;
-
         public override ABSArray Keys => new BSArray( m_InnerTable.Keys );
 
         public override ABSArray Values => new BSArray( m_InnerTable.Values );
@@ -39,17 +37,9 @@ namespace BadScript.Types.Implementations
             m_InnerTable = startObjects;
         }
 
-        
-
         public override void Clear()
         {
             m_InnerTable.Clear();
-        }
-
-
-        protected override int GetHashCodeImpl()
-        {
-            return m_InnerTable.GetHashCode();
         }
 
         public override bool Equals( ABSObject other )
@@ -99,13 +89,6 @@ namespace BadScript.Types.Implementations
             return m_InnerTable[key];
         }
 
-        public override void SetRawElement( ABSObject k, ABSObject o )
-        {
-            ABSObject key = k.ResolveReference();
-            m_InnerTable[key] = o;
-
-        }
-
         public override bool HasElement( ABSObject i )
         {
             ABSObject key = i.ResolveReference();
@@ -127,6 +110,11 @@ namespace BadScript.Types.Implementations
         public override ABSObject Invoke( ABSObject[] args )
         {
             throw new BSRuntimeException( Position, $"Can not invoke '{this}'" );
+        }
+
+        public override bool IsNull()
+        {
+            return false;
         }
 
         public void Lock()
@@ -208,6 +196,12 @@ namespace BadScript.Types.Implementations
             InsertElement( new BSObject( propertyName ), obj );
         }
 
+        public override void SetRawElement( ABSObject k, ABSObject o )
+        {
+            ABSObject key = k.ResolveReference();
+            m_InnerTable[key] = o;
+        }
+
         public override bool TryConvertBool( out bool v )
         {
             v = false;
@@ -227,6 +221,15 @@ namespace BadScript.Types.Implementations
             v = null;
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_InnerTable.GetHashCode();
         }
 
         #endregion

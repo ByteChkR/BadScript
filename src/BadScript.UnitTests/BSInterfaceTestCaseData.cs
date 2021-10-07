@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace BadScript.NUnit.Utils
+namespace BadScript.UnitTests
 {
 
     public struct BSInterfaceTestCaseData
     {
-        public List <BSInterfacePropertyTest> PropertyTests;
-        public List<BSInterfaceFunctionTestMatrix> FunctionTests;
+
+        public List < BSInterfacePropertyTest > PropertyTests;
+        public List < BSInterfaceFunctionTestMatrix > FunctionTests;
 
         public IEnumerable < BSRunnableTestCase > GenerateTests()
         {
@@ -21,41 +22,42 @@ namespace BadScript.NUnit.Utils
                 foreach ( BSRunnableTestCase bsRunnableTestCase in bsInterfaceFunctionTestMatrix.GenerateTests() )
                 {
                     yield return bsRunnableTestCase;
-                }   
+                }
             }
         }
 
-        public BSInterfaceFunctionTestMatrix GetFunctionMatrix(string name)
+        public BSInterfaceFunctionTestMatrix GetFunctionMatrix( string name )
         {
             return FunctionTests.First( x => x.Name == name );
         }
-        public BSInterfacePropertyTest GetPropertyTest(string name)
+
+        public BSInterfacePropertyTest GetPropertyTest( string name )
         {
             return PropertyTests.First( x => x.Name == name );
         }
 
-        public BSInterfaceTestCaseData Merge(BSInterfaceTestCaseData other)
+        public BSInterfaceTestCaseData Merge( BSInterfaceTestCaseData other )
         {
-            List<BSInterfacePropertyTest> p = new List<BSInterfacePropertyTest>();
+            List < BSInterfacePropertyTest > p = new List < BSInterfacePropertyTest >();
             p.AddRange( PropertyTests );
 
-            foreach (BSInterfacePropertyTest bsInterfacePropertyTest in other.PropertyTests)
+            foreach ( BSInterfacePropertyTest bsInterfacePropertyTest in other.PropertyTests )
             {
-                if (p.All(x => x.Name != bsInterfacePropertyTest.Name))
+                if ( p.All( x => x.Name != bsInterfacePropertyTest.Name ) )
                 {
-                    p.Add(bsInterfacePropertyTest);
+                    p.Add( bsInterfacePropertyTest );
                 }
-
             }
-            List<BSInterfaceFunctionTestMatrix> f = new List<BSInterfaceFunctionTestMatrix>();
+
+            List < BSInterfaceFunctionTestMatrix > f = new List < BSInterfaceFunctionTestMatrix >();
 
             f.AddRange( FunctionTests );
 
-            foreach (BSInterfaceFunctionTestMatrix bsInterfacePropertyTest in other.FunctionTests)
+            foreach ( BSInterfaceFunctionTestMatrix bsInterfacePropertyTest in other.FunctionTests )
             {
-                if (f.All(x => x.Name != bsInterfacePropertyTest.Name))
+                if ( f.All( x => x.Name != bsInterfacePropertyTest.Name ) )
                 {
-                    f.Add(bsInterfacePropertyTest);
+                    f.Add( bsInterfacePropertyTest );
                 }
             }
 
@@ -65,6 +67,7 @@ namespace BadScript.NUnit.Utils
                        FunctionTests = f
                    };
         }
+
     }
 
 }

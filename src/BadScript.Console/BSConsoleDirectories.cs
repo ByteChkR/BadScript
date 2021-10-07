@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-using BadScript.Settings;
+using BadScript.Utils;
 
 namespace BadScript.Console
 {
@@ -12,6 +12,7 @@ namespace BadScript.Console
         public string DataDirectory => Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "data" );
 
         public string SettingsDirectory => Path.Combine( DataDirectory, "settings" );
+
         #region Public
 
         public BSConsoleDirectories()

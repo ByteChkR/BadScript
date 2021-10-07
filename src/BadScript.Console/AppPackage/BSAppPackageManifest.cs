@@ -17,16 +17,16 @@ namespace BadScript.Console.AppPackage
 
         public string GetTempDirectory()
         {
-           string dir= Path.Combine( BSAppPackageDirectories.Instance.AppTempDirectory, AppName );
-           Directory.CreateDirectory( dir );
+            string dir = Path.Combine( BSAppPackageDirectories.Instance.AppTempDirectory, AppName );
+            Directory.CreateDirectory( dir );
 
-           return dir;
+            return dir;
         }
 
         public string GetPersistentDirectory()
         {
-            string dir = Path.Combine(BSAppPackageDirectories.Instance.AppPersistentDirectory, AppName);
-            Directory.CreateDirectory(dir);
+            string dir = Path.Combine( BSAppPackageDirectories.Instance.AppPersistentDirectory, AppName );
+            Directory.CreateDirectory( dir );
 
             return dir;
         }

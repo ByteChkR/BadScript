@@ -18,12 +18,6 @@ namespace BadScript.Reflection
         private readonly Dictionary < string, ABSReference > m_Members;
         private readonly object m_Instance;
 
-        public override bool IsNull() => m_Instance == null;
-
-        protected override int GetHashCodeImpl()
-        {
-            return m_Instance?.GetHashCode() ?? 0;
-        }
         #region Public
 
         public BSReflectedObject( Dictionary < string, ABSReference > members, object instance ) :
@@ -78,6 +72,11 @@ namespace BadScript.Reflection
         public override ABSObject Invoke( ABSObject[] args )
         {
             throw new NotSupportedException( "Types can not be invoked." );
+        }
+
+        public override bool IsNull()
+        {
+            return m_Instance == null;
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -205,6 +204,15 @@ namespace BadScript.Reflection
             v = null;
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Instance?.GetHashCode() ?? 0;
         }
 
         #endregion

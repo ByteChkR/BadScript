@@ -372,7 +372,7 @@ namespace BadScript.Math
                              );
 
             ret.InsertElement(
-                              new BSObject("Max"),
+                              new BSObject( "Max" ),
                               new BSFunction(
                                              "function Max(x, y)",
                                              args =>

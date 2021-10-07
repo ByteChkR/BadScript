@@ -11,8 +11,6 @@ namespace BadScript.Types.References
     public abstract class ABSReference : ABSObject
     {
 
-        public override bool IsNull() => Get().IsNull();
-
         #region Public
 
         /// <summary>
@@ -45,6 +43,11 @@ namespace BadScript.Types.References
         public override ABSObject Invoke( ABSObject[] args )
         {
             return Get().Invoke( args );
+        }
+
+        public override bool IsNull()
+        {
+            return Get().IsNull();
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )

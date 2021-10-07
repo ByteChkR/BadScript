@@ -30,18 +30,6 @@ namespace BadScript.Types
             return !Equals( left, right );
         }
 
-        public override int GetHashCode()
-        {
-            return GetHashCodeImpl();
-        }
-
-        protected abstract int GetHashCodeImpl();
-
-        /// <summary>
-        ///     Returns true if the object is null
-        /// </summary>
-        public abstract bool IsNull();
-
         #region Public
 
         /// <summary>
@@ -74,6 +62,11 @@ namespace BadScript.Types
         /// <returns></returns>
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public abstract ABSObject Invoke( ABSObject[] args );
+
+        /// <summary>
+        ///     Returns true if the object is null
+        /// </summary>
+        public abstract bool IsNull();
 
         /// <summary>
         ///     Returns a verbose string representation of this object
@@ -164,6 +157,11 @@ namespace BadScript.Types
             return obj is ABSObject o && Equals( o );
         }
 
+        public override int GetHashCode()
+        {
+            return GetHashCodeImpl();
+        }
+
         /// <summary>
         ///     Returns a verbose string representation of this object
         /// </summary>
@@ -182,6 +180,8 @@ namespace BadScript.Types
         {
             Position = pos;
         }
+
+        protected abstract int GetHashCodeImpl();
 
         #endregion
 

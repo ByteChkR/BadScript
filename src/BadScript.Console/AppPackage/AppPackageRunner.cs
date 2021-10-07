@@ -20,8 +20,8 @@ namespace BadScript.Console.AppPackage
 
             BSEngineSettings es =
                 EngineBuilderSettings.CreateEngineSettings(
-                                                           Array.Empty <string >(),
-                                                           Array.Empty<string>()
+                                                           Array.Empty < string >(),
+                                                           Array.Empty < string >()
                                                           );
 
             es.Interfaces.Add( new BSAppPackageInterface( package ) );
@@ -43,7 +43,9 @@ namespace BadScript.Console.AppPackage
             }
 
             if ( Directory.Exists( package.Manifest.GetTempDirectory() ) )
+            {
                 Directory.Delete( package.Manifest.GetTempDirectory() );
+            }
 
             ConsoleWriter.SuccessLine( $"App Terminated with Return: {o}" );
 

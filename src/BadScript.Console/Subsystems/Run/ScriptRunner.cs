@@ -15,35 +15,34 @@ namespace BadScript.Console.Subsystems.Run
 
         public static int Run( ScriptRunnerSettings settings )
         {
-            for (int i = 0; i < settings.Iterations; i++)
+            for ( int i = 0; i < settings.Iterations; i++ )
             {
-                List<string> files = new List<string>();
+                List < string > files = new List < string >();
 
-                foreach (string script in settings.Files)
+                foreach ( string script in settings.Files )
                 {
-                    if (Directory.Exists(script))
+                    if ( Directory.Exists( script ) )
                     {
-                        files.AddRange(Directory.GetFiles(script, "*.bs", SearchOption.AllDirectories));
+                        files.AddRange( Directory.GetFiles( script, "*.bs", SearchOption.AllDirectories ) );
                     }
-                    else if (File.Exists(script))
+                    else if ( File.Exists( script ) )
                     {
-                        files.Add(script);
+                        files.Add( script );
                     }
                     else
                     {
-                        ConsoleWriter.ErrorLine("Can not find File or Folder: " + script);
+                        ConsoleWriter.ErrorLine( "Can not find File or Folder: " + script );
                     }
                 }
 
                 BSEngine engine = settings.CreateEngineSettings().Build();
-                string[] args = settings.Arguments?.ToArray() ?? Array.Empty<string>();
+                string[] args = settings.Arguments?.ToArray() ?? Array.Empty < string >();
 
-                foreach (string script in files)
+                foreach ( string script in files )
                 {
-                    ConsoleWriter.LogLine("Executing File: " + script);
-                    engine.LoadFile(script, args, settings.IsBenchmark);
+                    ConsoleWriter.LogLine( "Executing File: " + script );
+                    engine.LoadFile( script, args, settings.IsBenchmark );
                 }
-
             }
 
             ConsoleWriter.SuccessLine( "Command 'run' finished!" );

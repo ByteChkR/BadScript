@@ -70,7 +70,7 @@ namespace BadScript.Console.Preprocessor.Directives
                 }
 
                 string block = GenerateBlock( values.ToArray() );
-                string ret = SourcePreprocessor.Preprocess(  ctx.CreateSubContext( block ) );
+                string ret = SourcePreprocessor.Preprocess( ctx.CreateSubContext( block ) );
 
                 return ret;
             }

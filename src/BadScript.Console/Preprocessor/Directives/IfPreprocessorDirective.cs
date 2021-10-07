@@ -21,7 +21,7 @@ namespace BadScript.Console.Preprocessor.Directives
 
             BSIfExpression expr = p.ParseIfExpression(
                                                       pos,
-                                                      s => SourcePreprocessor.Preprocess(ctx.CreateSubContext( s ) )
+                                                      s => SourcePreprocessor.Preprocess( ctx.CreateSubContext( s ) )
                                                      );
 
             expr.Execute( ctx.RuntimeScope );

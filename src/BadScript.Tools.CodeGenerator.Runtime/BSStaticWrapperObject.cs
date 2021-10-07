@@ -18,16 +18,10 @@ namespace BadScript.Tools.CodeGenerator.Runtime
     public class BSStaticWrapperObject : ABSObject, IEnumerable < IForEachIteration >
     {
 
-        protected override int GetHashCodeImpl()
-        {
-            return m_WrappedType.GetHashCode() ^ m_StaticProperties.GetHashCode();
-        }
         protected Dictionary < string, ABSReference > m_StaticProperties;
         private Type m_WrappedType;
 
         public string[] Properties => m_StaticProperties.Keys.ToArray();
-
-        public override bool IsNull() => false;
 
         #region Public
 
@@ -68,6 +62,11 @@ namespace BadScript.Tools.CodeGenerator.Runtime
         public override ABSObject Invoke( ABSObject[] args )
         {
             throw new BSRuntimeException( "Can not Invoke Object" );
+        }
+
+        public override bool IsNull()
+        {
+            return false;
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -188,6 +187,15 @@ namespace BadScript.Tools.CodeGenerator.Runtime
             v = m_WrappedType.Name;
 
             return true;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_WrappedType.GetHashCode() ^ m_StaticProperties.GetHashCode();
         }
 
         #endregion

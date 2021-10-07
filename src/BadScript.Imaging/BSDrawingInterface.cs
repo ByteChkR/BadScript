@@ -27,7 +27,7 @@ namespace BadScript.Imaging
         {
             root.InsertElement(
                                new BSObject( "LoadImage" ),
-                               new BSFunction("function LoadImage(data)", LoadImageApi, 1, 1 )
+                               new BSFunction( "function LoadImage(data)", LoadImageApi, 1, 1 )
                               );
 
             root.InsertElement(
@@ -40,7 +40,7 @@ namespace BadScript.Imaging
                                new BSFunction( "function Color(a, r, g, b)/Color(r, g, b)", CreateColorApi, 3, 4 )
                               );
 
-            root.InsertElement( new BSObject( "RotateFlipType" ), EnumBuilder<RotateFlipType>.Build () );
+            root.InsertElement( new BSObject( "RotateFlipType" ), EnumBuilder < RotateFlipType >.Build() );
         }
 
         #endregion
@@ -130,32 +130,32 @@ namespace BadScript.Imaging
 
             table.InsertElement(
                                 new BSObject( "GetWidth" ),
-                                new BSFunction("function GetWidth()", x => BitmapWidthApi( bmp ), 0 )
+                                new BSFunction( "function GetWidth()", x => BitmapWidthApi( bmp ), 0 )
                                );
 
             table.InsertElement(
                                 new BSObject( "GetHeight" ),
-                                new BSFunction("function GetHeight()", x => BitmapHeightApi( bmp ), 0 )
+                                new BSFunction( "function GetHeight()", x => BitmapHeightApi( bmp ), 0 )
                                );
 
             table.InsertElement(
                                 new BSObject( "SetPixel" ),
-                                new BSFunction("function SetPixel(x, y, value)", x => BitmapSetPixelApi( bmp, x ), 3 )
+                                new BSFunction( "function SetPixel(x, y, value)", x => BitmapSetPixelApi( bmp, x ), 3 )
                                );
 
             table.InsertElement(
                                 new BSObject( "GetPixel" ),
-                                new BSFunction("function GetPixel(x, y)", x => BitmapGetPixelApi( bmp, x ), 2 )
+                                new BSFunction( "function GetPixel(x, y)", x => BitmapGetPixelApi( bmp, x ), 2 )
                                );
 
             table.InsertElement(
                                 new BSObject( "RotateFlip" ),
-                                new BSFunction("function RotateFlip()", x => BitmapRotateFlip( bmp, x ), 1 )
+                                new BSFunction( "function RotateFlip()", x => BitmapRotateFlip( bmp, x ), 1 )
                                );
 
             table.InsertElement(
                                 new BSObject( "Serialize" ),
-                                new BSFunction("function Serialize()", x => BitmapSerializeApi( bmp, x ), 0, 0 )
+                                new BSFunction( "function Serialize()", x => BitmapSerializeApi( bmp, x ), 0, 0 )
                                );
 
             table.InsertElement(

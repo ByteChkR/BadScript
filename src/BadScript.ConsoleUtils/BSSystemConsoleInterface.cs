@@ -9,29 +9,30 @@ using BadScript.Types.Implementations;
 namespace BadScript.ConsoleUtils
 {
 
-    public class BSSystemConsoleInterface: BSConsoleInterface
+    public class BSSystemConsoleInterface : BSConsoleInterface
     {
+
+        #region Public
 
         public BSSystemConsoleInterface()
         {
-
         }
 
-        
         public override void AddApi( ABSTable root )
         {
             base.AddApi( root );
-            root.SetRawElement("Colors", EnumBuilder<ConsoleColor>.Build());
-            root.SetRawElement("Keys", EnumBuilder<ConsoleKey>.Build());
-            root.SetRawElement("Modifiers", EnumBuilder<ConsoleModifiers>.Build());
+            root.SetRawElement( "Colors", EnumBuilder < ConsoleColor >.Build() );
+            root.SetRawElement( "Keys", EnumBuilder < ConsoleKey >.Build() );
+            root.SetRawElement( "Modifiers", EnumBuilder < ConsoleModifiers >.Build() );
+
             root.SetRawElement(
                                "ForeColor",
-                               new BSReflectionReference(GetConsoleForeColor, SetConsoleForeColor)
+                               new BSReflectionReference( GetConsoleForeColor, SetConsoleForeColor )
                               );
 
             root.SetRawElement(
                                "BackColor",
-                               new BSReflectionReference(GetConsoleBackColor, SetConsoleBackColor)
+                               new BSReflectionReference( GetConsoleBackColor, SetConsoleBackColor )
                               );
 
             root.SetRawElement(
@@ -49,6 +50,7 @@ namespace BadScript.ConsoleUtils
                                                          SetConsoleBufferHeight
                                                         )
                               );
+
             root.SetRawElement(
                                "WindowWidth",
                                new BSReflectionReference(
@@ -64,6 +66,7 @@ namespace BadScript.ConsoleUtils
                                                          SetConsoleWindowHeight
                                                         )
                               );
+
             root.SetRawElement(
                                "LargestWindowWidth",
                                new BSReflectionReference(
@@ -87,6 +90,7 @@ namespace BadScript.ConsoleUtils
                                                          SetConsoleCursorSize
                                                         )
                               );
+
             root.SetRawElement(
                                "CursorLeft",
                                new BSReflectionReference(
@@ -94,6 +98,7 @@ namespace BadScript.ConsoleUtils
                                                          SetConsoleCursorLeft
                                                         )
                               );
+
             root.SetRawElement(
                                "CursorTop",
                                new BSReflectionReference(
@@ -101,6 +106,7 @@ namespace BadScript.ConsoleUtils
                                                          SetConsoleCursorTop
                                                         )
                               );
+
             root.SetRawElement(
                                "WindowLeft",
                                new BSReflectionReference(
@@ -108,6 +114,7 @@ namespace BadScript.ConsoleUtils
                                                          SetConsoleWindowLeft
                                                         )
                               );
+
             root.SetRawElement(
                                "WindowTop",
                                new BSReflectionReference(
@@ -115,8 +122,6 @@ namespace BadScript.ConsoleUtils
                                                          SetConsoleWindowTop
                                                         )
                               );
-
-
 
             root.SetRawElement(
                                "Title",
@@ -133,6 +138,7 @@ namespace BadScript.ConsoleUtils
                                                          null
                                                         )
                               );
+
             root.SetRawElement(
                                "NumberLock",
                                new BSReflectionReference(
@@ -144,7 +150,9 @@ namespace BadScript.ConsoleUtils
             root.SetRawElement(
                                "IsErrorRedirected",
                                new BSReflectionReference(
-                                                         () => Console.IsErrorRedirected ? BSObject.True : BSObject.False,
+                                                         () => Console.IsErrorRedirected
+                                                                   ? BSObject.True
+                                                                   : BSObject.False,
                                                          null
                                                         )
                               );
@@ -152,7 +160,9 @@ namespace BadScript.ConsoleUtils
             root.SetRawElement(
                                "IsInputRedirected",
                                new BSReflectionReference(
-                                                         () => Console.IsInputRedirected ? BSObject.True : BSObject.False,
+                                                         () => Console.IsInputRedirected
+                                                                   ? BSObject.True
+                                                                   : BSObject.False,
                                                          null
                                                         )
                               );
@@ -160,7 +170,9 @@ namespace BadScript.ConsoleUtils
             root.SetRawElement(
                                "IsOutputRedirected",
                                new BSReflectionReference(
-                                                         () => Console.IsOutputRedirected ? BSObject.True : BSObject.False,
+                                                         () => Console.IsOutputRedirected
+                                                                   ? BSObject.True
+                                                                   : BSObject.False,
                                                          null
                                                         )
                               );
@@ -182,6 +194,7 @@ namespace BadScript.ConsoleUtils
                                                          null
                                                         )
                               );
+
             root.SetRawElement(
                                "CursorVisible",
                                new BSReflectionReference(
@@ -201,23 +214,25 @@ namespace BadScript.ConsoleUtils
                                                   Console.Beep();
 
                                                   return BSObject.Null;
-                                              }, 
+                                              },
                                               0
                                              )
                               );
+
             root.SetRawElement(
                                "Read",
                                new BSFunction(
                                               "function Read()",
                                               o =>
                                               {
-                                                  int c= Console.Read();
+                                                  int c = Console.Read();
 
-                                                  return new BSObject((decimal)c);
+                                                  return new BSObject( ( decimal )c );
                                               },
                                               0
                                              )
                               );
+
             root.SetRawElement(
                                "ResetColor",
                                new BSFunction(
@@ -231,135 +246,157 @@ namespace BadScript.ConsoleUtils
                                               0
                                              )
                               );
+
             root.SetRawElement(
                                "ReadKey",
                                new BSFunction(
-                                              "function ReadKey(intercept)", 
-                                              ConsoleReadKey, 
+                                              "function ReadKey(intercept)",
+                                              ConsoleReadKey,
                                               0
                                              )
                               );
-
-
-
         }
+
+        #endregion
+
+        #region Private
 
         private ABSObject ConsoleReadKey( ABSObject[] arg )
         {
             ConsoleKeyInfo i = arg.Length == 0 ? Console.ReadKey() : Console.ReadKey( arg[0].ConvertBool() );
             BSTable t = new BSTable( SourcePosition.Unknown );
-            t.InsertElement("Key", new BSObject((decimal)i.Key));
-            t.InsertElement("KeyChar", new BSObject(i.KeyChar.ToString()));
-            t.InsertElement("Modifiers", new BSObject((decimal)i.Modifiers));
+            t.InsertElement( "Key", new BSObject( ( decimal )i.Key ) );
+            t.InsertElement( "KeyChar", new BSObject( i.KeyChar.ToString() ) );
+            t.InsertElement( "Modifiers", new BSObject( ( decimal )i.Modifiers ) );
             t.Lock();
+
             return t;
-        }
-
-        private ABSObject GetConsoleCursorSize()
-        {
-            return new BSObject((decimal)Console.CursorSize);
-        }
-        private void SetConsoleCursorSize(ABSObject o)
-        {
-            Console.CursorSize = (int)o.ConvertDecimal();
-        }
-        private ABSObject GetConsoleCursorLeft()
-        {
-            return new BSObject((decimal)Console.CursorLeft);
-        }
-        private void SetConsoleCursorLeft(ABSObject o)
-        {
-            Console.CursorLeft = (int)o.ConvertDecimal();
-        }
-        private ABSObject GetConsoleCursorTop()
-        {
-            return new BSObject((decimal)Console.CursorTop);
-        }
-        private void SetConsoleCursorTop(ABSObject o)
-        {
-            Console.CursorTop = (int)o.ConvertDecimal();
-        }
-        private ABSObject GetConsoleWindowLeft()
-        {
-            return new BSObject((decimal)Console.WindowLeft);
-        }
-        private void SetConsoleWindowLeft(ABSObject o)
-        {
-            Console.WindowLeft = (int)o.ConvertDecimal();
-        }
-        private ABSObject GetConsoleWindowTop()
-        {
-            return new BSObject((decimal)Console.WindowTop);
-        }
-        private void SetConsoleWindowTop(ABSObject o)
-        {
-            Console.WindowTop = (int)o.ConvertDecimal();
-        }
-
-
-        private ABSObject GetConsoleBufferWidth()
-        {
-            return new BSObject((decimal)Console.BufferWidth);
-        }
-        private ABSObject GetConsoleBufferHeight()
-        {
-            return new BSObject((decimal)Console.BufferHeight);
-        }
-        private void SetConsoleBufferHeight(ABSObject o)
-        {
-            Console.BufferHeight = (int)o.ConvertDecimal();
-        }
-        private void SetConsoleBufferWidth(ABSObject o)
-        {
-            Console.BufferWidth = (int)o.ConvertDecimal();
-        }
-        private ABSObject GetConsoleWindowWidth()
-        {
-            return new BSObject((decimal)Console.BufferWidth);
-        }
-        private ABSObject GetConsoleLargestWindowHeight()
-        {
-            return new BSObject((decimal)Console.LargestWindowHeight);
-        }
-        private ABSObject GetConsoleLargestWindowWidth()
-        {
-            return new BSObject((decimal)Console.LargestWindowWidth);
-        }
-        private ABSObject GetConsoleWindowHeight()
-        {
-            return new BSObject((decimal)Console.BufferHeight);
-        }
-        private void SetConsoleWindowHeight(ABSObject o)
-        {
-            Console.BufferHeight = (int)o.ConvertDecimal();
-        }
-        private void SetConsoleWindowWidth(ABSObject o)
-        {
-            Console.BufferWidth = (int)o.ConvertDecimal();
         }
 
         private ABSObject GetConsoleBackColor()
         {
-            return new BSObject((decimal)Console.BackgroundColor);
+            return new BSObject( ( decimal )Console.BackgroundColor );
+        }
+
+        private ABSObject GetConsoleBufferHeight()
+        {
+            return new BSObject( ( decimal )Console.BufferHeight );
+        }
+
+        private ABSObject GetConsoleBufferWidth()
+        {
+            return new BSObject( ( decimal )Console.BufferWidth );
+        }
+
+        private ABSObject GetConsoleCursorLeft()
+        {
+            return new BSObject( ( decimal )Console.CursorLeft );
+        }
+
+        private ABSObject GetConsoleCursorSize()
+        {
+            return new BSObject( ( decimal )Console.CursorSize );
+        }
+
+        private ABSObject GetConsoleCursorTop()
+        {
+            return new BSObject( ( decimal )Console.CursorTop );
         }
 
         private ABSObject GetConsoleForeColor()
         {
-            return new BSObject((decimal)Console.ForegroundColor);
+            return new BSObject( ( decimal )Console.ForegroundColor );
         }
 
-        private void SetConsoleBackColor(ABSObject arg)
+        private ABSObject GetConsoleLargestWindowHeight()
+        {
+            return new BSObject( ( decimal )Console.LargestWindowHeight );
+        }
+
+        private ABSObject GetConsoleLargestWindowWidth()
+        {
+            return new BSObject( ( decimal )Console.LargestWindowWidth );
+        }
+
+        private ABSObject GetConsoleWindowHeight()
+        {
+            return new BSObject( ( decimal )Console.BufferHeight );
+        }
+
+        private ABSObject GetConsoleWindowLeft()
+        {
+            return new BSObject( ( decimal )Console.WindowLeft );
+        }
+
+        private ABSObject GetConsoleWindowTop()
+        {
+            return new BSObject( ( decimal )Console.WindowTop );
+        }
+
+        private ABSObject GetConsoleWindowWidth()
+        {
+            return new BSObject( ( decimal )Console.BufferWidth );
+        }
+
+        private void SetConsoleBackColor( ABSObject arg )
         {
             Console.BackgroundColor =
                 ( ConsoleColor )Enum.ToObject( typeof( ConsoleColor ), ( int )arg.ConvertDecimal() );
         }
 
-        private void SetConsoleForeColor(ABSObject arg)
+        private void SetConsoleBufferHeight( ABSObject o )
+        {
+            Console.BufferHeight = ( int )o.ConvertDecimal();
+        }
+
+        private void SetConsoleBufferWidth( ABSObject o )
+        {
+            Console.BufferWidth = ( int )o.ConvertDecimal();
+        }
+
+        private void SetConsoleCursorLeft( ABSObject o )
+        {
+            Console.CursorLeft = ( int )o.ConvertDecimal();
+        }
+
+        private void SetConsoleCursorSize( ABSObject o )
+        {
+            Console.CursorSize = ( int )o.ConvertDecimal();
+        }
+
+        private void SetConsoleCursorTop( ABSObject o )
+        {
+            Console.CursorTop = ( int )o.ConvertDecimal();
+        }
+
+        private void SetConsoleForeColor( ABSObject arg )
         {
             Console.ForegroundColor =
-                (ConsoleColor)Enum.ToObject(typeof(ConsoleColor), (int)arg.ConvertDecimal());
-            
+                ( ConsoleColor )Enum.ToObject( typeof( ConsoleColor ), ( int )arg.ConvertDecimal() );
         }
+
+        private void SetConsoleWindowHeight( ABSObject o )
+        {
+            Console.BufferHeight = ( int )o.ConvertDecimal();
+        }
+
+        private void SetConsoleWindowLeft( ABSObject o )
+        {
+            Console.WindowLeft = ( int )o.ConvertDecimal();
+        }
+
+        private void SetConsoleWindowTop( ABSObject o )
+        {
+            Console.WindowTop = ( int )o.ConvertDecimal();
+        }
+
+        private void SetConsoleWindowWidth( ABSObject o )
+        {
+            Console.BufferWidth = ( int )o.ConvertDecimal();
+        }
+
+        #endregion
+
     }
 
 }

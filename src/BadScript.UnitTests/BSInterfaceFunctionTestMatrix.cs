@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace BadScript.NUnit.Utils
+namespace BadScript.UnitTests
 {
 
     public struct BSInterfaceFunctionTestMatrix
     {
+
         public string ReturnObjectAction;
         public string Name;
 
@@ -17,6 +18,7 @@ namespace BadScript.NUnit.Utils
                 yield return bsInterfaceFunctionTest.MakeTestCase( Name );
             }
         }
+
     }
 
 }

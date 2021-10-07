@@ -7,6 +7,7 @@ using BadScript.Reflection;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
+using BadScript.Types.References.Implementations;
 
 namespace BadScript.Xml
 {
@@ -14,14 +15,8 @@ namespace BadScript.Xml
     public class XmlNodeObject : ABSObject
     {
 
-        protected override int GetHashCodeImpl()
-        {
-            return m_Node.GetHashCode() ^ m_Properties.GetHashCode();
-        }
         protected XmlNode m_Node;
         protected Dictionary < string, ABSReference > m_Properties = new Dictionary < string, ABSReference >();
-
-        public override bool IsNull() => false;
 
         #region Public
 
@@ -41,7 +36,7 @@ namespace BadScript.Xml
 
             m_Properties.Add(
                              "FindChild",
-                             new BSFunctionReference( new BSFunction("function FindChild(name)", FindChildByName, 1 ) )
+                             new BSFunctionReference( new BSFunction( "function FindChild(name)", FindChildByName, 1 ) )
                             );
 
             m_Properties.Add(
@@ -66,7 +61,7 @@ namespace BadScript.Xml
 
             m_Properties.Add(
                              "ChildAt",
-                             new BSFunctionReference( new BSFunction("function ChildAt(index)", ChildAt, 1 ) )
+                             new BSFunctionReference( new BSFunction( "function ChildAt(index)", ChildAt, 1 ) )
                             );
 
             m_Properties.Add(
@@ -116,6 +111,11 @@ namespace BadScript.Xml
             throw new BSRuntimeException( "Can not Invoke XML Document Object" );
         }
 
+        public override bool IsNull()
+        {
+            return false;
+        }
+
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return m_Node.ToString();
@@ -145,6 +145,15 @@ namespace BadScript.Xml
             v = SafeToString();
 
             return true;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Node.GetHashCode() ^ m_Properties.GetHashCode();
         }
 
         #endregion

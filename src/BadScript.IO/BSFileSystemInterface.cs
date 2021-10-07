@@ -205,7 +205,7 @@ namespace BadScript.IO
                              );
 
             ret.InsertElement(
-                              new BSObject("IsFile"),
+                              new BSObject( "IsFile" ),
                               new BSFunction(
                                              "function IsFile(path)",
                                              args =>
@@ -338,13 +338,13 @@ namespace BadScript.IO
                                                  FileAccess m = FileAccess.ReadWrite;
 
                                                  return new BSStreamObject(
-                                                                               o.Position,
-                                                                               File.Open(
-                                                                                    o.ConvertString(),
-                                                                                    FileMode.OpenOrCreate,
-                                                                                    m
-                                                                                   )
-                                                                              );
+                                                                           o.Position,
+                                                                           File.Open(
+                                                                                o.ConvertString(),
+                                                                                FileMode.OpenOrCreate,
+                                                                                m
+                                                                               )
+                                                                          );
                                              },
                                              1
                                             )

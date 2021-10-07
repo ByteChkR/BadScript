@@ -729,11 +729,11 @@ namespace BadScript.Parser
 
             if ( sb[sb.Length - 1] == '.' )
             {
-                m_CurrentPosition--; //Rewind to the dot we accidentially added.
+                m_CurrentPosition--;           //Rewind to the dot we accidentially added.
                 sb.Remove( sb.Length - 1, 1 ); //Remove the dot from the number
             }
 
-                if ( sb.Length == 0 )
+            if ( sb.Length == 0 )
             {
                 throw new BSParserException( "Can not parse Number", this );
             }

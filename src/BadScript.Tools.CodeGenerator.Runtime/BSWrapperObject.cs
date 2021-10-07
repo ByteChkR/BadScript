@@ -11,20 +11,16 @@ using BadScript.Parser.Expressions.Implementations.Block.ForEach;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
+using BadScript.Types.References.Implementations;
 
 namespace BadScript.Tools.CodeGenerator.Runtime
 {
 
     public class BSWrapperObject < T > : ABSObject, IBSWrappedObject, IEnumerable < IForEachIteration >
     {
-        protected override int GetHashCodeImpl()
-        {
-            return m_InternalObject.GetHashCode() ^ m_Properties.GetHashCode();
-        }
+
         protected T m_InternalObject;
         protected Dictionary < string, ABSReference > m_Properties = new Dictionary < string, ABSReference >();
-
-        public override bool IsNull() => m_InternalObject == null;
 
         #region Public
 
@@ -51,7 +47,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
                 return false;
             }
 
-            if (IsNull())
+            if ( IsNull() )
             {
                 return other.IsNull();
             }
@@ -92,7 +88,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
         public override bool HasProperty( string propertyName )
         {
-            if (IsNull())
+            if ( IsNull() )
             {
                 return false;
             }
@@ -105,6 +101,11 @@ namespace BadScript.Tools.CodeGenerator.Runtime
             throw new BSRuntimeException( "Can not Invoke Object" );
         }
 
+        public override bool IsNull()
+        {
+            return m_InternalObject == null;
+        }
+
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             if ( doneList.ContainsKey( this ) )
@@ -114,7 +115,7 @@ namespace BadScript.Tools.CodeGenerator.Runtime
 
             doneList[this] = "{}";
 
-            if (IsNull())
+            if ( IsNull() )
             {
                 return "NULL";
             }
@@ -228,6 +229,15 @@ namespace BadScript.Tools.CodeGenerator.Runtime
             v = m_InternalObject?.ToString() ?? $"{typeof( T ).Name}(NULL)";
 
             return true;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_InternalObject.GetHashCode() ^ m_Properties.GetHashCode();
         }
 
         #endregion

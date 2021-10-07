@@ -1,12 +1,9 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 using BadScript.Interfaces;
 using BadScript.Interfaces.Environment;
-
-using BadScript.Parser;
 using BadScript.Parser.Expressions;
 using BadScript.Types;
 using BadScript.Types.Implementations;
@@ -22,7 +19,7 @@ namespace BadScript
         public const bool ENABLE_SERIALIZER_WRITE_LOGS = false;
         public const bool ENABLE_OPERATOR_OVERRIDES = true;
         public const bool ENABLE_CORE_FAST_TRACK = true;
-        
+
         public readonly List < ABSScriptInterface > Interfaces;
         public readonly List < string > ActiveInterfaces;
         public readonly List < string > IncludeDirectories;
@@ -45,7 +42,7 @@ namespace BadScript
 
         #region Public
 
-        public BSEngineSettings( )
+        public BSEngineSettings()
         {
             Interfaces = new List < ABSScriptInterface >();
             ActiveInterfaces = new List < string >();
@@ -55,9 +52,9 @@ namespace BadScript
         public static BSEngineSettings MakeDefault()
         {
             BSEngineSettings s = new BSEngineSettings();
-            s.ActiveInterfaces.Add("Convert");
-            s.ActiveInterfaces.Add("Console");
-            s.ActiveInterfaces.Add("Collection");
+            s.ActiveInterfaces.Add( "Convert" );
+            s.ActiveInterfaces.Add( "Console" );
+            s.ActiveInterfaces.Add( "Collection" );
 
             return s;
         }

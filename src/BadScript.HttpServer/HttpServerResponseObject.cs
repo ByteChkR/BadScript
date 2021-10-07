@@ -15,15 +15,9 @@ namespace BadScript.HttpServer
 
     public class HttpServerResponseObject : ABSObject
     {
-        protected override int GetHashCodeImpl()
-        {
-            return m_Response.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
-        }
 
         private readonly BSTable m_InstanceFunctions;
         private IHttpResponse m_Response;
-
-        public override bool IsNull() => false;
 
         #region Public
 
@@ -93,6 +87,11 @@ namespace BadScript.HttpServer
             throw new BSRuntimeException( Position, "HTTPListenerRequest Objects can not be invoked" );
         }
 
+        public override bool IsNull()
+        {
+            return false;
+        }
+
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return doneList[this] = m_Response?.ToString() ?? "NULL(HTTPListenerRequest)";
@@ -122,6 +121,15 @@ namespace BadScript.HttpServer
             v = $"HTTPListenerRequest('{m_Response}')";
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Response.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
         }
 
         #endregion

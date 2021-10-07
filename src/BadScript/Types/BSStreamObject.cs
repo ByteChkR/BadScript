@@ -16,23 +16,19 @@ namespace BadScript.Types
         private readonly BSTable m_InstanceFunctions;
         private Stream m_Stream;
 
-        protected override int GetHashCodeImpl()
-        {
-            return m_Stream.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
-        }
-
-        public override bool IsNull() => false;
-
         #region Public
 
-        public BSStreamObject(Stream fs):this(SourcePosition.Unknown, fs){}
-        public BSStreamObject(SourcePosition pos, Stream fs) : base(pos)
+        public BSStreamObject( Stream fs ) : this( SourcePosition.Unknown, fs )
+        {
+        }
+
+        public BSStreamObject( SourcePosition pos, Stream fs ) : base( pos )
         {
             m_Stream = fs;
 
             m_InstanceFunctions = new BSTable(
                                               SourcePosition.Unknown,
-                                              new Dictionary<ABSObject, ABSObject>
+                                              new Dictionary < ABSObject, ABSObject >
                                               {
                                                   {
                                                       new BSObject( "close" ), new BSFunction(
@@ -112,51 +108,56 @@ namespace BadScript.Types
                                              );
         }
 
-        public override bool Equals(ABSObject other)
+        public override bool Equals( ABSObject other )
         {
-            return ReferenceEquals(this, other);
+            return ReferenceEquals( this, other );
         }
 
-        public override ABSReference GetProperty(string propertyName)
+        public override ABSReference GetProperty( string propertyName )
         {
-            return m_InstanceFunctions.GetProperty(propertyName);
+            return m_InstanceFunctions.GetProperty( propertyName );
         }
 
-        public override bool HasProperty(string propertyName)
+        public override bool HasProperty( string propertyName )
         {
-            return m_InstanceFunctions.HasProperty(propertyName);
+            return m_InstanceFunctions.HasProperty( propertyName );
         }
 
-        public override ABSObject Invoke(ABSObject[] args)
+        public override ABSObject Invoke( ABSObject[] args )
         {
-            throw new BSRuntimeException(Position, "File Stream API Objects can not be invoked");
+            throw new BSRuntimeException( Position, "File Stream API Objects can not be invoked" );
         }
 
-        public override string SafeToString(Dictionary<ABSObject, string> doneList)
+        public override bool IsNull()
+        {
+            return false;
+        }
+
+        public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return doneList[this] = m_Stream?.ToString() ?? "NULL(FileStream)";
         }
 
-        public override void SetProperty(string propertyName, ABSObject obj)
+        public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new BSRuntimeException(Position, "File Stream API Objects can not be written to");
+            throw new BSRuntimeException( Position, "File Stream API Objects can not be written to" );
         }
 
-        public override bool TryConvertBool(out bool v)
+        public override bool TryConvertBool( out bool v )
         {
             v = m_Stream == null;
 
             return true;
         }
 
-        public override bool TryConvertDecimal(out decimal d)
+        public override bool TryConvertDecimal( out decimal d )
         {
             d = decimal.Zero;
 
             return false;
         }
 
-        public override bool TryConvertString(out string v)
+        public override bool TryConvertString( out string v )
         {
             v = $"Stream Object('{m_Stream}')";
 
@@ -165,13 +166,22 @@ namespace BadScript.Types
 
         #endregion
 
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Stream.GetHashCode() ^ m_InstanceFunctions.GetHashCode();
+        }
+
+        #endregion
+
         #region Private
 
         private ABSObject CloseFileStream()
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
             m_Stream.Close();
@@ -182,142 +192,142 @@ namespace BadScript.Types
 
         private ABSObject GetLength()
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
-            return new BSObject((decimal)m_Stream.Length);
+            return new BSObject( ( decimal )m_Stream.Length );
         }
 
         private ABSObject GetPosition()
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
-            return new BSObject((decimal)m_Stream.Position);
+            return new BSObject( ( decimal )m_Stream.Position );
         }
 
         private ABSObject ReadAll()
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
-            using (TextReader reader = new StreamReader(m_Stream))
+            using ( TextReader reader = new StreamReader( m_Stream ) )
 
             {
-                return new BSObject(reader.ReadToEnd());
+                return new BSObject( reader.ReadToEnd() );
             }
         }
 
         private ABSObject ReadAllBinary()
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
             byte[] buf = new byte[m_Stream.Length];
-            m_Stream.Read(buf, 0, buf.Length);
-            BSArray a = new BSArray(buf.Select(x => new BSObject((decimal)x)));
+            m_Stream.Read( buf, 0, buf.Length );
+            BSArray a = new BSArray( buf.Select( x => new BSObject( ( decimal )x ) ) );
 
             return a;
         }
 
         private ABSObject ReadLine()
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
-            using (TextReader reader = new StreamReader(m_Stream))
+            using ( TextReader reader = new StreamReader( m_Stream ) )
 
             {
-                return new BSObject(reader.ReadLine());
+                return new BSObject( reader.ReadLine() );
             }
         }
 
-        private ABSObject SetLength(ABSObject[] arg)
+        private ABSObject SetLength( ABSObject[] arg )
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
             ABSObject o = arg[0].ResolveReference();
-            m_Stream.SetLength((long)o.ConvertDecimal());
+            m_Stream.SetLength( ( long )o.ConvertDecimal() );
 
             return BSObject.Null;
         }
 
-        private ABSObject SetPosition(ABSObject[] arg)
+        private ABSObject SetPosition( ABSObject[] arg )
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
             ABSObject o = arg[0].ResolveReference();
 
-            m_Stream.Position = (long)o.ConvertDecimal();
+            m_Stream.Position = ( long )o.ConvertDecimal();
 
             return BSObject.Null;
         }
 
-        private ABSObject WriteBinary(ABSObject[] arg)
+        private ABSObject WriteBinary( ABSObject[] arg )
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
             ABSObject o = arg[0].ResolveReference();
 
-            if (o is ABSArray arr)
+            if ( o is ABSArray arr )
             {
-                for (int i = 0; i < arr.GetLength(); i++)
+                for ( int i = 0; i < arr.GetLength(); i++ )
                 {
-                    m_Stream.WriteByte((byte)arr.GetRawElement(i).ConvertDecimal());
+                    m_Stream.WriteByte( ( byte )arr.GetRawElement( i ).ConvertDecimal() );
                 }
             }
 
             return BSObject.Null;
         }
 
-        private ABSObject WriteLine(ABSObject[] arg)
+        private ABSObject WriteLine( ABSObject[] arg )
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
             ABSObject o = arg[0].ResolveReference();
 
-            using (TextWriter writer = new StreamWriter(m_Stream))
+            using ( TextWriter writer = new StreamWriter( m_Stream ) )
             {
-                writer.WriteLine(o.ConvertString());
+                writer.WriteLine( o.ConvertString() );
             }
 
             return BSObject.Null;
         }
 
-        private ABSObject WriteString(ABSObject[] arg)
+        private ABSObject WriteString( ABSObject[] arg )
         {
-            if (m_Stream == null)
+            if ( m_Stream == null )
             {
-                throw new BSRuntimeException(Position, "File Stream is Disposed");
+                throw new BSRuntimeException( Position, "File Stream is Disposed" );
             }
 
             ABSObject o = arg[0].ResolveReference();
 
-            using (TextWriter writer = new StreamWriter(m_Stream))
+            using ( TextWriter writer = new StreamWriter( m_Stream ) )
             {
-                writer.Write(o.ConvertString());
+                writer.Write( o.ConvertString() );
             }
 
             return BSObject.Null;

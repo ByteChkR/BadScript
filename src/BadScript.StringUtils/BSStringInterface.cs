@@ -18,17 +18,13 @@ namespace BadScript.StringUtils
         public BSStringInterface() : base( "String" )
         {
         }
-        private ABSObject EscapeString(ABSObject[] arg)
-        {
-            string str = arg[0].ConvertString();
 
-            return new BSObject(Uri.EscapeDataString(str));
-        }
         public override void AddApi( ABSTable apiRoot )
         {
-            apiRoot.InsertElement(new BSObject("Escape"), new BSFunction("function Escape(str)", EscapeString, 1));
-
-            
+            apiRoot.InsertElement(
+                                  new BSObject( "Escape" ),
+                                  new BSFunction( "function Escape(str)", EscapeString, 1 )
+                                 );
 
             apiRoot.InsertElement(
                                   "Trim",
@@ -89,37 +85,37 @@ namespace BadScript.StringUtils
 
             apiRoot.InsertElement(
                                   "StartsWith",
-                                  MakeFunction("function StartsWith(str, start)", StartsWith, 2, 2 )
+                                  MakeFunction( "function StartsWith(str, start)", StartsWith, 2, 2 )
                                  );
 
             //indexOf(str, searchStr)/indexOf(str, searchStr, start)
             apiRoot.InsertElement(
                                   "IndexOf",
-                                  MakeFunction("function IndexOf(str, searchStr)", IndexOf, 2, 2 )
+                                  MakeFunction( "function IndexOf(str, searchStr)", IndexOf, 2, 2 )
                                  );
 
             //insert(str, 
             apiRoot.InsertElement(
                                   "Insert",
-                                  MakeFunction("function Insert(str, index, s)", Insert, 3, 3 )
+                                  MakeFunction( "function Insert(str, index, s)", Insert, 3, 3 )
                                  );
 
             //lastIndexOf(str, searchStr)/lastIndexOf(str, searchStr, start)
             apiRoot.InsertElement(
                                   "LastIndexOf",
-                                  MakeFunction("function LastIndexOf(str, searchStr)", LastIndexOf, 2, 2 )
+                                  MakeFunction( "function LastIndexOf(str, searchStr)", LastIndexOf, 2, 2 )
                                  );
 
             //remove
             apiRoot.InsertElement(
                                   "Remove",
-                                  MakeFunction("function Remove(str, start, length)", Remove, 3, 3 )
+                                  MakeFunction( "function Remove(str, start, length)", Remove, 3, 3 )
                                  );
 
             //replace
             apiRoot.InsertElement(
                                   "Replace",
-                                  MakeFunction("function Replace(str, old, new)", Replace, 3, 3 )
+                                  MakeFunction( "function Replace(str, old, new)", Replace, 3, 3 )
                                  );
 
             //toArray
@@ -141,24 +137,24 @@ namespace BadScript.StringUtils
 
             apiRoot.InsertElement(
                                   "IsWhiteSpace",
-                                  MakeFunction("function IsWhiteSpace(str)", StringIsWhiteSpace, 1, 1 )
+                                  MakeFunction( "function IsWhiteSpace(str)", StringIsWhiteSpace, 1, 1 )
                                  );
 
             apiRoot.InsertElement(
                                   "IsLetter",
-                                  MakeFunction("function IsLetter(str)", StringIsLetter, 1, 1 )
+                                  MakeFunction( "function IsLetter(str)", StringIsLetter, 1, 1 )
                                  );
 
             apiRoot.InsertElement(
                                   "IsDigit",
-                                  MakeFunction("function IsDigit(str)", StringIsDigit, 1, 1 )
+                                  MakeFunction( "function IsDigit(str)", StringIsDigit, 1, 1 )
                                  );
 
             //toLower
 
             apiRoot.InsertElement(
                                   "ToLower",
-                                  MakeFunction("function ToLower(str)", ToLower, 1, 1 )
+                                  MakeFunction( "function ToLower(str)", ToLower, 1, 1 )
                                  );
 
             apiRoot.InsertElement(
@@ -303,6 +299,13 @@ namespace BadScript.StringUtils
         private static ABSObject ToUpper( ABSObject[] arg )
         {
             return new BSObject( arg[0].ConvertString().ToUpper() );
+        }
+
+        private ABSObject EscapeString( ABSObject[] arg )
+        {
+            string str = arg[0].ConvertString();
+
+            return new BSObject( Uri.EscapeDataString( str ) );
         }
 
         private ABSObject StringGetLength( ABSObject[] arg )

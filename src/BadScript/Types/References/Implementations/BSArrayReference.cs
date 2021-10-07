@@ -10,8 +10,6 @@ namespace BadScript.Types.References.Implementations
         private readonly int m_Key;
         private readonly bool m_ReadOnly;
 
-        public override bool IsNull() => Get().IsNull();
-
         #region Public
 
         public BSArrayReference( ABSArray table, int key, bool readOnly ) : base( table.Position )
@@ -44,12 +42,22 @@ namespace BadScript.Types.References.Implementations
             throw new BSRuntimeException( Position, $"Index is out of bounds: {m_Key}" );
         }
 
+        public override bool IsNull()
+        {
+            return Get().IsNull();
+        }
+
         #endregion
+
+        #region Protected
 
         protected override int GetHashCodeImpl()
         {
             return m_Key.GetHashCode() ^ m_SourceTable.GetHashCode();
         }
+
+        #endregion
+
     }
 
 }
