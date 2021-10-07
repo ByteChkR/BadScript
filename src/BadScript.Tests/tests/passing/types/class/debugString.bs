@@ -1,0 +1,6 @@
+class TestType
+{
+	
+}
+Environment.Debug(new TestType())
+return true
