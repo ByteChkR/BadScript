@@ -1,0 +1,3 @@
+TestType = Reflection.GetType("TestType")
+dbg = Environment.Debug(TestType)
+return true
