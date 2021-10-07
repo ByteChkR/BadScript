@@ -1,0 +1,14 @@
+t = {
+	a = 0
+}
+
+aVar = null
+aVal = null
+
+foreach k in t
+{
+	aVar = k
+	aVal = t[k]
+}
+
+return aVar == "a" && aVal == 0

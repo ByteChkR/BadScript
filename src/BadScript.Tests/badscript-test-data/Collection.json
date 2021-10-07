@@ -1,0 +1,142 @@
+{
+  "PropertyTests": [],
+  "FunctionTests": [
+    {
+      "ReturnObjectAction": null,
+      "Name": "Collection.Size",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{ A = 123, B = null, C = true }"
+          ],
+          "ReturnObjectAction": "return args[0] == 3"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[ 123, null, true ]"
+          ],
+          "ReturnObjectAction": "return args[0] == 3"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Collection.Keys",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{ A = 123, B = null, C = true }"
+          ],
+          "ReturnObjectAction": "return args[0][0] == \"A\" && args[0][1] == \"B\" && args[0][2] == \"C\""
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Collection.Values",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{ A = 123, B = null, C = true }"
+          ],
+          "ReturnObjectAction": "return args[0][0] == 123 && args[0][1] == null && args[0][2] == true"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Collection.Lock",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{ A = 123, B = null, C = true }"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[ 123, null, true ]"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Collection.HasKey",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "KeyExists",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{ A = 123, B = null, C = true }",
+            "\"A\""
+          ],
+          "ReturnObjectAction": "return args[0] == true"
+        },
+        {
+          "Name": "KeyNotFound",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{ A = 123, B = null, C = true }",
+            "\"Z\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    }
+  ]
+}

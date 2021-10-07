@@ -1,0 +1,691 @@
+{
+  "PropertyTests": [
+    {
+      "Name": "Environment.Settings",
+      "ReturnObjectAction": "args[0] != null"
+    }
+  ],
+  "FunctionTests": [
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.DefaultOp",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullNullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "OpAdditionArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "+",
+            "1",
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == 2"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.CreateScope",
+      "Tests": [
+        {
+          "Name": "NoArguments",
+          "CrashIsPass": false,
+          "Arguments": [],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ScopeArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "__SELF"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.ResetScope",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ScopeArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "Environment.CreateScope()"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.LoadScopedString",
+      "Tests": [
+        {
+          "Name": "NullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullNullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "Environment.CreateScope()",
+            "\"return true\""
+          ],
+          "ReturnObjectAction": "return args[0]"
+        },
+        {
+          "Name": "StringArgsArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "Environment.CreateScope()",
+            "\"return args[0]\"",
+            "[ true ]"
+          ],
+          "ReturnObjectAction": "return args[0]"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.LoadScopedBenchmark",
+      "Tests": [
+        {
+          "Name": "NullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullNullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "Environment.CreateScope()",
+            "\"return true\""
+          ],
+          "ReturnObjectAction": "return args[0]"
+        },
+        {
+          "Name": "StringArgsArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "Environment.CreateScope()",
+            "\"return args[0]\"",
+            "[ true ]"
+          ],
+          "ReturnObjectAction": "return args[0]"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.AddPreprocessor",
+      "Tests": [
+        {
+          "Name": "NullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.LoadString",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullNullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"return true\""
+          ],
+          "ReturnObjectAction": "return args[0]"
+        },
+        {
+          "Name": "StringArgsArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"return args[0]\"",
+            "[ true ]"
+          ],
+          "ReturnObjectAction": "return args[0]"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.LoadBenchmark",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullNullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"return true\""
+          ],
+          "ReturnObjectAction": "return args[0]"
+        },
+        {
+          "Name": "StringArgsArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"return args[0]\"",
+            "[ true ]"
+          ],
+          "ReturnObjectAction": "return args[0]"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.LoadInterface",
+      "Tests": [
+        {
+          "Name": "NullNullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"1\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"Environment\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableTableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}",
+            "{ }"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayTableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]",
+            "{ }"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberTableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"1\"",
+            "{ }"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolTableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true",
+            "{ }"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringTableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"Environment\"",
+            "{ }"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionTableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }",
+            "{ }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.GetInterfaceNames",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.HasInterface",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"1\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.Error",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"1\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.Sleep",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.Debug",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"1\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"SGVsbG9Xb3JsZA==\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    }
+  ]
+}

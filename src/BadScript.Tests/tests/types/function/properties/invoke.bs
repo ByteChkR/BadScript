@@ -1,0 +1,7 @@
+r = false
+function f()
+{
+	r = true
+}
+f.Invoke([])
+return r

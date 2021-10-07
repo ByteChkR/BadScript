@@ -6,6 +6,7 @@ using BadScript.ConsoleUtils;
 using BadScript.Http;
 using BadScript.HttpServer;
 using BadScript.Imaging;
+using BadScript.Interfaces;
 using BadScript.Interfaces.Collection;
 using BadScript.Interfaces.Convert;
 using BadScript.Interfaces.Versioning;
@@ -19,14 +20,29 @@ using BadScript.Types;
 using BadScript.Xml;
 using BadScript.Zip;
 
+using Newtonsoft.Json;
+
 using NUnit.Framework;
 
 namespace BadScript.Tests
 {
-    public class ScopeTests : ABSUnitTest
+
+    public class CollectionInterfaceTestWrapper : ABSScriptInterfaceUnitTestWrapper
+    {
+        public CollectionInterfaceTestWrapper() : base( new BSCollectionInterface() )
+        {
+        }
+        
+    }
+    public class CollectionInterfaceTests : ABSInterfaceUnitTest <CollectionInterfaceTestWrapper>
     {
 
-        public static string[] GenerateTestCases() => PopulateKeyMap("/tests/scope/");
+        
+
+    }
+    public class CollectionHandWrittenTests : ABSUnitTest
+    {
+        public static string[] GenerateTestCases() => PopulateKeyMap("/tests/interfaces/collection/");
 
         [Test]
         [TestCaseSource(nameof(GenerateTestCases))]
@@ -34,8 +50,6 @@ namespace BadScript.Tests
         {
             RunTest(key, x => Assert.True(x.ConvertBool()));
         }
-
     }
 
-    
 }

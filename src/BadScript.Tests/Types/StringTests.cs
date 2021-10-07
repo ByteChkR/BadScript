@@ -23,10 +23,10 @@ using NUnit.Framework;
 
 namespace BadScript.Tests
 {
-    public class ScopeTests : ABSUnitTest
+    public class StringTests : ABSUnitTest
     {
 
-        public static string[] GenerateTestCases() => PopulateKeyMap("/tests/scope/");
+        public static string[] GenerateTestCases() => PopulateKeyMap("/tests/types/string/");
 
         [Test]
         [TestCaseSource(nameof(GenerateTestCases))]
@@ -36,6 +36,6 @@ namespace BadScript.Tests
         }
 
     }
-
     
+
 }

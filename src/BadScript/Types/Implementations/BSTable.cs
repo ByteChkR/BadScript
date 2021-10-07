@@ -39,19 +39,7 @@ namespace BadScript.Types.Implementations
             m_InnerTable = startObjects;
         }
 
-        public static BSTable FromEnum < T >() where T : Enum
-        {
-            BSTable t = new BSTable( SourcePosition.Unknown );
-            string[] keys = Enum.GetNames( typeof( T ) );
-
-            foreach ( string key in keys )
-            {
-                int v = ( int )Enum.Parse( typeof( T ), key );
-                t.InsertElement( new BSObject( key ), new BSObject( ( decimal )v ) );
-            }
-
-            return t;
-        }
+        
 
         public override void Clear()
         {

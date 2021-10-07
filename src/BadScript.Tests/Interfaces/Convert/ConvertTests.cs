@@ -6,6 +6,7 @@ using BadScript.ConsoleUtils;
 using BadScript.Http;
 using BadScript.HttpServer;
 using BadScript.Imaging;
+using BadScript.Interfaces;
 using BadScript.Interfaces.Collection;
 using BadScript.Interfaces.Convert;
 using BadScript.Interfaces.Versioning;
@@ -23,10 +24,24 @@ using NUnit.Framework;
 
 namespace BadScript.Tests
 {
-    public class ScopeTests : ABSUnitTest
+
+    public class ConvertInterfaceTestWrapper : ABSScriptInterfaceUnitTestWrapper
     {
 
-        public static string[] GenerateTestCases() => PopulateKeyMap("/tests/scope/");
+        public ConvertInterfaceTestWrapper(  ) : base( new BSConvertInterface())
+        {
+        }
+
+    }
+    public class ConvertInterfaceTests : ABSInterfaceUnitTest <ConvertInterfaceTestWrapper>
+    {
+
+
+    }
+
+    public class ConvertHandWrittenTests : ABSUnitTest
+    {
+        public static string[] GenerateTestCases() => PopulateKeyMap("/tests/interfaces/convert/");
 
         [Test]
         [TestCaseSource(nameof(GenerateTestCases))]
@@ -34,8 +49,6 @@ namespace BadScript.Tests
         {
             RunTest(key, x => Assert.True(x.ConvertBool()));
         }
-
     }
 
-    
 }

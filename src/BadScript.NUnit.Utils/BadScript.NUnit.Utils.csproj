@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.13.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BadScript.UnitTests\BadScript.UnitTests.csproj" />
+    <ProjectReference Include="..\BadScript\BadScript.csproj" />
+  </ItemGroup>
+
+</Project>

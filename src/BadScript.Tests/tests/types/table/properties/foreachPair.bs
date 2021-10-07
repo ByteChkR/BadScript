@@ -1,0 +1,14 @@
+t = {
+	a = 0
+}
+
+aVar = null
+aVal = null
+
+foreach (k, v) in t
+{
+	aVar = k
+	aVal = v
+}
+
+return aVar == "a" && aVal == 0

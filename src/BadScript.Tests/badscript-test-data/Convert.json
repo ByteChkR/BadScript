@@ -1,0 +1,811 @@
+{
+  "PropertyTests": [],
+  "FunctionTests": [
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.IsTable",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.IsType",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.IsLiteral",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.IsString",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.IsNumber",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.IsBoolean",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.IsArray",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.IsFunction",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.Base64.To",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == \"\""
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"1\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.Base64.From",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"1\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"SGVsbG9Xb3JsZA==\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.ToNumber",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"1\""
+          ],
+          "ReturnObjectAction": "return args[0] == 1"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.ToBoolean",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"true\""
+          ],
+          "ReturnObjectAction": "return args[0]"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Convert.ToString",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": "return args[0] == false"
+        }
+      ]
+    }
+  ]
+}

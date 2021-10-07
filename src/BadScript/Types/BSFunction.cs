@@ -43,7 +43,10 @@ namespace BadScript.Types
         private static readonly Dictionary < Thread, Stack < BSFunction > > s_Stacks =
             new Dictionary < Thread, Stack < BSFunction > >();
 
-        private readonly (int min, int max)? m_ParameterCount;
+        private readonly (int min, int max) m_ParameterCount;
+
+        public int MinParameters => m_ParameterCount.min;
+        public int MaxParameters => m_ParameterCount.max;
 
         private readonly List < BSFunction > m_Hooks = new List < BSFunction >();
         private readonly Dictionary < string, BSCachedFunction > m_Properties;
@@ -262,16 +265,9 @@ namespace BadScript.Types
                     }
                 }
             }
+            
 
-            if ( m_ParameterCount == null )
-            {
-                ABSObject o = m_Func( args );
-                PopStack();
-
-                return o;
-            }
-
-            ( int min, int max ) = m_ParameterCount.Value;
+            ( int min, int max ) = m_ParameterCount;
 
             if ( args.Length < min || args.Length > max )
             {

@@ -1,0 +1,162 @@
+{
+  "PropertyTests": [
+    {
+      "Name": "Versioning.RuntimeVersion",
+      "ReturnObjectAction": null
+    }
+  ],
+  "FunctionTests": [
+    {
+      "ReturnObjectAction": null,
+      "Name": "Versioning.Parse",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"1\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"1.0.0.0\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Versioning.Create",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null",
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ValidArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Versioning.CalVer",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "TableArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "{}"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ArrayArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "[]"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "NumberArgument",
+          "CrashIsPass": false,
+          "Arguments": [
+            "1"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "BoolArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "true"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "StringArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "\"\""
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "FunctionArgument",
+          "CrashIsPass": true,
+          "Arguments": [
+            "function() { }"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    }
+  ]
+}

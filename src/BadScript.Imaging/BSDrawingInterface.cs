@@ -6,6 +6,7 @@ using System.Linq;
 using BadScript.Exceptions;
 using BadScript.Interfaces;
 using BadScript.Parser.Expressions;
+using BadScript.Reflection;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
@@ -39,7 +40,7 @@ namespace BadScript.Imaging
                                new BSFunction( "function Color(a, r, g, b)/Color(r, g, b)", CreateColorApi, 3, 4 )
                               );
 
-            root.InsertElement( new BSObject( "RotateFlipType" ), BSTable.FromEnum < RotateFlipType >() );
+            root.InsertElement( new BSObject( "RotateFlipType" ), EnumBuilder<RotateFlipType>.Build () );
         }
 
         #endregion

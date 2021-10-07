@@ -1,0 +1,14 @@
+class Test
+{
+	A = 0
+	B = true
+	C = "Hello World"
+}
+
+count = 0
+foreach	(k, v) in new Test()
+{
+	count += 1
+}
+
+return count == 8

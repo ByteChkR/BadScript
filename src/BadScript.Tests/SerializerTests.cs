@@ -12,6 +12,7 @@ using BadScript.Interfaces.Versioning;
 using BadScript.IO;
 using BadScript.Json;
 using BadScript.Math;
+using BadScript.NUnit.Utils;
 using BadScript.Parser.Expressions;
 using BadScript.Process;
 using BadScript.Serialization;
@@ -24,93 +25,18 @@ using NUnit.Framework;
 
 namespace BadScript.Tests
 {
-
-    public class SerializerTests
+    public class SerializerTests : ABSUnitTest
     {
 
-        private static Dictionary < string, string > m_Files = new Dictionary < string, string >();
-
-        private BSEngine m_Engine;
-
-        #region Public
+        public static string[] GenerateTestCases() => PopulateKeyMap("/tests/");
 
         [Test]
-        [TestCaseSource( nameof( TestFiles ) )]
-        public void RunTest( string key )
+        [TestCaseSource(nameof(GenerateTestCases))]
+        public void Test(string key)
         {
-            string file = m_Files[key];
-            BSExpression[] expressions = m_Engine.ParseFile( file );
-            MemoryStream ms = new MemoryStream();
-            BSSerializer.Serialize( expressions, ms );
-            ms.Position = 0;
-
-            expressions = BSSerializer.Deserialize( ms );
-
-            ABSObject o = m_Engine.LoadScript( expressions );
-            Assert.IsTrue( o.ConvertBool() );
+            RunTest(key, x => Assert.True(x.ConvertBool()));
         }
-
-        [Test]
-        [TestCaseSource( nameof( TestFiles ) )]
-        public void RunTestUncached( string key )
-        {
-            string file = m_Files[key];
-            BSExpression[] expressions = m_Engine.ParseFile( file );
-            MemoryStream ms = new MemoryStream();
-            BSSerializer.Serialize( expressions, ms, BSSerializerHints.NoStringCache );
-            ms.Position = 0;
-
-            expressions = BSSerializer.Deserialize( ms );
-
-            ABSObject o = m_Engine.LoadScript( expressions );
-            Assert.IsTrue( o.ConvertBool() );
-        }
-
-        [SetUp]
-        public void Setup()
-        {
-            BSEngineSettings es = BSEngineSettings.MakeDefault();
-            es.Interfaces.Add(new BSCollectionInterface());
-            es.Interfaces.Add(new BSConvertInterface());
-            es.Interfaces.Add( new BSSystemConsoleInterface() );
-            es.Interfaces.Add( new BS2JsonInterface() );
-            es.Interfaces.Add( new Json2BSInterface() );
-            es.Interfaces.Add( new BSFileSystemInterface() );
-            es.Interfaces.Add( new BSFileSystemPathInterface( AppDomain.CurrentDomain.BaseDirectory ) );
-            es.Interfaces.Add( new BSMathInterface() );
-            es.Interfaces.Add( new BSHttpInterface() );
-            es.Interfaces.Add( new BSHttpServerInterface() );
-            es.Interfaces.Add( new BSProcessInterface() );
-            es.Interfaces.Add( new BSStringInterface() );
-            es.Interfaces.Add( new BSZipInterface() );
-            es.Interfaces.Add( new BSDrawingInterface() );
-            es.Interfaces.Add( new BSVersioningInterface() );
-            es.Interfaces.Add( new BSXmlInterface() );
-            m_Engine = es.Build();
-        }
-
-        #endregion
-
-        #region Private
-
-        private static string[] TestFiles()
-        {
-            string testDir = TestContext.CurrentContext.TestDirectory + "/tests/";
-            string[] files = Directory.GetFiles( testDir, "*", SearchOption.AllDirectories );
-
-            for ( int i = 0; i < files.Length; i++ )
-            {
-                string file = files[i];
-                string key = file.Remove( 0, testDir.Length );
-                m_Files[key] = file;
-                files[i] = key;
-            }
-
-            return files;
-        }
-
-        #endregion
 
     }
-
+    
 }
