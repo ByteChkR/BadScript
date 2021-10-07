@@ -1,3 +1,5 @@
+using System.Linq;
+
 using BadScript.NUnit.Utils;
 
 using NUnit.Framework;
@@ -16,10 +18,10 @@ namespace BadScript.Tests.Types
         }
 
         [Test]
-        [TestCaseSource( nameof( GenerateTestCases ) )]
-        public void Test( string key )
+        [TestCaseSource(nameof(GenerateTestCases))]
+        public void Test(string key)
         {
-            RunTest( key, x => Assert.True( x.ConvertBool() ) );
+            RunTest(key, x => Assert.True(x.ConvertBool()));
         }
 
         #endregion

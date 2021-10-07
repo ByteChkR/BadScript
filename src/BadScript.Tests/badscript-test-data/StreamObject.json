@@ -1,0 +1,187 @@
+{
+  "PropertyTests": [],
+  "FunctionTests": [
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.write",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ValidArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"TEST\""
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.writeb",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ValidArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "[ 1, 2, 3 ]"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.writeLine",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ValidArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "\"TEST\""
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.readLine",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.readbAll",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.readAll",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.getPosition",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.setPosition",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ValidArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "10"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.getLength",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.setLength",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "ValidArguments",
+          "CrashIsPass": false,
+          "Arguments": [
+            "100"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "stream.close",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": false,
+          "Arguments": [],
+          "ReturnObjectAction": null
+        }
+      ]
+    }
+  ]
+}
