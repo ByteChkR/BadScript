@@ -1,27 +1,27 @@
-xml = environment.loadInterface("xml")
-fs = environment.loadInterface("fs")
-path = environment.loadInterface("path")
-versioning = environment.loadInterface("versioning")
+xml = Environment.LoadInterface("Xml")
+fs = Environment.LoadInterface("FileSystem")
+path = Environment.LoadInterface("Path")
+versioning = Environment.LoadInterface("Versioning")
 
 function loadCSProject(p)
 {
-	return xml.createDoc(fs.readAll(p))
+	return xml.CreateDoc(fs.ReadAll(p))
 }
 
 function getProjectVersion(projDoc)
 {
-	projNode = projDoc.findChild("Project")
-	propNode = projNode.findChild("PropertyGroup")
-	versionNode = propNode.findChild("Version")
+	projNode = projDoc.FindChild("Project")
+	propNode = projNode.FindChild("PropertyGroup")
+	versionNode = propNode.FindChild("Version")
 	return versionNode
 }
 
 function setProjectVersion(projDoc, version)
 {
-	projNode = projDoc.findChild("Project")
-	propNode = projNode.findChild("PropertyGroup")
-	versionNode = propNode.findChild("Version")
-	versionNode.innerText = version
+	projNode = projDoc.FindChild("Project")
+	propNode = projNode.FindChild("PropertyGroup")
+	versionNode = propNode.FindChild("Version")
+	versionNode.InnerText = version
 }
 
 function updateProjectVersion(p)
@@ -30,23 +30,23 @@ function updateProjectVersion(p)
 	doc = loadCSProject(p)
 	version = getProjectVersion(doc)
 
-	oldVersion = versioning.parse(version.innerText)
-	newVersion = oldVersion.change(verFmt)
+	oldVersion = versioning.Parse(version.InnerText)
+	newVersion = oldVersion.Change(verFmt)
 
 
-	str = path.getFileNameWithoutExtension(p) + ": " + oldVersion + " => " + newVersion
+	str = path.GetFileNameWithoutExtension(p) + ": " + oldVersion + " => " + newVersion
 	
-	print(str)
+	Console.WriteLine(str)
 
 	setProjectVersion(doc, newVersion)
 
-	fs.writeAll(p, doc.toString())
+	fs.WriteAll(p, doc.ToString())
 }
 
-if(args.size() == 1)
+if(args.Size() == 1)
 {
-	print("Directory: " + args[0])
-	files = fs.getFiles(args[0], "*.csproj", true)
+	Console.WriteLine("Directory: " + args[0])
+	files = fs.GetFiles(args[0], "*.csproj", true)
 	foreach file in files
 	{
 		updateProjectVersion(file)
@@ -55,24 +55,24 @@ if(args.size() == 1)
 }
 
 
-print("Write 'exit' to quit")
+Console.WriteLine("Write 'exit' to quit")
 while(true)
 {
-	write("CS Project Path: ")
-	url = read()
+	Console.WriteLine("CS Project Path: ")
+	url = Console.ReadLine()
 	if(url == "exit")
 	{
 		break
 	}
-	if(fs.exists(url))
+	if(fs.Exists(url))
 	{
-		if(fs.isFile(url))
+		if(fs.IsFile(url))
 		{
 			updateProjectVersion(url)
 		}
 		else
 		{
-			files = fs.getFiles(url, "*.csproj", 1)
+			files = fs.GetFiles(url, "*.csproj", 1)
 			foreach file in files
 			{
 				updateProjectVersion(file)
@@ -81,7 +81,7 @@ while(true)
 	}
 	else
 	{
-		print("File does not exist!")
+		Console.WriteLine("File does not exist!")
 	}
 }
 

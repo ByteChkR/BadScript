@@ -1,16 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>2021.10.8.0</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.13.2" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\BadScript.UnitTests\BadScript.UnitTests.csproj" />
     <ProjectReference Include="..\BadScript\BadScript.csproj" />
   </ItemGroup>
-
 </Project>
