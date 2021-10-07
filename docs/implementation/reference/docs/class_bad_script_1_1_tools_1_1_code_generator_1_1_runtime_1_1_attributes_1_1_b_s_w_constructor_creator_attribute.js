@@ -1,7 +1,0 @@
-var class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_constructor_creator_attribute =
-[
-    [ "BSWConstructorCreatorAttribute", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_constructor_creator_attribute.html#a1aa4fd709edca9da88e3f97281f6d20a", null ],
-    [ "ConstructorCreatorType", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_constructor_creator_attribute.html#a5f2f7e1cd74aca8a74a6b90bd4efd22f", null ],
-    [ "HasValidConstructor", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_constructor_creator_attribute.html#a5787c8c35b8fe027151be939967c2c1a", null ],
-    [ "IsCreatorType", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_constructor_creator_attribute.html#a0e7e431c0a48bf4e084db4de283926f9", null ]
-];

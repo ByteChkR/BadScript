@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['name_842',['Name',['../class_bad_script_1_1_namespaces_1_1_b_s_namespace.html#aa406cde50ad7325808ecfae93b712813',1,'BadScript::Namespaces::BSNamespace']]],
-  ['namespace_843',['Namespace',['../class_bad_script_1_1_scopes_1_1_b_s_scope.html#a08fc54d754a226843fd107749fed17ff',1,'BadScript::Scopes::BSScope']]]
+  ['name_868',['Name',['../class_bad_script_1_1_namespaces_1_1_b_s_namespace.html#aa406cde50ad7325808ecfae93b712813',1,'BadScript::Namespaces::BSNamespace']]],
+  ['namespace_869',['Namespace',['../class_bad_script_1_1_scopes_1_1_b_s_scope.html#a08fc54d754a226843fd107749fed17ff',1,'BadScript::Scopes::BSScope']]]
 ];

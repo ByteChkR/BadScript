@@ -1,5 +1,17 @@
 var hierarchy =
 [
+    [ "BadScript.NUnit.Utils.ABSInterfaceUnitTest< CollectionInterfaceTestWrapper >", "class_bad_script_1_1_n_unit_1_1_utils_1_1_a_b_s_interface_unit_test.html", [
+      [ "BadScript.Tests.Interfaces.Collection.CollectionInterfaceTests", "class_bad_script_1_1_tests_1_1_interfaces_1_1_collection_1_1_collection_interface_tests.html", null ]
+    ] ],
+    [ "BadScript.NUnit.Utils.ABSInterfaceUnitTest< ConvertInterfaceTestWrapper >", "class_bad_script_1_1_n_unit_1_1_utils_1_1_a_b_s_interface_unit_test.html", [
+      [ "BadScript.Tests.Interfaces.Convert.ConvertInterfaceTests", "class_bad_script_1_1_tests_1_1_interfaces_1_1_convert_1_1_convert_interface_tests.html", null ]
+    ] ],
+    [ "BadScript.NUnit.Utils.ABSInterfaceUnitTest< EnvironmentInterfaceTestWrapper >", "class_bad_script_1_1_n_unit_1_1_utils_1_1_a_b_s_interface_unit_test.html", [
+      [ "BadScript.Tests.Interfaces.Environment.EnvironmentInterfaceTests", "class_bad_script_1_1_tests_1_1_interfaces_1_1_environment_1_1_environment_interface_tests.html", null ]
+    ] ],
+    [ "BadScript.NUnit.Utils.ABSInterfaceUnitTest< VersioningInterfaceTestWrapper >", "class_bad_script_1_1_n_unit_1_1_utils_1_1_a_b_s_interface_unit_test.html", [
+      [ "BadScript.Tests.Interfaces.Versioning.VersioningInterfaceTests", "class_bad_script_1_1_tests_1_1_interfaces_1_1_versioning_1_1_versioning_interface_tests.html", null ]
+    ] ],
     [ "BadScript.Parser.OperatorImplementations.ABSOperatorImplementation", "class_bad_script_1_1_parser_1_1_operator_implementations_1_1_a_b_s_operator_implementation.html", [
       [ "BadScript.Parser.OperatorImplementations.BSOperatorImplementation", "class_bad_script_1_1_parser_1_1_operator_implementations_1_1_b_s_operator_implementation.html", null ],
       [ "BadScript.Parser.OperatorImplementations.Implementations.BSArrayAccessOperatorImplementation", "class_bad_script_1_1_parser_1_1_operator_implementations_1_1_implementations_1_1_b_s_array_access_operator_implementation.html", null ],
@@ -63,24 +75,50 @@ var hierarchy =
       [ "BadScript.Json.BS2JsonInterface", "class_bad_script_1_1_json_1_1_b_s2_json_interface.html", null ],
       [ "BadScript.Json.Json2BSInterface", "class_bad_script_1_1_json_1_1_json2_b_s_interface.html", null ],
       [ "BadScript.Math.BSMathInterface", "class_bad_script_1_1_math_1_1_b_s_math_interface.html", null ],
+      [ "BadScript.NUnit.Utils.ABSScriptInterfaceUnitTestWrapper", "class_bad_script_1_1_n_unit_1_1_utils_1_1_a_b_s_script_interface_unit_test_wrapper.html", [
+        [ "BadScript.Tests.Interfaces.Collection.CollectionInterfaceTestWrapper", "class_bad_script_1_1_tests_1_1_interfaces_1_1_collection_1_1_collection_interface_test_wrapper.html", null ],
+        [ "BadScript.Tests.Interfaces.Convert.ConvertInterfaceTestWrapper", "class_bad_script_1_1_tests_1_1_interfaces_1_1_convert_1_1_convert_interface_test_wrapper.html", null ],
+        [ "BadScript.Tests.Interfaces.Environment.EnvironmentInterfaceTestWrapper", "class_bad_script_1_1_tests_1_1_interfaces_1_1_environment_1_1_environment_interface_test_wrapper.html", null ],
+        [ "BadScript.Tests.Interfaces.Versioning.VersioningInterfaceTestWrapper", "class_bad_script_1_1_tests_1_1_interfaces_1_1_versioning_1_1_versioning_interface_test_wrapper.html", null ]
+      ] ],
       [ "BadScript.Process.BSProcessInterface", "class_bad_script_1_1_process_1_1_b_s_process_interface.html", null ],
       [ "BadScript.Reflection.BSReflectionInterface", "class_bad_script_1_1_reflection_1_1_b_s_reflection_interface.html", null ],
       [ "BadScript.StringUtils.BSStringInterface", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface.html", null ],
+      [ "BadScript.UnitTests.BSUnitTestInterface", "class_bad_script_1_1_unit_tests_1_1_b_s_unit_test_interface.html", null ],
       [ "BadScript.Xml.BSXmlInterface", "class_bad_script_1_1_xml_1_1_b_s_xml_interface.html", null ],
       [ "BadScript.Zip.BSZipInterface", "class_bad_script_1_1_zip_1_1_b_s_zip_interface.html", null ]
     ] ],
     [ "BadScript.Interfaces.ABSTableInterfaceExtensions", "class_bad_script_1_1_interfaces_1_1_a_b_s_table_interface_extensions.html", null ],
+    [ "BadScript.NUnit.Utils.ABSUnitTest", "class_bad_script_1_1_n_unit_1_1_utils_1_1_a_b_s_unit_test.html", [
+      [ "BadScript.NUnit.Utils.ABSInterfaceUnitTest< T >", "class_bad_script_1_1_n_unit_1_1_utils_1_1_a_b_s_interface_unit_test.html", null ],
+      [ "BadScript.Tests.FailingTests.AFailingBSParserUnitTest", "class_bad_script_1_1_tests_1_1_failing_tests_1_1_a_failing_b_s_parser_unit_test.html", [
+        [ "BadScript.Tests.FailingTests.InvalidSyntaxTests", "class_bad_script_1_1_tests_1_1_failing_tests_1_1_invalid_syntax_tests.html", null ]
+      ] ],
+      [ "BadScript.Tests.FailingTests.AFailingBSUnitTest", "class_bad_script_1_1_tests_1_1_failing_tests_1_1_a_failing_b_s_unit_test.html", [
+        [ "BadScript.Tests.FailingTests.InvalidOperationTests", "class_bad_script_1_1_tests_1_1_failing_tests_1_1_invalid_operation_tests.html", null ]
+      ] ],
+      [ "BadScript.Tests.Interfaces.Collection.CollectionHandWrittenTests", "class_bad_script_1_1_tests_1_1_interfaces_1_1_collection_1_1_collection_hand_written_tests.html", null ],
+      [ "BadScript.Tests.Interfaces.Convert.ConvertHandWrittenTests", "class_bad_script_1_1_tests_1_1_interfaces_1_1_convert_1_1_convert_hand_written_tests.html", null ],
+      [ "BadScript.Tests.Interfaces.Environment.EnvironmentHandWrittenTests", "class_bad_script_1_1_tests_1_1_interfaces_1_1_environment_1_1_environment_hand_written_tests.html", null ],
+      [ "BadScript.Tests.Interfaces.Reflection.ReflectionTests", "class_bad_script_1_1_tests_1_1_interfaces_1_1_reflection_1_1_reflection_tests.html", null ],
+      [ "BadScript.Tests.Operators.AssignmentTests", "class_bad_script_1_1_tests_1_1_operators_1_1_assignment_tests.html", null ],
+      [ "BadScript.Tests.Operators.BlockTests", "class_bad_script_1_1_tests_1_1_operators_1_1_block_tests.html", null ],
+      [ "BadScript.Tests.Operators.MathTests", "class_bad_script_1_1_tests_1_1_operators_1_1_math_tests.html", null ],
+      [ "BadScript.Tests.Operators.NamespaceTests", "class_bad_script_1_1_tests_1_1_operators_1_1_namespace_tests.html", null ],
+      [ "BadScript.Tests.Operators.OverrideTests", "class_bad_script_1_1_tests_1_1_operators_1_1_override_tests.html", null ],
+      [ "BadScript.Tests.ParserTests", "class_bad_script_1_1_tests_1_1_parser_tests.html", null ],
+      [ "BadScript.Tests.ScopeTests", "class_bad_script_1_1_tests_1_1_scope_tests.html", null ],
+      [ "BadScript.Tests.SerializerTests", "class_bad_script_1_1_tests_1_1_serializer_tests.html", null ],
+      [ "BadScript.Tests.Types.ArrayTests", "class_bad_script_1_1_tests_1_1_types_1_1_array_tests.html", null ],
+      [ "BadScript.Tests.Types.BooleanTests", "class_bad_script_1_1_tests_1_1_types_1_1_boolean_tests.html", null ],
+      [ "BadScript.Tests.Types.ClassTests", "class_bad_script_1_1_tests_1_1_types_1_1_class_tests.html", null ],
+      [ "BadScript.Tests.Types.FunctionTests", "class_bad_script_1_1_tests_1_1_types_1_1_function_tests.html", null ],
+      [ "BadScript.Tests.Types.NumberTests", "class_bad_script_1_1_tests_1_1_types_1_1_number_tests.html", null ],
+      [ "BadScript.Tests.Types.StringTests", "class_bad_script_1_1_tests_1_1_types_1_1_string_tests.html", null ],
+      [ "BadScript.Tests.Types.TableTests", "class_bad_script_1_1_tests_1_1_types_1_1_table_tests.html", null ]
+    ] ],
     [ "BadScript.Console.AppPackage.AppBuilder", "class_bad_script_1_1_console_1_1_app_package_1_1_app_builder.html", null ],
     [ "BadScript.Console.AppPackage.AppPackageRunner", "class_bad_script_1_1_console_1_1_app_package_1_1_app_package_runner.html", null ],
-    [ "BadScript.Tests.ArrayTests", "class_bad_script_1_1_tests_1_1_array_tests.html", null ],
-    [ "BadScript.Tests.AssignmentTests", "class_bad_script_1_1_tests_1_1_assignment_tests.html", null ],
-    [ "Attribute", null, [
-      [ "BadScript.Tools.CodeGenerator.Runtime.Attributes.BSWConstructorCreatorAttribute", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_constructor_creator_attribute.html", null ],
-      [ "BadScript.Tools.CodeGenerator.Runtime.Attributes.BSWIgnoreAttribute", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_ignore_attribute.html", null ],
-      [ "BadScript.Tools.CodeGenerator.Runtime.Attributes.BSWNameAttribute", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_name_attribute.html", null ]
-    ] ],
-    [ "BadScript.Tests.BlockTests", "class_bad_script_1_1_tests_1_1_block_tests.html", null ],
-    [ "BadScript.Tests.BooleanTests", "class_bad_script_1_1_tests_1_1_boolean_tests.html", null ],
     [ "BadScript.Console.AppPackage.BSAppPackageManifest", "struct_bad_script_1_1_console_1_1_app_package_1_1_b_s_app_package_manifest.html", null ],
     [ "BadScript.Parser.Operators.Implementations.BSBinaryOperatorMetaData", "class_bad_script_1_1_parser_1_1_operators_1_1_implementations_1_1_b_s_binary_operator_meta_data.html", null ],
     [ "BadScript.Types.BSFunction.BSCachedFunction", "class_bad_script_1_1_types_1_1_b_s_function_1_1_b_s_cached_function.html", null ],
@@ -106,7 +144,6 @@ var hierarchy =
         [ "BadScript.Parser.Expressions.Implementations.Binary.BSAssignExpression", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_binary_1_1_b_s_assign_expression.html", null ]
       ] ],
       [ "BadScript.Parser.Expressions.Implementations.Block.BSBlockExpression", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_block_1_1_b_s_block_expression.html", null ],
-      [ "BadScript.Parser.Expressions.Implementations.Block.BSEnumerableFunctionDefinitionExpression", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_block_1_1_b_s_enumerable_function_definition_expression.html", null ],
       [ "BadScript.Parser.Expressions.Implementations.Block.BSFunctionDefinitionExpression", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_block_1_1_b_s_function_definition_expression.html", null ],
       [ "BadScript.Parser.Expressions.Implementations.Block.BSIfExpression", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_block_1_1_b_s_if_expression.html", null ],
       [ "BadScript.Parser.Expressions.Implementations.Block.BSTryExpression", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_block_1_1_b_s_try_expression.html", null ],
@@ -138,7 +175,6 @@ var hierarchy =
       [ "BadScript.Serialization.Serializers.BsBreakExpressionSerializer", "class_bad_script_1_1_serialization_1_1_serializers_1_1_bs_break_expression_serializer.html", null ],
       [ "BadScript.Serialization.Serializers.BsClassDefExpressionSerializer", "class_bad_script_1_1_serialization_1_1_serializers_1_1_bs_class_def_expression_serializer.html", null ],
       [ "BadScript.Serialization.Serializers.BsContinueExpressionSerializer", "class_bad_script_1_1_serialization_1_1_serializers_1_1_bs_continue_expression_serializer.html", null ],
-      [ "BadScript.Serialization.Serializers.BsEnumerableFunctionDefinitionExpressionSerializer", "class_bad_script_1_1_serialization_1_1_serializers_1_1_bs_enumerable_function_definition_expression_serializer.html", null ],
       [ "BadScript.Serialization.Serializers.BsForeachExpressionSerializer", "class_bad_script_1_1_serialization_1_1_serializers_1_1_bs_foreach_expression_serializer.html", null ],
       [ "BadScript.Serialization.Serializers.BsForExpressionSerializer", "class_bad_script_1_1_serialization_1_1_serializers_1_1_bs_for_expression_serializer.html", null ],
       [ "BadScript.Serialization.Serializers.BsFunctionDefinitionExpressionSerializer", "class_bad_script_1_1_serialization_1_1_serializers_1_1_bs_function_definition_expression_serializer.html", null ],
@@ -160,6 +196,10 @@ var hierarchy =
       [ "BadScript.Validators.BSFunctionReturnExpressionValidator", "class_bad_script_1_1_validators_1_1_b_s_function_return_expression_validator.html", null ]
     ] ],
     [ "BadScript.Parser.Expressions.Implementations.Block.BSFunctionParameter", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_block_1_1_b_s_function_parameter.html", null ],
+    [ "BadScript.UnitTests.DataObjects.BSInterfaceFunctionTest", "struct_bad_script_1_1_unit_tests_1_1_data_objects_1_1_b_s_interface_function_test.html", null ],
+    [ "BadScript.UnitTests.DataObjects.BSInterfaceFunctionTestMatrix", "struct_bad_script_1_1_unit_tests_1_1_data_objects_1_1_b_s_interface_function_test_matrix.html", null ],
+    [ "BadScript.UnitTests.DataObjects.BSInterfacePropertyTest", "struct_bad_script_1_1_unit_tests_1_1_data_objects_1_1_b_s_interface_property_test.html", null ],
+    [ "BadScript.UnitTests.DataObjects.BSInterfaceTestCaseData", "struct_bad_script_1_1_unit_tests_1_1_data_objects_1_1_b_s_interface_test_case_data.html", null ],
     [ "BadScript.Namespaces.BSNamespace", "class_bad_script_1_1_namespaces_1_1_b_s_namespace.html", [
       [ "BadScript.Namespaces.BSNamespaceRoot", "class_bad_script_1_1_namespaces_1_1_b_s_namespace_root.html", null ]
     ] ],
@@ -174,6 +214,7 @@ var hierarchy =
     [ "BadScript.Parser.Operators.BSOperatorPreceedenceTable", "class_bad_script_1_1_parser_1_1_operators_1_1_b_s_operator_preceedence_table.html", null ],
     [ "BadScript.Parser.BSParser", "class_bad_script_1_1_parser_1_1_b_s_parser.html", null ],
     [ "BadScript.Types.References.BSReferenceExtensions", "class_bad_script_1_1_types_1_1_references_1_1_b_s_reference_extensions.html", null ],
+    [ "BadScript.UnitTests.DataObjects.BSRunnableTestCase", "struct_bad_script_1_1_unit_tests_1_1_data_objects_1_1_b_s_runnable_test_case.html", null ],
     [ "BadScript.Serialization.BSSerializedHeader", "struct_bad_script_1_1_serialization_1_1_b_s_serialized_header.html", null ],
     [ "BadScript.Serialization.BSSerializer", "class_bad_script_1_1_serialization_1_1_b_s_serializer.html", null ],
     [ "BadScript.Serialization.BSSerializerContext", "class_bad_script_1_1_serialization_1_1_b_s_serializer_context.html", null ],
@@ -182,13 +223,10 @@ var hierarchy =
     [ "BadScript.StringUtils.BSStringInterfaceExtensions", "class_bad_script_1_1_string_utils_1_1_b_s_string_interface_extensions.html", null ],
     [ "BadScript.Types.Implementations.Types.BSTypeDatabase", "class_bad_script_1_1_types_1_1_implementations_1_1_types_1_1_b_s_type_database.html", null ],
     [ "BadScript.Parser.Operators.Implementations.BSUnaryOperatorMetaData", "class_bad_script_1_1_parser_1_1_operators_1_1_implementations_1_1_b_s_unary_operator_meta_data.html", null ],
-    [ "BadScript.Tests.ClassTests", "class_bad_script_1_1_tests_1_1_class_tests.html", null ],
-    [ "BadScript.Tests.CollectionTests", "class_bad_script_1_1_tests_1_1_collection_tests.html", null ],
+    [ "BadScript.UnitTests.BSUnitTestGenerator", "class_bad_script_1_1_unit_tests_1_1_b_s_unit_test_generator.html", null ],
     [ "BadScript.Console.Logging.ConsoleWriter", "class_bad_script_1_1_console_1_1_logging_1_1_console_writer.html", null ],
-    [ "BadScript.Tests.ConvertTests", "class_bad_script_1_1_tests_1_1_convert_tests.html", null ],
     [ "BadScript.IO.Crc", "class_bad_script_1_1_i_o_1_1_crc.html", null ],
     [ "BadScript.Reflection.EnumBuilder< T >", "class_bad_script_1_1_reflection_1_1_enum_builder.html", null ],
-    [ "BadScript.Tests.EnvironmentTests", "class_bad_script_1_1_tests_1_1_environment_tests.html", null ],
     [ "Exception", null, [
       [ "BadScript.Console.AppPackage.BSAppPackageException", "class_bad_script_1_1_console_1_1_app_package_1_1_b_s_app_package_exception.html", null ],
       [ "BadScript.Exceptions.BSParserException", "class_bad_script_1_1_exceptions_1_1_b_s_parser_exception.html", null ],
@@ -201,10 +239,8 @@ var hierarchy =
       [ "BadScript.Parser.BSParser.ParserException", "class_bad_script_1_1_parser_1_1_b_s_parser_1_1_parser_exception.html", null ],
       [ "BadScript.Serialization.BSSerializerException", "class_bad_script_1_1_serialization_1_1_b_s_serializer_exception.html", null ]
     ] ],
-    [ "BadScript.Tests.FunctionTests", "class_bad_script_1_1_tests_1_1_function_tests.html", null ],
     [ "BadScript.Types.Implementations.IBSWrappedObject", "interface_bad_script_1_1_types_1_1_implementations_1_1_i_b_s_wrapped_object.html", [
       [ "BadScript.Reflection.BSReflectedObject", "class_bad_script_1_1_reflection_1_1_b_s_reflected_object.html", null ],
-      [ "BadScript.Tools.CodeGenerator.Runtime.BSWrapperObject< T >", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_b_s_wrapper_object.html", null ],
       [ "BadScript.Types.Implementations.BSObject", "class_bad_script_1_1_types_1_1_implementations_1_1_b_s_object.html", [
         [ "BadScript.Interfaces.Versioning.BSVersionObject", "class_bad_script_1_1_interfaces_1_1_versioning_1_1_b_s_version_object.html", null ]
       ] ]
@@ -215,12 +251,9 @@ var hierarchy =
     [ "IEnumerable", null, [
       [ "BadScript.Interfaces.Environment.Settings.SettingsCategoryEnumerator", "class_bad_script_1_1_interfaces_1_1_environment_1_1_settings_1_1_settings_category_enumerator.html", null ],
       [ "BadScript.Interfaces.Environment.Settings.SettingsPairEnumerator", "class_bad_script_1_1_interfaces_1_1_environment_1_1_settings_1_1_settings_pair_enumerator.html", null ],
-      [ "BadScript.Parser.Expressions.Implementations.Block.BSFunctionEnumeratorObject", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_block_1_1_b_s_function_enumerator_object.html", null ],
       [ "BadScript.Scopes.BSScope", "class_bad_script_1_1_scopes_1_1_b_s_scope.html", null ],
       [ "BadScript.Settings.SettingsCategory", "class_bad_script_1_1_settings_1_1_settings_category.html", null ],
       [ "BadScript.Settings.SettingsCategory", "class_bad_script_1_1_settings_1_1_settings_category.html", null ],
-      [ "BadScript.Tools.CodeGenerator.Runtime.BSStaticWrapperObject", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_b_s_static_wrapper_object.html", null ],
-      [ "BadScript.Tools.CodeGenerator.Runtime.BSWrapperObject< T >", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_b_s_wrapper_object.html", null ],
       [ "BadScript.Types.Implementations.BSArray", "class_bad_script_1_1_types_1_1_implementations_1_1_b_s_array.html", null ],
       [ "BadScript.Types.Implementations.BSTable", "class_bad_script_1_1_types_1_1_implementations_1_1_b_s_table.html", null ],
       [ "BadScript.Types.Implementations.Types.BSClassInstance", "class_bad_script_1_1_types_1_1_implementations_1_1_types_1_1_b_s_class_instance.html", null ]
@@ -235,11 +268,8 @@ var hierarchy =
         [ "BadScript.Interfaces.Environment.Settings.SettingsCategoryWrapper", "class_bad_script_1_1_interfaces_1_1_environment_1_1_settings_1_1_settings_category_wrapper.html", null ],
         [ "BadScript.Interfaces.Environment.Settings.SettingsPairEnumerator", "class_bad_script_1_1_interfaces_1_1_environment_1_1_settings_1_1_settings_pair_enumerator.html", null ],
         [ "BadScript.Interfaces.Environment.Settings.SettingsPairWrapper", "class_bad_script_1_1_interfaces_1_1_environment_1_1_settings_1_1_settings_pair_wrapper.html", null ],
-        [ "BadScript.Parser.Expressions.Implementations.Block.BSFunctionEnumeratorObject", "class_bad_script_1_1_parser_1_1_expressions_1_1_implementations_1_1_block_1_1_b_s_function_enumerator_object.html", null ],
         [ "BadScript.Reflection.BSReflectedObject", "class_bad_script_1_1_reflection_1_1_b_s_reflected_object.html", null ],
         [ "BadScript.Reflection.BSReflectedType", "class_bad_script_1_1_reflection_1_1_b_s_reflected_type.html", null ],
-        [ "BadScript.Tools.CodeGenerator.Runtime.BSStaticWrapperObject", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_b_s_static_wrapper_object.html", null ],
-        [ "BadScript.Tools.CodeGenerator.Runtime.BSWrapperObject< T >", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_b_s_wrapper_object.html", null ],
         [ "BadScript.Types.ABSArray", "class_bad_script_1_1_types_1_1_a_b_s_array.html", [
           [ "BadScript.Types.Implementations.BSArray", "class_bad_script_1_1_types_1_1_implementations_1_1_b_s_array.html", null ]
         ] ],
@@ -254,8 +284,8 @@ var hierarchy =
         [ "BadScript.Types.Implementations.Types.BSClassInstance", "class_bad_script_1_1_types_1_1_implementations_1_1_types_1_1_b_s_class_instance.html", null ],
         [ "BadScript.Types.References.ABSReference", "class_bad_script_1_1_types_1_1_references_1_1_a_b_s_reference.html", [
           [ "BadScript.Reflection.BSReflectionReference", "class_bad_script_1_1_reflection_1_1_b_s_reflection_reference.html", null ],
-          [ "BadScript.Types.Implementations.BSFunctionReference", "class_bad_script_1_1_types_1_1_implementations_1_1_b_s_function_reference.html", null ],
           [ "BadScript.Types.References.Implementations.BSArrayReference", "class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_array_reference.html", null ],
+          [ "BadScript.Types.References.Implementations.BSFunctionReference", "class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_function_reference.html", null ],
           [ "BadScript.Types.References.Implementations.BSTableReference", "class_bad_script_1_1_types_1_1_references_1_1_implementations_1_1_b_s_table_reference.html", null ]
         ] ],
         [ "BadScript.Xml.XmlNodeObject", "class_bad_script_1_1_xml_1_1_xml_node_object.html", [
@@ -270,15 +300,7 @@ var hierarchy =
       [ "BadScript.HttpServer.BSFunctionHandler", "class_bad_script_1_1_http_server_1_1_b_s_function_handler.html", null ]
     ] ],
     [ "BadScript.Console.Subsystems.Include.IncludeManager", "class_bad_script_1_1_console_1_1_subsystems_1_1_include_1_1_include_manager.html", null ],
-    [ "BadScript.Tools.CodeGenerator.Runtime.IWrapperConstructorDataBase", "interface_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_i_wrapper_constructor_data_base.html", null ],
-    [ "BadScript.Tools.CodeGenerator.Runtime.IWrapperObjectCreator", "interface_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_i_wrapper_object_creator.html", [
-      [ "BadScript.Tools.CodeGenerator.Runtime.Attributes.WrapperObjectCreator< T >", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_wrapper_object_creator.html", null ]
-    ] ],
     [ "BadScript.Console.Logging.LogColor", "struct_bad_script_1_1_console_1_1_logging_1_1_log_color.html", null ],
-    [ "BadScript.Tests.MathTests", "class_bad_script_1_1_tests_1_1_math_tests.html", null ],
-    [ "BadScript.Tests.NamespaceTests", "class_bad_script_1_1_tests_1_1_namespace_tests.html", null ],
-    [ "BadScript.Tests.NumberTests", "class_bad_script_1_1_tests_1_1_number_tests.html", null ],
-    [ "BadScript.Tests.OverrideTests", "class_bad_script_1_1_tests_1_1_override_tests.html", null ],
     [ "BadScript.Console.Subsystems.Project.Utils.ProcessEventRunner", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_utils_1_1_process_event_runner.html", null ],
     [ "BadScript.Testing.Program", "class_bad_script_1_1_testing_1_1_program.html", null ],
     [ "BadScript.Console.Subsystems.Project.ProjectBuilder", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_project_builder.html", null ],
@@ -297,29 +319,27 @@ var hierarchy =
     ] ],
     [ "BadScript.Console.Subsystems.Project.Utils.ReflectionResolveInfo", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_utils_1_1_reflection_resolve_info.html", null ],
     [ "BadScript.Validators.BSFunctionReturnExpressionValidator.ReturnInfo", "struct_bad_script_1_1_validators_1_1_b_s_function_return_expression_validator_1_1_return_info.html", null ],
-    [ "BadScript.Tests.ScopeTests", "class_bad_script_1_1_tests_1_1_scope_tests.html", null ],
     [ "BadScript.Console.Subsystems.Compile.ScriptCompiler", "class_bad_script_1_1_console_1_1_subsystems_1_1_compile_1_1_script_compiler.html", null ],
     [ "BadScript.Console.Subsystems.Run.ScriptRunner", "class_bad_script_1_1_console_1_1_subsystems_1_1_run_1_1_script_runner.html", null ],
-    [ "BadScript.Tests.SerializerTests", "class_bad_script_1_1_tests_1_1_serializer_tests.html", null ],
     [ "BadScript.Settings.SettingsLogWriter", "class_bad_script_1_1_settings_1_1_settings_log_writer.html", null ],
     [ "BadScript.Settings.SettingsPair", "class_bad_script_1_1_settings_1_1_settings_pair.html", null ],
-    [ "BadScript.Settings.SimpleSingleton< T >", "class_bad_script_1_1_settings_1_1_simple_singleton.html", null ],
-    [ "BadScript.Settings.SimpleSingleton< BSAppPackageDirectories >", "class_bad_script_1_1_settings_1_1_simple_singleton.html", [
+    [ "BadScript.Utils.SimpleSingleton< T >", "class_bad_script_1_1_utils_1_1_simple_singleton.html", null ],
+    [ "BadScript.Utils.SimpleSingleton< BSAppPackageDirectories >", "class_bad_script_1_1_utils_1_1_simple_singleton.html", [
       [ "BadScript.Console.AppPackage.BSAppPackageDirectories", "class_bad_script_1_1_console_1_1_app_package_1_1_b_s_app_package_directories.html", null ]
     ] ],
-    [ "BadScript.Settings.SimpleSingleton< BSConsoleDirectories >", "class_bad_script_1_1_settings_1_1_simple_singleton.html", [
+    [ "BadScript.Utils.SimpleSingleton< BSConsoleDirectories >", "class_bad_script_1_1_utils_1_1_simple_singleton.html", [
       [ "BadScript.Console.BSConsoleDirectories", "class_bad_script_1_1_console_1_1_b_s_console_directories.html", null ]
     ] ],
-    [ "BadScript.Settings.SimpleSingleton< EngineBuilderDirectories >", "class_bad_script_1_1_settings_1_1_simple_singleton.html", [
+    [ "BadScript.Utils.SimpleSingleton< EngineBuilderDirectories >", "class_bad_script_1_1_utils_1_1_simple_singleton.html", [
       [ "BadScript.Console.Subsystems.EngineBuilderDirectories", "class_bad_script_1_1_console_1_1_subsystems_1_1_engine_builder_directories.html", null ]
     ] ],
-    [ "BadScript.Settings.SimpleSingleton< ProjectSystemDirectories >", "class_bad_script_1_1_settings_1_1_simple_singleton.html", [
+    [ "BadScript.Utils.SimpleSingleton< ProjectSystemDirectories >", "class_bad_script_1_1_utils_1_1_simple_singleton.html", [
       [ "BadScript.Console.Subsystems.Project.ProjectSystemDirectories", "class_bad_script_1_1_console_1_1_subsystems_1_1_project_1_1_project_system_directories.html", null ]
     ] ],
-    [ "BadScript.Settings.SimpleSingleton< ScriptRunnerDirectories >", "class_bad_script_1_1_settings_1_1_simple_singleton.html", [
+    [ "BadScript.Utils.SimpleSingleton< ScriptRunnerDirectories >", "class_bad_script_1_1_utils_1_1_simple_singleton.html", [
       [ "BadScript.Console.Subsystems.Run.ScriptRunnerDirectories", "class_bad_script_1_1_console_1_1_subsystems_1_1_run_1_1_script_runner_directories.html", null ]
     ] ],
-    [ "BadScript.Settings.SimpleSingleton< SourcePreprocessorDirectories >", "class_bad_script_1_1_settings_1_1_simple_singleton.html", [
+    [ "BadScript.Utils.SimpleSingleton< SourcePreprocessorDirectories >", "class_bad_script_1_1_utils_1_1_simple_singleton.html", [
       [ "BadScript.Console.Preprocessor.SourcePreprocessorDirectories", "class_bad_script_1_1_console_1_1_preprocessor_1_1_source_preprocessor_directories.html", null ]
     ] ],
     [ "BadScript.Parser.Expressions.SourcePosition", "struct_bad_script_1_1_parser_1_1_expressions_1_1_source_position.html", null ],
@@ -336,12 +356,7 @@ var hierarchy =
       [ "BadScript.Console.Preprocessor.Directives.IfNotDefinedPreprocessorDirective", "class_bad_script_1_1_console_1_1_preprocessor_1_1_directives_1_1_if_not_defined_preprocessor_directive.html", null ],
       [ "BadScript.Console.Preprocessor.Directives.IfPreprocessorDirective", "class_bad_script_1_1_console_1_1_preprocessor_1_1_directives_1_1_if_preprocessor_directive.html", null ]
     ] ],
-    [ "BadScript.Tests.StringTests", "class_bad_script_1_1_tests_1_1_string_tests.html", null ],
-    [ "BadScript.Tests.TableTests", "class_bad_script_1_1_tests_1_1_table_tests.html", null ],
-    [ "BadScript.Interfaces.Versioning.VersionExtensions", "class_bad_script_1_1_interfaces_1_1_versioning_1_1_version_extensions.html", null ],
-    [ "BadScript.Tools.CodeGenerator.Runtime.WrapperConstructorDataBaseExtensions", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_wrapper_constructor_data_base_extensions.html", null ],
-    [ "BadScript.Tools.CodeGenerator.WrapperGenerator", "class_bad_script_1_1_tools_1_1_code_generator_1_1_wrapper_generator.html", null ],
-    [ "BadScript.Tools.CodeGenerator.Runtime.WrapperHelper", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_wrapper_helper.html", null ],
-    [ "BadScript.Tools.CodeGenerator.Runtime.WrapperStaticDataBase", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_wrapper_static_data_base.html", null ],
-    [ "BadScript.Tools.CodeGenerator.WrapperTypeInfo", "class_bad_script_1_1_tools_1_1_code_generator_1_1_wrapper_type_info.html", null ]
+    [ "BadScript.Tests.Types.StreamTests", "class_bad_script_1_1_tests_1_1_types_1_1_stream_tests.html", null ],
+    [ "BadScript.Tests.Interfaces.Reflection.ReflectionTests.TestType", "class_bad_script_1_1_tests_1_1_interfaces_1_1_reflection_1_1_reflection_tests_1_1_test_type.html", null ],
+    [ "BadScript.Interfaces.Versioning.VersionExtensions", "class_bad_script_1_1_interfaces_1_1_versioning_1_1_version_extensions.html", null ]
 ];

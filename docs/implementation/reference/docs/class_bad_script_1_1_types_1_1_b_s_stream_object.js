@@ -5,6 +5,7 @@ var class_bad_script_1_1_types_1_1_b_s_stream_object =
     [ "CloseFileStream", "class_bad_script_1_1_types_1_1_b_s_stream_object.html#a878f07bc299e7370dc2ef40619ab14d8", null ],
     [ "Equals", "class_bad_script_1_1_types_1_1_b_s_stream_object.html#a0077057b34ed4cec21041d33630edad8", null ],
     [ "GetHashCodeImpl", "class_bad_script_1_1_types_1_1_b_s_stream_object.html#aa07010386b971d9c204ccab4886ae69b", null ],
+    [ "GetInnerFunctionTable", "class_bad_script_1_1_types_1_1_b_s_stream_object.html#addc23bf0d66d9ece1dca1ae9bc0b4bd3", null ],
     [ "GetLength", "class_bad_script_1_1_types_1_1_b_s_stream_object.html#a282f50af05c7dec337ea85a8605cfd4e", null ],
     [ "GetPosition", "class_bad_script_1_1_types_1_1_b_s_stream_object.html#adfb858905e2dc6244f164aff9c240970", null ],
     [ "GetProperty", "class_bad_script_1_1_types_1_1_b_s_stream_object.html#a88e438fc45ea25329e973ee86bf91057", null ],

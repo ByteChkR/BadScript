@@ -1,7 +1,0 @@
-var namespace_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes =
-[
-    [ "BSWConstructorCreatorAttribute", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_constructor_creator_attribute.html", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_constructor_creator_attribute" ],
-    [ "BSWIgnoreAttribute", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_ignore_attribute.html", null ],
-    [ "BSWNameAttribute", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_name_attribute.html", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_b_s_w_name_attribute" ],
-    [ "WrapperObjectCreator", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_wrapper_object_creator.html", "class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_wrapper_object_creator" ]
-];

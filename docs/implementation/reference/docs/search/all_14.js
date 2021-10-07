@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['wrapperconstructordatabaseextensions_418',['WrapperConstructorDataBaseExtensions',['../class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_wrapper_constructor_data_base_extensions.html',1,'BadScript::Tools::CodeGenerator::Runtime']]],
-  ['wrappergenerator_419',['WrapperGenerator',['../class_bad_script_1_1_tools_1_1_code_generator_1_1_wrapper_generator.html',1,'BadScript::Tools::CodeGenerator']]],
-  ['wrapperhelper_420',['WrapperHelper',['../class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_wrapper_helper.html',1,'BadScript::Tools::CodeGenerator::Runtime']]],
-  ['wrapperobjectcreator_421',['WrapperObjectCreator',['../class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_attributes_1_1_wrapper_object_creator.html',1,'BadScript::Tools::CodeGenerator::Runtime::Attributes']]],
-  ['wrapperstaticdatabase_422',['WrapperStaticDataBase',['../class_bad_script_1_1_tools_1_1_code_generator_1_1_runtime_1_1_wrapper_static_data_base.html',1,'BadScript::Tools::CodeGenerator::Runtime']]],
-  ['wrappertypeinfo_423',['WrapperTypeInfo',['../class_bad_script_1_1_tools_1_1_code_generator_1_1_wrapper_type_info.html',1,'BadScript::Tools::CodeGenerator']]]
+  ['xmldocumentobject_437',['XmlDocumentObject',['../class_bad_script_1_1_xml_1_1_xml_document_object.html',1,'BadScript::Xml']]],
+  ['xmlnodeobject_438',['XmlNodeObject',['../class_bad_script_1_1_xml_1_1_xml_node_object.html',1,'BadScript::Xml']]]
 ];

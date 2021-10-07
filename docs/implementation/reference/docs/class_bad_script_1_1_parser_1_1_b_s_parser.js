@@ -23,7 +23,6 @@ var class_bad_script_1_1_parser_1_1_b_s_parser =
     [ "ParseBlock", "class_bad_script_1_1_parser_1_1_b_s_parser.html#ab9a25e70ff3e563025f207024a9a0418", null ],
     [ "ParseClass", "class_bad_script_1_1_parser_1_1_b_s_parser.html#af1b5b76523fce937568326881bcab61f", null ],
     [ "ParseConditionalBlock", "class_bad_script_1_1_parser_1_1_b_s_parser.html#a9dd15f528de5b16110f00f472dd6c7f8", null ],
-    [ "ParseEnumerableFunction", "class_bad_script_1_1_parser_1_1_b_s_parser.html#a130cefa9f943d97f9d100d81bbba8dd2", null ],
     [ "ParseExpression", "class_bad_script_1_1_parser_1_1_b_s_parser.html#a1411c7c1d91b07ff1187f15e9f5a239f", null ],
     [ "ParseForeachExpression", "class_bad_script_1_1_parser_1_1_b_s_parser.html#a5b522a8b6fe8bb1505c2a816b71b0dca", null ],
     [ "ParseForExpression", "class_bad_script_1_1_parser_1_1_b_s_parser.html#aba1d4614416e0453e4b302a497530684", null ],

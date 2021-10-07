@@ -1,9 +1,7 @@
 var class_bad_script_1_1_tests_1_1_serializer_tests =
 [
-    [ "RunTest", "class_bad_script_1_1_tests_1_1_serializer_tests.html#af0d745ad8e7a0788d7c6bba5b8bdabe7", null ],
-    [ "RunTestUncached", "class_bad_script_1_1_tests_1_1_serializer_tests.html#a6d3f66ced8dd22aca17bd2c6ae45c973", null ],
-    [ "Setup", "class_bad_script_1_1_tests_1_1_serializer_tests.html#ad7b9727eb7c1709de198f1ef9c92bd3c", null ],
-    [ "TestFiles", "class_bad_script_1_1_tests_1_1_serializer_tests.html#a7086c5b8aaa97aa48fd462a7a29d43c0", null ],
-    [ "m_Engine", "class_bad_script_1_1_tests_1_1_serializer_tests.html#a923a3e8494998ec9a102e2df07dc5426", null ],
-    [ "m_Files", "class_bad_script_1_1_tests_1_1_serializer_tests.html#a5fe7d876835e9651496b9aad54edb810", null ]
+    [ "GenerateTestCases", "class_bad_script_1_1_tests_1_1_serializer_tests.html#a433364944f887710757475910367c972", null ],
+    [ "RunTest", "class_bad_script_1_1_tests_1_1_serializer_tests.html#abbcc60ef720492747788a4559edd7942", null ],
+    [ "SetUp", "class_bad_script_1_1_tests_1_1_serializer_tests.html#a298e601d0309a58c3f3b2cde5d6b4543", null ],
+    [ "Test", "class_bad_script_1_1_tests_1_1_serializer_tests.html#a999b3ef1c71229430388939fb14659c6", null ]
 ];
