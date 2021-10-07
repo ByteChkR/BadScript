@@ -1,6 +1,7 @@
 ﻿using System;
 
 using BadScript.NUnit.Utils;
+using BadScript.Parser.Expressions;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 
@@ -9,7 +10,7 @@ using NUnit.Framework;
 namespace BadScript.Tests.FailingTests
 {
 
-    public abstract class AFailingBSUnitTest : ABSUnitTest
+    public abstract class AFailingBSParserUnitTest : ABSUnitTest
     {
 
         #region Protected
@@ -21,7 +22,7 @@ namespace BadScript.Tests.FailingTests
 
             try
             {
-                m_Engine.LoadFile( file );
+                BSExpression[] exprs = m_Engine.ParseFile( file );
                 Assert.Fail( $"The Test case: {key} does not fail as expected." );
             }
             catch ( Exception e )

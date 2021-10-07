@@ -1,4 +1,4 @@
-﻿namespace BadScript.UnitTests
+﻿namespace BadScript.UnitTests.DataObjects
 {
 
     public struct BSInterfaceFunctionTest

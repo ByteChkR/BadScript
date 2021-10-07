@@ -2,7 +2,7 @@
 using System.Linq;
 
 using BadScript.Types;
-using BadScript.UnitTests;
+using BadScript.UnitTests.DataObjects;
 
 using NUnit.Framework;
 

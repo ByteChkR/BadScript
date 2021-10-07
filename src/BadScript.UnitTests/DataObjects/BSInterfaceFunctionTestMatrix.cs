@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BadScript.UnitTests
+namespace BadScript.UnitTests.DataObjects
 {
 
     public struct BSInterfaceFunctionTestMatrix

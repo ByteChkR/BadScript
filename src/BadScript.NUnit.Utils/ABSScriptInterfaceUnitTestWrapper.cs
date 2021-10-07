@@ -4,6 +4,7 @@ using System.IO;
 using BadScript.Interfaces;
 using BadScript.Types;
 using BadScript.UnitTests;
+using BadScript.UnitTests.DataObjects;
 
 using Newtonsoft.Json;
 

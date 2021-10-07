@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
-using BadScript.Parser.Expressions.Implementations.Block.ForEach;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
 
@@ -23,8 +21,6 @@ namespace BadScript.Types
         public BSStreamObject( Stream fs ) : this( SourcePosition.Unknown, fs )
         {
         }
-
-        public ABSTable GetInnerFunctionTable() => m_InstanceFunctions;
 
         public BSStreamObject( SourcePosition pos, Stream fs ) : base( pos )
         {
@@ -115,6 +111,11 @@ namespace BadScript.Types
         public override bool Equals( ABSObject other )
         {
             return ReferenceEquals( this, other );
+        }
+
+        public ABSTable GetInnerFunctionTable()
+        {
+            return m_InstanceFunctions;
         }
 
         public override ABSReference GetProperty( string propertyName )
@@ -338,7 +339,6 @@ namespace BadScript.Types
         }
 
         #endregion
-        
 
     }
 

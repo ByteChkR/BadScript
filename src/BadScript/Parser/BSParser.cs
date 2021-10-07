@@ -248,7 +248,6 @@ namespace BadScript.Parser
 
             throw new BSParserException( "Expected '('", this );
         }
-               
 
         public BSExpression ParseExpression( int start )
         {
@@ -912,6 +911,7 @@ namespace BadScript.Parser
             {
                 return ParseClass( isGlobal );
             }
+
             if ( isGlobal )
             {
                 throw new BSParserException( "Expected 'function', 'class' or 'enumerable' after 'global'", this );
