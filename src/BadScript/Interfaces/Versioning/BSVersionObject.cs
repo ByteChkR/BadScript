@@ -88,9 +88,9 @@ namespace BadScript.Interfaces.Versioning
         {
             m_Properties = new Dictionary < string, ABSReference >();
             m_Properties.Add( "Major", new BSReflectionReference( GetMajor, null ) );
-            m_Properties.Add("Minor", new BSReflectionReference( GetMinor, null ) );
-            m_Properties.Add("MajorRevision", new BSReflectionReference( GetMajorRevision, null ) );
-            m_Properties.Add("MinorRevision", new BSReflectionReference( GetMinorRevision, null ) );
+            m_Properties.Add( "Minor", new BSReflectionReference( GetMinor, null ) );
+            m_Properties.Add( "MajorRevision", new BSReflectionReference( GetMajorRevision, null ) );
+            m_Properties.Add( "MinorRevision", new BSReflectionReference( GetMinorRevision, null ) );
             m_Properties.Add( "Revision", new BSReflectionReference( GetRevision, null ) );
             m_Properties.Add( "Build", new BSReflectionReference( GetBuild, null ) );
 
@@ -107,7 +107,7 @@ namespace BadScript.Interfaces.Versioning
 
             m_Properties.Add(
                              "Change",
-                             new BSFunctionReference( new BSFunction("function Change(changeStr)", ChangeVersion, 1 ) )
+                             new BSFunctionReference( new BSFunction( "function Change(changeStr)", ChangeVersion, 1 ) )
                             );
 
             m_Properties.Add(

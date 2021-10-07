@@ -19,12 +19,6 @@ namespace BadScript.Interfaces.Environment.Settings
         private readonly SettingsCategoryEnumerator m_CategoryEnumerator;
         private readonly Dictionary < string, ABSReference > m_Properties;
 
-        protected override int GetHashCodeImpl()
-        {
-            return m_Category.GetHashCode() ^m_Properties.GetHashCode();
-        }
-        public override bool IsNull() => false;
-
         #region Public
 
         public SettingsCategoryWrapper( SettingsCategory cat ) : base( SourcePosition.Unknown )
@@ -138,10 +132,13 @@ namespace BadScript.Interfaces.Environment.Settings
                                                                                 "function FindCategory(name)/FindCategory(name, create)",
                                                                                 objects => new SettingsCategoryWrapper(
                                                                                      m_Category.FindCategory(
-                                                                                          objects[0].ConvertString(), objects.Length==2 && objects[1].ConvertBool()
+                                                                                          objects[0].ConvertString(),
+                                                                                          objects.Length == 2 &&
+                                                                                          objects[1].ConvertBool()
                                                                                          )
                                                                                     ),
-                                                                                1,2
+                                                                                1,
+                                                                                2
                                                                                )
                                                                           )
                                },
@@ -151,10 +148,13 @@ namespace BadScript.Interfaces.Environment.Settings
                                                                                "function FindSetting(name)/FindSetting(name, create)",
                                                                                objects => new SettingsPairWrapper(
                                                                                     m_Category.FindSetting(
-                                                                                         objects[0].ConvertString(), objects.Length==2 && objects[1].ConvertBool()
+                                                                                         objects[0].ConvertString(),
+                                                                                         objects.Length == 2 &&
+                                                                                         objects[1].ConvertBool()
                                                                                         )
                                                                                    ),
-                                                                               1,2
+                                                                               1,
+                                                                               2
                                                                               )
                                                                          )
                                },
@@ -181,6 +181,11 @@ namespace BadScript.Interfaces.Environment.Settings
         public override ABSObject Invoke( ABSObject[] args )
         {
             throw new BSRuntimeException( "Can not Invoke Settings Category" );
+        }
+
+        public override bool IsNull()
+        {
+            return false;
         }
 
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
@@ -212,6 +217,15 @@ namespace BadScript.Interfaces.Environment.Settings
             v = SafeToString();
 
             return true;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Category.GetHashCode() ^ m_Properties.GetHashCode();
         }
 
         #endregion

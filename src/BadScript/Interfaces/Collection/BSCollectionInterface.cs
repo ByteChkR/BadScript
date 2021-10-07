@@ -11,51 +11,53 @@ namespace BadScript.Interfaces.Collection
     public class BSCollectionInterface : ABSScriptInterface
     {
 
-        public BSCollectionInterface(  ) : base( "Collection" )
+        #region Public
+
+        public BSCollectionInterface() : base( "Collection" )
         {
         }
 
         public override void AddApi( ABSTable root )
         {
             root.InsertElement(
-                                  new BSObject("Size"),
-                                  new BSFunction(
-                                                 "function Size(table/array)",
-                                                 (args) =>
-                                                 {
-                                                     ABSObject arg = args[0].ResolveReference();
+                               new BSObject( "Size" ),
+                               new BSFunction(
+                                              "function Size(table/array)",
+                                              ( args ) =>
+                                              {
+                                                  ABSObject arg = args[0].ResolveReference();
 
-                                                     if (arg is ABSArray ar)
-                                                     {
-                                                         return new BSObject((decimal)ar.GetLength());
-                                                     }
+                                                  if ( arg is ABSArray ar )
+                                                  {
+                                                      return new BSObject( ( decimal )ar.GetLength() );
+                                                  }
 
-                                                     if (arg is ABSTable t)
-                                                     {
-                                                         return new BSObject((decimal)t.GetLength());
-                                                     }
+                                                  if ( arg is ABSTable t )
+                                                  {
+                                                      return new BSObject( ( decimal )t.GetLength() );
+                                                  }
 
-                                                     throw new BSInvalidTypeException(
-                                                          arg.Position,
-                                                          "Can not get Size of object",
-                                                          arg,
-                                                          "Table",
-                                                          "Array"
-                                                         );
-                                                 },
-                                                 1
-                                                )
-                                 );
+                                                  throw new BSInvalidTypeException(
+                                                       arg.Position,
+                                                       "Can not get Size of object",
+                                                       arg,
+                                                       "Table",
+                                                       "Array"
+                                                      );
+                                              },
+                                              1
+                                             )
+                              );
 
             root.InsertElement(
-                               new BSObject("Keys"),
+                               new BSObject( "Keys" ),
                                new BSFunction(
                                               "function Keys(table)",
                                               objects =>
                                               {
                                                   ABSObject a = objects[0].ResolveReference();
 
-                                                  if (a is ABSTable t)
+                                                  if ( a is ABSTable t )
                                                   {
                                                       return t.Keys;
                                                   }
@@ -72,14 +74,14 @@ namespace BadScript.Interfaces.Collection
                               );
 
             root.InsertElement(
-                               new BSObject("Values"),
+                               new BSObject( "Values" ),
                                new BSFunction(
                                               "function Values(table)",
                                               objects =>
                                               {
                                                   ABSObject a = objects[0].ResolveReference();
 
-                                                  if (a is ABSTable t)
+                                                  if ( a is ABSTable t )
                                                   {
                                                       return t.Values;
                                                   }
@@ -95,22 +97,19 @@ namespace BadScript.Interfaces.Collection
                                              )
                               );
 
-
-
-
             root.InsertElement(
-                               new BSObject("Lock"),
+                               new BSObject( "Lock" ),
                                new BSFunction(
                                               "function Lock(array/table)",
-                                              (args) =>
+                                              ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
 
-                                                  if (arg is BSArray arr)
+                                                  if ( arg is BSArray arr )
                                                   {
                                                       arr.Lock();
                                                   }
-                                                  else if (arg is BSTable table)
+                                                  else if ( arg is BSTable table )
                                                   {
                                                       table.Lock();
                                                   }
@@ -122,14 +121,14 @@ namespace BadScript.Interfaces.Collection
                               );
 
             root.InsertElement(
-                               new BSObject("HasKey"),
+                               new BSObject( "HasKey" ),
                                new BSFunction(
                                               "function HasKey(table, key)",
-                                              (args) =>
+                                              ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
 
-                                                  if (arg is ABSTable table)
+                                                  if ( arg is ABSTable table )
                                                   {
                                                       return table.HasElement(
                                                                               args[1].ResolveReference()
@@ -138,13 +137,13 @@ namespace BadScript.Interfaces.Collection
                                                                  : BSObject.False
                                                           ;
                                                   }
-                                                  else if (arg is IBSWrappedObject wo)
+                                                  else if ( arg is IBSWrappedObject wo )
                                                   {
                                                       object o = wo.GetInternalObject();
 
-                                                      if (o is BSScope scope)
+                                                      if ( o is BSScope scope )
                                                       {
-                                                          return scope.Has(args[1].ConvertString())
+                                                          return scope.Has( args[1].ConvertString() )
                                                                      ? BSObject.True
                                                                      : BSObject.False;
                                                       }
@@ -161,8 +160,9 @@ namespace BadScript.Interfaces.Collection
                                               2
                                              )
                               );
-
         }
+
+        #endregion
 
     }
 

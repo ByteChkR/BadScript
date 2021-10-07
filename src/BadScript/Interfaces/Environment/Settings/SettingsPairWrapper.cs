@@ -17,14 +17,7 @@ namespace BadScript.Interfaces.Environment.Settings
         private readonly SettingsPair m_Pair;
         private readonly Dictionary < string, ABSReference > m_Properties;
 
-        public override bool IsNull() => false;
-
         #region Public
-
-        protected override int GetHashCodeImpl()
-        {
-            return m_Pair.GetHashCode() ^ m_Properties.GetHashCode();
-        }
 
         public SettingsPairWrapper( SettingsPair pair ) : base( SourcePosition.Unknown )
         {
@@ -68,6 +61,11 @@ namespace BadScript.Interfaces.Environment.Settings
             throw new BSRuntimeException( "Can not Invoke Settings Category" );
         }
 
+        public override bool IsNull()
+        {
+            return false;
+        }
+
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return m_Pair.Name + " : " + m_Pair.Value;
@@ -97,6 +95,15 @@ namespace BadScript.Interfaces.Environment.Settings
             v = m_Pair.Value;
 
             return true;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Pair.GetHashCode() ^ m_Properties.GetHashCode();
         }
 
         #endregion

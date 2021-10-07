@@ -59,7 +59,7 @@ namespace BadScript.Settings
             return r;
         }
 
-        public SettingsCategory FindCategory( string categoryName, bool createIfNotFound)
+        public SettingsCategory FindCategory( string categoryName, bool createIfNotFound )
         {
             string[] parts = categoryName.Split( '.' );
             SettingsCategory current = this;
@@ -73,9 +73,9 @@ namespace BadScript.Settings
                 else if ( i == 0 && parts[i] == current.Name )
                 {
                 }
-                else if (createIfNotFound)
+                else if ( createIfNotFound )
                 {
-                    current = current.AddCategory(parts[i]);
+                    current = current.AddCategory( parts[i] );
                 }
                 else
                 {
@@ -100,9 +100,9 @@ namespace BadScript.Settings
                 else if ( i == 0 && parts[i] == current.Name )
                 {
                 }
-                else if (createIfNotFound && i != parts.Length - 1)
+                else if ( createIfNotFound && i != parts.Length - 1 )
                 {
-                    current = current.AddCategory(parts[i]);
+                    current = current.AddCategory( parts[i] );
                 }
                 else
                 {
@@ -111,8 +111,11 @@ namespace BadScript.Settings
             }
 
             if ( createIfNotFound )
+            {
                 return current.GetSetting( parts[parts.Length - 1], "" );
-            return current.GetSetting( parts[parts.Length - 1]);
+            }
+
+            return current.GetSetting( parts[parts.Length - 1] );
         }
 
         public SettingsCategory GetCategory( string name )

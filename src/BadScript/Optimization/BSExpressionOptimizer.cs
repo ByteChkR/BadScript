@@ -16,6 +16,7 @@ namespace BadScript.Optimization
 
     public static class BSExpressionOptimizer
     {
+
         #region Public
 
         public static void Optimize( BSExpression[] expr )
@@ -86,7 +87,7 @@ namespace BadScript.Optimization
                         md = new BSExpressionOptimizerMetaData( wo.GetInternalObject() );
                     }
 
-                    if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                    if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
                     {
                         Console.WriteLine(
                                           $"[Expression Optimizer] Optimizing {invoc.GetType().Name}: " +
@@ -115,7 +116,7 @@ namespace BadScript.Optimization
                         md = new BSExpressionOptimizerMetaData( wo.GetInternalObject() );
                     }
 
-                    if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                    if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
                     {
                         Console.WriteLine(
                                           $"[Expression Optimizer] Optimizing {unary.GetType().Name}: " +
@@ -163,7 +164,7 @@ namespace BadScript.Optimization
                     {
                         if ( pexpr.Object.TryConvertBool( out bool c ) && c )
                         {
-                            if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                            if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
                             {
                                 Console.WriteLine(
                                                   $"[Expression Optimizer] Replacing If Branch with If Block.."
@@ -181,7 +182,7 @@ namespace BadScript.Optimization
                     {
                         if ( vexpr.SourceValue is true )
                         {
-                            if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                            if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
                             {
                                 Console.WriteLine(
                                                   $"[Expression Optimizer] Replacing If Branch with If Block.."
@@ -203,7 +204,7 @@ namespace BadScript.Optimization
 
                 foreach ( BSExpression bsExpression in remList )
                 {
-                    if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                    if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
                     {
                         Console.WriteLine(
                                           $"[Expression Optimizer] Removing If Branch {bsExpression}"
@@ -215,7 +216,7 @@ namespace BadScript.Optimization
 
                 if ( newConditions.Count == 0 )
                 {
-                    if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                    if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
                     {
                         Console.WriteLine(
                                           $"[Expression Optimizer] Replacing If Branch with Else Block.."
@@ -252,7 +253,7 @@ namespace BadScript.Optimization
 
                 if ( whileExpr.Condition is BSProxyExpression pexpr && pexpr.Object.TryConvertBool( out bool v ) && !v )
                 {
-                    if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                    if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
                     {
                         Console.WriteLine(
                                           $"[Expression Optimizer] Removing Unreachable While Loop"
@@ -268,7 +269,7 @@ namespace BadScript.Optimization
 
                 if ( whileExpr.Condition is BSValueExpression vexpr && vexpr.SourceValue is false )
                 {
-                    if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                    if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
                     {
                         Console.WriteLine(
                                           $"[Expression Optimizer] Removing Unreachable While Loop"

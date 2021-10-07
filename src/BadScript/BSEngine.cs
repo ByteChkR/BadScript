@@ -32,6 +32,7 @@ namespace BadScript
             new List < BSExpressionValidator > { new BSFunctionReturnExpressionValidator() };
 
         private readonly Dictionary < string, ABSObject > m_Preprocessors;
+
         //private readonly ABSTable m_StaticData;
         private readonly ABSTable m_GlobalTable;
         private readonly List < ABSScriptInterface > m_Interfaces;
@@ -41,7 +42,6 @@ namespace BadScript
         ///     When a type gets defined outside a namespace, they are saved in this namespace.
         /// </summary>
         public BSNamespaceRoot NamespaceRoot { get; }
-
 
         /// <summary>
         ///     Contains the names of all available ABSScriptInterface instances
@@ -61,7 +61,7 @@ namespace BadScript
         /// </param>
         public BSEngine(
             Dictionary < string, ABSObject > startObjects,
-            List < ABSScriptInterface > interfaces)
+            List < ABSScriptInterface > interfaces )
         {
             NamespaceRoot = new BSNamespaceRoot();
             m_Interfaces = interfaces;
@@ -76,7 +76,7 @@ namespace BadScript
                     buildScriptEngineRuntimeObject.Value;
             }
 
-            m_GlobalTable = new BSTable(SourcePosition.Unknown, staticData);
+            m_GlobalTable = new BSTable( SourcePosition.Unknown, staticData );
 
             m_GlobalTable.InsertElement( new BSObject( "__G" ), m_GlobalTable );
         }
@@ -341,7 +341,8 @@ namespace BadScript
         {
             return LoadScript(
                               exprs,
-                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ?? Array.Empty < ABSObject >(),
+                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ??
+                              Array.Empty < ABSObject >(),
                               isBenchmark
                              );
         }
@@ -373,7 +374,8 @@ namespace BadScript
             return LoadScript(
                               exprs,
                               scope,
-                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ?? Array.Empty < ABSObject >(),
+                              args?.Select( x => ( ABSObject )new BSObject( x ) ).ToArray() ??
+                              Array.Empty < ABSObject >(),
                               isBenchmark
                              );
         }
@@ -389,7 +391,7 @@ namespace BadScript
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
-            if ( BSEngineSettings.ENABLE_OPTIMIZE_CONST_EXPRESSIONS)
+            if ( BSEngineSettings.ENABLE_OPTIMIZE_CONST_EXPRESSIONS )
             {
                 BSExpressionOptimizer.Optimize( exprs );
             }
@@ -541,14 +543,7 @@ namespace BadScript
 
             return BSObject.Null;
         }
-        internal ABSObject ResetScope(ABSObject[] args)
-        {
-            BSScope scope = (BSScope)((BSObject)args[0].ResolveReference()).GetInternalObject();
 
-            scope.ResetFlag();
-
-            return BSObject.Null;
-        }
         internal ABSObject CreateScope( ABSObject[] args )
         {
             BSScope scope;
@@ -574,7 +569,6 @@ namespace BadScript
             {
                 return m_GlobalTable.GetElement( name );
             }
-            
 
             throw new BSRuntimeException( name.Position, $"Can not Resolve name: '{name.SafeToString()}'" );
         }
@@ -699,6 +693,15 @@ namespace BadScript
                                              o,
                                              "string"
                                             );
+        }
+
+        internal ABSObject ResetScope( ABSObject[] args )
+        {
+            BSScope scope = ( BSScope )( ( BSObject )args[0].ResolveReference() ).GetInternalObject();
+
+            scope.ResetFlag();
+
+            return BSObject.Null;
         }
 
         #endregion

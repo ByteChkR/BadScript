@@ -44,12 +44,12 @@ namespace BadScript.Interfaces.Versioning
         {
             obj.InsertElement(
                               new BSObject( "Parse" ),
-                              new BSFunction("function Parse(versionStr)", ParseVersion, 1 )
+                              new BSFunction( "function Parse(versionStr)", ParseVersion, 1 )
                              );
 
             obj.InsertElement(
                               new BSObject( "Create" ),
-                              new BSFunction("function Create(major, minor, revision, build)", CreateVersion, 4 )
+                              new BSFunction( "function Create(major, minor, revision, build)", CreateVersion, 4 )
                              );
 
             obj.InsertElement(
@@ -57,7 +57,7 @@ namespace BadScript.Interfaces.Versioning
                               new BSVersionObject( typeof( BSEngine ).Assembly.GetName().Version )
                              );
 
-            obj.InsertElement( new BSObject( "CalVer" ), new BSFunction("function CalVer(build)", CreateCalVer, 1 ) );
+            obj.InsertElement( new BSObject( "CalVer" ), new BSFunction( "function CalVer(build)", CreateCalVer, 1 ) );
         }
 
         private static ABSObject ParseVersion( ABSObject[] arg )

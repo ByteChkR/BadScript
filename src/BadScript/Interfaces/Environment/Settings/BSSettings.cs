@@ -152,7 +152,6 @@ namespace BadScript.Interfaces.Environment.Settings
             }
         }
 
-
         #endregion
 
     }

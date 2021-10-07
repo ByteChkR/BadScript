@@ -29,17 +29,18 @@ namespace BadScript.Parser.Expressions.Implementations.Access
             if ( Left != null )
             {
                 ABSObject l = Left.Execute( scope );
-                if(BSEngineSettings.ENABLE_CORE_FAST_TRACK)
+
+                if ( BSEngineSettings.ENABLE_CORE_FAST_TRACK )
                 {
-                    if (l is BSArray||
-                        l is BSTable ||
-                        l is BSClassInstance ||
-                        l is BSFunction)
+                    if ( l is BSArray ||
+                         l is BSTable ||
+                         l is BSClassInstance ||
+                         l is BSFunction )
                     {
-                        return l.GetProperty(Right);
+                        return l.GetProperty( Right );
                     }
-                   
                 }
+
                 ABSOperatorImplementation impl = BSOperatorImplementationResolver.ResolveImplementation(
                      ".",
                      new[] { l, new BSObject( Right ) },

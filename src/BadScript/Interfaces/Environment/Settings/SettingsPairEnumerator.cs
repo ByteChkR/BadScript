@@ -16,12 +16,6 @@ namespace BadScript.Interfaces.Environment.Settings
 
         private readonly SettingsCategory m_Category;
 
-        protected override int GetHashCodeImpl()
-        {
-            return m_Category.GetHashCode() ^ typeof(SettingsPairEnumerator).GetHashCode();
-        }
-        public override bool IsNull() => false;
-
         #region Public
 
         public SettingsPairEnumerator( SettingsCategory cat ) : base( SourcePosition.Unknown )
@@ -57,6 +51,11 @@ namespace BadScript.Interfaces.Environment.Settings
             throw new BSRuntimeException( "Can not Invoke Settings Pair Enumerator" );
         }
 
+        public override bool IsNull()
+        {
+            return false;
+        }
+
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return m_Category.FullName + "(Pair Enumerator)";
@@ -86,6 +85,15 @@ namespace BadScript.Interfaces.Environment.Settings
             v = null;
 
             return false;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Category.GetHashCode() ^ typeof( SettingsPairEnumerator ).GetHashCode();
         }
 
         #endregion

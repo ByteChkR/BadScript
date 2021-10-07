@@ -19,14 +19,6 @@ namespace BadScript.Parser.Expressions.Implementations.Block
         private readonly string m_DebugData;
         private readonly BSScope m_Scope;
 
-
-        protected override int GetHashCodeImpl()
-        {
-            return m_DebugData.GetHashCode() ^ m_Block.GetHashCode();
-        }
-
-        public override bool IsNull() => false;
-
         #region Public
 
         public BSFunctionEnumeratorObject(
@@ -86,6 +78,11 @@ namespace BadScript.Parser.Expressions.Implementations.Block
             throw new BSRuntimeException( "Function Enumerators can only be enumerated" );
         }
 
+        public override bool IsNull()
+        {
+            return false;
+        }
+
         public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return m_DebugData;
@@ -115,6 +112,15 @@ namespace BadScript.Parser.Expressions.Implementations.Block
             v = m_DebugData;
 
             return true;
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_DebugData.GetHashCode() ^ m_Block.GetHashCode();
         }
 
         #endregion

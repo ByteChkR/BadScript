@@ -37,7 +37,7 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject("CreateScope"),
+                              new BSObject( "CreateScope" ),
                               new BSFunction(
                                              "function CreateScope()/CreateScope(parentScope)",
                                              m_Instance.CreateScope,
@@ -47,7 +47,7 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject("ResetScope"),
+                              new BSObject( "ResetScope" ),
                               new BSFunction(
                                              "function ResetScope(scope)",
                                              m_Instance.ResetScope,
@@ -66,7 +66,7 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject("LoadScopedBenchmark"),
+                              new BSObject( "LoadScopedBenchmark" ),
                               new BSFunction(
                                              "function LoadScopedBenchmark(scope, str, args..)/LoadScopedBenchmark(rootTable, str, args..)",
                                              m_Instance.LoadStringScopedBenchmarkApi,
@@ -86,12 +86,12 @@ namespace BadScript.Interfaces.Environment
 
             env.InsertElement(
                               new BSObject( "LoadString" ),
-                              new BSFunction("function LoadString(str)", m_Instance.LoadStringApi, 1, int.MaxValue )
+                              new BSFunction( "function LoadString(str)", m_Instance.LoadStringApi, 1, int.MaxValue )
                              );
 
             env.InsertElement(
                               new BSObject( "LoadBenchmark" ),
-                              new BSFunction("function LoadBenchmark(str)", m_Instance.LoadStringApi, 1, int.MaxValue )
+                              new BSFunction( "function LoadBenchmark(str)", m_Instance.LoadStringApi, 1, int.MaxValue )
                              );
 
             env.InsertElement(
@@ -117,28 +117,28 @@ namespace BadScript.Interfaces.Environment
             env.InsertElement( new BSObject( "Settings" ), new SettingsCategoryWrapper( BSSettings.BsRoot ) );
 
             env.InsertElement(
-                              new BSObject("Error"),
+                              new BSObject( "Error" ),
                               new BSFunction(
                                              "function Error(obj)",
-                                             (args) =>
+                                             ( args ) =>
                                              {
                                                  ABSObject arg = args[0].ResolveReference();
 
-                                                 throw new BSRuntimeException(arg.Position, arg.ToString());
+                                                 throw new BSRuntimeException( arg.Position, arg.ToString() );
                                              },
                                              1
                                             )
                              );
 
             env.InsertElement(
-                              new BSObject("Sleep"),
+                              new BSObject( "Sleep" ),
                               new BSFunction(
                                              "function Sleep(ms)",
-                                             (args) =>
+                                             ( args ) =>
                                              {
-                                                 if (args[0].TryConvertDecimal(out decimal lD))
+                                                 if ( args[0].TryConvertDecimal( out decimal lD ) )
                                                  {
-                                                     Thread.Sleep((int)lD);
+                                                     Thread.Sleep( ( int )lD );
 
                                                      return BSObject.Null;
                                                  }
@@ -155,23 +155,22 @@ namespace BadScript.Interfaces.Environment
                              );
 
             env.InsertElement(
-                              new BSObject("Debug"),
+                              new BSObject( "Debug" ),
                               new BSFunction(
                                              "function Debug(obj)",
-                                             (args) =>
+                                             ( args ) =>
                                              {
                                                  ABSObject arg = args[0].ResolveReference();
 
                                                  return new BSObject(
                                                                      arg.SafeToString(
-                                                                          new Dictionary<ABSObject, string>()
+                                                                          new Dictionary < ABSObject, string >()
                                                                          )
                                                                     );
                                              },
                                              1
                                             )
                              );
-
         }
 
         #endregion
