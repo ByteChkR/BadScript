@@ -1,0 +1,39 @@
+{
+  "AppInfo": {
+    "Name": "SubTargetExample",
+    "Version": "0.0.0.1"
+  },
+  "BuildTargets": {
+    "Targets": [
+      {
+        "Name": "build",
+        "OutputFormat": "text",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "PreprocessorDirectives": "",
+        "Include": [
+          "./src/*.bs",
+          "%BS_DIR%data/preprocessor/directives/*.bs"
+        ],
+        "SubTarget": "",
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": []
+      },
+      {
+        "Name": "run",
+        "OutputFormat": "none",
+        "OutputFile": "%SubTarget.OutputFile%",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "build",
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": [
+          "%BS_EXEC% run --nologo -f %Target.OutputFile%"
+        ]
+      }
+    ]
+  },
+  "ReferenceResolvers": {},
+  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\""
+}

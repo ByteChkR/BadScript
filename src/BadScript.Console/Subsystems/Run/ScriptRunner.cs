@@ -40,12 +40,19 @@ namespace BadScript.Console.Subsystems.Run
 
                 foreach ( string script in files )
                 {
-                    ConsoleWriter.LogLine( "Executing File: " + script );
+                    if ( !settings.NoLogo )
+                    {
+                        ConsoleWriter.LogLine( "Executing File: " + script );
+                    }
+
                     engine.LoadFile( script, args, settings.IsBenchmark );
                 }
             }
 
-            ConsoleWriter.SuccessLine( "Command 'run' finished!" );
+            if ( !settings.NoLogo )
+            {
+                ConsoleWriter.SuccessLine( "Command 'run' finished!" );
+            }
 
             return 0;
         }

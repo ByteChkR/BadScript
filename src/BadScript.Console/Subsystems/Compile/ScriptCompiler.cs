@@ -24,14 +24,17 @@ namespace BadScript.Console.Subsystems.Compile
             }
 
             BSEngine engine = settings.CreateEngineSettings().Build();
-            ConsoleWriter.LogLine( "Compiling..." );
+
+            if (!settings.NoLogo) 
+                ConsoleWriter.LogLine( "Compiling..." );
 
             using ( Stream s = File.Open( settings.Output, FileMode.CreateNew, FileAccess.ReadWrite ) )
             {
                 BSSerializer.Serialize( engine.ParseFile( settings.Input ), s );
             }
 
-            ConsoleWriter.SuccessLine( "Command 'compile' finished!" );
+            if (!settings.NoLogo)
+                ConsoleWriter.SuccessLine( "Command 'compile' finished!" );
 
             return 0;
         }

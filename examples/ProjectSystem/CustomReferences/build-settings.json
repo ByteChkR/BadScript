@@ -1,0 +1,46 @@
+{
+  "AppInfo": {
+    "Name": "CustomReferencesExample",
+    "Version": "0.0.0.1"
+  },
+  "BuildTargets": {
+    "Targets": [
+      {
+        "Name": "build",
+        "OutputFormat": "text",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "PreprocessorDirectives": "",
+        "Include": [
+          "./src/*.bs",
+          "%BS_DIR%data/preprocessor/directives/*.bs"
+        ],
+        "SubTarget": "",
+        "References": [
+          {
+            "Target": "none",
+            "Path": "customref://my-reference"
+          }
+        ],
+        "PreEvents": [],
+        "PostEvents": []
+      },
+      {
+        "Name": "run",
+        "OutputFormat": "none",
+        "OutputFile": "%SubTarget.OutputFile%",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "build",
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": [
+          "%BS_EXEC% run --nologo -f %Target.OutputFile%"
+        ]
+      }
+    ]
+  },
+  "ReferenceResolvers": {
+    "customref" :"%BS_EXEC% run --nologo -f ./tools/customReferenceResolver.bs -a %Reference.Path%"
+  },
+  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\""
+}

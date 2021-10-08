@@ -1,0 +1,10 @@
+Environment.LoadInterface("Path")
+Environment.LoadInterface("Http")
+
+sourceDir = Path.GetFullPath("./references")
+reference = args[0]
+
+url = Http.CreateUri(reference)
+localPath = url.getHost()
+
+Console.WriteLine(Path.Combine(sourceDir, localPath + ".bs"))
