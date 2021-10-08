@@ -1,0 +1,10 @@
+pass = false
+try
+{
+	test = Reflection.Create("TestType", "MYVALUE", "MYSECONDVALUE")
+}
+catch
+{
+	pass = true
+}
+return pass

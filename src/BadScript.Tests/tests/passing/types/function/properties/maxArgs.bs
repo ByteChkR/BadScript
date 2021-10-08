@@ -1,0 +1,6 @@
+function f(x, y)
+{
+
+}
+
+return f.MaxArgs == 2

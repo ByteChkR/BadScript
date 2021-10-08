@@ -1,0 +1,15 @@
+pass = false
+function f()
+{
+	
+}
+
+function fHook(target, args)
+{
+	pass = true
+}
+
+f.Hook(fHook)
+f()
+
+return pass

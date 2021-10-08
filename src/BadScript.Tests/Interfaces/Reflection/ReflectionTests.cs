@@ -16,6 +16,8 @@ namespace BadScript.Tests.Interfaces.Reflection
 
             public static bool StaticProperty { get; set; } = true;
             public string InstanceProperty { get; set; }
+            public static bool StaticField = true;
+            public string InstanceField;
             public static bool StaticFunction0()
             {
                 return true;
@@ -36,6 +38,7 @@ namespace BadScript.Tests.Interfaces.Reflection
             public TestType()
             {
                 InstanceProperty = "Unset";
+                InstanceField = "Unset";
             }
             public TestType( string propertyValue )
             {

@@ -1,0 +1,5 @@
+TestType = Reflection.GetType("TestType")
+TestType.StaticField = false
+pass = TestType.StaticField == false
+TestType.StaticField = true
+return pass

@@ -1,0 +1,29 @@
+
+
+function makeEnumerator(max)
+{
+	enumerator = {
+		_cur = -1,
+		_max = max,
+		MoveNext = function()
+		{
+			enumerator._cur += 1
+			return enumerator._cur < enumerator._max
+		},
+		GetCurrent = function()
+		{
+			return enumerator._cur
+		}
+	}
+
+	return enumerator
+}
+
+a = makeEnumerator(3)
+
+v = 0
+foreach e in a
+{
+	v += e
+}
+return v == 3

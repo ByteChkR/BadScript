@@ -1,0 +1,4 @@
+test = Reflection.Create("TestType")
+test.InstanceField = "AAAAA"
+pass = test.InstanceField == "AAAAA"
+return pass

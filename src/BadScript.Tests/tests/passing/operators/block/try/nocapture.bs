@@ -3,7 +3,7 @@ try
 {
 	Environment.Error("Test")
 }
-catch (e)
+catch
 {
 	r = true
 }

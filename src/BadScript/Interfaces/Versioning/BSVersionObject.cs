@@ -112,14 +112,14 @@ namespace BadScript.Interfaces.Versioning
                             );
 
             m_Properties.Add(
-                             "op_Equals",
+                             "op_Equality",
                              new BSFunctionReference(
-                                                     new BSFunction( "function op_Equals(other)", VersionEquality, 1 )
+                                                     new BSFunction("function op_Equality(other)", VersionEquality, 1 )
                                                     )
                             );
 
             m_Properties.Add(
-                             "op_InEqual",
+                             "op_Inequality",
                              new BSFunctionReference(
                                                      new BSFunction(
                                                                     "function op_InEqual(other)",
@@ -130,10 +130,10 @@ namespace BadScript.Interfaces.Versioning
                             );
 
             m_Properties.Add(
-                             "op_LessOrEqual",
+                             "op_LessThanOrEqual",
                              new BSFunctionReference(
                                                      new BSFunction(
-                                                                    "function op_LessOrEqual(other)",
+                                                                    "function op_LessThanOrEqual(other)",
                                                                     VersionLessOrEqual,
                                                                     1
                                                                    )
@@ -141,10 +141,10 @@ namespace BadScript.Interfaces.Versioning
                             );
 
             m_Properties.Add(
-                             "op_GreaterOrEqual",
+                             "op_GreaterThanOrEqual",
                              new BSFunctionReference(
                                                      new BSFunction(
-                                                                    "function op_GreaterOrEqual(other)",
+                                                                    "function op_GreaterThanOrEqual(other)",
                                                                     VersionGreaterOrEqual,
                                                                     1
                                                                    )
