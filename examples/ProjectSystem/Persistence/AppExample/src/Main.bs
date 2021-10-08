@@ -1,0 +1,207 @@
+#define SETTINGS_ROOT = "MySettings"
+#define FIRST_START_PATH = "FirstStart"
+#define USER_DATA_PATH = "UserData"
+
+//Force the Preprocessor to Resolve the define keyword and return the content surrounded by string quotes
+#custom GET_DEFINE(defName) { return "\"" + defName + "\"" }
+
+class MyApp
+{
+	App.Manifest.Settings = null
+	_userData = null
+	function IsFirstStart()
+	{
+		if(App.Manifest.Settings.HasSetting(#GET_DEFINE(FIRST_START_PATH)))
+		{
+			firstStartObj = App.Manifest.Settings.GetSetting(#GET_DEFINE(FIRST_START_PATH))
+			return firstStartObj.Value == "true"
+		}
+		return true
+	}
+
+	function SetFirstStart()
+	{
+		firstStartSetting = App.Manifest.Settings.FindSetting(#GET_DEFINE(FIRST_START_PATH), true)
+		firstStartSetting.IsPersistent = true //Set Persistent
+		firstStartSetting.Value = "false"
+	}
+
+	function ResetFirstStart()
+	{
+		firstStartSetting = App.Manifest.Settings.FindSetting(#GET_DEFINE(FIRST_START_PATH), true)
+		firstStartSetting.IsPersistent = true //Set Persistent
+		firstStartSetting.Value = "true"
+	}
+
+	function UserExists(!name)
+	{
+		#ASSERT_STRING(name) //Preprocessor Directive
+		foreach user in _userData
+		{
+			if(user == name)
+			{
+				return true
+			}
+		}
+		return false
+	}
+
+	function CredentialsValid(!name, !pass)
+	{
+		
+		if(!UserExists(name))
+		{
+			return false
+		}
+		return _userData[name] == pass
+	}
+
+	function Register()
+	{
+		Console.WriteLine("Registration:")
+		name = null
+		while(true)
+		{
+			Console.Write("Username: ")
+			name = Console.ReadLine()
+			if(UserExists(name))
+			{
+				Console.WriteLine("The user '" + name + "' already exists.")
+			}
+			else
+			{
+				break
+			}
+		}
+
+		pass = null
+		while(true)
+		{
+			Console.Write("Password: ")
+			pass = Console.ReadLine()
+			Console.Write("Re-Enter Password: ")
+			passCheck = Console.ReadLine()
+			if(pass == passCheck)
+			{
+				break
+			}
+			else
+			{
+				Console.WriteLine("Passwords didnt match.")
+			}
+		}
+
+		_userData[name] = pass
+		Console.WriteLine("Registered User: " + name)
+	}
+
+	function Login()
+	{
+		Console.WriteLine("Registration:")
+		while(true)
+		{
+			Console.Write("Username: ")
+			name = Console.ReadLine()
+			if(!UserExists(name))
+			{
+				Console.WriteLine("The user '" + name + "' does not exists.")
+			}
+			else
+			{
+				Console.Write("Password: ")
+				pass = Console.ReadLine()
+				if(CredentialsValid(name, pass))
+				{
+					Console.WriteLine("Logged in as " + name)
+					break
+				}
+				else
+				{
+					Console.WriteLine("Wrong Password.")
+				}
+			}
+		}
+	}
+
+	function SaveUserData()
+	{
+		userData = App.Manifest.Settings.FindSetting(#GET_DEFINE(USER_DATA_PATH), true)
+		userData.IsPersistent = true
+		userData.Value = Json.ToJson(_userData)
+	}
+
+
+	function ListUsers()
+	{
+		Console.WriteLine("Registered Users:")
+		foreach user in _userData
+		{
+			Console.WriteLine("\t" + user)
+		}
+	}
+
+	function Run(args)
+	{
+		if(IsFirstStart())
+		{
+			SetFirstStart()
+			Console.WriteLine("First Start. Registration Required.")
+			Register()
+		}
+
+		Console.WriteLine("Commands: 'login', 'register', 'list', 'reset', 'exit'")
+		while(true)
+		{
+			Console.Write(">>>")
+			cmd = Console.ReadLine()
+			if(cmd == "login")
+			{
+				Login()
+			}
+			else if(cmd == "register")
+			{
+				Register()
+			}
+			else if(cmd == "list")
+			{
+				ListUsers()
+			}
+			else if(cmd == "reset")
+			{
+				ResetFirstStart()
+				_userData = {}
+			}
+			else if(cmd == "exit")
+			{
+				SaveUserData()
+				break
+			}
+		}
+		
+	}
+
+	function MyApp()
+	{
+		Environment.LoadInterface("Json")
+
+		userData = App.Manifest.Settings.FindSetting(#GET_DEFINE(USER_DATA_PATH), true)
+
+		userData.IsPersistent = true
+		if(userData.Value != "")
+		{
+			_userData = Json.FromJson(userData.Value)
+		}
+		else
+		{
+			_userData = {}
+		}
+	}
+}
+
+Console.WriteLine("Persistent Directory: " + App.Manifest.PersistentPath)
+Console.WriteLine("Temp Directory: " + App.Manifest.TempPath)
+Console.WriteLine("Settings Path: " + App.Manifest.Settings)
+
+app = new MyApp()
+
+app.Run(args)

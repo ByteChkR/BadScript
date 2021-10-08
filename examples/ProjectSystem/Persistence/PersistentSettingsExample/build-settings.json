@@ -1,0 +1,26 @@
+{
+  "AppInfo": {
+    "Name": "PersistentSettingsExample",
+    "Version": "0.0.0.1"
+  },
+  "BuildTargets": {
+    "Targets": [
+      {
+        "Name": "build",
+        "OutputFormat": "text",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "PreprocessorDirectives": "",
+        "Include": [
+          "./src/*.bs",
+          "%BS_DIR%data/preprocessor/directives/*.bs"
+        ],
+        "SubTarget": "",
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": []
+      }
+    ]
+  },
+  "ReferenceResolvers": {},
+  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\""
+}
