@@ -7,6 +7,7 @@ using BadScript.Reflection;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
+using BadScript.Types.References.Implementations;
 
 namespace BadScript.Examples.Integration
 {
