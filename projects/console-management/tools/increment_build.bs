@@ -1,0 +1,14 @@
+versionChangeString = "(~){yyyy}.(~){MM}.(~){dd}.+"
+
+Versioning = Environment.LoadInterface("Versioning")
+Json = Environment.LoadInterface("Json")
+FileSystem = Environment.LoadInterface("FileSystem")
+
+file = Json.FromJson(FileSystem.ReadAll("./build-settings.Json"))
+
+v = Versioning.Parse(file.AppInfo.Version)
+vNew = v.Change(versionChangeString)
+Console.WriteLine(v + " => " + vNew)
+
+file.AppInfo.Version = vNew.ToString()
+FileSystem.WriteAll("./build-settings.Json", Json.ToJson(file))

@@ -1,0 +1,103 @@
+namespace CommandlineParser
+{
+
+	class Command
+	{
+		Name = null
+		Func = null
+		function Command(!name, !func)
+		{
+			#ASSERT_STRING(name)
+			#ASSERT_FUNCTION(func)
+			Name = name
+			Func = func
+		}
+
+		function ToString()
+		{
+			return Name + " : " + Environment.Debug(Func)
+		}
+
+		function Invoke(args)
+		{
+			#ASSERT_ARRAY(args)
+			if(	args.Size() < Func.MinArgs ||
+				args.Size() > Func.MaxArgs)
+			{
+				Console.WriteLine("Invalid Argument count for Command " + ToString())
+			}
+			else
+			{
+				Func.Invoke(args)
+			}
+		}
+	}
+
+	class CommandlineParser
+	{
+		_commands = {}
+		function CommandlineParser()
+		{
+			AddCommand("help", Help)
+		}
+
+		function AddCommand(!name, !func)
+		{
+			#ASSERT_STRING(name)
+			_commands[name] = new Command(name, func)
+		}
+
+		function GetCommand(!name)
+		{
+			#ASSERT_STRING(name)
+			if(Collection.HasKey(_commands, name))
+			{
+				return _commands[name]
+			}
+			return null
+		}
+
+		function Help()
+		{
+			Console.WriteLine("Available Commands: ")
+			foreach (k, cmd) in _commands
+			{
+				Console.WriteLine("\t" + cmd.ToString())
+			}
+		}
+
+		function CreateCommandArgs(args)
+		{
+			a = []
+			for i = 1 while< args.Size()
+			{
+				a.Add(args[i])
+			}
+			return a
+		}
+
+		function Run(args)
+		{
+			#ASSERT_ARRAY(args)
+
+			if(args.Size() == 0)
+			{
+				args.Add("help")
+			}
+
+			cmdName = args[0]
+			cmdArgs = CreateCommandArgs(args)
+
+			cmd = GetCommand(cmdName)
+			if(cmd == null)
+			{
+				Console.WriteLine("Can not Find Command: " + cmdName)
+				Help()
+			}
+			else
+			{
+				cmd.Invoke(cmdArgs)
+			}
+		}
+	}
+}

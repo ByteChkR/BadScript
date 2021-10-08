@@ -1,7 +1,7 @@
 {
   "AppInfo": {
-    "Name": "System",
-    "Version": "2021.10.8.2"
+    "Name": "ConsoleManager",
+    "Version": "2021.10.8.6"
   },
   "BuildTargets": {
     "Targets": [
@@ -9,16 +9,24 @@
         "Name": "build",
         "OutputFormat": "text",
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "PreprocessorDirectives": "",
         "Include": [
           "./src/*.bs",
-          "./src/Enumerables/*.bs",
           "%BS_DIR%data/preprocessor/directives/*.bs"
         ],
         "SubTarget": "",
-        "References": [],
+        "References": [
+          {
+            "Target": "build",
+            "Path": "../commandline-parser/build-settings.json"
+          },
+          {
+            "Target": "build",
+            "Path": "../console-management/build-settings.json"
+          }
+        ],
         "PreEvents": [],
-        "PostEvents": [],
-        "PreprocessorDirectives": ""
+        "PostEvents": []
       },
       {
         "Name": "build_minify",
@@ -34,34 +42,29 @@
         ]
       },
       {
-        "Name": "test",
-        "OutputFormat": "text",
-        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
-        "Include": [
-          "./tests/*.bs",
-          "./src/Enumerables/*.bs",
-          "./src/*.bs",
-          "%BS_DIR%data/preprocessor/directives/*.bs"
-        ],
-        "SubTarget": "",
-        "References": [],
-        "PreEvents": [],
-        "PostEvents": [
-          "%BS_EXEC% run --nologo -f %Target.OutputFile%"
-        ],
-        "PreprocessorDirectives": ""
-      },
-      {
-        "Name": "publish",
+        "Name": "run",
         "OutputFormat": "none",
-        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%SubTarget.Output.OutputExtension%",
+        "OutputFile": "%SubTarget.OutputFile%",
         "PreprocessorDirectives": "",
         "Include": [],
         "SubTarget": "build",
         "References": [],
         "PreEvents": [],
         "PostEvents": [
-          "%BS_EXEC% run --nologo -f ./tools/copy_file.bs -a %SubTarget.OutputFile% %Target.OutputFile%"
+          "%BS_EXEC% run --nologo -f %Target.OutputFile%"
+        ]
+      },
+      {
+        "Name": "publish",
+        "OutputFormat": "none",
+        "OutputFile": "%SubTarget.OutputFile%",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "build",
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": [
+          "%BS_EXEC% appbuilder --nologo -f %Target.OutputFile% -n %AppInfo.Name% -v %AppInfo.Version% -r ./res -o ./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.bsapp"
         ]
       },
       {
@@ -76,11 +79,11 @@
           "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
         ],
         "PostEvents": [
-          "%BS_EXEC% run --nologo -f ./tools/copy_file.bs -a %Target.OutputFile% ../../docs/projects/libs/%AppInfo.Name%.bs"
+          "%BS_EXEC% appbuilder --nologo -f %Target.OutputFile% -n %AppInfo.Name% -v %AppInfo.Version% -r ./res -o ../../docs/projects/%AppInfo.Name%.bsapp"
         ]
       }
     ]
   },
-  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\"",
-  "ReferenceResolvers": {}
+  "ReferenceResolvers": {},
+  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\""
 }

@@ -7,6 +7,7 @@ using System.Threading;
 
 using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
+using BadScript.Reflection;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
 using BadScript.Types.References.Implementations;
@@ -47,7 +48,8 @@ namespace BadScript.Types
         private readonly (int min, int max) m_ParameterCount;
 
         private readonly List < BSFunction > m_Hooks = new List < BSFunction >();
-        private readonly Dictionary < string, BSCachedFunction > m_Properties;
+        private readonly Dictionary<string, BSCachedFunction> m_CachedFunctions;
+        private readonly Dictionary<string, ABSReference> m_Properties = new Dictionary < string, ABSReference >();
 
         private Func < ABSObject[],
             ABSObject > m_Func;
@@ -214,17 +216,21 @@ namespace BadScript.Types
 
         public override ABSReference GetProperty( string propertyName )
         {
-            if ( m_Properties.ContainsKey( propertyName ) )
+            
+            if ( m_CachedFunctions.ContainsKey( propertyName ) )
             {
-                return m_Properties[propertyName].Reference;
+                return m_CachedFunctions[propertyName].Reference;
             }
+
+            if ( m_Properties.ContainsKey( propertyName ) )
+                return m_Properties[propertyName];
 
             throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override bool HasProperty( string propertyName )
         {
-            return m_Properties.ContainsKey( propertyName );
+            return m_CachedFunctions.ContainsKey( propertyName ) || m_Properties.ContainsKey(propertyName);
         }
 
         /// <summary>
@@ -334,7 +340,7 @@ namespace BadScript.Types
 
         protected override int GetHashCodeImpl()
         {
-            return m_Func?.GetHashCode() ?? 0 ^ m_Properties.GetHashCode();
+            return m_Func?.GetHashCode() ?? 0 ^ m_Properties.GetHashCode() ^ m_CachedFunctions.GetHashCode();
         }
 
         protected void SetFunc( Func < ABSObject[], ABSObject > func )
@@ -354,9 +360,14 @@ namespace BadScript.Types
         {
             DebugData = debugData;
             m_Func = func;
-            m_Properties = new();
+            m_CachedFunctions = new();
 
-            m_Properties["Invoke"] = new BSCachedFunction(
+            m_Properties["MaxArgs"] =
+                new BSReflectionReference(() => new BSObject((decimal)m_ParameterCount.max), null);
+            m_Properties["MinArgs"] =
+                new BSReflectionReference(() => new BSObject((decimal)m_ParameterCount.min), null);
+
+            m_CachedFunctions["Invoke"] = new BSCachedFunction(
                                                           () => new BSFunctionReference(
                                                                new BSFunction(
                                                                               "function Invoke(args)/Invoke(args, execHooks)",
@@ -383,7 +394,7 @@ namespace BadScript.Types
                                                               )
                                                          );
 
-            m_Properties["Hook"] =
+            m_CachedFunctions["Hook"] =
                 new BSCachedFunction(
                                      () => new BSFunctionReference(
                                                                    new BSFunction(
@@ -394,7 +405,7 @@ namespace BadScript.Types
                                                                   )
                                     );
 
-            m_Properties["ReleaseHook"] =
+            m_CachedFunctions["ReleaseHook"] =
                 new BSCachedFunction(
                                      () => new BSFunctionReference(
                                                                    new BSFunction(
@@ -405,7 +416,7 @@ namespace BadScript.Types
                                                                   )
                                     );
 
-            m_Properties["ReleaseHooks"] = new BSCachedFunction(
+            m_CachedFunctions["ReleaseHooks"] = new BSCachedFunction(
                                                                 () => new BSFunctionReference(
                                                                      new BSFunction(
                                                                           "function ReleaseHook()",

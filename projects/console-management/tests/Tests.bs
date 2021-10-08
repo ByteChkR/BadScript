@@ -1,0 +1,1 @@
+#LOG("Project '" + FULLNAME + "' will be built with Tests")

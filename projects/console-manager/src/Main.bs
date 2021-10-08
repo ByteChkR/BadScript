@@ -1,0 +1,26 @@
+
+namespace ConsoleManager
+{
+	using CommandlineParser
+	using ConsoleManagement
+	function main()
+	{
+		function printToConsole(!func)
+		{
+			#ASSERT_FUNCTION(func)
+			return function() => Console.WriteLine(func())
+		}
+		mgr = new ConsoleManager()
+		cli = new CommandlineParser()
+		cli.AddCommand("data", printToConsole(mgr.GetDataPath))
+		cli.AddCommand("include", printToConsole(mgr.GetIncludePath))
+		cli.AddCommand("ppinclude", printToConsole(mgr.GetPreprocessorIncludePath))
+		cli.AddCommand("ppdirective", printToConsole(mgr.GetPreprocessorDirectivePath))
+		cli.AddCommand("addinclude", mgr.AddInclude)
+		cli.AddCommand("addppinclude", mgr.AddPreprocessorInclude)
+		cli.AddCommand("addppdirective", mgr.AddPreprocessorDirective)
+		cli.Run(args)
+	}
+
+	main()
+}

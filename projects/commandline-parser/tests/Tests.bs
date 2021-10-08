@@ -1,0 +1,39 @@
+#LOG("Project '" + FULLNAME + "' will be built with Tests")
+
+namespace CommandlineParser.Tests
+{
+	using CommandlineParser
+
+	passNoArgs = false
+	function TestCommand0()
+	{
+		passNoArgs = true
+	}
+
+	passArgs = false
+	function TestCommand1(!arg)
+	{
+		passArgs = arg == "theargument"
+	}
+	passOptionalArgs = false
+	function TestCommand2(!arg0, ?arg1)
+	{
+		passOptionalArgs = arg0 == "theargument" && arg1 == null
+	}
+
+	parser = new CommandlineParser()
+	parser.AddCommand("noargs", TestCommand0)
+	parser.AddCommand("oneargs", TestCommand1)
+	parser.AddCommand("optargs", TestCommand2)
+
+	noargs = ["noargs"]
+	oneargs = ["oneargs", "theargument"]
+	optargs = ["optargs", "theargument"]
+	parser.Run(noargs)
+	parser.Run(oneargs)
+	parser.Run(optargs)
+
+	#ASSERT_EQUALS(passNoArgs, true)
+	#ASSERT_EQUALS(passArgs, true)
+	#ASSERT_EQUALS(passOptionalArgs, true)
+}
