@@ -20,6 +20,19 @@
         "PreprocessorDirectives": ""
       },
       {
+        "Name": "build_minify",
+        "OutputFormat": "none",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%SubTarget.Output.OutputExtension%",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "build",
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": [
+          "%BS_EXEC% run --nologo -f ./tools/minify.bs -a %SubTarget.OutputFile% %Target.OutputFile%"
+        ]
+      },
+      {
         "Name": "run",
         "OutputFormat": "none",
         "OutputFile": "%SubTarget.OutputFile%",
@@ -38,7 +51,7 @@
         "OutputFile": "%SubTarget.OutputFile%",
         "PreprocessorDirectives": "",
         "Include": [],
-        "SubTarget": "build",
+        "SubTarget": "build_minify",
         "References": [],
         "PreEvents": [
           "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
