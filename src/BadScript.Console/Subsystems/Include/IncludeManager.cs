@@ -44,8 +44,10 @@ namespace BadScript.Console.Subsystems.Include
 
             if ( ret != -1 )
             {
-                if (!settings.NoLogo)
+                if ( !settings.NoLogo )
+                {
                     ConsoleWriter.SuccessLine( "Command 'include' finished!" );
+                }
             }
 
             return ret;

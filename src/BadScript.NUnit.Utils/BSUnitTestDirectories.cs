@@ -8,9 +8,9 @@ namespace BadScript.NUnit.Utils
     public static class BSUnitTestDirectories
     {
 
-        public static string DataDirectory => Path.Combine(TestContext.CurrentContext.TestDirectory, "data");
+        public static string DataDirectory => Path.Combine( TestContext.CurrentContext.TestDirectory, "data" );
 
-        public static string SettingsDirectory => Path.Combine(DataDirectory, "settings");
+        public static string SettingsDirectory => Path.Combine( DataDirectory, "settings" );
 
     }
 

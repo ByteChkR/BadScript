@@ -47,8 +47,10 @@ namespace BadScript.Console.AppPackage
                 Directory.Delete( package.Manifest.GetTempDirectory() );
             }
 
-            if (!settings.NoLogo)
+            if ( !settings.NoLogo )
+            {
                 ConsoleWriter.SuccessLine( $"App Terminated with Return: {o}" );
+            }
 
             return 0;
         }

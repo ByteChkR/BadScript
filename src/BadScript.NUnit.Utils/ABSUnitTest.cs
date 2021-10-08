@@ -12,14 +12,6 @@ using NUnit.Framework;
 namespace BadScript.NUnit.Utils
 {
 
-    public static class BSUnitTestDirectories
-    {
-
-        public static string DataDirectory => Path.Combine(TestContext.CurrentContext.TestDirectory, "data");
-
-        public static string SettingsDirectory => Path.Combine(DataDirectory, "settings");
-
-    }
     public abstract class ABSUnitTest
     {
 
@@ -34,7 +26,7 @@ namespace BadScript.NUnit.Utils
         [SetUp]
         public void SetUp()
         {
-            BSSettings.BsRoot.LoadFromDirectory(BSUnitTestDirectories.SettingsDirectory);
+            BSSettings.BsRoot.LoadFromDirectory( BSUnitTestDirectories.SettingsDirectory );
 
             BSEngineSettings es = BSEngineSettings.MakeDefault();
 
@@ -46,7 +38,7 @@ namespace BadScript.NUnit.Utils
         [TearDown]
         public virtual void TearDown()
         {
-            BSSettings.BsRoot.SaveToDirectory(BSUnitTestDirectories.SettingsDirectory);
+            BSSettings.BsRoot.SaveToDirectory( BSUnitTestDirectories.SettingsDirectory );
         }
 
         #endregion
