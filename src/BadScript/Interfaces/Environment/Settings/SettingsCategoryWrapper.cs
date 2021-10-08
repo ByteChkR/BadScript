@@ -46,6 +46,16 @@ namespace BadScript.Interfaces.Environment.Settings
                                                                             )
                                },
                                {
+                                   "SetPersistent", new BSFunctionReference(new BSFunction("function SetPersistent()",
+                                                                                objects =>
+                                                                                {
+                                                                                    m_Category.
+                                                                                        SetPersistentRecursively();
+
+                                                                                    return BSObject.Null;
+                                                                                }, 0))
+                               },
+                               {
                                    "HasSetting", new BSFunctionReference(
                                                                          new BSFunction(
                                                                               "function HasSetting(name)",
@@ -76,14 +86,26 @@ namespace BadScript.Interfaces.Environment.Settings
                                {
                                    "GetSetting", new BSFunctionReference(
                                                                          new BSFunction(
-                                                                              "function GetSetting(name)",
+                                                                              "function GetSetting(name)/GetSetting(name, value)",
                                                                               objects =>
-                                                                                  new SettingsPairWrapper(
+                                                                              {
+                                                                                  if ( objects.Length == 1 )
+                                                                                      return new SettingsPairWrapper(
+                                                                                           m_Category.GetSetting(
+                                                                                                objects[0].
+                                                                                                    ConvertString()
+                                                                                               )
+                                                                                          );
+
+                                                                                  return new SettingsPairWrapper(
                                                                                        m_Category.GetSetting(
-                                                                                            objects[0].ConvertString()
+                                                                                            objects[0].
+                                                                                                ConvertString(),
+                                                                                            objects[1].ConvertString()
                                                                                            )
-                                                                                      ),
-                                                                              1
+                                                                                      );
+                                                                              },
+                                                                              1,2
                                                                              )
                                                                         )
                                },

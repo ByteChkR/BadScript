@@ -1,7 +1,7 @@
 {
   "AppInfo": {
-    "Name": "ConsoleManagement",
-    "Version": "2021.10.8.13"
+    "Name": "AppTools",
+    "Version": "2021.10.8.3"
   },
   "BuildTargets": {
     "Targets": [
@@ -11,8 +11,7 @@
         "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
         "PreprocessorDirectives": "",
         "Include": [
-          "./src/*.bs",
-          "%BS_DIR%data/preprocessor/directives/*.bs"
+          "./src/*.bs"
         ],
         "SubTarget": "",
         "References": [],
@@ -39,28 +38,28 @@
         "PreprocessorDirectives": "",
         "Include": [
           "./tests/*.bs",
-          "./src/*.bs",
-          "%BS_DIR%data/preprocessor/directives/*.bs"
+          "./src/*.bs"
         ],
         "SubTarget": "",
         "References": [],
         "PreEvents": [],
         "PostEvents": [
-          "%BS_EXEC% run --nologo -f %Target.OutputFile%"
+          "%BS_EXEC% appbuilder --nologo -f %Target.OutputFile% -n %AppInfo.Name%_Testing -v %AppInfo.Version% -r ./res -o ./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.bsapp",
+          "%BS_EXEC% app --nologo ./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.bsapp"
         ]
       },
       {
         "Name": "publish",
         "OutputFormat": "none",
-        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%SubTarget.Output.OutputExtension%",
+        "OutputFile": "%SubTarget.OutputFile%",
         "PreprocessorDirectives": "",
         "Include": [],
-        "SubTarget": "build",
+        "SubTarget": "build_minify",
         "References": [],
-        "PreEvents": [],
-        "PostEvents": [
-          "%BS_EXEC% run --nologo -f ./tools/copy_file.bs -a %SubTarget.OutputFile% %Target.OutputFile%"
-        ]
+        "PreEvents": [
+          "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
+        ],
+        "PostEvents": []
       },
       {
         "Name": "release",

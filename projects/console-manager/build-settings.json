@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "ConsoleManager",
-    "Version": "2021.10.8.6"
+    "Version": "2021.10.8.7"
   },
   "BuildTargets": {
     "Targets": [

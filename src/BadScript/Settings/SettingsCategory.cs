@@ -59,6 +59,17 @@ namespace BadScript.Settings
             return r;
         }
 
+        public void SetPersistentRecursively()
+        {
+            SettingsCategory current = this;
+
+            while ( current!=null )
+            {
+                current.IsPersistent = true;
+                current = current.m_Parent;
+            }
+        }
+
         public SettingsCategory FindCategory( string categoryName, bool createIfNotFound )
         {
             string[] parts = categoryName.Split( '.' );

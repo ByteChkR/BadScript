@@ -1,0 +1,18 @@
+namespace AppTools.Testing
+{
+	using AppTools
+
+	context = new AppContext()
+
+	firstStart = context.IsFirstStart()
+	newVersion = context.IsNewVersion()
+	firstVersion = context.GetFirstVersion()
+	lastVersion = context.GetLastVersion()
+	currentVersion = context.GetCurrentVersion()
+	Console.WriteLine("Is First Start: " + firstStart)
+	Console.WriteLine("Is New Version:" + newVersion)
+	Console.WriteLine("First Version: " + firstVersion)
+	Console.WriteLine("Last Version: " + lastVersion)
+	Console.WriteLine("Current Version: " + currentVersion)
+
+}
