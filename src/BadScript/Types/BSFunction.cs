@@ -7,6 +7,7 @@ using System.Threading;
 
 using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
+using BadScript.Profiling;
 using BadScript.Reflection;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
@@ -48,8 +49,8 @@ namespace BadScript.Types
         private readonly (int min, int max) m_ParameterCount;
 
         private readonly List < BSFunction > m_Hooks = new List < BSFunction >();
-        private readonly Dictionary<string, BSCachedFunction> m_CachedFunctions;
-        private readonly Dictionary<string, ABSReference> m_Properties = new Dictionary < string, ABSReference >();
+        private readonly Dictionary < string, BSCachedFunction > m_CachedFunctions;
+        private readonly Dictionary < string, ABSReference > m_Properties = new Dictionary < string, ABSReference >();
 
         private Func < ABSObject[],
             ABSObject > m_Func;
@@ -216,21 +217,22 @@ namespace BadScript.Types
 
         public override ABSReference GetProperty( string propertyName )
         {
-            
             if ( m_CachedFunctions.ContainsKey( propertyName ) )
             {
                 return m_CachedFunctions[propertyName].Reference;
             }
 
             if ( m_Properties.ContainsKey( propertyName ) )
+            {
                 return m_Properties[propertyName];
+            }
 
             throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
         }
 
         public override bool HasProperty( string propertyName )
         {
-            return m_CachedFunctions.ContainsKey( propertyName ) || m_Properties.ContainsKey(propertyName);
+            return m_CachedFunctions.ContainsKey( propertyName ) || m_Properties.ContainsKey( propertyName );
         }
 
         /// <summary>
@@ -243,6 +245,13 @@ namespace BadScript.Types
         public ABSObject Invoke( ABSObject[] args, bool executeHooks )
         {
             PushStack( this );
+
+            BSFunctionInvocationData fData = null;
+
+            if ( BSProfilerData.EnableProfiler )
+            {
+                fData = BSProfilerData.ProfilerFunctionEntry( this, args );
+            }
 
             ABSObject[] arr = null;
 
@@ -261,6 +270,11 @@ namespace BadScript.Types
                     {
                         PopStack();
 
+                        if ( BSProfilerData.EnableProfiler )
+                        {
+                            BSProfilerData.ProfilerFunctionLeave( fData );
+                        }
+
                         return o;
                     }
                 }
@@ -278,6 +292,11 @@ namespace BadScript.Types
 
             ABSObject or = m_Func( args );
             PopStack();
+
+            if ( BSProfilerData.EnableProfiler )
+            {
+                BSProfilerData.ProfilerFunctionLeave( fData );
+            }
 
             return or;
         }
@@ -363,36 +382,37 @@ namespace BadScript.Types
             m_CachedFunctions = new();
 
             m_Properties["MaxArgs"] =
-                new BSReflectionReference(() => new BSObject((decimal)m_ParameterCount.max), null);
+                new BSReflectionReference( () => new BSObject( ( decimal )m_ParameterCount.max ), null );
+
             m_Properties["MinArgs"] =
-                new BSReflectionReference(() => new BSObject((decimal)m_ParameterCount.min), null);
+                new BSReflectionReference( () => new BSObject( ( decimal )m_ParameterCount.min ), null );
 
             m_CachedFunctions["Invoke"] = new BSCachedFunction(
-                                                          () => new BSFunctionReference(
-                                                               new BSFunction(
-                                                                              "function Invoke(args)/Invoke(args, execHooks)",
-                                                                              x =>
-                                                                              {
-                                                                                  if ( x.Length == 1 )
-                                                                                  {
-                                                                                      return Invoke(
-                                                                                           ( x[0].ResolveReference() as
-                                                                                                   BSArray ).
-                                                                                           Elements
-                                                                                          );
-                                                                                  }
+                                                               () => new BSFunctionReference(
+                                                                    new BSFunction(
+                                                                         "function Invoke(args)/Invoke(args, execHooks)",
+                                                                         x =>
+                                                                         {
+                                                                             if ( x.Length == 1 )
+                                                                             {
+                                                                                 return Invoke(
+                                                                                      ( x[0].ResolveReference() as
+                                                                                              BSArray ).
+                                                                                      Elements
+                                                                                     );
+                                                                             }
 
-                                                                                  return Invoke(
-                                                                                       ( x[0].ResolveReference() as
-                                                                                               BSArray ).Elements,
-                                                                                       x[1].ConvertBool()
-                                                                                      );
-                                                                              },
-                                                                              1,
-                                                                              2
-                                                                             )
-                                                              )
-                                                         );
+                                                                             return Invoke(
+                                                                                  ( x[0].ResolveReference() as
+                                                                                          BSArray ).Elements,
+                                                                                  x[1].ConvertBool()
+                                                                                 );
+                                                                         },
+                                                                         1,
+                                                                         2
+                                                                        )
+                                                                   )
+                                                              );
 
             m_CachedFunctions["Hook"] =
                 new BSCachedFunction(
@@ -417,14 +437,14 @@ namespace BadScript.Types
                                     );
 
             m_CachedFunctions["ReleaseHooks"] = new BSCachedFunction(
-                                                                () => new BSFunctionReference(
-                                                                     new BSFunction(
-                                                                          "function ReleaseHook()",
-                                                                          ReleaseHooksFunction,
-                                                                          0
+                                                                     () => new BSFunctionReference(
+                                                                          new BSFunction(
+                                                                               "function ReleaseHook()",
+                                                                               ReleaseHooksFunction,
+                                                                               0
+                                                                              )
                                                                          )
-                                                                    )
-                                                               );
+                                                                    );
         }
 
         private static BSFunction PeekStack()

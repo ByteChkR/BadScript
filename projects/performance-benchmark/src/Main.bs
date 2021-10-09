@@ -1,0 +1,48 @@
+function Add(a, b)
+{
+	return a + b
+}
+
+function Multiply(a, b)
+{
+	return a * b
+}
+
+function MultiplyArray(a)
+{
+	r = 1
+	foreach i in a
+	{
+		r = Multiply(r, i)
+	}
+}
+function AddArray(a)
+{
+	r = 0
+	foreach i in a
+	{
+		r = Add(r, i)
+	}
+}
+
+function CreateArray(n)
+{
+	a = []
+	for i = 0 while< n
+	{
+		a.Add(i)
+	}
+	return a
+}
+
+function Benchmark(n)
+{
+	a = CreateArray(n)
+	sum = AddArray(a)
+	mul = MultiplyArray(a)
+}
+
+for i = 0 while< 1000
+{
+	Benchmark(i)
+}

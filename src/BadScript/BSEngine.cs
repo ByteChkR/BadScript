@@ -11,6 +11,7 @@ using BadScript.Namespaces;
 using BadScript.Optimization;
 using BadScript.Parser;
 using BadScript.Parser.Expressions;
+using BadScript.Profiling;
 using BadScript.Scopes;
 using BadScript.Serialization;
 using BadScript.Types;
@@ -424,6 +425,7 @@ namespace BadScript
             {
                 sw.Stop();
                 Console.WriteLine( $"[BS Benchmark] Execution took: {sw.ElapsedMilliseconds}ms ({sw.Elapsed})" );
+                
             }
 
             return scope.Return ?? scope.GetLocals();

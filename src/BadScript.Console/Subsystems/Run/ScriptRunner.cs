@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 
 using BadScript.Console.Logging;
+using BadScript.Profiling;
 
 namespace BadScript.Console.Subsystems.Run
 {
@@ -15,6 +16,7 @@ namespace BadScript.Console.Subsystems.Run
 
         public static int Run( ScriptRunnerSettings settings )
         {
+            BSProfilerData.EnableProfiler = settings.IsBenchmark;
             for ( int i = 0; i < settings.Iterations; i++ )
             {
                 List < string > files = new List < string >();
@@ -47,6 +49,21 @@ namespace BadScript.Console.Subsystems.Run
 
                     engine.LoadFile( script, args, settings.IsBenchmark );
                 }
+            }
+
+            if (BSProfilerData.EnableProfiler)
+            {
+                string fName = $@"profiler_{DateTime.Now.Ticks}.json";
+                string fDir = Path.Combine(
+                                            BSConsoleDirectories.Instance.ProfilerDirectory,
+                                            fName
+                                           );
+
+                if(!settings.NoLogo)
+                    ConsoleWriter.LogLine( "Saving Profiler Output: " + fName );
+                
+                string fData = BSProfilerData.SerializeProfilerData();
+                File.WriteAllText( fDir, fData );
             }
 
             if ( !settings.NoLogo )
