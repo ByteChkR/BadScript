@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "CommandlineParser",
-    "Version": "2021.10.8.13"
+    "Version": "2021.10.9.0"
   },
   "BuildTargets": {
     "Targets": [

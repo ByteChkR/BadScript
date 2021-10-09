@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "AppTools",
-    "Version": "2021.10.8.3"
+    "Version": "2021.10.9.0"
   },
   "BuildTargets": {
     "Targets": [
