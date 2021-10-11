@@ -9,28 +9,16 @@
 - Function Signature: '`function ResetColor()`'
 - Function Signature: '`function ReadKey(intercept)`'
 ## Properties:
-- `ForeColor = 6`
-- `BackColor = 5`
-- `BufferWidth = 120`
-- `BufferHeight = 3000`
-- `WindowWidth = 120`
-- `WindowHeight = 3000`
-- `LargestWindowWidth = 192`
-- `LargestWindowHeight = 63`
-- `CursorSize = 25`
-- `CursorLeft = 0`
-- `CursorTop = 8`
-- `WindowLeft = 0`
-- `WindowTop = 0`
-- `Title = Windows PowerShell`
+- `ForeColor = 7`
+- `BackColor = 0`
+- `LargestWindowWidth = 0`
+- `LargestWindowHeight = 0`
+- `Title = D:\Users\Tim\Documents\BadScript\src\BadScript.Console\bin\Release\net5.0\bs.exe`
 - `CapsLock = False`
 - `NumberLock = True`
-- `IsErrorRedirected = False`
-- `IsInputRedirected = False`
-- `IsOutputRedirected = False`
-- `KeyAvailable = False`
-- `TreatControlCAsInput = False`
-- `CursorVisible = True`
+- `IsErrorRedirected = True`
+- `IsInputRedirected = True`
+- `IsOutputRedirected = True`
 
 
 ## `Colors` Documentation
