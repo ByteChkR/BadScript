@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>bs</AssemblyName>
-    <Version>2021.10.8.0</Version>
+    <Version>2021.10.11.0</Version>
     <FileUpgradeFlags></FileUpgradeFlags>
     <UpgradeBackupLocation></UpgradeBackupLocation>
     <OldToolsVersion>Current</OldToolsVersion>
