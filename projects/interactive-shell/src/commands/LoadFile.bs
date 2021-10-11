@@ -10,11 +10,11 @@ namespace InteractiveShell.Console.Command
 		{
 			foreach arg in args
 			{
-				Console.WriteLine("Loading File: " + arg)
+				Console.WriteLine($"Loading File: {arg}")
 				o = Instance._shell.RunCommand(FileSystem.ReadAll(arg))
 				if(o.IsError)
 				{
-					Console.WriteLine("Plugin Returned: " + o.ToString())
+					Console.WriteLine($"Plugin Returned: {o.ToString()}")
 				}
 			}
 		}

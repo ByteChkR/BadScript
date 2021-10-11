@@ -42,7 +42,7 @@ function writeArrayContent(arr)
 
 function writeArray(key, arr)
 {
-	return "Property '" + key + "' with default value \n```js\n" + writeArrayContent(arr) + "\n```\n"
+	return $"Property '{key}' with default value \n```js\n{writeArrayContent(arr)}\n```\n"
 }
 
 function writeTableContent(table)
@@ -52,7 +52,7 @@ function writeTableContent(table)
 
 function writeTable(key, table)
 {
-	return "Property '" + key + "' with default value \n```js\n" + writeTableContent(table) + "\n```\n"
+	return $"Property '{key}' with default value \n```js\n{writeTableContent(table)}\n```\n"
 }
 
 function writeTypeContent(type)
@@ -62,13 +62,13 @@ function writeTypeContent(type)
 
 function writeType(key, type)
 {
-	return "Property '" + key + "' with default value \n```js\n" + writeTypeContent(type) + "\n```\n"
+	return $"Property '{key}' with default value \n```js\n{writeTypeContent(type)}\n```\n"
 }
 
 
 function writeFunction(fnc)
 {
-	return "Function Signature: '`" + Environment.Debug(fnc) + "`'"
+	return $"Function Signature: '`{Environment.Debug(fnc)}`'"
 }
 
 
@@ -78,13 +78,13 @@ function writeLiteralContent(value)
 }
 function writeLiteral(key, value)
 {
-	return "Property '`" + key + "`' with default value '`" + value + "`'\n"
+	return $"Property '`{key}`' with default value '`{value}`'\n"
 }
 
 
 function makeSection(key, value, depth)
 {
-	header = repeatChar("#", depth) + " " + key + "\n"
+	header = $"{repeatChar("#", depth)} {key}\n"
 	body = ""
 
 	if(Convert.IsArray(value))
@@ -101,22 +101,22 @@ function makeSection(key, value, depth)
 	}
 	else
 	{
-		Console.WriteLine("Can not Generate Readme for '" + key + "' = '" + Environment.Debug(value) + "'")
+		Console.WriteLine($"Can not Generate Readme for '{key}' = '{Environment.Debug(value)}'")
 	}
 
 	footer = "\n______\n"
 
-	return "\n" + header + body + footer
+	return $"\n{header}{body}{footer}"
 }
 
 function makeReadme(name, table, depth)
 {
 	if(knowsItem(table))
 	{
-		return "\n<RECURSION: " + name + ">\n"
+		return $"\n<RECURSION: {name}>\n"
 	}
 	knownItems.Add(table)
-	header = repeatChar("#", depth) + " `" + name + "` Documentation"
+	header = $"{repeatChar("#", depth)} `{name}` Documentation"
 	rm = "\n"
 	literalData = {}
 	funcData = {}
@@ -144,26 +144,26 @@ function makeReadme(name, table, depth)
 		}
 		catch(e)
 		{
-			Console.WriteLine("Error: " + Environment.Debug(e))
+			Console.WriteLine($"Error: {Environment.Debug(e)}")
 		}
 	}
 
-	props = repeatChar("#", depth + 1) + " Properties:"
+	props = $"{repeatChar("#", depth + 1)} Properties:"
 	hasProps = false
 	foreach (k, v) in literalData
 	{
 		hasProps = true
-		line = "\n- `" + k + " = " + v + "`"
+		line = $"\n- `{k} = {v}`"
 		props += line
 	}
 	props += "\n"
 
-	funcs = repeatChar("#", depth + 1) + " Functions:"
+	funcs = $"{repeatChar("#", depth + 1)} Functions:"
 	hasFuncs = false
 	foreach (k, v) in funcData
 	{
 		hasFuncs = true
-		line = "\n- " + writeFunction(v)
+		line = $"\n- {writeFunction(v)}"
 		funcs += line
 	}
 	funcs += "\n"
@@ -179,15 +179,15 @@ function makeReadme(name, table, depth)
 	{
 		rs += props
 	}
-	return header + "\n" + rs + "\n" + rm
+	return $"{header}\n{rs}\n{rm}"
 }
 
 function makeInterfaceReadme(iface)
 {
-	Console.WriteLine("Generating Docs for " + iface)
+	Console.WriteLine($"Generating Docs for {iface}")
 	interface = Environment.LoadInterface(iface, {})
 	str = makeReadme(iface, interface, 1)
-	FileSystem.WriteAll(Path.Combine(outputDir, iface + ".md"), str)
+	FileSystem.WriteAll(Path.Combine(outputDir, $"{iface}.md"), str)
 }
 
 if(!FileSystem.Exists(outputDir))

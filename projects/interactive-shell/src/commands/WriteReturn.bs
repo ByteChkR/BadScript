@@ -9,7 +9,7 @@ namespace InteractiveShell.Console.Commands
 		{
 			Instance._writeReturn = !Instance._writeReturn
 			
-			Console.WriteLine("Write Return: " + Instance._writeReturn)
+			Console.WriteLine($"Write Return: {Instance._writeReturn}")
 		}
 
 		function ToString()

@@ -15,7 +15,7 @@ namespace CommandlineParser
 
 		function ToString()
 		{
-			return Name + " : " + Environment.Debug(Func)
+			return $"{Name} : {Environment.Debug(Func)}"
 		}
 
 		function Invoke(args)
@@ -24,7 +24,7 @@ namespace CommandlineParser
 			if(	args.Size() < Func.MinArgs ||
 				args.Size() > Func.MaxArgs)
 			{
-				Console.WriteLine("Invalid Argument count for Command " + ToString())
+				Console.WriteLine($"Invalid Argument count for Command {ToString()}")
 			}
 			else
 			{
@@ -62,7 +62,7 @@ namespace CommandlineParser
 			Console.WriteLine("Available Commands: ")
 			foreach (k, cmd) in _commands
 			{
-				Console.WriteLine("\t" + cmd.ToString())
+				Console.WriteLine($"\t{cmd.ToString()}")
 			}
 		}
 
@@ -91,7 +91,7 @@ namespace CommandlineParser
 			cmd = GetCommand(cmdName)
 			if(cmd == null)
 			{
-				Console.WriteLine("Can not Find Command: " + cmdName)
+				Console.WriteLine($"Can not Find Command: {cmdName}")
 				Help()
 			}
 			else

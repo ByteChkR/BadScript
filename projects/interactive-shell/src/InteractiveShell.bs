@@ -21,10 +21,10 @@ namespace InteractiveShell.Internal
 		{
 			if(IsError)
 			{
-				return "ERROR: " + Environment.Debug(ReturnValue)
+				return $"ERROR: {Environment.Debug(ReturnValue)}"
 			}
 			
-			return "SUCCESS: " + Environment.Debug(ReturnValue)
+			return $"SUCCESS: {Environment.Debug(ReturnValue)}"
 		}
 	}
 

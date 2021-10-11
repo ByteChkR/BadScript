@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "readme-generator",
-    "Version": "2021.10.9.0"
+    "Version": "2021.10.11.1"
   },
   "BuildTargets": {
     "Targets": [

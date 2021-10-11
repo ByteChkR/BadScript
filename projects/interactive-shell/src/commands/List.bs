@@ -10,7 +10,7 @@ namespace InteractiveShell.Console.Commands
 			Console.WriteLine("Available Commands:")
 			foreach cmd in Instance._commands
 			{
-				Console.WriteLine("\t- " + cmd.ToString())
+				Console.WriteLine($"\t- {cmd.ToString()}")
 			}
 		}
 

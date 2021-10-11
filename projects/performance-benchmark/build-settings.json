@@ -20,6 +20,17 @@
         "PostEvents": []
       },
       {
+        "Name": "publish",
+        "OutputFormat": "none",
+        "OutputFile": "",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "",
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": []
+      },
+      {
         "Name": "release",
         "OutputFormat": "none",
         "OutputFile": "",

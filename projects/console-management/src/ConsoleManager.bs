@@ -13,7 +13,7 @@ namespace ConsoleManagement
 			#ASSERT_STRING(outDir)
 			if(!FileSystem.Exists(fileToAdd))
 			{
-				Console.WriteLine("File '" + fileToAdd + "' can not be found.")
+				Console.WriteLine($"File '{fileToAdd}' can not be found.")
 			}
 			else
 			{

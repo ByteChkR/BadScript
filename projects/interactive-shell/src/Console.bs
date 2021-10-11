@@ -17,7 +17,7 @@ namespace InteractiveShell.Console
 
 		function RunCommand(!args)
 		{
-			Environment.Error("Command '" + Name + "' does not implement 'InteractiveShellConsoleCommand.RunCommand(!args)'")
+			Environment.Error($"Command '{Name}' does not implement 'InteractiveShellConsoleCommand.RunCommand(!args)'")
 		}
 
 	}
@@ -45,11 +45,11 @@ namespace InteractiveShell.Console
 
 			if(!cmd.IsInstanceOf("InteractiveShellConsoleCommand"))
 			{
-				error(cmd + "has to inherit from ConsoleCommand")
+				error($"{cmd} has to inherit from ConsoleCommand")
 			}
 
 			cmd.Instance = this
-			Console.WriteLine("New Command: " + cmd.ToString())
+			Console.WriteLine($"New Command: {cmd.ToString()}")
 			_commands.Add(cmd)
 		}
 
@@ -68,7 +68,7 @@ namespace InteractiveShell.Console
 			{
 				if(cmd.Name == cmdName)
 				{
-					Console.WriteLine("Found Command: "	+ cmd.Name)
+					Console.WriteLine($"Found Command: {cmd.Name}")
 					cmd.RunCommand(cmdArgs)
 					return true
 				}
@@ -111,7 +111,7 @@ namespace InteractiveShell.Console
 				o = _shell.RunCommand(_currentStr)
 				if(_writeReturn || o.IsError)
 				{
-					Console.WriteLine("Returned: " + o.ToString())
+					Console.WriteLine($"Returned: {o.ToString()}")
 				}
 				_currentStr = ""
 			}
@@ -148,18 +148,18 @@ namespace InteractiveShell.Console
 			FileSystem.CreateDir(pluginPath)
 
 			files = FileSystem.GetFiles(pluginPath, "*.bs", true)
-			Console.WriteLine("Loading " + files.Size() + " Plugins")
+			Console.WriteLine($"Loading {files.Size()} Plugins")
 			foreach file in files
 			{
 				name = Path.GetFileName(file)
-				Console.WriteLine("Loading Plugin: " + name)
+				Console.WriteLine($"Loading Plugin: {name}")
 				try
 				{
 					Environment.LoadString(FileSystem.ReadAll(file), this)
 				}
 				catch(e)
 				{
-					Console.WriteLine("Loading Plugin: " + name + " Failed!(" + e.message + ")")
+					Console.WriteLine($"Loading Plugin: {name} Failed!({e.message})")
 				}
 			}
 		}
