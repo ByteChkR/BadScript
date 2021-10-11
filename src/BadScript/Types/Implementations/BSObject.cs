@@ -11,7 +11,8 @@ namespace BadScript.Types.Implementations
     public class BSObject : ABSObject, IBSWrappedObject
     {
 
-        public static readonly BSObject Null = new BSObject( null );
+        public static readonly BSObject Null = new BSObject(null);
+        public static readonly BSObject EmptyString = new BSObject(string.Empty);
         public static readonly BSObject True = new BSObject( true );
         public static readonly BSObject False = new BSObject( false );
 

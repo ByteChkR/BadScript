@@ -8,6 +8,7 @@
         ValueNull,
         ValueDecimal,
         ValueString,
+        ValueFormattedString,
         ValueBoolean,
         ReturnExpr,
         ContinueExpr,

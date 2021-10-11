@@ -1,0 +1,3 @@
+a = 1
+fmt = $"A: {a} Number"
+return fmt == "A: 1 Number"

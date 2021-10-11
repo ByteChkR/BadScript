@@ -41,7 +41,25 @@ namespace BadScript.Parser
             return m_CurrentPosition;
         }
 
-        private char Current =>
+        public void IncrementPosition() => m_CurrentPosition++;
+
+        public void DecrementPosition() => m_CurrentPosition--;
+        public void IncrementPosition(int c)
+        {
+            for (int i = 0; i < c; i++)
+            {
+                IncrementPosition();
+            }
+        }
+        public void DecrementPosition(int c)
+        {
+            for (int i = 0; i < c; i++)
+            {
+                DecrementPosition();
+            }
+        }
+
+        public char Current =>
             m_CurrentPosition < m_OriginalSource.Length ? m_OriginalSource[m_CurrentPosition] : '\0';
 
         private char[] CurrentArray => m_OriginalSource.ToCharArray();
@@ -676,7 +694,7 @@ namespace BadScript.Parser
             return new BSValueExpression( CreateSourcePosition( pos ), negative * decimal.Parse( sb.ToString() ) );
         }
 
-        public BSExpression ParseString()
+        public BSExpression ParseString(bool isFormatString = false)
         {
             ReadWhitespaceAndNewLine();
 
@@ -689,12 +707,37 @@ namespace BadScript.Parser
             m_CurrentPosition++;
             StringBuilder sb = new StringBuilder();
             bool isEscaped = false;
-
+            List < BSExpression > exprs = new List < BSExpression >();
+            
             while ( !IsStringQuotes() && !IsNewLine() )
             {
-                if ( m_OriginalSource[m_CurrentPosition] == '\\' )
+                if (isFormatString && Is('{'))
                 {
-                    isEscaped = !isEscaped;
+                    IncrementPosition();
+                    if ( !Is('{' ) )
+                    {
+                        BSExpression expr = Parse(int.MaxValue);
+                        if (!Is('}'))
+                            throw new BSParserException("Expected '}'", this);
+
+
+                        sb.Append($"{{{exprs.Count}}}");
+
+                        exprs.Add(expr);
+                    }
+                    else
+                    {
+                        sb.Append( "{" );
+                    }
+                }
+                else if ( m_OriginalSource[m_CurrentPosition] == '\\' )
+                {
+                    isEscaped = true;
+                }
+                else if (isFormatString && Is('}') && Is(1, '}'))
+                {
+                    IncrementPosition();
+                    sb.Append( '}' );
                 }
                 else
                 {
@@ -721,6 +764,8 @@ namespace BadScript.Parser
             m_CurrentPosition++; //Skip over string quotes
             string str = sb.ToString();
 
+            if ( exprs.Count != 0 )
+                return new BSFormattedStringExpression( CreateSourcePosition( pos ), str, exprs.ToArray() );
             return new BSValueExpression( CreateSourcePosition( pos ), str );
         }
 
@@ -766,6 +811,20 @@ namespace BadScript.Parser
         {
             int pos = m_CurrentPosition;
             ReadWhitespaceAndNewLine();
+
+            if (Is('$'))
+            {
+                m_CurrentPosition++;
+
+                if ( !IsStringQuotes() )
+                {
+                    m_CurrentPosition--;
+                }
+                else
+                {
+                    return ParseString( true );
+                }
+            }
 
             if ( IsStringQuotes() )
             {
@@ -1303,12 +1362,12 @@ namespace BadScript.Parser
 
         #region Private
 
-        private SourcePosition CreateSourcePosition( int pos )
+        public SourcePosition CreateSourcePosition( int pos )
         {
             return SourcePosition.GetCurrentLineInfo( m_OffsetSource, pos );
         }
 
-        private bool Is( string s )
+        public bool Is( string s )
         {
             bool isOpen = true;
 
@@ -1320,39 +1379,39 @@ namespace BadScript.Parser
             return isOpen;
         }
 
-        private bool Is( char c )
+        public bool Is( char c )
         {
             return m_OriginalSource.Length > m_CurrentPosition && m_OriginalSource[m_CurrentPosition] == c;
         }
 
-        private bool Is( int off, char c )
+        public bool Is( int off, char c )
         {
             return m_OriginalSource.Length > m_CurrentPosition + off && m_OriginalSource[m_CurrentPosition + off] == c;
         }
 
-        private bool IsDigit()
+        public bool IsDigit()
         {
             return m_OriginalSource.Length > m_CurrentPosition && char.IsDigit( m_OriginalSource[m_CurrentPosition] );
         }
 
-        private bool IsNewLine()
+        public bool IsNewLine()
         {
             return m_OriginalSource.Length > m_CurrentPosition && m_OriginalSource[m_CurrentPosition] == '\n';
         }
 
-        private bool IsStringQuotes()
+        public bool IsStringQuotes()
         {
             return m_OriginalSource.Length > m_CurrentPosition && m_OriginalSource[m_CurrentPosition] == '\"';
         }
 
-        private bool IsWordMiddle()
+        public bool IsWordMiddle()
         {
             return m_OriginalSource.Length > m_CurrentPosition &&
                    ( char.IsLetterOrDigit( m_OriginalSource[m_CurrentPosition] ) ||
                      m_OriginalSource[m_CurrentPosition] == '_' );
         }
 
-        private bool IsWordStart()
+        public bool IsWordStart()
         {
             return m_OriginalSource.Length > m_CurrentPosition &&
                    ( char.IsLetter( m_OriginalSource[m_CurrentPosition] ) ||

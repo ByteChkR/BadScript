@@ -19,7 +19,8 @@ namespace BadScript.Tests
         [TestCaseSource(nameof(GenerateTestCases))]
         public void Test(string key)
         {
-            RunTest(key, x => Assert.True(x.ConvertBool()));
+            RunTest(key, x =>
+                             Assert.True(x.ConvertBool()));
         }
 
         #endregion
