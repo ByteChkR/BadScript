@@ -11,16 +11,17 @@ class MyType
 ## Default Functions
 
 ### GetType()
-TODO
+Returns the name of the Type
 
 ### ToString()
-TODO
+Returns a string implementation of the type instance.
+Base implementation: `return GetType()`
 
 ### IsInstanceOf(other)
-TODO
+Returns true if the type instance is the same type or a subtype of `other`.
 
 ### IsInstanceOf(otherName)
-TODO
+Returns true if the type instance is the same type or a subtype of a type with name `otherName`
 
 
 ## Type Constructors
