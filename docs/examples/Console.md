@@ -73,12 +73,9 @@ Prints all global variable names to the console
 Complete Console Output:
 ```
 Creating Script Engine
+Console
 __G
-print
-write
-read
-clear
-environment
+Environment
 
 ```
 

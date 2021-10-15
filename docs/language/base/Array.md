@@ -22,13 +22,13 @@ array = [
 
 ## Implemented Functions
 
-### add
+### Add
 Adds one or more objects to the array.
 
 ```js
 array = []
-array.add(true) //Adds true to the array
-array.add(1, 2, 3, "Hello World", null) //Adds those elements to the array
+array.Add(true) //Adds true to the array
+array.Add(1, 2, 3, "Hello World", null) //Adds those elements to the array
 ```
 
 #### Required Parameters
@@ -39,15 +39,15 @@ array.add(1, 2, 3, "Hello World", null) //Adds those elements to the array
 - obj1...
 	- Additional Elements that will be added.
 
-### clear
+### Clear
 Clears all items from the list
 
 ```js
 array = [ 1, true, null ]
-array.clear() //Array is now empty
+array.Clear() //Array is now empty
 ```
 
-### contentEquals
+### ContentEquals
 Returns true if the specified array and this array have the same contents
 
 ```js
@@ -59,20 +59,20 @@ array2 = [
 	1, 2, 3
 ]
 
-if(array1.contentEquals(array2))
+if(array1.ContentEquals(array2))
 {
 	//Array Contents are equal
 }
 
 ```
 
-### remove
+### Remove
 Removes the first occurence of one or more elements from the list that are equal to the ones specified.
 
 ```js
 array = [1, 2, 3]
-array.remove(2) //Array Content: [1, 3]
-array.remove(1, 3) //Array Content: []
+array.Remove(2) //Array Content: [1, 3]
+array.Remove(1, 3) //Array Content: []
 ```
 
 #### Required Parameters
@@ -83,13 +83,13 @@ array.remove(1, 3) //Array Content: []
 - obj1...
 	- Additional Elements that will be removed.
 
-### removeAt
+### RemoveAt
 Removes one or more elements at the specified indices from the list.
 
 ```js
 array = [1, 2, 3]
-array.removeAt(1) //Array Content: [1, 3]
-array.removeAt(1, 0) //Array Content: []
+array.RemoveAt(1) //Array Content: [1, 3]
+array.RemoveAt(1, 0) //Array Content: []
 ```
 
 #### Required Parameters
@@ -101,28 +101,28 @@ array.removeAt(1, 0) //Array Content: []
 	- Additional Indices of Elements that will be removed.
 
 
-### reverse
+### Reverse
 Reverses the Order of the Elements in the list
 
 ```js
 array = [1, 2, 3]
-array.reverse() //New Array Order: [ 3, 2, 1 ]
+array.Reverse() //New Array Order: [ 3, 2, 1 ]
 ```
 
-### size
+### Size
 Returns the amount of elements in the list
 
 ```js
 array = [1, 2, 3]
-array.size() //Returns 3
+array.Size() //Returns 3
 ```
 
-### swap
+### Swap
 Swaps two elements in the list.
 
 ```js
 array = [1, 2, 3]
-array.swap(0, 1) //New Array Order: [2, 1, 3]
+array.Swap(0, 1) //New Array Order: [2, 1, 3]
 ```
 
 #### Required Parameters

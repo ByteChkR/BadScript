@@ -66,7 +66,7 @@ t = {
         a = 0
     }
 }
-lock(t) //Requires the "core" interface to be available and loaded(in global scope)
+Collection.Lock(t) //Requires the "Collection" interface to be available and loaded
 
 t.MyFunction = null //Will now crash the runtime.
 t.subTable.a = null //will still work
@@ -125,7 +125,7 @@ function f()
 
 }
 
-f.hook(f) //Will result in stack overflow.
+f.Hook(f) //Will result in stack overflow.
 ```
 ```js
 function f()
@@ -137,7 +137,7 @@ function f_Hook()
 {
     f() //Will Stack overflow
 }
-f.hook(f_Hook) //Will result in stack overflow.
+f.Hook(f_Hook) //Will result in stack overflow.
 ```
 There is however a way to invoke a function without calling the hooks
 ```js
@@ -148,9 +148,9 @@ function f()
 
 function f_Hook()
 {
-    f.invoke([], false) // Will execute f without executing all hooks again.
+    f.Invoke([], false) // Will execute f without executing all hooks again.
 }
-f.hook(f_Hook)
+f.Hook(f_Hook)
 ```
 
 ### Function Hook Return Quirks
@@ -171,7 +171,7 @@ function getPath_DebugHook()
     return "./MyPath/To/Debug/File"
 }
 
-getPath.hook(getPath_DebugHook) //Hook the getPath Function for testing purposes
+getPath.Hook(getPath_DebugHook) //Hook the getPath Function for testing purposes
 
 str = getPath() //Str will contain "Hook Executed", f() never ran.
 ```
@@ -186,7 +186,7 @@ function f(x)
 
 function f_Hook1(x)
 {
-    print("X: " + x)
+    Console.WriteLine("X: " + x)
 }
 
 function f_Hook2(x, y)
@@ -194,8 +194,8 @@ function f_Hook2(x, y)
 
 }
 
-f.hook(f_Hook1)
-f.hook(f_Hook2) //Will work.
+f.Hook(f_Hook1)
+f.Hook(f_Hook2) //Will work.
 f(1) //Will crash because the runtime tries to invoke f_Hook2 with 1 arguments.
 ```
 
@@ -208,19 +208,19 @@ function f(x)
 
 function f_Hook1(x, ?y)
 {
-    print("X: " + x)
+    Console.WriteLine("X: " + x)
 }
 
 function f_Hook2(*args)
 {
     foreach arg in args
     {
-        print("Arg: " + arg)
+        Console.WriteLine("Arg: " + arg)
     }
 }
 
-f.hook(f_Hook1)
-f.hook(f_Hook2)
+f.Hook(f_Hook1)
+f.Hook(f_Hook2)
 f(1) //Will work correctly as both function signatures are valid for the input arguments provided.
 ```
 But Parameter Modifiers can also result in crashes if used in an incompatible way.
@@ -232,7 +232,7 @@ function f(x)
 
 function f_Hook1(x)
 {
-    print("X: " + x)
+    Console.WriteLine("X: " + x)
 }
 
 function f_Hook2(!x)
@@ -240,8 +240,8 @@ function f_Hook2(!x)
 
 }
 
-f.hook(f_Hook1)
-f.hook(f_Hook2) //Will work.
+f.Hook(f_Hook1)
+f.Hook(f_Hook2) //Will work.
 f(null) //Will crash because the runtime tries to invoke f_Hook2 with null as first argument, 
         //which is explicitly not allowed in the function signature.
 ```

@@ -1,22 +1,5 @@
 # Bad Script Interface Documentation
 
-## Contents(Hand written, maybe outdated)
-- [Console](./old/console.md)
-- [Core](./old/core.md)
-- [Http](./old/http.md)
-- [HttpServer](./old/http-server.md)
-- [Imaging](./old/imaging.md)
-- [IO](./old/io.md)
-- [Json](./old/json.md)
-- [Math](./old/math.md)
-- [Path](./old/path.md)
-- [Process](./old/process.md)
-- [Reflection](./old/reflection.md)
-- [String](./old/string.md)
-- [Versioning](./old/versioning.md)
-- [Xml](./old/xml.md)
-- [Zip](./old/zip.md)
-
 ## Contents(Automatically generated)
 - [Collection](./new/Collection.md)
 - [Console](./new/console.md)

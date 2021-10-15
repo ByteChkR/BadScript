@@ -2,12 +2,12 @@
 If trying to implement a complicated task it is often required to get a bit more creative to get to a working state.
 
 ## Generating Code at runtime
-For projects that require custom logic that can not be implemented in advance, the `environment` script interface can be helpful to execute generated code.
+For projects that require custom logic that can not be implemented in advance, the `Environment` script interface can be helpful to execute generated code.
 ```js
 
 source = "return args[0] * args[1] + args[2]"
 
-ret = environment.loadScript(source, [1, 2, 3]) //Call Code that has not been parsed at script load.
+ret = Environment.LoadScript(source, [1, 2, 3]) //Call Code that has not been parsed at script load.
 
 ```
 
@@ -16,14 +16,14 @@ Sometimes it is useful to encapsulate script executions into subscopes for persi
 ```js
 source = "return a * b + c"
 
-subScope = environment.createScope(__SELF) //Use the Default Variable containing the current scope as parent.
+subScope = Environment.CreateScope(__SELF) //Use the Default Variable containing the current scope as parent.
 
 //Defining the Variables here means they will be accessible in the subScope.
 a = 1
 b = 2
 c = 3
 
-ret = environment.loadScopedString(subScope, source)
+ret = Environment.LoadScopedString(subScope, source)
 ```
 
 ### Executing Code in same scope
@@ -36,7 +36,7 @@ a = 1
 b = 2
 c = 3
 
-environment.loadScopedString(__SELF, source) //Using __SELF as scope
+Environment.LoadScopedString(__SELF, source) //Using __SELF as scope
 
 myValue = result //Result is defined in the source we executed in the current scope.
 

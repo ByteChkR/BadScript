@@ -152,7 +152,7 @@ function f(x) //Illegal
 
 ## Implemented Functions
 
-### invoke
+### Invoke
 Invokes the Function
 
 ```js
@@ -162,10 +162,10 @@ function f(x)
 }
 
 v = 1
-vDouble = f.invoke([v], true) 		//[v] = Defining an Array with one element(v)
+vDouble = f.Invoke([v], true) 		//[v] = Defining an Array with one element(v)
 									//true = Execute Hooks
 
-vQuadruple = f.invoke([vDouble]) 	//[v] = Defining an Array with one element(v)
+vQuadruple = f.Invoke([vDouble]) 	//[v] = Defining an Array with one element(v)
 ```
 
 #### Required Parameters
@@ -176,7 +176,7 @@ vQuadruple = f.invoke([vDouble]) 	//[v] = Defining an Array with one element(v)
 - execHooks(default: `true`)
 	- if `false`, the function will be executed without any hooks
 
-### hook
+### Hook
 Hooks into a function. Every time this function gets invoked, all registered hooks are called.
 
 ```js
@@ -190,7 +190,7 @@ function NotifyIfInvoked(x)
 	//Do Stuff
 }
 
-f.hook(NotifyIfInvoked) // Hooks NotifyIfInvoked into f
+f.Hook(NotifyIfInvoked) // Hooks NotifyIfInvoked into f
 
 f(2) 					// NotifyIfInvoked gets called before f
 ```
@@ -207,26 +207,26 @@ function InterceptIfInvoked(x)
 						// of all following hooks and the base function itself
 }
 
-f.hook(InterceptIfInvoked) //Hooks InterceptIfInvoked into f
+f.Hook(InterceptIfInvoked) //Hooks InterceptIfInvoked into f
 
 f(2) 					// InterceptIfInvoked gets called before f. The return is 8
-f.invoke([2], false) 	// InterceptIfInvoked does not get called. The return is 4
+f.Invoke([2], false) 	// InterceptIfInvoked does not get called. The return is 4
 ```
 
 #### Required Parameters
 - hookFunc
 	- The Function that will be hooked.
 
-### releaseHook
+### ReleaseHook
 Releases the Specified hook from the function
 
 ```js
 function f() {}
 function f_hook() {}
 
-f.hook(f_hook)
+f.Hook(f_hook)
 f() // Calls f_hook
-f.releaseHook(f_hook)
+f.ReleaseHook(f_hook)
 f() // Does not call f_hook anymore
 ```
 
@@ -234,17 +234,17 @@ f() // Does not call f_hook anymore
 - hookFunc
 	- The Function that will be released.
 
-### releaseHooks
+### ReleaseHooks
 Releases all hooks from the function
 
 ```js
 function f() {}
 function f_hook1() {}
 function f_hook2() {}
-f.hook(f_hook1)
-f.hook(f_hook2)
+f.Hook(f_hook1)
+f.Hook(f_hook2)
 
-f.releaseHooks() //Clears all Hooks
+f.ReleaseHooks() //Clears all Hooks
 ```
 
 
