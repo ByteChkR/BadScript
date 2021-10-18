@@ -5,6 +5,7 @@ using System.Linq;
 using BadScript.Interfaces;
 using BadScript.Interfaces.Environment;
 using BadScript.Parser.Expressions;
+using BadScript.Scopes;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 
@@ -57,6 +58,18 @@ namespace BadScript
             s.ActiveInterfaces.Add( "Collection" );
 
             return s;
+        }
+
+        public BSScope BuildLocalEnvironment()
+        {
+            ActiveInterfaces.Clear();
+            BSEngine engine = Build( false );
+            BSScope scope = new BSScope( engine );
+            BSTable env = new BSTable( SourcePosition.Unknown );
+            engine.AddInterface( new BSEnvironmentInterface( engine ) );
+            scope.AddLocalVar( "Environment", engine.LoadInterface( "Environment",env ) );
+
+            return scope;
         }
 
         public BSEngine Build( bool addEnvironmentApi = true )

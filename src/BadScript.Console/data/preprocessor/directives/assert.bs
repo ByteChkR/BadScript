@@ -109,6 +109,15 @@
 	}
 }
 
+#macro ASSERT_INSTANCE_OF(NAME, VAR)
+{
+	#ASSERT_TYPE(VAR)
+	if(!VAR.IsInstanceOf("NAME"))
+	{
+		Environment.Error("Assertion Failed. var is not an Instance of NAME. Actual Value: " + VAR.GetType())
+	}
+}
+
 #macro ASSERT_FUNCTION(VAR)
 {
 	#ASSERT_NOT_NULL(VAR)

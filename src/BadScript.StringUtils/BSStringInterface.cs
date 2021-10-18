@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using BadScript.Exceptions;
 using BadScript.Interfaces;
@@ -22,8 +23,16 @@ namespace BadScript.StringUtils
         public override void AddApi( ABSTable apiRoot )
         {
             apiRoot.InsertElement(
-                                  new BSObject( "Escape" ),
-                                  new BSFunction( "function Escape(str)", EscapeString, 1 )
+                                  new BSObject("Escape"),
+                                  new BSFunction("function Escape(str)", EscapeString, 1)
+                                 );
+            apiRoot.InsertElement(
+                                  new BSObject("RegexEscape"),
+                                  new BSFunction("function RegexEscape(str)", RegexEscapeString, 1)
+                                 );
+            apiRoot.InsertElement(
+                                  new BSObject("RegexUnescape"),
+                                  new BSFunction("function RegexUnescape(str)", RegexUnescapeString, 1)
                                  );
 
             apiRoot.InsertElement(
@@ -301,11 +310,23 @@ namespace BadScript.StringUtils
             return new BSObject( arg[0].ConvertString().ToUpper() );
         }
 
-        private ABSObject EscapeString( ABSObject[] arg )
+        private ABSObject EscapeString(ABSObject[] arg)
         {
             string str = arg[0].ConvertString();
 
-            return new BSObject( Uri.EscapeDataString( str ) );
+            return new BSObject(Uri.EscapeDataString(str));
+        }
+        private ABSObject RegexEscapeString(ABSObject[] arg)
+        {
+            string str = arg[0].ConvertString();
+
+            return new BSObject(Regex.Escape(str));
+        }
+        private ABSObject RegexUnescapeString(ABSObject[] arg)
+        {
+            string str = arg[0].ConvertString();
+
+            return new BSObject(Regex.Unescape(str));
         }
 
         private ABSObject StringGetLength( ABSObject[] arg )

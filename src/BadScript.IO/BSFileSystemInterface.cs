@@ -194,11 +194,9 @@ namespace BadScript.IO
                                              {
                                                  ABSObject o = args[0].ResolveReference();
 
-                                                 return new BSObject(
-                                                                     ( decimal )( Directory.Exists( o.ConvertString() )
-                                                                                 ? 1
-                                                                                 : 0 )
-                                                                    );
+                                                 return Directory.Exists(o.ConvertString())
+                                                            ? BSObject.True
+                                                            : BSObject.False;
                                              },
                                              1
                                             )
@@ -212,11 +210,9 @@ namespace BadScript.IO
                                              {
                                                  ABSObject o = args[0].ResolveReference();
 
-                                                 return new BSObject(
-                                                                     ( decimal )( File.Exists( o.ConvertString() )
-                                                                                 ? 1
-                                                                                 : 0 )
-                                                                    );
+                                                 return File.Exists( o.ConvertString() )
+                                                            ? BSObject.True
+                                                            : BSObject.False;
                                              },
                                              1
                                             )

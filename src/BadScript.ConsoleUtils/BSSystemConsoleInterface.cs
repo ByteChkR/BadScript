@@ -177,12 +177,9 @@ namespace BadScript.ConsoleUtils
                                                         )
                               );
 
-            root.SetRawElement(
-                               "KeyAvailable",
-                               new BSReflectionReference(
-                                                         () => Console.KeyAvailable ? BSObject.True : BSObject.False,
-                                                         null
-                                                        )
+            root.InsertElement(
+                               "IsKeyAvailable",
+                               new BSFunction("function IsKeyAvailable()", args => Console.KeyAvailable ? BSObject.True : BSObject.False, 0)
                               );
 
             root.SetRawElement(
@@ -227,7 +224,23 @@ namespace BadScript.ConsoleUtils
                                               {
                                                   int c = Console.Read();
 
-                                                  return new BSObject( ( decimal )c );
+                                                  return new BSObject((decimal)c);
+                                              },
+                                              0
+                                             )
+                              );
+
+            root.SetRawElement(
+                               "ReadChar",
+                               new BSFunction(
+                                              "function ReadChar()",
+                                              o =>
+                                              {
+                                                  int c = Console.Read();
+
+                                                  if ( c == -1 )
+                                                      c = '\0';
+                                                  return new BSObject(new string((char)c, 1));
                                               },
                                               0
                                              )

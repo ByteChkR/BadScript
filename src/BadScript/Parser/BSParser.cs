@@ -780,8 +780,10 @@ namespace BadScript.Parser
 #endif
         public BSExpression[] ParseToEnd()
         {
+#if !DEBUG
             try
             {
+#endif
                 ReadWhitespaceAndNewLine();
                 List < BSExpression > ret = new List < BSExpression >();
 
@@ -796,15 +798,16 @@ namespace BadScript.Parser
                 }
 
                 return ret.ToArray();
+
+#if !DEBUG
             }
             catch ( Exception e )
             {
                 throw
-#if !DEBUG
                     new ParserException(e)
+            ;
+        }
 #endif
-                    ;
-            }
         }
 
         public BSExpression ParseValue()
@@ -1358,9 +1361,9 @@ namespace BadScript.Parser
             return r;
         }
 
-        #endregion
+#endregion
 
-        #region Private
+#region Private
 
         public SourcePosition CreateSourcePosition( int pos )
         {
@@ -1601,7 +1604,7 @@ namespace BadScript.Parser
             return true;
         }
 
-        #endregion
+#endregion
 
     }
 

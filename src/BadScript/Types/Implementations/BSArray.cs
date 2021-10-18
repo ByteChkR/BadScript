@@ -89,7 +89,7 @@ namespace BadScript.Types.Implementations
         {
             if ( !m_Functions.ContainsKey( propertyName ) )
             {
-                throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
+                throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in Array {SafeToString()}" );
             }
 
             return new BSFunctionReference( m_Functions[propertyName] );
@@ -186,7 +186,7 @@ namespace BadScript.Types.Implementations
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in array {SafeToString()}" );
         }
 
         public override bool TryConvertBool( out bool v )
@@ -251,7 +251,7 @@ namespace BadScript.Types.Implementations
                                                 objects =>
                                                 {
                                                     m_InnerArray.AddRange(
-                                                                          objects.Select( x => x.ResolveReference() )
+                                                                          objects.Select(x => x.ResolveReference())
                                                                          );
 
                                                     return BSObject.Null;
@@ -259,6 +259,22 @@ namespace BadScript.Types.Implementations
                                                 1,
                                                 int.MaxValue
                                                );
+
+            m_Functions["Insert"] = new BSFunction(
+                                                   "function Insert(idx, obj0, obj1, obj2, ...)",
+                                                   objects =>
+                                                   {
+                                                       m_InnerArray.InsertRange(
+                                                                                ( int )objects.First().ConvertDecimal(),
+                                                                                objects.Skip( 1 ).
+                                                                                    Select( x => x.ResolveReference() )
+                                                                               );
+
+                                                       return BSObject.Null;
+                                                   },
+                                                   1,
+                                                   int.MaxValue
+                                                  );
 
             m_Functions["Remove"] = new BSFunction(
                                                    "function Remove(obj0, obj1, obj2, ...)",

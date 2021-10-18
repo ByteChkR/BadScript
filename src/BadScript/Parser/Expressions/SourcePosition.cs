@@ -39,6 +39,10 @@ namespace BadScript.Parser.Expressions
             {
                 text = text.Take( pos ).ToArray();
             }
+            else
+            {
+                pos = src.Length;
+            }
 
             int lineCount = 0;
             int lastNewLine = 0;

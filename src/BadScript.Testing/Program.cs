@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using BadScript.ConsoleUtils;
 using BadScript.Exceptions;
+using BadScript.Interfaces.Collection;
+using BadScript.Interfaces.Convert;
 using BadScript.Parser;
 using BadScript.Parser.Expressions;
 using BadScript.Parser.Expressions.Implementations.Value;
+using BadScript.Scopes;
 using BadScript.Types;
 
 namespace BadScript.Testing
@@ -16,40 +22,17 @@ namespace BadScript.Testing
         
         #region Public
 
-        private static BSExpression Parse(string str)
-        {
-            BSParser p = new BSParser(str );
-
-            return p.ParseString( true );
-        }
 
         public static void Main( string[] args )
         {
-            string[] src =
-            {
-                "\"LoadInterface Function: {Environment.Debug(Environment.LoadInterface)}\"",
-                "\"Masked Character: {{\"",
-                "\"Masked Character: }}\"",
-                "\"Masked Character: {{ABC}}\"",
-                "\"{Environment.Debug(Environment.LoadInterface)} LoadInterface Function\"",
-                "\"{{Masked Character\"",
-                "\"}}Masked Character\"",
-                "\"{{ABC}} Masked Character\"",
-                "\"LoadInterface {Environment.Debug(Environment.LoadInterface)} Function\"",
-                "\"Masked {{ Character\"",
-                "\"Masked }} Character\"",
-                "\"Masked {{ABC}} Character\"",
-            };
+            BSEngineSettings es = BSEngineSettings.MakeDefault();
+            es.Interfaces.Add(new BSCollectionInterface());
+            es.Interfaces.Add(new BSConvertInterface());
+            es.Interfaces.Add(new BSSystemConsoleInterface());
+            BSScope scope = es.BuildLocalEnvironment();
 
-            BSEngine e = BSEngineSettings.MakeDefault().Build();
-            foreach ( string s in src )
-            {
-                BSExpression expr = Parse( s );
-                BSReturnExpression r = new BSReturnExpression( SourcePosition.Unknown, expr );
-                ABSObject o = e.LoadScript( new[] { r } );
-                System.Console.WriteLine( o.ToString() );
-            }
-
+            BSEngine engine = scope.Engine;
+            engine.LoadSource( File.ReadAllText( args[0] ), scope, args.Skip( 1 ).ToArray() );
         }
 
         #endregion

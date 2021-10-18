@@ -56,7 +56,7 @@ namespace BadScript.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
-            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in object {SafeToString()}" );
         }
 
         public override bool HasProperty( string propertyName )
@@ -95,7 +95,7 @@ namespace BadScript.Types.Implementations
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in object {SafeToString()}" );
         }
 
         public override string ToString()

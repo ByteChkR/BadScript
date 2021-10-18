@@ -227,7 +227,7 @@ namespace BadScript.Types
                 return m_Properties[propertyName];
             }
 
-            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in function {SafeToString()}" );
         }
 
         public override bool HasProperty( string propertyName )
@@ -329,7 +329,7 @@ namespace BadScript.Types
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist" );
+            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in function {SafeToString()}" );
         }
 
         public override bool TryConvertBool( out bool v )
