@@ -12,7 +12,7 @@ namespace BadScript.Tests.Interfaces.Convert
 
         public static string[] GenerateTestCases()
         {
-            return PopulateKeyMap("/tests/passing/interfaces/convert/");
+            return PopulateKeyMap( "/tests/passing/interfaces/convert/" );
         }
 
         [Test]

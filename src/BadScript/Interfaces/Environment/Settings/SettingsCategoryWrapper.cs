@@ -46,14 +46,19 @@ namespace BadScript.Interfaces.Environment.Settings
                                                                             )
                                },
                                {
-                                   "SetPersistent", new BSFunctionReference(new BSFunction("function SetPersistent()",
-                                                                                objects =>
-                                                                                {
-                                                                                    m_Category.
-                                                                                        SetPersistentRecursively();
+                                   "SetPersistent", new BSFunctionReference(
+                                                                            new BSFunction(
+                                                                                 "function SetPersistent()",
+                                                                                 objects =>
+                                                                                 {
+                                                                                     m_Category.
+                                                                                         SetPersistentRecursively();
 
-                                                                                    return BSObject.Null;
-                                                                                }, 0))
+                                                                                     return BSObject.Null;
+                                                                                 },
+                                                                                 0
+                                                                                )
+                                                                           )
                                },
                                {
                                    "HasSetting", new BSFunctionReference(
@@ -90,12 +95,14 @@ namespace BadScript.Interfaces.Environment.Settings
                                                                               objects =>
                                                                               {
                                                                                   if ( objects.Length == 1 )
+                                                                                  {
                                                                                       return new SettingsPairWrapper(
                                                                                            m_Category.GetSetting(
                                                                                                 objects[0].
                                                                                                     ConvertString()
                                                                                                )
                                                                                           );
+                                                                                  }
 
                                                                                   return new SettingsPairWrapper(
                                                                                        m_Category.GetSetting(
@@ -105,7 +112,8 @@ namespace BadScript.Interfaces.Environment.Settings
                                                                                            )
                                                                                       );
                                                                               },
-                                                                              1,2
+                                                                              1,
+                                                                              2
                                                                              )
                                                                         )
                                },

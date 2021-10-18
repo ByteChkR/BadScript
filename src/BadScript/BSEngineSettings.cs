@@ -60,18 +60,6 @@ namespace BadScript
             return s;
         }
 
-        public BSScope BuildLocalEnvironment()
-        {
-            ActiveInterfaces.Clear();
-            BSEngine engine = Build( false );
-            BSScope scope = new BSScope( engine );
-            BSTable env = new BSTable( SourcePosition.Unknown );
-            engine.AddInterface( new BSEnvironmentInterface( engine ) );
-            scope.AddLocalVar( "Environment", engine.LoadInterface( "Environment",env ) );
-
-            return scope;
-        }
-
         public BSEngine Build( bool addEnvironmentApi = true )
         {
             BSEngine instance = new BSEngine(
@@ -93,6 +81,18 @@ namespace BadScript
             }
 
             return instance;
+        }
+
+        public BSScope BuildLocalEnvironment()
+        {
+            ActiveInterfaces.Clear();
+            BSEngine engine = Build( false );
+            BSScope scope = new BSScope( engine );
+            BSTable env = new BSTable( SourcePosition.Unknown );
+            engine.AddInterface( new BSEnvironmentInterface( engine ) );
+            scope.AddLocalVar( "Environment", engine.LoadInterface( "Environment", env ) );
+
+            return scope;
         }
 
         #endregion

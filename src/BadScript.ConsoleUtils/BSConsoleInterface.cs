@@ -86,7 +86,6 @@ namespace BadScript.ConsoleUtils
                                               0
                                              )
                               );
-            
 
             root.InsertElement(
                                new BSObject( "Clear" ),

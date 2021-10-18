@@ -114,7 +114,7 @@ namespace BadScript.Interfaces.Versioning
             m_Properties.Add(
                              "op_Equality",
                              new BSFunctionReference(
-                                                     new BSFunction("function op_Equality(other)", VersionEquality, 1 )
+                                                     new BSFunction( "function op_Equality(other)", VersionEquality, 1 )
                                                     )
                             );
 

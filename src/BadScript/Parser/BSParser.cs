@@ -24,6 +24,23 @@ namespace BadScript.Parser
     public class BSParser
     {
 
+#if !DEBUG
+        public class ParserException : Exception
+        {
+
+            public override string StackTrace => "";
+
+            #region Public
+
+            public ParserException( Exception inner ) : base( inner.Message )
+            {
+            }
+
+            #endregion
+
+        }
+#endif
+
         private readonly string m_OriginalSource;
         private int m_CurrentPosition;
         private readonly int m_SourcePositionOffset;
@@ -31,36 +48,7 @@ namespace BadScript.Parser
         private readonly bool m_AllowFunctionBaseInvocation;
         private readonly bool m_AllowFunctionGlobal;
 
-        public void SetPosition( int pos )
-        {
-            m_CurrentPosition = pos;
-        }
-
-        public int GetPosition()
-        {
-            return m_CurrentPosition;
-        }
-
-        public void IncrementPosition() => m_CurrentPosition++;
-
-        public void DecrementPosition() => m_CurrentPosition--;
-        public void IncrementPosition(int c)
-        {
-            for (int i = 0; i < c; i++)
-            {
-                IncrementPosition();
-            }
-        }
-        public void DecrementPosition(int c)
-        {
-            for (int i = 0; i < c; i++)
-            {
-                DecrementPosition();
-            }
-        }
-
-        public char Current =>
-            m_CurrentPosition < m_OriginalSource.Length ? m_OriginalSource[m_CurrentPosition] : '\0';
+        public char Current => m_CurrentPosition < m_OriginalSource.Length ? m_OriginalSource[m_CurrentPosition] : '\0';
 
         private char[] CurrentArray => m_OriginalSource.ToCharArray();
 
@@ -85,6 +73,24 @@ namespace BadScript.Parser
         public SourcePosition CreateSourcePosition()
         {
             return CreateSourcePosition( m_CurrentPosition + m_SourcePositionOffset );
+        }
+
+        public SourcePosition CreateSourcePosition( int pos )
+        {
+            return SourcePosition.GetCurrentLineInfo( m_OffsetSource, pos );
+        }
+
+        public void DecrementPosition()
+        {
+            m_CurrentPosition--;
+        }
+
+        public void DecrementPosition( int c )
+        {
+            for ( int i = 0; i < c; i++ )
+            {
+                DecrementPosition();
+            }
         }
 
         public int FindClosing( string open, string close )
@@ -140,6 +146,75 @@ namespace BadScript.Parser
             return word;
         }
 
+        public int GetPosition()
+        {
+            return m_CurrentPosition;
+        }
+
+        public void IncrementPosition()
+        {
+            m_CurrentPosition++;
+        }
+
+        public void IncrementPosition( int c )
+        {
+            for ( int i = 0; i < c; i++ )
+            {
+                IncrementPosition();
+            }
+        }
+
+        public bool Is( string s )
+        {
+            bool isOpen = true;
+
+            for ( int i = 0; i < s.Length; i++ )
+            {
+                isOpen &= Is( i, s[i] );
+            }
+
+            return isOpen;
+        }
+
+        public bool Is( char c )
+        {
+            return m_OriginalSource.Length > m_CurrentPosition && m_OriginalSource[m_CurrentPosition] == c;
+        }
+
+        public bool Is( int off, char c )
+        {
+            return m_OriginalSource.Length > m_CurrentPosition + off && m_OriginalSource[m_CurrentPosition + off] == c;
+        }
+
+        public bool IsDigit()
+        {
+            return m_OriginalSource.Length > m_CurrentPosition && char.IsDigit( m_OriginalSource[m_CurrentPosition] );
+        }
+
+        public bool IsNewLine()
+        {
+            return m_OriginalSource.Length > m_CurrentPosition && m_OriginalSource[m_CurrentPosition] == '\n';
+        }
+
+        public bool IsStringQuotes()
+        {
+            return m_OriginalSource.Length > m_CurrentPosition && m_OriginalSource[m_CurrentPosition] == '\"';
+        }
+
+        public bool IsWordMiddle()
+        {
+            return m_OriginalSource.Length > m_CurrentPosition &&
+                   ( char.IsLetterOrDigit( m_OriginalSource[m_CurrentPosition] ) ||
+                     m_OriginalSource[m_CurrentPosition] == '_' );
+        }
+
+        public bool IsWordStart()
+        {
+            return m_OriginalSource.Length > m_CurrentPosition &&
+                   ( char.IsLetter( m_OriginalSource[m_CurrentPosition] ) ||
+                     m_OriginalSource[m_CurrentPosition] == '_' );
+        }
+
         public BSExpression Parse( int start )
         {
             BSExpression expr = ParseValue();
@@ -191,6 +266,126 @@ namespace BadScript.Parser
             return expr;
         }
 
+        public BSFunctionParameter[] ParseArgumentList()
+        {
+            if ( !Is( '(' ) )
+            {
+                throw new BSParserException( "Expected '('", this );
+            }
+
+            m_CurrentPosition++;
+
+            List < BSFunctionParameter > args = new List < BSFunctionParameter >();
+            bool needsToBeOptional = false;
+
+            if ( !Is( ')' ) )
+            {
+                bool notNull = false;
+                bool optional = false;
+                bool isArgArray = false;
+
+                if ( Is( '*' ) )
+                {
+                    m_CurrentPosition++;
+                    isArgArray = true;
+                }
+                else if ( Is( '!' ) )
+                {
+                    m_CurrentPosition++;
+                    notNull = true;
+
+                    if ( Is( '?' ) )
+                    {
+                        m_CurrentPosition++;
+                        optional = true;
+                        needsToBeOptional = true;
+                    }
+                }
+                else if ( Is( "?" ) )
+                {
+                    m_CurrentPosition++;
+                    optional = true;
+                    needsToBeOptional = true;
+
+                    if ( Is( '!' ) )
+                    {
+                        m_CurrentPosition++;
+                        notNull = true;
+                    }
+                }
+
+                if ( needsToBeOptional && !optional )
+                {
+                    throw new BSRuntimeException(
+                                                 "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters."
+                                                );
+                }
+
+                args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional, isArgArray ) );
+                ReadWhitespaceAndNewLine();
+
+                while ( Is( ',' ) )
+                {
+                    m_CurrentPosition++;
+                    notNull = false;
+                    optional = false;
+                    ReadWhitespaceAndNewLine();
+
+                    if ( Is( '!' ) )
+                    {
+                        m_CurrentPosition++;
+                        notNull = true;
+
+                        if ( Is( '?' ) )
+                        {
+                            m_CurrentPosition++;
+                            optional = true;
+                            needsToBeOptional = true;
+                        }
+                    }
+                    else if ( Is( "?" ) )
+                    {
+                        m_CurrentPosition++;
+                        optional = true;
+                        needsToBeOptional = true;
+
+                        if ( Is( '!' ) )
+                        {
+                            m_CurrentPosition++;
+                            notNull = true;
+                        }
+                    }
+
+                    if ( needsToBeOptional && !optional )
+                    {
+                        throw new BSRuntimeException(
+                                                     "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters."
+                                                    );
+                    }
+
+                    args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional, false ) );
+                    ReadWhitespaceAndNewLine();
+                }
+
+                ReadWhitespaceAndNewLine();
+
+                if ( !Is( ')' ) )
+                {
+                    throw new BSParserException( "Expected ')'", this );
+                }
+
+                m_CurrentPosition++;
+
+                return args.ToArray();
+            }
+            else
+            {
+                m_CurrentPosition++;
+
+                return args.ToArray();
+            }
+        }
+
         public string ParseArgumentName()
         {
             ReadWhitespaceAndNewLine();
@@ -238,145 +433,24 @@ namespace BadScript.Parser
             throw new BSParserException( "Expected ']'", this );
         }
 
-        public (BSExpression, BSExpression[]) ParseConditionalBlock( Func < string, string > blockModifier = null )
+        public string ParseBlock()
         {
-            if ( Is( '(' ) )
+            if ( !Is( '{' ) )
             {
-                m_CurrentPosition++;
-
-                BSExpression condition = ParseExpression( int.MaxValue );
-                ReadWhitespaceAndNewLine();
-
-                if ( !Is( ')' ) )
-                {
-                    throw new BSParserException( "Expected ')'", this );
-                }
-
-                m_CurrentPosition++;
-                ReadWhitespaceAndNewLine();
-                string block = ParseBlock();
-                block = blockModifier?.Invoke( block ) ?? block;
-
-                BSParser p = new BSParser( block );
-
-                BSExpression[] b = p.ParseToEnd();
-
-                return ( condition, b );
+                throw new BSParserException( "Expected '{'", this );
             }
 
-            throw new BSParserException( "Expected '('", this );
-        }
+            m_CurrentPosition++;
 
-        public BSExpression ParseExpression( int start )
-        {
-            BSExpression expr = ParseValue();
+            //Find Closing
+            int start = m_CurrentPosition;
+            int end = FindClosing( "{", "}" );
 
-            string preop = ParseKey();
+            string s = m_OriginalSource.Substring( start, end - start );
 
-            if ( BSOperatorPreceedenceTable.HasPostfix( start, preop ) )
-            {
-                expr = BSOperatorPreceedenceTable.GetPostfix( int.MaxValue, preop ).
-                                                  Parse( expr, this );
-            }
-            else
-            {
-                m_CurrentPosition -= preop.Length;
-            }
+            m_CurrentPosition = end + 1;
 
-            while ( Is( '(' ) || Is( '[' ) )
-            {
-                if ( Is( '(' ) )
-                {
-                    expr = ParseInvocation( expr );
-                }
-                else
-                {
-                    expr = ParseArrayAccess( expr );
-                }
-            }
-
-            string key = ParseKeyword();
-
-            if ( key.StartsWith( ")" ) ||
-                 key.StartsWith( "]" ) ||
-                 key == "," ||
-                 !BSOperatorPreceedenceTable.Has( start, key ) )
-            {
-                m_CurrentPosition -= key.Length;
-            }
-            else if ( key != "" )
-            {
-                BSOperator o = BSOperatorPreceedenceTable.Get( start, key );
-
-                BSExpression r = Parse( o.Parse( expr, this ), start );
-
-                return r;
-            }
-
-            return expr;
-        }
-
-        public BSUsingExpression ParseUsing()
-        {
-            SourcePosition sp = CreateSourcePosition();
-
-            ReadWhitespaceAndNewLine();
-            List < string > fn = new();
-            bool restart = true;
-
-            while ( restart )
-            {
-                ReadWhitespaceAndNewLine();
-                fn.Add( GetNextWord() );
-                ReadWhitespaceAndNewLine();
-
-                if ( Is( '.' ) )
-                {
-                    restart = true;
-                    m_CurrentPosition++;
-                }
-                else
-                {
-                    restart = false;
-                }
-            }
-
-            return new BSUsingExpression( sp, fn.ToArray() );
-        }
-
-        public BSNamespaceExpression ParseNamespace()
-        {
-            SourcePosition sp = CreateSourcePosition();
-
-            ReadWhitespaceAndNewLine();
-            List < string > fn = new();
-            bool restart = true;
-
-            while ( restart )
-            {
-                ReadWhitespaceAndNewLine();
-                fn.Add( GetNextWord() );
-                ReadWhitespaceAndNewLine();
-
-                if ( Is( '{' ) )
-                {
-                    restart = false;
-                }
-
-                if ( Is( '.' ) )
-                {
-                    restart = true;
-                    m_CurrentPosition++;
-                }
-            }
-
-            ReadWhitespaceAndNewLine();
-            int off = m_CurrentPosition + 1;
-            string block = ParseBlock();
-            BSParser p = new BSParser( block, m_OriginalSource, off );
-            BSExpression[] exprs = p.ParseToEnd();
-
-            return new BSNamespaceExpression( sp, fn.ToArray(), exprs );
+            return s;
         }
 
         public BSExpression ParseClass( bool isGlobal )
@@ -467,6 +541,256 @@ namespace BadScript.Parser
             }
 
             return new BSClassExpression( pos, className, baseClass, isGlobal, expressions );
+        }
+
+        public (BSExpression, BSExpression[]) ParseConditionalBlock( Func < string, string > blockModifier = null )
+        {
+            if ( Is( '(' ) )
+            {
+                m_CurrentPosition++;
+
+                BSExpression condition = ParseExpression( int.MaxValue );
+                ReadWhitespaceAndNewLine();
+
+                if ( !Is( ')' ) )
+                {
+                    throw new BSParserException( "Expected ')'", this );
+                }
+
+                m_CurrentPosition++;
+                ReadWhitespaceAndNewLine();
+                string block = ParseBlock();
+                block = blockModifier?.Invoke( block ) ?? block;
+
+                BSParser p = new BSParser( block );
+
+                BSExpression[] b = p.ParseToEnd();
+
+                return ( condition, b );
+            }
+
+            throw new BSParserException( "Expected '('", this );
+        }
+
+        public BSExpression ParseExpression( int start )
+        {
+            BSExpression expr = ParseValue();
+
+            string preop = ParseKey();
+
+            if ( BSOperatorPreceedenceTable.HasPostfix( start, preop ) )
+            {
+                expr = BSOperatorPreceedenceTable.GetPostfix( int.MaxValue, preop ).
+                                                  Parse( expr, this );
+            }
+            else
+            {
+                m_CurrentPosition -= preop.Length;
+            }
+
+            while ( Is( '(' ) || Is( '[' ) )
+            {
+                if ( Is( '(' ) )
+                {
+                    expr = ParseInvocation( expr );
+                }
+                else
+                {
+                    expr = ParseArrayAccess( expr );
+                }
+            }
+
+            string key = ParseKeyword();
+
+            if ( key.StartsWith( ")" ) ||
+                 key.StartsWith( "]" ) ||
+                 key == "," ||
+                 !BSOperatorPreceedenceTable.Has( start, key ) )
+            {
+                m_CurrentPosition -= key.Length;
+            }
+            else if ( key != "" )
+            {
+                BSOperator o = BSOperatorPreceedenceTable.Get( start, key );
+
+                BSExpression r = Parse( o.Parse( expr, this ), start );
+
+                return r;
+            }
+
+            return expr;
+        }
+
+        public BSForeachExpression ParseForeachExpression( int pos )
+        {
+            ReadWhitespaceAndNewLine();
+
+            string[] vars;
+
+            if ( Is( '(' ) )
+            {
+                vars = ParseArgumentList().Select( x => x.Name ).ToArray();
+            }
+            else
+            {
+                vars = new[] { GetNextWord() };
+            }
+
+            ReadWhitespaceAndNewLine();
+            string inStr = GetNextWord();
+
+            if ( inStr != "in" )
+            {
+                throw new BSParserException( $"Expected 'in' got '{inStr}'", this );
+            }
+
+            ReadWhitespaceAndNewLine();
+            BSExpression cDecl = ParseExpression( int.MaxValue );
+            ReadWhitespaceAndNewLine();
+            string block = ParseBlock();
+
+            BSParser p = new BSParser( block );
+
+            BSExpression[] b = p.ParseToEnd();
+
+            return new BSForeachExpression( CreateSourcePosition( pos ), vars, cDecl, b );
+        }
+
+        public BSForExpression ParseForExpression( int pos, Func < string, string > blockModifier = null )
+        {
+            BSAssignExpression cDecl = ( BSAssignExpression )ParseExpression( int.MaxValue );
+            BSPropertyExpression cProp = ( BSPropertyExpression )cDecl.Left;
+
+            string untilWord = ParseKey();
+
+            if ( !untilWord.StartsWith( "while" ) )
+            {
+                throw new BSParserException( "Expected while", this );
+            }
+
+            ReadWhitespaceAndNewLine();
+
+            BSExpression cCond;
+
+            string op = untilWord.Substring( "while".Length, untilWord.Length - "while".Length );
+
+            if ( string.IsNullOrEmpty( op ) )
+            {
+                //Check condition to be true
+                cCond = ParseExpression( int.MaxValue );
+            }
+            else
+            {
+                //Use OP to wrap the condition into an expression that checks for true/false
+                switch ( op )
+                {
+                    case "=":
+                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "==" ).
+                                                           Parse( cProp, this );
+
+                        break;
+
+                    case "!":
+                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "!=" ).
+                                                           Parse( cProp, this );
+
+                        break;
+
+                    case "<":
+                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "<" ).
+                                                           Parse( cProp, this );
+
+                        break;
+
+                    case ">":
+                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, ">" ).
+                                                           Parse( cProp, this );
+
+                        break;
+
+                    case "<=":
+                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "<=" ).
+                                                           Parse( cProp, this );
+
+                        break;
+
+                    case ">=":
+                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, ">=" ).
+                                                           Parse( cProp, this );
+
+                        break;
+
+                    default:
+                        throw new BSParserException( "Invalid Operator: " + op, this );
+                }
+            }
+
+            string step = ParseKey();
+
+            BSExpression cInc;
+
+            if ( step != "step" )
+            {
+                m_CurrentPosition -= step.Length;
+
+                cInc = new BSAssignExpression(
+                                              CreateSourcePosition( pos ),
+                                              cProp,
+                                              new BSInvocationExpression(
+                                                                         CreateSourcePosition( pos ),
+                                                                         new BSProxyExpression(
+                                                                              CreateSourcePosition( pos ),
+                                                                              new BSFunction(
+                                                                                   CreateSourcePosition( pos ),
+                                                                                   "function +(a, b)",
+                                                                                   objects =>
+                                                                                       BSOperatorImplementationResolver.
+                                                                                           ResolveImplementation(
+                                                                                                "+",
+                                                                                                objects
+                                                                                               ).
+                                                                                           ExecuteOperator(
+                                                                                                objects
+                                                                                               ),
+                                                                                   2
+                                                                                  ),
+                                                                              new BSBinaryOperatorMetaData(
+                                                                                   "+",
+                                                                                   "a, b",
+                                                                                   2
+                                                                                  )
+                                                                             ),
+                                                                         new BSExpression[]
+                                                                         {
+                                                                             cProp,
+                                                                             new BSValueExpression(
+                                                                                  CreateSourcePosition( pos ),
+                                                                                  ( decimal )1
+                                                                                 )
+                                                                         }
+                                                                        )
+                                             );
+            }
+            else
+            {
+                cInc = new BSAssignExpression(
+                                              CreateSourcePosition( pos ),
+                                              cProp,
+                                              BSOperatorPreceedenceTable.Get( int.MaxValue, "+" ).
+                                                                         Parse( cProp, this )
+                                             );
+            }
+
+            ReadWhitespaceAndNewLine();
+            string block = ParseBlock();
+
+            block = blockModifier?.Invoke( block ) ?? block;
+
+            BSParser p = new BSParser( block );
+
+            BSExpression[] b = p.ParseToEnd();
+
+            return new BSForExpression( CreateSourcePosition( pos ), cDecl, cCond, cInc, b );
         }
 
         public BSFunctionDefinitionExpression ParseFunction(
@@ -573,6 +897,73 @@ namespace BadScript.Parser
                                                      );
         }
 
+        public BSIfExpression ParseIfExpression( int pos, Func < string, string > blockModifier = null )
+        {
+            string wordName;
+
+            Dictionary < BSExpression, BSExpression[] > cMap =
+                new Dictionary < BSExpression, BSExpression[] >();
+
+            BSExpression[] elseBlock = null;
+
+            (BSExpression, BSExpression[]) a = ParseConditionalBlock();
+            cMap.Add( a.Item1, a.Item2 );
+            int resetIndex = ReadWhitespaceAndNewLine();
+
+            if ( Current != '\0' && IsWordStart() )
+            {
+                wordName = GetNextWord();
+
+                while ( wordName == "else" )
+                {
+                    ReadWhitespaceAndNewLine();
+
+                    if ( Is( '{' ) )
+                    {
+                        string block = ParseBlock();
+                        block = blockModifier?.Invoke( block ) ?? block;
+
+                        BSParser p = new BSParser( block );
+
+                        elseBlock = p.ParseToEnd();
+
+                        break;
+                    }
+
+                    resetIndex = ReadWhitespaceAndNewLine();
+                    wordName = GetNextWord();
+                    ReadWhitespaceAndNewLine();
+
+                    if ( wordName == "if" )
+                    {
+                        (BSExpression, BSExpression[]) sA = ParseConditionalBlock( blockModifier );
+                        cMap.Add( sA.Item1, sA.Item2 );
+                        resetIndex = ReadWhitespaceAndNewLine();
+
+                        if ( !TryReadNextWord( out wordName ) )
+                        {
+                            m_CurrentPosition = resetIndex;
+                        }
+                        else
+                        {
+                            ReadWhitespaceAndNewLine();
+                        }
+                    }
+                    else
+                    {
+                        m_CurrentPosition = resetIndex;
+                    }
+                }
+
+                if ( wordName != "else" )
+                {
+                    m_CurrentPosition = resetIndex;
+                }
+            }
+
+            return new BSIfExpression( CreateSourcePosition( pos ), cMap, elseBlock );
+        }
+
         public BSInvocationExpression ParseInvocation( BSExpression expr )
         {
             int pos = m_CurrentPosition;
@@ -655,6 +1046,41 @@ namespace BadScript.Parser
             return sb.ToString();
         }
 
+        public BSNamespaceExpression ParseNamespace()
+        {
+            SourcePosition sp = CreateSourcePosition();
+
+            ReadWhitespaceAndNewLine();
+            List < string > fn = new();
+            bool restart = true;
+
+            while ( restart )
+            {
+                ReadWhitespaceAndNewLine();
+                fn.Add( GetNextWord() );
+                ReadWhitespaceAndNewLine();
+
+                if ( Is( '{' ) )
+                {
+                    restart = false;
+                }
+
+                if ( Is( '.' ) )
+                {
+                    restart = true;
+                    m_CurrentPosition++;
+                }
+            }
+
+            ReadWhitespaceAndNewLine();
+            int off = m_CurrentPosition + 1;
+            string block = ParseBlock();
+            BSParser p = new BSParser( block, m_OriginalSource, off );
+            BSExpression[] exprs = p.ParseToEnd();
+
+            return new BSNamespaceExpression( sp, fn.ToArray(), exprs );
+        }
+
         public BSExpression ParseNumber()
         {
             int negative = 1;
@@ -694,7 +1120,7 @@ namespace BadScript.Parser
             return new BSValueExpression( CreateSourcePosition( pos ), negative * decimal.Parse( sb.ToString() ) );
         }
 
-        public BSExpression ParseString(bool isFormatString = false)
+        public BSExpression ParseString( bool isFormatString = false )
         {
             ReadWhitespaceAndNewLine();
 
@@ -708,22 +1134,25 @@ namespace BadScript.Parser
             StringBuilder sb = new StringBuilder();
             bool isEscaped = false;
             List < BSExpression > exprs = new List < BSExpression >();
-            
+
             while ( !IsStringQuotes() && !IsNewLine() )
             {
-                if (isFormatString && Is('{'))
+                if ( isFormatString && Is( '{' ) )
                 {
                     IncrementPosition();
-                    if ( !Is('{' ) )
+
+                    if ( !Is( '{' ) )
                     {
-                        BSExpression expr = Parse(int.MaxValue);
-                        if (!Is('}'))
-                            throw new BSParserException("Expected '}'", this);
+                        BSExpression expr = Parse( int.MaxValue );
 
+                        if ( !Is( '}' ) )
+                        {
+                            throw new BSParserException( "Expected '}'", this );
+                        }
 
-                        sb.Append($"{{{exprs.Count}}}");
+                        sb.Append( $"{{{exprs.Count}}}" );
 
-                        exprs.Add(expr);
+                        exprs.Add( expr );
                     }
                     else
                     {
@@ -734,7 +1163,7 @@ namespace BadScript.Parser
                 {
                     isEscaped = true;
                 }
-                else if (isFormatString && Is('}') && Is(1, '}'))
+                else if ( isFormatString && Is( '}' ) && Is( 1, '}' ) )
                 {
                     IncrementPosition();
                     sb.Append( '}' );
@@ -765,19 +1194,13 @@ namespace BadScript.Parser
             string str = sb.ToString();
 
             if ( exprs.Count != 0 )
+            {
                 return new BSFormattedStringExpression( CreateSourcePosition( pos ), str, exprs.ToArray() );
+            }
+
             return new BSValueExpression( CreateSourcePosition( pos ), str );
         }
 
-#if !DEBUG
-        public class ParserException : Exception
-        {
-            public ParserException( Exception inner ) : base( inner.Message ){}
-
-            public override string StackTrace => "";
-
-    }
-#endif
         public BSExpression[] ParseToEnd()
         {
 #if !DEBUG
@@ -804,10 +1227,82 @@ namespace BadScript.Parser
             catch ( Exception e )
             {
                 throw
-                    new ParserException(e)
-            ;
-        }
+                    new ParserException( e )
+                    ;
+            }
 #endif
+        }
+
+        public BSTryExpression ParseTryExpression( int pos )
+        {
+            ReadWhitespaceAndNewLine();
+            string block = ParseBlock();
+
+            BSParser p = new BSParser( block );
+
+            BSExpression[] tryBlock = p.ParseToEnd();
+            ReadWhitespaceAndNewLine();
+            string catchStr = GetNextWord();
+
+            if ( catchStr != "catch" )
+            {
+                throw new BSParserException( "Expected 'catch' after 'try' block", this );
+            }
+
+            ReadWhitespaceAndNewLine();
+
+            string exVar = null;
+
+            if ( Is( '(' ) )
+            {
+                m_CurrentPosition++;
+                exVar = ParseArgumentName();
+
+                if ( !Is( ')' ) )
+                {
+                    throw new BSParserException( "Expected ')' after catch clause", this );
+                }
+
+                m_CurrentPosition++;
+            }
+
+            ReadWhitespaceAndNewLine();
+            string cBlock = ParseBlock();
+
+            BSParser cP = new BSParser( cBlock );
+
+            BSExpression[] catchBlock = cP.ParseToEnd();
+            ReadWhitespaceAndNewLine();
+
+            return new BSTryExpression( CreateSourcePosition( pos ), tryBlock, catchBlock, exVar );
+        }
+
+        public BSUsingExpression ParseUsing()
+        {
+            SourcePosition sp = CreateSourcePosition();
+
+            ReadWhitespaceAndNewLine();
+            List < string > fn = new();
+            bool restart = true;
+
+            while ( restart )
+            {
+                ReadWhitespaceAndNewLine();
+                fn.Add( GetNextWord() );
+                ReadWhitespaceAndNewLine();
+
+                if ( Is( '.' ) )
+                {
+                    restart = true;
+                    m_CurrentPosition++;
+                }
+                else
+                {
+                    restart = false;
+                }
+            }
+
+            return new BSUsingExpression( sp, fn.ToArray() );
         }
 
         public BSExpression ParseValue()
@@ -815,7 +1310,7 @@ namespace BadScript.Parser
             int pos = m_CurrentPosition;
             ReadWhitespaceAndNewLine();
 
-            if (Is('$'))
+            if ( Is( '$' ) )
             {
                 m_CurrentPosition++;
 
@@ -1060,289 +1555,6 @@ namespace BadScript.Parser
             return new BSPropertyExpression( CreateSourcePosition( pos ), left, wordName );
         }
 
-        public BSForExpression ParseForExpression( int pos, Func < string, string > blockModifier = null )
-        {
-            BSAssignExpression cDecl = ( BSAssignExpression )ParseExpression( int.MaxValue );
-            BSPropertyExpression cProp = ( BSPropertyExpression )cDecl.Left;
-
-            string untilWord = ParseKey();
-
-            if ( !untilWord.StartsWith( "while" ) )
-            {
-                throw new BSParserException( "Expected while", this );
-            }
-
-            ReadWhitespaceAndNewLine();
-
-            BSExpression cCond;
-
-            string op = untilWord.Substring( "while".Length, untilWord.Length - "while".Length );
-
-            if ( string.IsNullOrEmpty( op ) )
-            {
-                //Check condition to be true
-                cCond = ParseExpression( int.MaxValue );
-            }
-            else
-            {
-                //Use OP to wrap the condition into an expression that checks for true/false
-                switch ( op )
-                {
-                    case "=":
-                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "==" ).
-                                                           Parse( cProp, this );
-
-                        break;
-
-                    case "!":
-                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "!=" ).
-                                                           Parse( cProp, this );
-
-                        break;
-
-                    case "<":
-                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "<" ).
-                                                           Parse( cProp, this );
-
-                        break;
-
-                    case ">":
-                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, ">" ).
-                                                           Parse( cProp, this );
-
-                        break;
-
-                    case "<=":
-                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, "<=" ).
-                                                           Parse( cProp, this );
-
-                        break;
-
-                    case ">=":
-                        cCond = BSOperatorPreceedenceTable.Get( int.MaxValue, ">=" ).
-                                                           Parse( cProp, this );
-
-                        break;
-
-                    default:
-                        throw new BSParserException( "Invalid Operator: " + op, this );
-                }
-            }
-
-            string step = ParseKey();
-
-            BSExpression cInc;
-
-            if ( step != "step" )
-            {
-                m_CurrentPosition -= step.Length;
-
-                cInc = new BSAssignExpression(
-                                              CreateSourcePosition( pos ),
-                                              cProp,
-                                              new BSInvocationExpression(
-                                                                         CreateSourcePosition( pos ),
-                                                                         new BSProxyExpression(
-                                                                              CreateSourcePosition( pos ),
-                                                                              new BSFunction(
-                                                                                   CreateSourcePosition( pos ),
-                                                                                   "function +(a, b)",
-                                                                                   objects =>
-                                                                                       BSOperatorImplementationResolver.
-                                                                                           ResolveImplementation(
-                                                                                                "+",
-                                                                                                objects
-                                                                                               ).
-                                                                                           ExecuteOperator(
-                                                                                                objects
-                                                                                               ),
-                                                                                   2
-                                                                                  ),
-                                                                              new BSBinaryOperatorMetaData(
-                                                                                   "+",
-                                                                                   "a, b",
-                                                                                   2
-                                                                                  )
-                                                                             ),
-                                                                         new BSExpression[]
-                                                                         {
-                                                                             cProp,
-                                                                             new BSValueExpression(
-                                                                                  CreateSourcePosition( pos ),
-                                                                                  ( decimal )1
-                                                                                 )
-                                                                         }
-                                                                        )
-                                             );
-            }
-            else
-            {
-                cInc = new BSAssignExpression(
-                                              CreateSourcePosition( pos ),
-                                              cProp,
-                                              BSOperatorPreceedenceTable.Get( int.MaxValue, "+" ).
-                                                                         Parse( cProp, this )
-                                             );
-            }
-
-            ReadWhitespaceAndNewLine();
-            string block = ParseBlock();
-
-            block = blockModifier?.Invoke( block ) ?? block;
-
-            BSParser p = new BSParser( block );
-
-            BSExpression[] b = p.ParseToEnd();
-
-            return new BSForExpression( CreateSourcePosition( pos ), cDecl, cCond, cInc, b );
-        }
-
-        public BSForeachExpression ParseForeachExpression( int pos )
-        {
-            ReadWhitespaceAndNewLine();
-
-            string[] vars;
-
-            if ( Is( '(' ) )
-            {
-                vars = ParseArgumentList().Select( x => x.Name ).ToArray();
-            }
-            else
-            {
-                vars = new[] { GetNextWord() };
-            }
-
-            ReadWhitespaceAndNewLine();
-            string inStr = GetNextWord();
-
-            if ( inStr != "in" )
-            {
-                throw new BSParserException( $"Expected 'in' got '{inStr}'", this );
-            }
-
-            ReadWhitespaceAndNewLine();
-            BSExpression cDecl = ParseExpression( int.MaxValue );
-            ReadWhitespaceAndNewLine();
-            string block = ParseBlock();
-
-            BSParser p = new BSParser( block );
-
-            BSExpression[] b = p.ParseToEnd();
-
-            return new BSForeachExpression( CreateSourcePosition( pos ), vars, cDecl, b );
-        }
-
-        public BSTryExpression ParseTryExpression( int pos )
-        {
-            ReadWhitespaceAndNewLine();
-            string block = ParseBlock();
-
-            BSParser p = new BSParser( block );
-
-            BSExpression[] tryBlock = p.ParseToEnd();
-            ReadWhitespaceAndNewLine();
-            string catchStr = GetNextWord();
-
-            if ( catchStr != "catch" )
-            {
-                throw new BSParserException( "Expected 'catch' after 'try' block", this );
-            }
-
-            ReadWhitespaceAndNewLine();
-
-            string exVar = null;
-
-            if ( Is( '(' ) )
-            {
-                m_CurrentPosition++;
-                exVar = ParseArgumentName();
-
-                if ( !Is( ')' ) )
-                {
-                    throw new BSParserException( "Expected ')' after catch clause", this );
-                }
-
-                m_CurrentPosition++;
-            }
-
-            ReadWhitespaceAndNewLine();
-            string cBlock = ParseBlock();
-
-            BSParser cP = new BSParser( cBlock );
-
-            BSExpression[] catchBlock = cP.ParseToEnd();
-            ReadWhitespaceAndNewLine();
-
-            return new BSTryExpression( CreateSourcePosition( pos ), tryBlock, catchBlock, exVar );
-        }
-
-        public BSIfExpression ParseIfExpression( int pos, Func < string, string > blockModifier = null )
-        {
-            string wordName;
-
-            Dictionary < BSExpression, BSExpression[] > cMap =
-                new Dictionary < BSExpression, BSExpression[] >();
-
-            BSExpression[] elseBlock = null;
-
-            (BSExpression, BSExpression[]) a = ParseConditionalBlock();
-            cMap.Add( a.Item1, a.Item2 );
-            int resetIndex = ReadWhitespaceAndNewLine();
-
-            if ( Current != '\0' && IsWordStart() )
-            {
-                wordName = GetNextWord();
-
-                while ( wordName == "else" )
-                {
-                    ReadWhitespaceAndNewLine();
-
-                    if ( Is( '{' ) )
-                    {
-                        string block = ParseBlock();
-                        block = blockModifier?.Invoke( block ) ?? block;
-
-                        BSParser p = new BSParser( block );
-
-                        elseBlock = p.ParseToEnd();
-
-                        break;
-                    }
-
-                    resetIndex = ReadWhitespaceAndNewLine();
-                    wordName = GetNextWord();
-                    ReadWhitespaceAndNewLine();
-
-                    if ( wordName == "if" )
-                    {
-                        (BSExpression, BSExpression[]) sA = ParseConditionalBlock( blockModifier );
-                        cMap.Add( sA.Item1, sA.Item2 );
-                        resetIndex = ReadWhitespaceAndNewLine();
-
-                        if ( !TryReadNextWord( out wordName ) )
-                        {
-                            m_CurrentPosition = resetIndex;
-                        }
-                        else
-                        {
-                            ReadWhitespaceAndNewLine();
-                        }
-                    }
-                    else
-                    {
-                        m_CurrentPosition = resetIndex;
-                    }
-                }
-
-                if ( wordName != "else" )
-                {
-                    m_CurrentPosition = resetIndex;
-                }
-            }
-
-            return new BSIfExpression( CreateSourcePosition( pos ), cMap, elseBlock );
-        }
-
         public int ReadWhitespaceAndNewLine()
         {
             int r = m_CurrentPosition;
@@ -1361,205 +1573,14 @@ namespace BadScript.Parser
             return r;
         }
 
-#endregion
-
-#region Private
-
-        public SourcePosition CreateSourcePosition( int pos )
+        public void SetPosition( int pos )
         {
-            return SourcePosition.GetCurrentLineInfo( m_OffsetSource, pos );
+            m_CurrentPosition = pos;
         }
 
-        public bool Is( string s )
-        {
-            bool isOpen = true;
+        #endregion
 
-            for ( int i = 0; i < s.Length; i++ )
-            {
-                isOpen &= Is( i, s[i] );
-            }
-
-            return isOpen;
-        }
-
-        public bool Is( char c )
-        {
-            return m_OriginalSource.Length > m_CurrentPosition && m_OriginalSource[m_CurrentPosition] == c;
-        }
-
-        public bool Is( int off, char c )
-        {
-            return m_OriginalSource.Length > m_CurrentPosition + off && m_OriginalSource[m_CurrentPosition + off] == c;
-        }
-
-        public bool IsDigit()
-        {
-            return m_OriginalSource.Length > m_CurrentPosition && char.IsDigit( m_OriginalSource[m_CurrentPosition] );
-        }
-
-        public bool IsNewLine()
-        {
-            return m_OriginalSource.Length > m_CurrentPosition && m_OriginalSource[m_CurrentPosition] == '\n';
-        }
-
-        public bool IsStringQuotes()
-        {
-            return m_OriginalSource.Length > m_CurrentPosition && m_OriginalSource[m_CurrentPosition] == '\"';
-        }
-
-        public bool IsWordMiddle()
-        {
-            return m_OriginalSource.Length > m_CurrentPosition &&
-                   ( char.IsLetterOrDigit( m_OriginalSource[m_CurrentPosition] ) ||
-                     m_OriginalSource[m_CurrentPosition] == '_' );
-        }
-
-        public bool IsWordStart()
-        {
-            return m_OriginalSource.Length > m_CurrentPosition &&
-                   ( char.IsLetter( m_OriginalSource[m_CurrentPosition] ) ||
-                     m_OriginalSource[m_CurrentPosition] == '_' );
-        }
-
-        public BSFunctionParameter[] ParseArgumentList()
-        {
-            if ( !Is( '(' ) )
-            {
-                throw new BSParserException( "Expected '('", this );
-            }
-
-            m_CurrentPosition++;
-
-            List < BSFunctionParameter > args = new List < BSFunctionParameter >();
-            bool needsToBeOptional = false;
-
-            if ( !Is( ')' ) )
-            {
-                bool notNull = false;
-                bool optional = false;
-                bool isArgArray = false;
-
-                if ( Is( '*' ) )
-                {
-                    m_CurrentPosition++;
-                    isArgArray = true;
-                }
-                else if ( Is( '!' ) )
-                {
-                    m_CurrentPosition++;
-                    notNull = true;
-
-                    if ( Is( '?' ) )
-                    {
-                        m_CurrentPosition++;
-                        optional = true;
-                        needsToBeOptional = true;
-                    }
-                }
-                else if ( Is( "?" ) )
-                {
-                    m_CurrentPosition++;
-                    optional = true;
-                    needsToBeOptional = true;
-
-                    if ( Is( '!' ) )
-                    {
-                        m_CurrentPosition++;
-                        notNull = true;
-                    }
-                }
-
-                if ( needsToBeOptional && !optional )
-                {
-                    throw new BSRuntimeException(
-                                                 "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters."
-                                                );
-                }
-
-                args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional, isArgArray ) );
-                ReadWhitespaceAndNewLine();
-
-                while ( Is( ',' ) )
-                {
-                    m_CurrentPosition++;
-                    notNull = false;
-                    optional = false;
-                    ReadWhitespaceAndNewLine();
-
-                    if ( Is( '!' ) )
-                    {
-                        m_CurrentPosition++;
-                        notNull = true;
-
-                        if ( Is( '?' ) )
-                        {
-                            m_CurrentPosition++;
-                            optional = true;
-                            needsToBeOptional = true;
-                        }
-                    }
-                    else if ( Is( "?" ) )
-                    {
-                        m_CurrentPosition++;
-                        optional = true;
-                        needsToBeOptional = true;
-
-                        if ( Is( '!' ) )
-                        {
-                            m_CurrentPosition++;
-                            notNull = true;
-                        }
-                    }
-
-                    if ( needsToBeOptional && !optional )
-                    {
-                        throw new BSRuntimeException(
-                                                     "Invalid Parameters. Optional parameters can not be followed by Non-Optional Parameters."
-                                                    );
-                    }
-
-                    args.Add( new BSFunctionParameter( ParseArgumentName(), notNull, optional, false ) );
-                    ReadWhitespaceAndNewLine();
-                }
-
-                ReadWhitespaceAndNewLine();
-
-                if ( !Is( ')' ) )
-                {
-                    throw new BSParserException( "Expected ')'", this );
-                }
-
-                m_CurrentPosition++;
-
-                return args.ToArray();
-            }
-            else
-            {
-                m_CurrentPosition++;
-
-                return args.ToArray();
-            }
-        }
-
-        public string ParseBlock()
-        {
-            if ( !Is( '{' ) )
-            {
-                throw new BSParserException( "Expected '{'", this );
-            }
-
-            m_CurrentPosition++;
-
-            //Find Closing
-            int start = m_CurrentPosition;
-            int end = FindClosing( "{", "}" );
-
-            string s = m_OriginalSource.Substring( start, end - start );
-
-            m_CurrentPosition = end + 1;
-
-            return s;
-        }
+        #region Private
 
         private bool ReadComment()
         {
@@ -1604,7 +1625,7 @@ namespace BadScript.Parser
             return true;
         }
 
-#endregion
+        #endregion
 
     }
 

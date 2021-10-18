@@ -54,13 +54,12 @@ namespace BadScript.HttpServer
                                                       new BSFunction( "function Start()", args => StartListener(), 0 )
                                                   },
                                                   {
-                                                      new BSObject( "IsRunning" ),
-                                                      new BSReflectionReference(
-                                                                                () => m_Listener == null
-                                                                                    ? BSObject.False
-                                                                                    : BSObject.True,
-                                                                                null
-                                                                               )
+                                                      new BSObject( "IsRunning" ), new BSReflectionReference(
+                                                           () => m_Listener == null
+                                                                     ? BSObject.False
+                                                                     : BSObject.True,
+                                                           null
+                                                          )
                                                   }
                                               }
                                              );

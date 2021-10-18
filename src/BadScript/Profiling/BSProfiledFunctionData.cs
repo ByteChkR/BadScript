@@ -5,7 +5,8 @@ namespace BadScript.Profiling
 
     public class BSProfiledFunctionData
     {
-        public List < BSFunctionInvocationData > Invocations { get; }  =new List < BSFunctionInvocationData >();
+
+        public List < BSFunctionInvocationData > Invocations { get; } = new List < BSFunctionInvocationData >();
 
     }
 

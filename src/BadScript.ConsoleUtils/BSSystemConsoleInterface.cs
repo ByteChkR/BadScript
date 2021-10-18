@@ -179,7 +179,11 @@ namespace BadScript.ConsoleUtils
 
             root.InsertElement(
                                "IsKeyAvailable",
-                               new BSFunction("function IsKeyAvailable()", args => Console.KeyAvailable ? BSObject.True : BSObject.False, 0)
+                               new BSFunction(
+                                              "function IsKeyAvailable()",
+                                              args => Console.KeyAvailable ? BSObject.True : BSObject.False,
+                                              0
+                                             )
                               );
 
             root.SetRawElement(
@@ -224,7 +228,7 @@ namespace BadScript.ConsoleUtils
                                               {
                                                   int c = Console.Read();
 
-                                                  return new BSObject((decimal)c);
+                                                  return new BSObject( ( decimal )c );
                                               },
                                               0
                                              )
@@ -239,8 +243,11 @@ namespace BadScript.ConsoleUtils
                                                   int c = Console.Read();
 
                                                   if ( c == -1 )
+                                                  {
                                                       c = '\0';
-                                                  return new BSObject(new string((char)c, 1));
+                                                  }
+
+                                                  return new BSObject( new string( ( char )c, 1 ) );
                                               },
                                               0
                                              )

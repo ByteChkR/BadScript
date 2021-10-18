@@ -11,8 +11,8 @@ namespace BadScript.Types.Implementations
     public class BSObject : ABSObject, IBSWrappedObject
     {
 
-        public static readonly BSObject Null = new BSObject(null);
-        public static readonly BSObject EmptyString = new BSObject(string.Empty);
+        public static readonly BSObject Null = new BSObject( null );
+        public static readonly BSObject EmptyString = new BSObject( string.Empty );
         public static readonly BSObject True = new BSObject( true );
         public static readonly BSObject False = new BSObject( false );
 
@@ -56,7 +56,10 @@ namespace BadScript.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
-            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in object {SafeToString()}" );
+            throw new BSRuntimeException(
+                                         Position,
+                                         $"Property {propertyName} does not exist in object {SafeToString()}"
+                                        );
         }
 
         public override bool HasProperty( string propertyName )
@@ -95,7 +98,10 @@ namespace BadScript.Types.Implementations
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in object {SafeToString()}" );
+            throw new BSRuntimeException(
+                                         Position,
+                                         $"Property {propertyName} does not exist in object {SafeToString()}"
+                                        );
         }
 
         public override string ToString()

@@ -43,16 +43,15 @@ namespace BadScript.Console.AppPackage
                     //Manually Load APP interface because local environment will not load the active interfaces
                     scope.AddLocalVar(
                                       "App",
-                                      engine.LoadInterface("App", new BSTable( SourcePosition.Unknown ) )
+                                      engine.LoadInterface( "App", new BSTable( SourcePosition.Unknown ) )
                                      );
 
-
-                    o = engine.LoadSource(package.GetSource(), scope, settings.Arguments.ToArray());
+                    o = engine.LoadSource( package.GetSource(), scope, settings.Arguments.ToArray() );
                 }
                 else
                 {
                     BSEngine engine = es.Build();
-                    o = engine.LoadSource(package.GetSource(), settings.Arguments.ToArray());
+                    o = engine.LoadSource( package.GetSource(), settings.Arguments.ToArray() );
                 }
             }
             catch ( Exception e )

@@ -46,8 +46,6 @@ namespace BadScript.Settings
             }
         }
 
-       
-
         public static implicit operator bool( SettingsPair p )
         {
             return bool.Parse( p.Value );

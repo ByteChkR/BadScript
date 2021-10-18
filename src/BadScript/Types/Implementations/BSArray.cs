@@ -89,7 +89,10 @@ namespace BadScript.Types.Implementations
         {
             if ( !m_Functions.ContainsKey( propertyName ) )
             {
-                throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in Array {SafeToString()}" );
+                throw new BSRuntimeException(
+                                             Position,
+                                             $"Property {propertyName} does not exist in Array {SafeToString()}"
+                                            );
             }
 
             return new BSFunctionReference( m_Functions[propertyName] );
@@ -186,7 +189,10 @@ namespace BadScript.Types.Implementations
 
         public override void SetProperty( string propertyName, ABSObject obj )
         {
-            throw new BSRuntimeException( Position, $"Property {propertyName} does not exist in array {SafeToString()}" );
+            throw new BSRuntimeException(
+                                         Position,
+                                         $"Property {propertyName} does not exist in array {SafeToString()}"
+                                        );
         }
 
         public override bool TryConvertBool( out bool v )
@@ -251,7 +257,7 @@ namespace BadScript.Types.Implementations
                                                 objects =>
                                                 {
                                                     m_InnerArray.AddRange(
-                                                                          objects.Select(x => x.ResolveReference())
+                                                                          objects.Select( x => x.ResolveReference() )
                                                                          );
 
                                                     return BSObject.Null;

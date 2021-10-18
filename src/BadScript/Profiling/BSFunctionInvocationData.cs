@@ -7,10 +7,13 @@ namespace BadScript.Profiling
     {
 
         public readonly long StartTicks;
-        public long EndTicks { get; private set; }
 
         public readonly BSFunction Function;
         public readonly ABSObject[] Args;
+
+        public long EndTicks { get; private set; }
+
+        #region Public
 
         public BSFunctionInvocationData( BSFunction f, ABSObject[] args, long startTicks )
         {
@@ -18,7 +21,13 @@ namespace BadScript.Profiling
             Args = args;
             Function = f;
         }
-        public void SetEnd( long endTicks ) => EndTicks = endTicks;
+
+        public void SetEnd( long endTicks )
+        {
+            EndTicks = endTicks;
+        }
+
+        #endregion
 
     }
 

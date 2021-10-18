@@ -23,7 +23,8 @@ namespace BadScript.Serialization
                                                                                   new BsReturnExpressionSerializer(),
                                                                                   new BsTableExpressionSerializer(),
                                                                                   new BsValueExpressionSerializer(),
-                                                                                  new BsFormattedStringExpressionSerializer(),
+                                                                                  new
+                                                                                      BsFormattedStringExpressionSerializer(),
                                                                                   new
                                                                                       BsNullCheckPropertyExpressionSerializer(),
                                                                                   new BsAssignExpressionSerializer(),

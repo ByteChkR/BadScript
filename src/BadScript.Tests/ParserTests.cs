@@ -12,15 +12,18 @@ namespace BadScript.Tests
 
         public static string[] GenerateTestCases()
         {
-            return PopulateKeyMap("/tests/passing/parser/");
+            return PopulateKeyMap( "/tests/passing/parser/" );
         }
 
         [Test]
-        [TestCaseSource(nameof(GenerateTestCases))]
-        public void Test(string key)
+        [TestCaseSource( nameof( GenerateTestCases ) )]
+        public void Test( string key )
         {
-            RunTest(key, x =>
-                             Assert.True(x.ConvertBool()));
+            RunTest(
+                    key,
+                    x =>
+                        Assert.True( x.ConvertBool() )
+                   );
         }
 
         #endregion

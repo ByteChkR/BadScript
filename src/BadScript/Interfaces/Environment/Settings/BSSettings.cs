@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 
 using BadScript.Settings;
@@ -23,7 +22,6 @@ namespace BadScript.Interfaces.Environment.Settings
                 runtime.SetSetting( "version", typeof( BSEngine ).Assembly.GetName().Version.ToString() );
             }
         }
-        
 
         #region Public
 
@@ -81,8 +79,6 @@ namespace BadScript.Interfaces.Environment.Settings
                 File.WriteAllText( p, pair.Value );
             }
         }
-
-        
 
         #endregion
 

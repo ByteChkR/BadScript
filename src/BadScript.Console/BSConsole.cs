@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using BadScript.Console.AppPackage;
@@ -9,7 +8,6 @@ using BadScript.Console.Subsystems.Include;
 using BadScript.Console.Subsystems.Project;
 using BadScript.Console.Subsystems.Run;
 using BadScript.Interfaces.Environment.Settings;
-using BadScript.Profiling;
 
 using CommandLine;
 
@@ -115,8 +113,6 @@ namespace BadScript.Console
             }
 
             BSSettings.BsRoot.SaveToDirectory( BSConsoleDirectories.Instance.SettingsDirectory );
-
-            
 
             return ret;
         }

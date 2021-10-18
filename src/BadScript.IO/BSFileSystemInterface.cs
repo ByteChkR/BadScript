@@ -194,7 +194,7 @@ namespace BadScript.IO
                                              {
                                                  ABSObject o = args[0].ResolveReference();
 
-                                                 return Directory.Exists(o.ConvertString())
+                                                 return Directory.Exists( o.ConvertString() )
                                                             ? BSObject.True
                                                             : BSObject.False;
                                              },

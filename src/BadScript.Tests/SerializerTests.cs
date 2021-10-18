@@ -20,17 +20,7 @@ namespace BadScript.Tests
 
         public static string[] GenerateTestCases()
         {
-            return PopulateKeyMap("/tests/passing/");
-        }
-
-        protected override void SetUp( BSEngineSettings settings )
-        {
-            base.SetUp( settings );
-            BSReflectionInterface.Instance.AddType<ReflectionTests.TestType>();
-
-            settings.Interfaces.Add(BSReflectionInterface.Instance);
-            settings.ActiveInterfaces.Add(BSReflectionInterface.Instance.Name);
-
+            return PopulateKeyMap( "/tests/passing/" );
         }
 
         [Test]
@@ -40,17 +30,30 @@ namespace BadScript.Tests
             RunTest( key, x => Assert.True( x.ConvertBool() ) );
         }
 
+        #endregion
+
+        #region Protected
+
         protected override void RunTest( string key, Action < ABSObject > returnValidator )
         {
-            Assert.True(s_TestFileMap.ContainsKey(key), $"There is no Test Script for Test Case: {key}");
+            Assert.True( s_TestFileMap.ContainsKey( key ), $"There is no Test Script for Test Case: {key}" );
             string file = s_TestFileMap[key];
-            BSExpression[] exprs = m_Engine.ParseFile(file);
+            BSExpression[] exprs = m_Engine.ParseFile( file );
             MemoryStream ms = new MemoryStream();
             BSSerializer.Serialize( exprs, ms );
             ms.Position = 0;
             exprs = BSSerializer.Deserialize( ms );
             ABSObject o = m_Engine.LoadScript( exprs );
-            returnValidator?.Invoke(o);
+            returnValidator?.Invoke( o );
+        }
+
+        protected override void SetUp( BSEngineSettings settings )
+        {
+            base.SetUp( settings );
+            BSReflectionInterface.Instance.AddType < ReflectionTests.TestType >();
+
+            settings.Interfaces.Add( BSReflectionInterface.Instance );
+            settings.ActiveInterfaces.Add( BSReflectionInterface.Instance.Name );
         }
 
         #endregion

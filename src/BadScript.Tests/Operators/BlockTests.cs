@@ -12,7 +12,7 @@ namespace BadScript.Tests.Operators
 
         public static string[] GenerateTestCases()
         {
-            return PopulateKeyMap("/tests/passing/operators/block/");
+            return PopulateKeyMap( "/tests/passing/operators/block/" );
         }
 
         [Test]
