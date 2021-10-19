@@ -18,7 +18,16 @@ namespace BadScript.Exceptions
             Position = SourcePosition.Unknown;
         }
 
-        public BSRuntimeException( SourcePosition pos, string msg ) : base( GenerateMessage( pos, msg ) )
+        public BSRuntimeException(string msg, Exception innerException) : base(msg, innerException)
+        {
+            Position = SourcePosition.Unknown;
+        }
+        public BSRuntimeException(SourcePosition pos, string msg) : base(GenerateMessage(pos, msg))
+        {
+            Position = pos;
+        }
+
+        public BSRuntimeException(SourcePosition pos, string msg, Exception innerException) : base(GenerateMessage(pos, msg), innerException)
         {
             Position = pos;
         }

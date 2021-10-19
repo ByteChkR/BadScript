@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 
 using BadScript.Exceptions;
@@ -117,16 +119,52 @@ namespace BadScript.Interfaces.Environment
             env.InsertElement( new BSObject( "Settings" ), new SettingsCategoryWrapper( BSSettings.BsRoot ) );
 
             env.InsertElement(
-                              new BSObject( "Error" ),
+                              new BSObject("Error"),
                               new BSFunction(
                                              "function Error(obj)",
-                                             ( args ) =>
+                                             (args) =>
                                              {
                                                  ABSObject arg = args[0].ResolveReference();
 
-                                                 throw new BSRuntimeException( arg.Position, arg.ToString() );
+                                                 throw new BSRuntimeException(arg.Position, arg.ToString());
                                              },
                                              1
+                                            )
+                             );
+            env.InsertElement(
+                              new BSObject("Throw"),
+                              new BSFunction(
+                                             "function Throw(message, exception)",
+                                             (args) =>
+                                             {
+                                                 string msg = args[0].ResolveReference().ConvertString();
+                                                 ABSObject exc = args[1].ResolveReference();
+
+                                                 if (exc is IBSWrappedObject wo && wo.GetInternalObject() is Exception ex)
+                                                 {
+                                                     throw new BSRuntimeException(msg, ex);
+                                                 }
+                                                 throw new BSRuntimeException("Environment.Throw Expects an exception object as second argument.");
+                                             },
+                                             2
+                                            )
+                             );
+
+            env.InsertElement(
+                              new BSObject("Rethrow"),
+                              new BSFunction(
+                                             "function Rethrow(exception)",
+                                             (args) =>
+                                             {
+                                                 ABSObject exc = args[0].ResolveReference();
+
+                                                 if (exc is IBSWrappedObject wo && wo.GetInternalObject() is Exception ex)
+                                                 {
+                                                     ExceptionDispatchInfo.Capture( ex ).Throw();
+                                                 }
+                                                 throw new BSRuntimeException("Environment.Throw Expects an exception object as second argument.");
+                                             },
+                                             2
                                             )
                              );
 

@@ -97,7 +97,8 @@ namespace BadScript.Parser.Expressions.Implementations.Block
             }
 
             ABSTable t = new BSTable( p );
-            t.InsertElement( new BSObject( "type" ), new BSObject( e.GetType().Name ) );
+            t.InsertElement(new BSObject("cs_exception"), new BSObject(e));
+            t.InsertElement(new BSObject("type"), new BSObject(e.GetType().Name));
             t.InsertElement( new BSObject( "cs_trace" ), new BSObject( e.StackTrace ) );
 
             t.InsertElement( new BSObject( "trace" ), new BSObject( stack ) );
