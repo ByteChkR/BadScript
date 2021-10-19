@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 
@@ -257,44 +258,57 @@ namespace BadScript.Types
             }
 
             ABSObject[] arr = null;
+            ABSObject or = null;
 
-            if ( executeHooks )
+            try
             {
-                if ( m_Hooks.Count != 0 )
+                if ( executeHooks )
                 {
-                    arr = new ABSObject[] { this, new BSArray( args.Select( x => x.ResolveReference() ) ) };
-                }
-
-                foreach ( BSFunction bsFunction in m_Hooks )
-                {
-                    ABSObject o = bsFunction.Invoke( arr );
-
-                    if ( !o.IsNull() )
+                    if ( m_Hooks.Count != 0 )
                     {
-                        PopStack();
+                        arr = new ABSObject[] { this, new BSArray( args.Select( x => x.ResolveReference() ) ) };
+                    }
 
-                        if ( BSProfilerData.EnableProfiler )
+                    foreach ( BSFunction bsFunction in m_Hooks )
+                    {
+                        ABSObject o = bsFunction.Invoke( arr );
+
+                        if ( !o.IsNull() )
                         {
-                            BSProfilerData.ProfilerFunctionLeave( fData );
-                        }
+                            PopStack();
 
-                        return o;
+                            if ( BSProfilerData.EnableProfiler )
+                            {
+                                BSProfilerData.ProfilerFunctionLeave( fData );
+                            }
+
+                            return o;
+                        }
                     }
                 }
+
+                ( int min, int max ) = m_ParameterCount;
+
+                if ( args.Length < min || args.Length > max )
+                {
+                    throw new BSRuntimeException(
+                                                 Position,
+                                                 $"Invalid parameter Count: '{DebugData}' expected {min} - {max} and got {args.Length}"
+                                                );
+                }
+
+                or = m_Func( args );
+                PopStack();
             }
-
-            ( int min, int max ) = m_ParameterCount;
-
-            if ( args.Length < min || args.Length > max )
+            catch ( Exception e )
             {
-                throw new BSRuntimeException(
-                                             Position,
-                                             $"Invalid parameter Count: '{DebugData}' expected {min} - {max} and got {args.Length}"
-                                            );
+                if ( GetTopStack() != this )
+                {
+                    RestoreStack( this );
+                }
+                PopStack();
+                ExceptionDispatchInfo.Capture( e ).Throw();
             }
-
-            ABSObject or = m_Func( args );
-            PopStack();
 
             if ( BSProfilerData.EnableProfiler )
             {

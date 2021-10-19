@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 using BadScript.ConsoleUtils;
@@ -20,10 +21,13 @@ namespace BadScript.Testing
             es.Interfaces.Add( new BSCollectionInterface() );
             es.Interfaces.Add( new BSConvertInterface() );
             es.Interfaces.Add( new BSSystemConsoleInterface() );
-            BSScope scope = es.BuildLocalEnvironment();
+            
 
-            BSEngine engine = scope.Engine;
-            engine.LoadSource( File.ReadAllText( args[0] ), scope, args.Skip( 1 ).ToArray() );
+            BSEngine engine = es.Build();
+
+            
+            engine.LoadSource(File.ReadAllText(args[0]), args.Skip(1).ToArray());
+
         }
 
         #endregion
