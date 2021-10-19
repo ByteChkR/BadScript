@@ -694,6 +694,35 @@
           "ReturnObjectAction": null
         }
       ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.Throw",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Environment.Rethrow",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null"
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
     }
   ]
 }

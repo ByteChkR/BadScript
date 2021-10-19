@@ -164,7 +164,7 @@ namespace BadScript.Interfaces.Environment
                                                  }
                                                  throw new BSRuntimeException("Environment.Throw Expects an exception object as second argument.");
                                              },
-                                             2
+                                             1
                                             )
                              );
 
