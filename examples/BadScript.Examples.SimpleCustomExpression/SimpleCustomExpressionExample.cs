@@ -14,10 +14,9 @@ namespace BadScript.Examples.SimpleCustomExpression
     internal class SimpleCustomExpressionExample
     {
         private const string SOURCE = @"
-                foreach i in 0..10 //Using the Custom Range Operator
-                {
-                    Console.WriteLine(i)
-                }
+                a = [1, 2, 3, 4]
+                b = [5, 6, 7, 8]
+                Console.WriteLine(Environment.Debug(a::b))
 ";
 
 
@@ -47,14 +46,17 @@ namespace BadScript.Examples.SimpleCustomExpression
         private static void Main(string[] args)
         {
             //Create an entry in the Operator Precedence Table.
-            BSOperatorPreceedenceTable.Set( new BSBinaryOperator( 3,          //The Operator precedence
-                                                                  "..",       //The Operator that gets matched
-                                                                  "op_Range", //The Signature Name
-                                                                  2 )         //The Argument Count
+            
+            BSOperatorPreceedenceTable.Set(new BSBinaryOperator(3,          //The Operator precedence
+                                                                "::",       //The Operator that gets matched
+                                                                "op_Join",  //The Signature Name
+                                                                2)          //The Argument Count
                                           );
 
-            BSOperatorImplementationResolver.AddImplementation( null, //Optional Mapping. If set to "op_Range", tables can override this custom operator implementation with their own.
-                                                                new BSRangeCustomOperatorImplementation() //Add the Custom implementation.
+            
+
+            BSOperatorImplementationResolver.AddImplementation("op_Join", //Optional Mapping. If set to "op_Join", tables can override this custom operator implementation with their own.
+                                                               new BSJoinCustomOperatorImplementation() //Add the Custom implementation.
                                                               );
 
             BSEngine engine = CreateEngine();

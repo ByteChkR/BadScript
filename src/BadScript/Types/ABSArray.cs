@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using BadScript.Parser.Expressions;
@@ -10,7 +11,7 @@ namespace BadScript.Types
     /// <summary>
     ///     Base Implementations for all arrays inside the language
     /// </summary>
-    public abstract class ABSArray : ABSObject
+    public abstract class ABSArray : ABSObject, IEnumerable <ABSObject>
     {
 
         #region Public
@@ -91,6 +92,19 @@ namespace BadScript.Types
         }
 
         #endregion
+
+        public IEnumerator < ABSObject > GetEnumerator()
+        {
+            for ( int i = 0; i < GetLength(); i++ )
+            {
+                yield return GetRawElement( i );
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
     }
 

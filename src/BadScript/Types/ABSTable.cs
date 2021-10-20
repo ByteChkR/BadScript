@@ -1,4 +1,7 @@
-﻿using BadScript.Parser.Expressions;
+﻿using System.Collections;
+using System.Collections.Generic;
+
+using BadScript.Parser.Expressions;
 using BadScript.Types.References;
 
 namespace BadScript.Types
@@ -7,7 +10,7 @@ namespace BadScript.Types
     /// <summary>
     ///     Base Implementation for all tables inside the language
     /// </summary>
-    public abstract class ABSTable : ABSObject
+    public abstract class ABSTable : ABSObject, IEnumerable <(ABSObject, ABSObject)>
     {
 
         /// <summary>
@@ -83,6 +86,21 @@ namespace BadScript.Types
         }
 
         #endregion
+
+        public IEnumerator < (ABSObject, ABSObject) > GetEnumerator()
+        {
+            ABSArray keys = Keys;
+
+            foreach ( ABSObject key in keys )
+            {
+                yield return (key, GetRawElement(key));
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
     }
 

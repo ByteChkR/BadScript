@@ -1,0 +1,9 @@
+sum = 0
+start = 1
+end = 3
+foreach i in start..end
+{
+	sum += i
+}
+
+return sum == 6

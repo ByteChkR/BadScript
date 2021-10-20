@@ -7,6 +7,7 @@ using BadScript.Parser.OperatorImplementations.Implementations.Logic;
 using BadScript.Parser.OperatorImplementations.Implementations.Logic.Self;
 using BadScript.Parser.OperatorImplementations.Implementations.Math;
 using BadScript.Parser.OperatorImplementations.Implementations.Math.Self;
+using BadScript.Parser.OperatorImplementations.Implementations.Range;
 using BadScript.Parser.OperatorImplementations.Implementations.Relational;
 using BadScript.Types;
 using BadScript.Types.Implementations;
@@ -157,6 +158,8 @@ namespace BadScript.Parser.OperatorImplementations
             m_Implementations.Add( new BSArrayAccessOperatorImplementation() );
             m_Implementations.Add( new BSPropertyExpressionImplementation() );
             m_Implementations.Add( new BSInvocationExpressionOperatorImplementation() );
+            m_Implementations.Add( new BSRangeOperatorImplementation() );
+            
         }
 
         #endregion
