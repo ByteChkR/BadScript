@@ -3,7 +3,7 @@ namespace InteractiveShell.Console.Commands
 	using InteractiveShell.Console
 	class ResetCommand : InteractiveShellConsoleCommand
 	{
-		function ResetCommand() : base("list") { }
+		function ResetCommand() : base("reset") { }
 
 		function RunCommand(!args)
 		{

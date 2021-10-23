@@ -83,6 +83,11 @@ namespace InteractiveShell.Console
 			_exitLoop = true
 		}
 
+		function Reset()
+		{
+			_shell.ResetScope()
+		}
+
 		function Clear()
 		{
 			_currentStr = ""
