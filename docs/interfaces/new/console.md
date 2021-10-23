@@ -4,33 +4,23 @@
 - Function Signature: '`function Write(obj)`'
 - Function Signature: '`function ReadLine()`'
 - Function Signature: '`function ReadLine()`'
+- Function Signature: '`function IsKeyAvailable()`'
 - Function Signature: '`function Beep()`'
 - Function Signature: '`function Read()`'
+- Function Signature: '`function ReadChar()`'
 - Function Signature: '`function ResetColor()`'
 - Function Signature: '`function ReadKey(intercept)`'
 ## Properties:
 - `ForeColor = 7`
 - `BackColor = 0`
-- `BufferWidth = 120`
-- `BufferHeight = 30`
-- `WindowWidth = 120`
-- `WindowHeight = 30`
-- `LargestWindowWidth = 1904`
-- `LargestWindowHeight = 62`
-- `CursorSize = 25`
-- `CursorLeft = 0`
-- `CursorTop = 16`
-- `WindowLeft = 0`
-- `WindowTop = 0`
-- `Title = Windows PowerShell`
+- `LargestWindowWidth = 0`
+- `LargestWindowHeight = 0`
+- `Title = D:\Users\Tim\Documents\BadScript\src\BadScript.Console\bin\Release\net5.0\bs.exe`
 - `CapsLock = False`
 - `NumberLock = True`
-- `IsErrorRedirected = False`
-- `IsInputRedirected = False`
-- `IsOutputRedirected = False`
-- `KeyAvailable = False`
-- `TreatControlCAsInput = False`
-- `CursorVisible = True`
+- `IsErrorRedirected = True`
+- `IsInputRedirected = True`
+- `IsOutputRedirected = True`
 
 
 ## `Colors` Documentation

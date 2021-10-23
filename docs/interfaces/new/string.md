@@ -1,6 +1,8 @@
 # `String` Documentation
 ## Functions:
 - Function Signature: '`function Escape(str)`'
+- Function Signature: '`function RegexEscape(str)`'
+- Function Signature: '`function RegexUnescape(str)`'
 - Function Signature: '`function Trim(str)/`'
 - Function Signature: '`function TrimEnd(str)/`'
 - Function Signature: '`function TrimStart(str)/`'

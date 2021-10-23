@@ -12,6 +12,8 @@
 - Function Signature: '`function GetInterfaceNames()`'
 - Function Signature: '`function HasInterface(interfaceName)`'
 - Function Signature: '`function Error(obj)`'
+- Function Signature: '`function Throw(message, exception)`'
+- Function Signature: '`function Rethrow(exception)`'
 - Function Signature: '`function Sleep(ms)`'
 - Function Signature: '`function Debug(obj)`'
 ## Properties:
