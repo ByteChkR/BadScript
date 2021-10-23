@@ -69,15 +69,11 @@ namespace BadScript.Parser
 
             m_CurrentPosition = 0;
         }
+        
 
-        public SourcePosition CreateSourcePosition()
+        public SourcePosition CreateSourcePosition(int pos)
         {
-            return CreateSourcePosition( m_CurrentPosition + m_SourcePositionOffset );
-        }
-
-        public SourcePosition CreateSourcePosition( int pos )
-        {
-            return SourcePosition.GetCurrentLineInfo( m_OffsetSource, pos );
+            return SourcePosition.GetSourcePosition(m_OffsetSource, m_SourcePositionOffset + pos);
         }
 
         public void DecrementPosition()
@@ -149,6 +145,11 @@ namespace BadScript.Parser
         public int GetPosition()
         {
             return m_CurrentPosition;
+        }
+
+        public int GetTotalPosition()
+        {
+            return m_SourcePositionOffset+ m_CurrentPosition;
         }
 
         public void IncrementPosition()
@@ -455,15 +456,12 @@ namespace BadScript.Parser
 
         public BSExpression ParseClass( bool isGlobal )
         {
-            //if ( !isGlobal )
-            //{
-            //    throw new BSParserException( "Classes can only be defined 'global'" );
-            //}
+           
 
             StringBuilder sb = new StringBuilder();
             ReadWhitespaceAndNewLine();
 
-            SourcePosition pos = CreateSourcePosition();
+            SourcePosition pos = CreateSourcePosition(m_CurrentPosition);
 
             sb.Append( m_OriginalSource[m_CurrentPosition] );
             m_CurrentPosition++;
@@ -498,7 +496,7 @@ namespace BadScript.Parser
             ReadWhitespaceAndNewLine();
             int off = m_CurrentPosition + 1;
             string block = ParseBlock();
-            BSParser p = new BSParser( block, m_OriginalSource, off, baseClass != null, false );
+            BSParser p = new BSParser( block, m_OriginalSource,m_SourcePositionOffset+ off, baseClass != null, false );
             BSExpression[] exprs = p.ParseToEnd();
 
             Dictionary < string, BSExpression > expressions = new Dictionary < string, BSExpression >();
@@ -794,6 +792,7 @@ namespace BadScript.Parser
         }
 
         public BSFunctionDefinitionExpression ParseFunction(
+            int pos,
             bool isGlobal,
             Func < string, string > blockModifier = null )
         {
@@ -804,8 +803,6 @@ namespace BadScript.Parser
 
             StringBuilder sb = new StringBuilder();
             ReadWhitespaceAndNewLine();
-
-            int pos = m_CurrentPosition;
 
             string funcName;
             BSInvocationExpression baseInvocation = null;
@@ -844,7 +841,7 @@ namespace BadScript.Parser
             {
                 m_CurrentPosition++;
                 ReadWhitespaceAndNewLine();
-                SourcePosition basePos = CreateSourcePosition();
+                SourcePosition basePos = CreateSourcePosition(m_CurrentPosition);
                 string word = GetNextWord();
 
                 if ( word != "base" )
@@ -879,11 +876,13 @@ namespace BadScript.Parser
                                                          );
             }
 
+            ReadWhitespaceAndNewLine();
+            int posOffset = m_CurrentPosition+1;
             string block = ParseBlock();
 
             block = blockModifier?.Invoke( block ) ?? block;
 
-            BSParser p = new BSParser( block, m_OffsetSource, m_SourcePositionOffset + pos );
+            BSParser p = new BSParser( block, m_OffsetSource,m_SourcePositionOffset+ posOffset);
 
             BSExpression[] b = p.ParseToEnd();
 
@@ -1048,7 +1047,7 @@ namespace BadScript.Parser
 
         public BSNamespaceExpression ParseNamespace()
         {
-            SourcePosition sp = CreateSourcePosition();
+            SourcePosition sp = CreateSourcePosition(m_CurrentPosition);
 
             ReadWhitespaceAndNewLine();
             List < string > fn = new();
@@ -1075,7 +1074,7 @@ namespace BadScript.Parser
             ReadWhitespaceAndNewLine();
             int off = m_CurrentPosition + 1;
             string block = ParseBlock();
-            BSParser p = new BSParser( block, m_OriginalSource, off );
+            BSParser p = new BSParser( block, m_OriginalSource, m_SourcePositionOffset + off );
             BSExpression[] exprs = p.ParseToEnd();
 
             return new BSNamespaceExpression( sp, fn.ToArray(), exprs );
@@ -1279,7 +1278,7 @@ namespace BadScript.Parser
 
         public BSUsingExpression ParseUsing()
         {
-            SourcePosition sp = CreateSourcePosition();
+            SourcePosition sp = CreateSourcePosition(m_CurrentPosition);
 
             ReadWhitespaceAndNewLine();
             List < string > fn = new();
@@ -1461,7 +1460,7 @@ namespace BadScript.Parser
 
             if ( wordName == "function" )
             {
-                return ParseFunction( isGlobal );
+                return ParseFunction(pos, isGlobal );
             }
 
             if ( wordName == "class" )
@@ -1544,12 +1543,14 @@ namespace BadScript.Parser
 
             if ( wordName == "true" && left == null )
             {
-                return new BSValueExpression( CreateSourcePosition( pos ), BSObject.True );
+                SourcePosition po = CreateSourcePosition( pos );
+                return new BSValueExpression( po, BSObject.CreateTrue(po));
             }
 
             if ( wordName == "false" && left == null )
             {
-                return new BSValueExpression( CreateSourcePosition( pos ), BSObject.False );
+                SourcePosition po = CreateSourcePosition(pos);
+                return new BSValueExpression(po, BSObject.CreateFalse(po) );
             }
 
             return new BSPropertyExpression( CreateSourcePosition( pos ), left, wordName );

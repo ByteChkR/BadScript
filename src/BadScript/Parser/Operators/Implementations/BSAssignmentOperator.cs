@@ -16,7 +16,7 @@ namespace BadScript.Parser.Operators.Implementations
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
             return new BSAssignExpression(
-                                          parser.CreateSourcePosition(),
+                                          parser.CreateSourcePosition(parser.GetPosition()),
                                           left,
                                           parser.ParseExpression( Preceedence - 1 )
                                          );

@@ -26,7 +26,7 @@ namespace BadScript.Parser.Expressions.Implementations.Value
             else
             {
                 SourceValue = o;
-                m_Value = new BSObject( o );
+                m_Value = new BSObject(m_Position, o );
             }
         }
 

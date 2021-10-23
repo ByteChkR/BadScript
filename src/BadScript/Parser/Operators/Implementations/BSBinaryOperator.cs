@@ -36,10 +36,11 @@ namespace BadScript.Parser.Operators.Implementations
 
         public override BSExpression Parse( BSExpression left, BSParser parser )
         {
+            SourcePosition pos = parser.CreateSourcePosition( parser.GetPosition() );
             return new BSInvocationExpression(
-                                              parser.CreateSourcePosition(),
+                                              pos,
                                               new BSProxyExpression(
-                                                                    parser.CreateSourcePosition(),
+                                                                    pos,
                                                                     m_OperatorImplementation,
                                                                     m_Meta
                                                                    ),

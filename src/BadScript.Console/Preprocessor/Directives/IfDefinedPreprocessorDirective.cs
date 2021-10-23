@@ -26,7 +26,7 @@ namespace BadScript.Console.Preprocessor.Directives
             string block = p.ParseBlock();
             block = SourcePreprocessor.Preprocess( ctx.CreateSubContext( block ) );
 
-            BSParser sp = new BSParser( block, ctx.OriginalSource, p.GetPosition() );
+            BSParser sp = new BSParser( block, ctx.OriginalSource, p.GetTotalPosition() );
             BSExpression blockExpr = new BSBlockExpression( sp.ParseToEnd() );
 
             if ( ctx.RuntimeScope.Has( def ) )

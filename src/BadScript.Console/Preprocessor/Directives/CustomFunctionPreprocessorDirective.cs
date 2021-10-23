@@ -43,9 +43,11 @@ namespace BadScript.Console.Preprocessor.Directives
 
         public override string Process( BSParser p, SourcePreprocessorContext ctx )
         {
+            int pos = p.GetPosition();
             p.SetPosition( p.GetPosition() + Name.Length ); //Skip #define
 
             BSFunctionDefinitionExpression expr = p.ParseFunction(
+                                                                  pos,
                                                                   false,
                                                                   s => SourcePreprocessor.Preprocess(
                                                                        ctx.CreateSubContext( s )

@@ -1,0 +1,7 @@
+function f()
+{
+	a = true
+	return a + 1
+}
+
+f()

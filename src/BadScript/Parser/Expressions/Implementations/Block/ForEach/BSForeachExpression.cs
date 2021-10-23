@@ -108,13 +108,13 @@ namespace BadScript.Parser.Expressions.Implementations.Block.ForEach
 
         private void Enumerate( BSScope scope, BSScope foreachScope, ABSObject moveNext, ABSObject getCurrent )
         {
-            while ( moveNext.Invoke( Array.Empty < ABSObject >() ) != BSObject.False )
+            while ( moveNext.Invoke( Array.Empty < ABSObject >() ) != BSObject.False)
             {
                 ABSObject[] objs = { getCurrent.Invoke( Array.Empty < ABSObject >() ) };
 
                 for ( int i = 0; i < Vars.Length; i++ )
                 {
-                    foreachScope.AddLocalVar( Vars[i], objs.Length > i ? objs[i] : BSObject.Null );
+                    foreachScope.AddLocalVar( Vars[i], objs.Length > i ? objs[i] : BSObject.Null);
                 }
 
                 ABSObject ret = BSFunctionDefinitionExpression.InvokeBlockFunction(

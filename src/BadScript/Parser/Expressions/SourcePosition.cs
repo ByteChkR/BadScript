@@ -31,49 +31,100 @@ namespace BadScript.Parser.Expressions
                                0
                               );
 
-        public static SourcePosition GetCurrentLineInfo( string src, int pos )
+        private static int CountLines( string src, int pos )
         {
-            char[] text = src.ToCharArray();
-
-            if ( pos < src.Length )
-            {
-                text = text.Take( pos ).ToArray();
-            }
-            else
-            {
-                pos = src.Length;
-            }
-
-            int lineCount = 0;
-            int lastNewLine = 0;
+            int lines = 0;
 
             for ( int i = 0; i < pos; i++ )
             {
-                if ( text[i] == '\n' )
+                if (src[i] == '\n' )
+                    lines++;
+            }
+
+            return lines + 1;
+        }
+
+        private static int GetLineIndex( string src, int pos )
+        {
+            int index = 0;
+            for ( int i = pos; i > 0; i-- )
+            {
+                if ( src[i] == '\n' )
                 {
-                    lastNewLine = i;
-                    lineCount++;
+                    index = i;
+
+                    break;
                 }
             }
+            if(index != 0)
+            return index+1;
 
-            int textStart = lastNewLine + 1;
-            int nextNewLine = src.IndexOf( '\n', textStart );
-
-            if ( nextNewLine == -1 )
-            {
-                nextNewLine = src.Length - textStart;
-            }
-
-            string r = src.Substring( textStart, Math.Min( nextNewLine, src.Length - textStart ) );
-
-            return new SourcePosition(
-                                      src,
-                                      r.Trim(),
-                                      lineCount,
-                                      pos - lastNewLine,
-                                      pos
-                                     );
+            return index;
         }
+
+        public static SourcePosition GetSourcePosition( string src, int pos )
+        {
+            int lineCount = CountLines( src, pos );
+            int lineIndex = GetLineIndex( src, pos );
+
+            int start = pos;
+            char[] str = src.ToCharArray();
+            int nextLine = src.IndexOf( '\n', start );
+
+            if ( nextLine == -1 )
+            {
+                nextLine = src.Length;
+            }
+            string line = src.Substring(lineIndex, nextLine - lineIndex);
+            int col = start - lineIndex;
+
+            return new SourcePosition( src, line, lineCount, col, pos );
+        }
+
+        //public static SourcePosition GetCurrentLineInfo( string src, int pos )
+        //{
+        //    return GetSourcePosition( src, pos );
+        //    char[] text = src.ToCharArray();
+
+        //    if ( pos < src.Length )
+        //    {
+        //        text = text.Take( pos ).ToArray();
+        //    }
+        //    else
+        //    {
+        //        pos = src.Length;
+        //    }
+
+        //    int lineCount = 0;
+        //    int lastNewLine = 0;
+
+        //    for ( int i = 0; i < pos; i++ )
+        //    {
+        //        if ( text[i] == '\n' )
+        //        {
+        //            lastNewLine = i;
+        //            lineCount++;
+        //        }
+        //    }
+
+        //    int textStart = lastNewLine + 1;
+        //    int nextNewLine = src.IndexOf( '\n', textStart );
+
+        //    if ( nextNewLine == -1 )
+        //    {
+        //        nextNewLine = src.Length - textStart;
+        //    }
+
+        //    string r = src.Substring( textStart, Math.Min( nextNewLine, src.Length - textStart ) );
+
+        //    return new SourcePosition(
+        //                              src,
+        //                              r.Trim(),
+        //                              lineCount,
+        //                              pos - lastNewLine,
+        //                              pos
+        //                             );
+        //}
 
     }
 

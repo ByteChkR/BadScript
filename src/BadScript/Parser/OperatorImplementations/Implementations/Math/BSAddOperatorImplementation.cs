@@ -86,7 +86,7 @@ namespace BadScript.Parser.OperatorImplementations.Implementations.Math
                 return true;
             }
 
-            throw new BSRuntimeException( $"Can not convert objects '{lVal}', '{rVal}'" );
+            throw new BSRuntimeException(rVal.Position, $"Can not convert objects '{lVal}', '{rVal}'" );
         }
 
         #endregion
