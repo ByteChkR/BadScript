@@ -105,26 +105,32 @@ namespace BadScript.Optimization
             }
             else if ( expr is BSUnaryExpression unary )
             {
-                if ( unary.IsConstant &&
-                     !( unary is BSReturnExpression ) )
+                if ( unary.IsConstant )
                 {
-                    ABSObject o = unary.Execute( null );
-                    BSExpressionOptimizerMetaData md = null;
-
-                    if ( o is IBSWrappedObject wo )
+                    if ( unary is BSReturnExpression r )
                     {
-                        md = new BSExpressionOptimizerMetaData( wo.GetInternalObject() );
+                        r.Left = OptimizeExpression( r.Left );
                     }
-
-                    if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
+                    else
                     {
-                        Console.WriteLine(
-                                          $"[Expression Optimizer] Optimizing {unary.GetType().Name}: " +
-                                          o.SafeToString()
-                                         );
-                    }
+                        ABSObject o = unary.Execute(null);
+                        BSExpressionOptimizerMetaData md = null;
 
-                    return new BSProxyExpression( SourcePosition.Unknown, o, md );
+                        if (o is IBSWrappedObject wo)
+                        {
+                            md = new BSExpressionOptimizerMetaData(wo.GetInternalObject());
+                        }
+
+                        if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                        {
+                            Console.WriteLine(
+                                              $"[Expression Optimizer] Optimizing {unary.GetType().Name}: " +
+                                              o.SafeToString()
+                                             );
+                        }
+
+                        return new BSProxyExpression(SourcePosition.Unknown, o, md);
+                    }
                 }
                 else
                 {
