@@ -1,0 +1,27 @@
+namespace BadShell.Parser
+{
+
+	class CommandParser
+	{
+		Console = null
+		function CommandParser(!console)
+		{
+			Console = console
+		}
+		function ParseCommands(!src)
+		{
+			reader = new CommandReader(Console, src)
+			try
+			{
+				cmds = reader.ParseToEnd()
+				return cmds
+			}
+			catch(e)
+			{
+				Console.WriteLine($"Can not Parse Source: '{src}'")
+				Environment.Rethrow(e)
+			}
+			return null
+		}
+	}
+}

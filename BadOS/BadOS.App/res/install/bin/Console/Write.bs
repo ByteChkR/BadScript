@@ -1,0 +1,17 @@
+
+Console = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Console")
+args = ProcessInfo.GetArguments()
+s = ""
+for i = 1 while< args.Size()
+{
+	if(i == 1)
+	{
+		s += $"{args[i]}"
+	}
+	else
+	{
+		s += $" {args[i]}"
+	}
+}
+
+return Console.Write(s)

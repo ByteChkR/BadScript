@@ -1,0 +1,11 @@
+namespace BadOS.Extensions.FileSystem
+{
+	class FileSystemLink : Directory
+	{
+		function IsFileSystemLink() => return true
+		function ToString()
+		{
+			return GetDebugString(this)
+		}
+	}
+}

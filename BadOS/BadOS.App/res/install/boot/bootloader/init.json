@@ -1,0 +1,8 @@
+{
+  "StartupFiles": [],
+  "StartupProcess": [],
+  "Startup": "/bin/BadShell.bs",
+  "StartupArgs": ["/bin/BadShell.bs", "--file", "/data/BadShell/startup.bsh"],
+  "BootstrapAfterInstall": true,
+  "AlwaysInstall": true
+}

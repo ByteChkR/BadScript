@@ -1,0 +1,96 @@
+namespace BadOS.Core.UserManagement
+{
+	
+	class User
+	{
+		_UserID = -1
+		_UserRights = []
+		_UserName = "ANONYMOUS"
+		_UserPass = null
+
+		function User(!id, !name, !rights, ?pass)
+		{
+			#ASSERT_NUMBER(id)
+			#ASSERT_STRING(name)
+			#ASSERT_ARRAY(rights)
+			_UserID = id
+			_UserRights = rights
+			_UserName = name
+			_UserPass = pass
+		}
+
+		function GetUID()
+		{
+			return _UserID
+		}
+
+		function GetRights()
+		{
+			a = []
+			foreach r in _UserRights
+			{
+				a.Add(r)
+			}
+			return a
+		}
+
+		function GetName()
+		{
+			return _UserName
+		}
+
+		function IsCorrectPassword(!pw)
+		{
+			#ASSERT_STRING(pw)
+			return _UserPass == pw
+		}
+
+		function HasRight(!right)
+		{
+			#ASSERT_STRING(right)
+			
+
+			foreach r in _UserRights
+			{
+				if(r == right)
+				{
+					return true
+				}
+			}
+			if(_UserID == 0)
+			{
+				_UserRights.Add(right)
+				return true
+			}
+			return false
+		}
+
+		function AddRight(!right)
+		{
+			#ASSERT_STRING(right)
+			if(!HasRight(right))
+			{
+				_UserRights.Add(right)
+			}
+		}
+
+		function SetName(!name)
+		{
+			_UserName = name
+		}
+		function SetPassword(!pw, ?oldPW)
+		{
+			#ASSERT_STRING(pw)
+
+			if(oldPW != null)
+			{
+				#ASSERT_STRING(oldPW)
+			}
+
+			if(_UserPass == oldPW)
+			{
+				_UserPass = pw
+			}
+		}
+	}
+}

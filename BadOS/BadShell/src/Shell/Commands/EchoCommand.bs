@@ -1,0 +1,34 @@
+namespace BadShell.Commands
+{
+	class EchoCommand: ShellCommand
+	{
+		Console = null
+		function EchoCommand(!console)
+		{
+			Console = console
+		}
+		function GetName()
+		{
+			return "echo"
+		}
+
+		function GetHelp()
+		{
+			return "Writes the Input back to the console output"
+		}
+
+		function RunCommand(*args)
+		{
+			l = ""
+			for i = 0 while< args.Size()
+			{
+				if(i != 0)
+				{
+					l += " "
+				}
+				l += $"{args[i]}"
+			}
+			Console.WriteLine(l)
+		}
+	}
+}

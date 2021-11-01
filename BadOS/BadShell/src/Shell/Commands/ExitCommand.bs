@@ -1,0 +1,25 @@
+namespace BadShell.Commands
+{
+	class ExitCommand: ShellCommand
+	{
+		_fnc = null
+		function ExitCommand(!fnc)
+		{
+			_fnc = fnc
+		}
+		function GetName()
+		{
+			return "exit"
+		}
+
+		function GetHelp()
+		{
+			return "Exits the current Shell Session"
+		}
+
+		function RunCommand()
+		{
+			_fnc()
+		}
+	}
+}

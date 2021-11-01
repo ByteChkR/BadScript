@@ -1,0 +1,25 @@
+namespace BadShell.Commands
+{
+	class ClearConsoleCommand: ShellCommand
+	{
+		Console = null
+		function ClearConsoleCommand(!console)
+		{
+			Console = console
+		}
+		function GetName()
+		{
+			return "clear"
+		}
+
+		function GetHelp()
+		{
+			return "Clears the Console Output"
+		}
+
+		function RunCommand()
+		{
+			Console.Clear()
+		}
+	}
+}

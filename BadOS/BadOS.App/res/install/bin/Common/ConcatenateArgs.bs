@@ -1,0 +1,8 @@
+args = ProcessInfo.GetArguments()
+s = ""
+
+for i = 1 while< args.Size()
+{
+	s += $"{args[i]}"
+}
+return s

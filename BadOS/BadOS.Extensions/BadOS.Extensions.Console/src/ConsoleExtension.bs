@@ -1,0 +1,30 @@
+namespace BadOS.Extensions.Console
+{
+	using BadOS.Core.Extensions
+
+	class ConsoleExtension : Extension
+	{
+		_console = null
+		function ConsoleExtension(!environment)
+		{
+			_console = environment.LoadInterface("Console", {})
+		}
+
+		#EXTENSION_GENERATE_INFO_BODY()
+
+		function GetPublicInterface()
+		{
+			t = base.GetPublicInterface()
+			t.GetAccessRight = GetAccessRight
+			foreach (k, v) in _console
+			{
+				t[k] = v
+			}
+			return t
+		}
+
+		function Initialize(!host) : base(host)
+		{
+		}
+	}
+}

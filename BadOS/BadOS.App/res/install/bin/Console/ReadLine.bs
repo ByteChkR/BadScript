@@ -1,0 +1,5 @@
+
+Console = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Console")
+
+
+return Console.ReadLine()

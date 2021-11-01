@@ -1,0 +1,70 @@
+namespace BadShell.Commands
+{
+	using BadShell.Runner
+	class HelpCommand : ShellCommand
+	{
+		__runner = null
+		__parser = null
+
+		Console = null
+		function HelpCommand(!console, !parser, !runner)
+		{
+			Console = console
+			__runner = runner
+			__parser = parser
+		}
+
+		function GetName()
+		{
+			return "help"
+		}
+
+		function GetHelp()
+		{
+			return "Prints this help Text"
+		}
+
+		function ConstructCommandText(!cmd)
+		{
+			return $"{cmd.GetName()}: {cmd.GetHelp()}"
+		}
+
+		function ConstructCommandTexts(!cmds)
+		{
+			r = "Commands:\n"
+			foreach cmd in cmds
+			{
+				r+= $"\t- {ConstructCommandText(cmd)}\n"
+			}
+			return r
+		}
+
+		function RunCommand(?cmdName)
+		{
+			if(cmdName == null)
+			{
+				Console.WriteLine(ConstructCommandTexts(__runner.__commands))
+			}
+			else
+			{
+				input = __parser.ParseCommand(cmdName)
+				if(input == null)
+				{
+					Console.WriteLine($"Can not parse Command: {cmdName}")
+				}
+				else
+				{
+					cmd = __runner.FindTarget(input)
+					if(cmd == null)
+					{
+						Console.WriteLine($"Can not find Command: {cmdName}")
+					}
+					else
+					{
+						Console.WriteLine(ConstructCommandText(cmd))
+					}
+				}
+			}
+		}
+	}
+}

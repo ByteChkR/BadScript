@@ -1,0 +1,48 @@
+function CreateOSCore()
+{
+	env = Environment
+	env.LoadInterface("Convert")
+	env.LoadInterface("Collection")
+	env.LoadInterface("String")
+	env.LoadInterface("Json")
+	__G.Environment = {
+		Debug = env.Debug,
+		Error = env.Error,
+		Sleep = env.Sleep,
+		Throw = env.Throw,
+		Rethrow = env.Rethrow
+	}
+	Collection.Lock(__G.Environment)
+
+
+
+	rootFS = new IOFileSystem(env, App.Manifest.PersistentPath, "fs")
+	osCore = new OSCoreLoader()
+				.AddExtension(new ConsoleExtension(env))
+				.AddExtension(new LoggingExtension())
+				.AddExtension(new UserManagementExtension())
+				.AddExtension(new FileSystemExtension(
+														rootFS,
+														[
+															new IOFileSystem(env, App.Manifest.TempPath, "temp")
+														]
+													)
+								)
+				.AddExtension(new BootstrapperExtension(App))
+				.AddExtension(new ConcurrencyExtension(env))
+
+	return osCore
+}
+
+
+function RunOS()
+{
+	console = Environment.LoadInterface("Console", {})
+	console.Clear()
+	
+	core = CreateOSCore().LoadCore()
+	__G.OS = core.GetPublicApi()
+	core.Run()
+}
+
+RunOS()

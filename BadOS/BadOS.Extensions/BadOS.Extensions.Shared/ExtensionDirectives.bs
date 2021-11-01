@@ -1,0 +1,45 @@
+#macro ASSERT_USER_HAS_RIGHT(user, right)
+{
+	if(!user.HasRight(right))
+	{
+		Environment.Error("User Does not Have Right: 'right'")
+	}
+}
+
+#macro EXTENSION_ASSERT_USER_HAS_RIGHT(user, right)
+{
+	if(!user.HasRight($"{GetName()}.right"))
+	{
+		Environment.Error($"User Does not Have Right: '{GetName()}.right'")
+	}
+}
+
+
+#custom EXTENSION_GET_NAME()
+{
+	return $"\"{NAME}\""
+}
+
+#custom EXTENSION_GET_VERSION()
+{
+	return $"\"{VERSION}\""
+}
+
+#macro EXTENSION_GENERATE_INFO_BODY()
+{
+	function GetName()
+	{
+		return #EXTENSION_GET_NAME()
+	}
+
+	function GetVersion()
+	{
+		return #EXTENSION_GET_VERSION()
+	}
+
+	function GetAccessRight()
+	{
+		return #EXTENSION_GET_NAME() + ".Access"
+	}
+
+}

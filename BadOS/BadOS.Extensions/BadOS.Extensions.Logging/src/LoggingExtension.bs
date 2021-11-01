@@ -1,0 +1,58 @@
+namespace BadOS.Extensions.Logging
+{
+	using BadOS.Core.Extensions
+
+	class LoggingExtension : Extension
+	{
+		_logger = null
+		_console = null
+		function LoggingExtension()
+		{
+			_logger = CreateLogger(GetName())
+		}
+
+		function CreateLogger(!tag)
+		{
+			#ASSERT_STRING(tag)
+			t = {
+				Log = function(!str)
+				{
+					#ASSERT_STRING(str)
+					_console.WriteLine($"[LOG][{tag}] {str}")
+				},
+				Info = function(!str)
+				{
+					#ASSERT_STRING(str)
+					_console.WriteLine($"[INFO][{tag}] {str}")
+				},
+				Warn = function(!str)
+				{
+					#ASSERT_STRING(str)
+					_console.WriteLine($"[WARN][{tag}] {str}")
+				},
+				Error = function(!str)
+				{
+					#ASSERT_STRING(str)
+					_console.WriteLine($"[ERR][{tag}] {str}")
+				},
+				GetTag = function() => return tag
+			}
+			return t
+		}
+
+		#EXTENSION_GENERATE_INFO_BODY()
+
+		function Initialize(!host) : base(host)
+		{
+			_console = host.GetExtension("BadOS.Extensions.Console")
+		}
+
+		function GetPublicInterface()
+		{
+			t = base.GetPublicInterface()
+			t.CreateLogger = CreateLogger
+			t.GetAccessRight = GetAccessRight
+			return t
+		}
+	}
+}

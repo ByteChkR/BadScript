@@ -1,0 +1,243 @@
+
+namespace BadOS.Extensions.FileSystem
+{
+	using BadOS.Core.Extensions
+
+	class FileSystemExtension : Extension
+	{
+		_logger = null
+		_rootFS = null
+		_rootLink = null
+		_userManager = null
+		_additionalFs = []
+		_pathResolver = null
+		function FileSystemExtension(!rootFs, ?additionalFs)
+		{
+			#ASSERT_INSTANCE_OF(FileSystem, rootFs)
+			if(additionalFs != null)
+			{
+				#ASSERT_ARRAY(additionalFs)
+				_additionalFs = additionalFs
+			}
+			_rootFS = rootFs
+		}
+		#EXTENSION_GENERATE_INFO_BODY()
+		function Initialize(!host) : base(host)
+		{
+			l = host.GetExtension("BadOS.Extensions.Logging")
+			_userManager = host.GetExtension("BadOS.Extensions.UserManagement")
+			_logger = l.CreateLogger(GetName())
+
+
+			node = new FileSystemLink()
+			node._Logger = _logger
+			root = _userManager.GetRoot()
+			node._OwnerUID = root.GetUID()
+			node._Name = ""
+			node._Parent = null
+			node._FileSystem = _rootFS
+
+			_logger.Log($"Mounting File System '{_rootFS.GetName()}' for UID {root.GetUID()} in '/'")
+			node.LoadFileSystemEntries()
+			devs = node.CreateDirectory(root, "devs")
+			
+			devs.CreateLink(root, _rootFS.GetName(), node)
+
+			foreach afs in _additionalFs
+			{
+				devs.MountFileSystem(root, afs.GetName(), afs)
+			}
+
+			_rootLink = node
+
+			_pathResolver = new PathResolver()
+		}
+
+
+		function GetRootFS()
+		{
+			return _rootFS
+		}
+		function GetRootNode()
+		{
+			return _rootLink
+		}
+
+		function CreateFile(!user, !startNode, !path)
+		{
+			if(String.StartsWith(path, "/"))
+			{
+				path = String.Remove(path, 0, 1)
+			}
+
+			parts = String.Split(path, "/")
+
+			current = startNode
+			for i = 0 while< parts.Size()-1
+			{
+				part = parts[i]
+				if(current.IsDirectory())
+				{
+					next = current.GetChild(part)
+					if(next != null)
+					{
+						current = next
+					}
+					else
+					{
+						current = current.CreateDirectory(user, part)
+					}
+				}
+				else if(current.IsFile())
+				{
+					Environment.Error($"Can not Create Directory: '{current.ToString()}' already exists")
+				}
+				else
+				{
+					Environment.Error($"Can not Find Through Node: {current.ToString()}")
+				}
+			}
+			file = current.GetChild(parts[parts.Size() - 1])
+			if(file == null)
+			{
+				file = current.CreateFile(user, parts[parts.Size() - 1])
+			}
+			return file
+		}
+
+		function ResolvePath(!path, ?currentPath) => return _pathResolver.ResolvePath(path, currentPath)
+
+		function CreateDirectory(!user, !startNode, !path)
+		{
+			if(String.StartsWith(path, "/"))
+			{
+				path = String.Remove(path, 0, 1)
+			}
+
+			parts = String.Split(path, "/")
+
+			current = startNode
+			for i = 0 while< parts.Size()
+			{
+				part = parts[i]
+				if(current.IsDirectory())
+				{
+					next = current.GetChild(part)
+					if(next != null)
+					{
+						current = next
+					}
+					else
+					{
+						current = current.CreateDirectory(user, part)
+					}
+				}
+				else if(current.IsFile())
+				{
+					Environment.Error($"Can not Create Directory: '{current.ToString()}' already exists")
+				}
+				else
+				{
+					Environment.Error($"Can not Find Through Node: {current.ToString()}")
+				}
+			}
+			return current
+		}
+
+		function Exists(!startNode, !path)
+		{
+			if(path == "/")
+			{
+				return true
+			}
+			if(String.StartsWith(path, "/"))
+			{
+				path = String.Remove(path, 0, 1)
+			}
+
+			parts = String.Split(path, "/")
+
+			current = startNode
+			for i = 0 while< parts.Size()
+			{
+				part = parts[i]
+				if(current.IsDirectory())
+				{
+					next = current.GetChild(part)
+					if(next != null)
+					{
+						current = next
+					}
+					else
+					{
+						return false
+					}
+				}
+				else if(current.IsFile() && i != parts.Size() - 1)
+				{
+					return false
+				}
+				else
+				{
+					Environment.Error($"Can not Find Through Node: {current.ToString()}")
+				}
+			}
+			return true
+		}
+
+		function FindNode(!startNode, !path)
+		{
+			if(path == "/")
+			{
+				return GetRootNode()
+			}
+			if(String.StartsWith(path, "/"))
+			{
+				path = String.Remove(path, 0, 1)
+			}
+
+			parts = String.Split(path, "/")
+
+			current = startNode
+			for i = 0 while< parts.Size()
+			{
+				part = parts[i]
+				if(current.IsDirectory())
+				{
+					next = current.GetChild(part)
+					if(next != null)
+					{
+						current = next
+					}
+					else
+					{
+						Environment.Error($"Find Node Path '{path}' does not exist in the starting node '{startNode.GetFullName()}'")
+					}
+				}
+				else if(current.IsFile() && i != parts.Size() - 1)
+				{
+					Environment.Error($"Find Node Path '{path}' does not exist in the starting node '{startNode.GetFullName()}'")
+				}
+				else
+				{
+					Environment.Error($"Can not Find Through Node: {current.ToString()}")
+				}
+			}
+			return current
+		}
+
+		function GetPublicInterface()
+		{
+			t = base.GetPublicInterface()
+			t.GetAccessRight = GetAccessRight
+			t.GetRootFS = GetRootFS
+			t.GetRootNode = GetRootNode
+			t.FindNode = FindNode
+			t.CreateDirectory = CreateDirectory
+			t.CreateFile = CreateFile
+			t.ResolvePath = ResolvePath
+			t.Exists = Exists
+			return t
+		}
+	}
+}

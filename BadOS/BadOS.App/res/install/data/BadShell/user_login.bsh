@@ -1,0 +1,14 @@
+set USER $(whoami)
+set HOME_DIR $(combine "/home/" %USER%)
+
+cd %HOME_DIR%
+
+if $(eq $(exists "./.BadShell") false) $({
+	mkdir "./.BadShell"
+})
+
+if $(isfile "./.BadShell/startup.bs") $({
+	./.BadShell/startup.bs
+})
+
+echo $(loadtext "/data/BadShell/login_info.txt")

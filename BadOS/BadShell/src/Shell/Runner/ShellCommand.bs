@@ -1,0 +1,20 @@
+namespace BadShell.Runner
+{
+	class ShellCommand
+	{
+		function GetName()
+		{
+			Environment.Error($"ShellCommand '{GetType()}' does not implement 'GetName()'")
+		}
+
+		function GetHelp()
+		{
+			Environment.Error($"ShellCommand '{GetName()}' does not implement 'GetHelp()'")
+		}
+
+		function RunCommand()
+		{
+			Environment.Error($"ShellCommand '{GetName()}' does not implement 'RunCommand()'")
+		}
+	}
+}

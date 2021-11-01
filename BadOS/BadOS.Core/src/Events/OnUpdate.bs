@@ -1,0 +1,9 @@
+namespace BadOS.Core.Events
+{
+
+	#EVENT_CREATE(OnUpdateEvent, OS_UPDATE)
+
+	#EVENT_HANDLER_CREATE(OnUpdateHandler, OS_UPDATE)
+	
+
+}

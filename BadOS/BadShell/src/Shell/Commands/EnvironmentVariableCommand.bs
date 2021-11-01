@@ -1,0 +1,75 @@
+namespace BadShell.Commands
+{
+	class EnvironmentVariableCommand : ShellCommand
+	{
+		__runner = null
+		Console = null
+		function EnvironmentVariableCommand(!console, !runner)
+		{
+			Console = console
+			__runner = runner
+		}
+		function GetName()
+		{
+			return "env"
+		}
+
+		function GetHelp()
+		{
+			return "'set'/'get'/'list' Environment Variables"
+		}
+
+		function RunCommand(?operation, ?key, ?value)
+		{
+			if(operation == "set")
+			{
+				if(key == null)
+				{
+					Console.WriteLine("Expected key and optional value as arguments.")
+				}
+				else
+				{
+					__runner.AddEnv(key, value)
+				}
+			}
+			else if(operation == "get")
+			{
+				if(key == null)
+				{
+					Console.WriteLine("Expected key as argument.")
+				}
+				else if(value != null)
+				{
+					Console.WriteLine("Expected no value argument.")
+				}
+				else
+				{
+					Console.WriteLine($"Value of '{key}': {__runner.GetEnv(key)}")
+				}
+			}
+			else if(operation == "list")
+			{
+				if(key != null || value != null)
+				{
+					Console.WriteLine("Expected no arguments.")
+				}
+				else
+				{
+					Console.WriteLine("Environment Variables:")
+					foreach (k, v) in __runner.__envs
+					{
+						Console.WriteLine($"\t- {k}: {v}")
+					}
+				}
+			}
+			else if(operation == null)
+			{
+				Console.WriteLine($"No Environment Variable Operation specified")
+			}
+			else
+			{
+				Console.WriteLine($"Unknown Environment Variable Operation: '{operation}'")
+			}
+		}
+	}
+}

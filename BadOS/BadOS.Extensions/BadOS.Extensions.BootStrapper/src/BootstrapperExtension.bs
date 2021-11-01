@@ -1,0 +1,163 @@
+namespace BadOS.Extensions.BootStrapper
+{
+	using BadOS.Core.Extensions
+	using BadOS.Extensions.Concurrency
+	using BadOS.Core.Events
+	class BootstrapperExtension : Extension
+	{
+		#EXTENSION_GENERATE_INFO_BODY()
+
+		_App = null
+		function BootstrapperExtension(!app)
+		{
+			_App = app
+		}
+
+		_FileSystem = null
+		_ConcurrencySystem = null
+		_UserSystem = null
+		_RootUser = null
+		_Logger = null
+		_BootStrapperConfigPath = "/boot/bootloader"
+		_BootStrapperConfigDir = null
+		function Initialize(!host) : base(host)
+		{
+			l = host.GetExtension("BadOS.Extensions.Logging")
+			_Logger = l.CreateLogger(GetName())
+			_UserSystem = _Host.GetExtension("BadOS.Extensions.UserManagement")
+			_RootUser = _UserSystem.GetRoot()
+		}
+
+		function IsFirstStart()
+		{	
+			r = _BootStrapperConfigDir.GetChild("init.json") == null
+			return r
+		}
+
+		function GetBootstrapperConfigFile()
+		{
+			configFile = _BootStrapperConfigDir.GetChild("init.json")
+			if(configFile == null)
+			{
+				configFile = _BootStrapperConfigDir.CreateFile(_RootUser, "init.json")
+				CreateDefaultConfig(configFile)
+			}
+			return configFile
+		}
+		function GetPublicInterface()
+		{
+			t = base.GetPublicInterface()
+			t.GetAccessRight = GetAccessRight
+			t.GetBootstrapperConfigFile = GetBootstrapperConfigFile
+			return t
+		}
+
+		function Bootstrap()
+		{
+			configFile = GetBootstrapperConfigFile()
+			config = configFile.ReadJson(_RootUser)
+			#ASSERT_TABLE(config)
+
+
+			_Logger.Log($"Starting {config.StartupFiles.Size()} Synchronous Startup Files")
+			foreach startupFile in config.StartupFiles
+			{
+				fileNode = _FileSystem.FindNode(_FileSystem.GetRootNode(), startupFile)
+				text = fileNode.ReadAllText(_RootUser)
+				_ConcurrencySystem.StartSynchronousProcess(_RootUser, text, [], $"BOOTSTRAP: {startupFile}")
+			}
+
+			_Logger.Log($"Starting {config.StartupProcess.Size()} Startup Process Files")
+			foreach startupFile in config.StartupProcess
+			{
+				fileNode = _FileSystem.FindNode(_FileSystem.GetRootNode(), startupFile)
+				text = fileNode.ReadAllText(_RootUser)
+				_ConcurrencySystem.StartProcess(_RootUser, text, [], null, $"BOOTSTRAP: {startupFile}")
+			}
+
+
+			if(config.Startup != null)
+			{
+				_Logger.Log($"Starting Root Start File '{config.Startup}'")
+				
+				fileNode = _FileSystem.FindNode(_FileSystem.GetRootNode(), config.Startup)
+				text = fileNode.ReadAllText(_RootUser)
+				_Host.GetEventSystem().SendEvent(new ProcessStartEvent(_RootUser, text, config.StartupArgs, null, $"{config.Startup}"))
+
+			}
+			_Logger.Log($"Bootstrap Successful")
+		}
+
+		function OnInitializationFinished()
+		{
+			_FileSystem = _Host.GetExtension("BadOS.Extensions.FileSystem")
+			_ConcurrencySystem = _Host.GetExtension("BadOS.Extensions.Concurrency")
+			_BootStrapperConfigDir = _FileSystem.CreateDirectory(_RootUser, _FileSystem.GetRootNode(), _BootStrapperConfigPath)
+			_ExtensionSystem = _Host.GetExtension("BadOS.Core.Extensions.CoreExtension")
+			
+			if(IsFirstStart())
+			{
+				_Logger.Log($"Installing...")
+				Install()
+				configFile = GetBootstrapperConfigFile()
+				config = configFile.ReadJson(_RootUser)
+				if(config.BootstrapAfterInstall)
+				{
+					Bootstrap()
+				}
+				else
+				{
+					_Logger.Log($"Installation Finised. Shutting Down")
+					_Host.GetEventSystem().SendEvent(new OnShutdownEvent())
+				}
+			}
+			else
+			{
+				configFile = GetBootstrapperConfigFile()
+				config = configFile.ReadJson(_RootUser)
+				if(config.AlwaysInstall)
+				{
+					_Logger.Log($"Re-Installing...")
+					Install()
+				}
+				_Logger.Log($"Starting...")
+				Bootstrap()
+			}
+
+			
+		}
+
+		function CreateDefaultConfig(!file)
+		{
+			config = {
+				StartupFiles = [],
+				StartupProcess = [],
+				Startup = null,
+				StartupArgs = [],
+				BootstrapAfterInstall = false,
+  				AlwaysInstall = false
+			}
+
+			file.WriteJson(_RootUser, config)
+		}
+
+		function Install()
+		{
+			installConfigStream = _App.GetResource("install_config.json")
+			installConfig = Json.FromJson(installConfigStream.readAll())
+			installConfigStream.close()
+
+			paths = _App.GetAllItemPaths()
+			foreach path in paths
+			{
+				path = "/" + path
+				if(String.StartsWith(path, installConfig.InstallPath))
+				{
+					fPath = String.Remove(path, 0, String.Length(installConfig.InstallPath)-1)
+					file = _FileSystem.CreateFile(_RootUser, _FileSystem.GetRootNode(), fPath)
+					file.WriteAllText(_RootUser, _App.GetItem(String.Remove(path, 0, 1)).readAll())
+				}
+			}
+		}
+	}
+}

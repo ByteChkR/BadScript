@@ -1,0 +1,909 @@
+namespace BadShell.Parser.Expressions
+{
+	class Scope
+	{
+		__Parent = null
+		__LocalVars = {}
+		__ReturnFlag = false
+		__ReturnValue = null
+		__ScopeHooks = []
+
+		function AddNamedHook(name, fnc)
+		{
+			#ASSERT_STRING(name)
+			AddScopeHook(function(n)
+						{
+							if(n == name)
+							{
+								return fnc
+							}
+							return null
+						}
+			)
+		}
+
+		function AddScopeHook(fnc)
+		{
+			__ScopeHooks.Add(fnc)
+		}
+
+		function GetFromHooks(name)
+		{
+			#ASSERT_STRING(name)
+			foreach hook in __ScopeHooks
+			{
+				v = hook(name)
+				if(v != null)
+				{
+					return v
+				}
+			}
+
+			if(__Parent != null)
+			{
+				return __Parent.GetFromHooks(name)
+			}
+
+			return null
+		}
+
+		function IsReturn() => return __ReturnFlag
+		function GetReturn() => return __ReturnValue
+		function SetReturn(value)
+		{
+			__ReturnValue = value
+			__ReturnFlag = true
+		}
+
+		function Scope(?parent)
+		{
+			if(parent != null)
+			{
+				#ASSERT_INSTANCE_OF(Scope, parent)
+			}
+			__Parent = parent
+
+			AddNamedHook("set", Set)
+			AddNamedHook("alias", AddNamedHook)
+		}
+
+		function CreateSubScope()
+		{
+			return new Scope(this)
+		}
+
+		function AddLocal(name, value)
+		{
+			#ASSERT_STRING(name)
+			if(value != null)
+			{
+				__LocalVars[name] = value
+			}
+		}
+
+		function HasLocal(name)
+		{
+			#ASSERT_STRING(name)
+			return Collection.HasKey(__LocalVars, name)
+		}
+
+		function Has(name)
+		{
+			#ASSERT_STRING(name)
+			if(HasLocal(name))
+			{
+				return true
+			}
+			else if(__Parent != null)
+			{
+				return __Parent.Has(name)
+			}
+			return false
+		}
+
+		function Get(name)
+		{
+			#ASSERT_STRING(name)
+
+			if(HasLocal(name))
+			{
+				return __LocalVars[name]
+			}
+			else if(__Parent != null)
+			{
+				return __Parent.Get(name)
+			}
+			Environment.Error($"Can not find Variable: {name} in {Environment.Debug(this)}")
+			return null
+		}
+
+		function SetIfExists(name, value)
+		{
+			#ASSERT_STRING(name)
+			if(HasLocal(name))
+			{
+				AddLocal(name, value)
+				return true
+			}
+			else if(__Parent != null)
+			{
+				return SetIfExists(name, value)
+			}
+			return false
+		}
+
+		function Set(name, value)
+		{
+			#ASSERT_STRING(name)
+			if(__Parent == null)
+			{
+				AddLocal(name, value)
+			}
+			else if(!__Parent.SetIfExists(name, value))
+			{
+				AddLocal(name, value)
+			}
+		}
+	}
+
+	class Expression
+	{
+		function Compute(scope)
+		{
+			#ASSERT_INSTANCE_OF(Scope, scope)
+		}
+	}
+
+	class StaticExpression : Expression
+	{
+		__value = null
+		function StaticExpression(value)
+		{
+			__value = value
+		}
+
+		function Compute(scope) : base(scope)
+		{
+			return __value
+		}
+
+		function ToString()
+		{
+			return $"{__value}"
+		}
+	}
+
+
+	class WordExpression : Expression
+	{
+		__value = null
+		function WordExpression(value)
+		{
+			__value = value
+		}
+
+		function Compute(scope) : base(scope)
+		{
+			v = scope.GetFromHooks(__value)
+			lastV = v
+			while(v != null)
+			{
+				lastV = v
+				if(!Convert.IsString(v))
+				{
+					break
+				}
+				v = scope.GetFromHooks(v)
+			}
+			if(lastV != null)
+			{
+				return lastV
+			}
+			return __value
+		}
+
+		function ToString()
+		{
+			return $"({__value})"
+		}
+	}
+
+	class VariableExpression : Expression
+	{
+		__name = null
+		function VariableExpression(name)
+		{
+			__name = name
+		}
+
+		function Compute(scope) : base(scope)
+		{
+			return scope.Get(__name)
+		}
+
+		function ToString()
+		{
+			return $"$[{__name}]"
+		}
+	}
+
+	class InvokeExpression : Expression
+	{
+		__target = null
+		__parameters = null
+		function InvokeExpression(!target, ?parameters)
+		{
+			#ASSERT_INSTANCE_OF(Expression, target)
+			__target = target
+			if(parameters == null)
+			{
+				__parameters = []
+			}
+			else
+			{
+				#ASSERT_ARRAY(parameters)
+				__parameters = parameters
+			}
+		}
+
+		function Compute(scope) : base(scope)
+		{
+			target = __target.Compute(scope)
+
+			args = []
+			foreach param in __parameters
+			{
+				args.Add(param.Compute(scope))
+			}
+
+			if(target == null)
+			{
+				return null
+			}
+
+			if(!Convert.IsFunction(target))
+			{
+				Environment.Error($"Can not Resolve '{__target.ToString()}' current value '{target}' in scope {Environment.Debug(scope)}")
+			}
+
+			return target.Invoke(args)
+		}
+
+		function ToString()
+		{
+			s = $"$({__target.ToString()}"
+			foreach param in __parameters
+			{
+				s += $" {param.ToString()}"
+			}
+			s += ")"
+			return s
+		}
+	}
+
+	class BlockExpression : Expression
+	{
+		__block = null
+		function BlockExpression(!block)
+		{
+			#ASSERT_ARRAY(block)
+			__block = block
+		}
+
+		function Compute(scope) : base(scope)
+		{
+			foreach expr in __block
+			{
+				expr.Compute(scope)
+				if(scope.IsReturn())
+				{
+					return null
+				}
+			}
+			return null
+		}
+
+		function ToString()
+		{
+			s = "{\n"
+			foreach param in __block
+			{
+				s += $"\t {param.ToString()}\n"
+			}
+			s += "}"
+			return s
+		}
+	}
+
+	class ScopedExpression : Expression
+	{
+		__expr = null
+		function ScopedExpression(!expr)
+		{
+		}
+
+		function Compute(scope) : base(scope)
+		{
+			#ASSERT_INSTANCE_OF(Scope, scope)
+			blockScope = scope.CreateSubScope()
+
+			__expr.Compute(blockScope)
+
+			if(blockScope.IsReturn())
+			{
+				return blockScope.GetReturn()
+			}
+			return null
+		}
+		function ToString()
+		{
+			return $"@{__expr.ToString()}"
+		}
+	}
+
+	class IfExpression : Expression
+	{
+		__condition = null
+		__trueExpr = null
+		__falseExpr = null
+		function IfExpression(!condition, !trueExpr, ?falseExpr)
+		{
+			__condition = condition
+			__trueExpr = trueExpr
+			__falseExpr = falseExpr
+		}
+
+		function Compute(scope)
+		{
+			expr = null
+			if(__condition.Compute(scope))
+			{
+				expr = __trueExpr
+			}
+			else
+			{
+				expr = __falseExpr
+			}
+
+			if(expr != null)
+			{
+				expr.Compute(scope)
+			}
+		}
+
+		function ToString()
+		{
+			if(__falseExpr != null)
+			{
+				return $"if({__condition.ToString()}) {__trueExpr.ToString()} else {__falseExpr.ToString()}"
+			}
+
+			return $"if({__condition.ToString()}) {__trueExpr.ToString()}"
+		}
+	}
+
+
+
+	class ExpressionReader
+	{
+		Console = null
+		__src = null
+		__current = 0
+		function ExpressionReader(!console, !src)
+		{
+			Console = console
+			__src = src
+		}
+
+		function IsEOF(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return String.Length(__src) <= __current + off
+		}
+
+		function Is(!c, ?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return String.CharAt(__src, __current+off) == c
+		}
+
+		function IsWhiteSpace(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			c = String.CharAt(__src, __current+off)
+			return String.IsWhiteSpace(c) && c != "\n"
+		}
+
+		function IsWordChar(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return IsLetter(off) || Is("_", off) || Is("\\", off) || Is("/", off) || Is("-", off) || Is(".", off)
+		}
+
+		function IsLetter(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return String.IsLetter(String.CharAt(__src, __current+off))
+		}
+
+		function IsDigit(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return String.IsDigit(String.CharAt(__src, __current+ off))
+		}
+
+		function Get()
+		{
+			return String.CharAt(__src, __current)
+		}
+
+		function Eat(!c)
+		{
+			if(!Is(c))
+			{
+				Environment.Error($"Expected {c} but got {Get()}")
+			}
+			__current += 1
+			return c
+		}
+
+		function MoveNext()
+		{
+			return Eat(Get())
+		}
+
+		function EatWhiteSpace()
+		{
+			while(IsWhiteSpace())
+			{
+				MoveNext()
+				if(IsEOF())
+				{
+					break
+				}
+			}
+		}
+
+		function ParseWord()
+		{
+			EatWhiteSpace()
+
+			if(IsEOF())
+			{
+				Environment.Error($"Expected Word Begin but got EOF")
+			}
+			if(!IsWordChar())
+			{
+				Environment.Error($"Expected Word Begin but got {Get()}")
+			}
+			word = MoveNext()
+			if(IsEOF())
+			{
+				return word
+			}
+			while(IsWordChar())
+			{
+				word += MoveNext()
+				if(IsEOF())
+				{
+					break
+				}
+			}
+
+			return word
+		}
+
+		function ParseVariable()
+		{
+			EatWhiteSpace()
+			if(!Is("%"))
+			{
+				Environment.Error($"Expected % but got {Get()}")
+			}
+
+			MoveNext()
+			str = ParseWord()
+			EatWhiteSpace()
+			if(!Is("%"))
+			{
+				Environment.Error($"Expected % but got {Get()}")
+			}
+			MoveNext()
+			return str
+		}
+
+		function ParseNumber()
+		{
+			EatWhiteSpace()
+			num = ""
+			if(Is("-"))
+			{
+				num += MoveNext()
+			}
+			isFraction = false
+			hasDecimalPlaces = false
+			canBeFraction = true
+
+			while(true)
+			{
+				if(IsEOF())
+				{
+					break
+				}
+				if(Is("."))
+				{
+					if(isFraction)
+					{
+						Environment.Error("Do many decimal Seperators")
+					}
+					isFraction =  true
+				}
+				else if(isFraction)
+				{
+					hasDecimalPlaces = true
+				}
+				if(!IsDigit() && !Is("."))
+				{
+					break
+				}
+				dig = IsDigit()
+				c = MoveNext()
+				num += c
+
+				if(IsEOF())
+				{
+					break
+				}
+			}
+
+			if(isFraction && !hasDecimalPlaces)
+			{
+				__current -= 1
+				num = String.Remove(num, String.Length(num) - 1, 1)
+			}
+			Console.WriteLine("Parsed Number: " + num)
+			return Convert.ToNumber(num)
+		}
+
+		function ParseString()
+		{
+			EatWhiteSpace()
+			if(!Is("\""))
+			{
+				Environment.Error($"Expected Word Begin but got {Get()}")
+			}
+			MoveNext()
+			str = ""
+			isEscaped = false
+			while(!Is("\""))
+			{
+				if(Is("\n"))
+				{
+					Environment.Error($"Missing '\"'")
+				}
+				else if(Is("\\"))
+				{
+					isEscaped = true
+					MoveNext()
+					escChar = MoveNext()
+					str += String.RegexUnescape($"\\{escChar}")
+				}
+				else
+				{
+					str += MoveNext()
+				}
+				if(IsEOF())
+				{
+					break
+				}
+			}
+			if(!IsEOF())
+			{
+				MoveNext()
+			}
+			return str
+		}
+
+		function ParseIfExpression()
+		{
+			cond = ParseValue()
+			trueExpr = ParseValue()
+			falseExpr = null
+			if(IsEOF())
+			{
+				return new IfExpression(cond, trueExpr, falseExpr)
+			}
+			EatWhiteSpace()
+			if(IsEOF())
+			{
+				return new IfExpression(cond, trueExpr, falseExpr)
+			}
+			if(IsWordChar())
+			{
+				pos = __current
+				word = ParseWord()
+				if(word == "else")
+				{
+					falseExpr = ParseValue()
+				}
+				else
+				{
+					__current = pos
+				}
+			}
+			return new IfExpression(cond, trueExpr, falseExpr)
+		}
+
+		function ParseValue()
+		{
+			EatWhiteSpace()
+			if(Is("$"))
+			{
+				return ParseSubCommand()
+			}
+			if(Is("{"))
+			{
+				return ParseBlock()
+			}
+			if(Is("\""))
+			{
+				str = ParseString()
+				return new StaticExpression(str)
+			}
+			if(Is("%"))
+			{
+				var = ParseVariable()
+				return new VariableExpression(var)
+			}
+			if(IsDigit() || (Is("-") && !IsEOF(1)))
+			{
+				if(Is("-") && !IsWordChar(1))
+				{
+					num = ParseNumber()
+					return new StaticExpression(num)
+				}
+				else if(IsDigit())
+				{
+					num = ParseNumber()
+					return new StaticExpression(num)
+				}
+			}
+			if(IsWordChar())
+			{
+				word = ParseWord()
+				if(	String.ToLower(word) == "false")
+				{
+					return new StaticExpression(false)
+				}
+
+				if(	String.ToLower(word) == "true")
+				{
+					return new StaticExpression(true)
+				}
+
+				if(word == "if")
+				{
+					return ParseIfExpression()
+				}
+
+				return new WordExpression(word)
+			}
+
+			Environment.Error($"Can not Parse: {Get()}")
+		}
+
+		function ParseSubCommand()
+		{
+			EatWhiteSpace()
+			cmds = []
+			Eat("$")
+			Eat("(")
+			while(!Is(")"))
+			{
+				if(IsEOF())
+				{
+					break
+				}
+				cmds.Add(ParseValue())
+				if(IsEOF())
+				{
+					break
+				}
+				EatWhiteSpace()
+				if(IsEOF())
+				{
+					break
+				}
+			}
+			Eat(")")
+			target = cmds[0]
+			cmds.RemoveAt(0)
+			cmd = new InvokeExpression(target, cmds)
+			return cmd
+		}
+
+		function ParseCommand()
+		{
+			EatWhiteSpace()
+			cmds = []
+
+			while(!Is("\n"))
+			{
+				if(IsEOF())
+				{
+					break
+				}
+				cmds.Add(ParseValue())
+				if(IsEOF())
+				{
+					break
+				}
+				EatWhiteSpace()
+				if(IsEOF())
+				{
+					break
+				}
+			}
+			target = cmds[0]
+			cmds.RemoveAt(0)
+			cmd = new InvokeExpression(target, cmds)
+			return cmd
+		}
+
+		function ParseBlock()
+		{
+			if(!Is("{"))
+			{
+				Environment.Error("Expected '{'")
+			}
+			Eat("{")
+			EatWhiteSpace()
+			cmds = []
+			while(!IsEOF())
+			{
+				EatWhiteSpace()
+				while(Is("\n"))
+				{
+					MoveNext()
+					if(IsEOF())
+					{
+						break
+					}
+					EatWhiteSpace()
+				}
+				if(IsEOF())
+				{
+					break
+				}
+
+				if(Is("}"))
+				{
+					break
+				}
+				cmds.Add(ParseCommand())
+			}
+
+			if(!Is("}"))
+			{
+				Environment.Error("Expected '{'")
+			}
+			Eat("}")
+
+			return new BlockExpression(cmds)
+		}
+
+		function ParseToEnd()
+		{
+			EatWhiteSpace()
+			cmds = []
+			while(!IsEOF())
+			{
+				EatWhiteSpace()
+				while(Is("\n"))
+				{
+					MoveNext()
+					if(IsEOF())
+					{
+						break
+					}
+					EatWhiteSpace()
+				}
+				if(IsEOF())
+				{
+					break
+				}
+				cmds.Add(ParseCommand())
+				
+			}
+
+			return new BlockExpression(cmds)
+		}
+	}
+
+	class ShellTest
+	{
+		__scope = null
+		__runner = null
+		Console = null
+		function ShellTest(!console, ?scope)
+		{
+			Console = console
+			if(scope == null)
+			{
+				scope = new Scope()
+			}
+			#ASSERT_INSTANCE_OF(Scope, scope)
+			__scope = scope
+			__runner = new ExpressionRunner(Console)
+		}
+
+		function GetRootScope() => return __scope
+
+		function RunScript(src)
+		{
+			return __runner.RunScript(src, __scope.CreateSubScope())
+		}
+		function RunRootScript(src)
+		{
+			return __runner.RunScript(src, __scope)
+		}
+	}
+
+	class ExpressionRunner
+	{
+		Console = null
+
+		function ExpressionRunner(!console)
+		{
+			Console = console
+		}
+
+		function RunScript(src, ?scope)
+		{
+			return Run(Parse(src), scope)
+		}
+
+		function Parse(src)
+		{
+			#ASSERT_STRING(src)
+			reader = new ExpressionReader(Console, src)
+			expr = reader.ParseToEnd()
+			return expr
+		}
+
+		function Run(expr, ?scope)
+		{
+			if(scope == null)
+			{
+				scope = new Scope()
+			}
+
+			#ASSERT_INSTANCE_OF(Scope, scope)
+			return expr.Compute(scope)
+		}
+	}
+}

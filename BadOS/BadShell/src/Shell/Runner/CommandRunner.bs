@@ -1,0 +1,155 @@
+namespace BadShell.Runner
+{
+	class CommandRunner
+	{
+		Console = null
+		__commands = []
+		__aliasTable = []
+		__customAliasResolvers = []
+		__envs = {}
+		function CommandRunner(!console)
+		{
+			Console = console
+			AddEnv("SHELL_NAME", "BadShell")
+			AddEnv("SHELL_PRINT_INPUT", false)
+		}
+
+		function AddAlias(!aliasKey, !aliasValue)
+		{
+			__aliasTable.Add({key = aliasKey, value = aliasValue})
+		}
+
+		function AddEnv(!key, value)
+		{
+			__envs[key] = value
+		}
+
+		function GetEnv(!key)
+		{
+			if(Collection.HasKey(__envs, key))
+			{
+				return __envs[key]
+			}
+			return null
+		}
+
+		function AddAlias(!aliasKey, !aliasValue)
+		{
+			__aliasTable.Add({key = aliasKey, value = aliasValue})
+		}
+
+		function RemoveAlias(!aliasKey)
+		{
+			for i = 0 while< __aliasTable.Size()
+			{
+				if(__aliasTable[i].key == aliasKey)
+				{
+					__aliasTable.RemoveAt(i)
+				}
+			}
+		}
+
+		function AddCustomAliasResolver(!aliasResolver)
+		{
+			__customAliasResolvers.Add(aliasResolver)
+		}
+
+
+		function AddCommand(!cmd)
+		{
+			__commands.Add(cmd)
+		}
+
+		function ResolveTarget(!target)
+		{
+			foundAlias = true
+			while(foundAlias)
+			{
+				foundAlias = false
+				foreach resolver in __customAliasResolvers
+				{
+					if(resolver.CanResolve(target))
+					{
+						resolver.Resolve(target)
+						foundAlias = true
+						break
+					}
+				}
+				if(foundAlias)
+				{
+					continue
+				}
+				foreach alias in __aliasTable
+				{
+
+					if(target.Target == alias.key)
+					{
+						target.Target = alias.value
+						foundAlias = true
+						break
+					}
+				}
+			}
+			
+			return target
+		}
+
+		function FindTarget(!target)
+		{
+			t = ResolveTarget(target)
+			foreach cmd in __commands
+			{
+				if(cmd.GetName() == t.Target)
+				{
+					return cmd
+				}
+			}
+			return null
+		}
+
+		function CreateInput(!parsedCommand, !envs)
+		{
+			vals = parsedCommand.GetResolvedValues(__envs)
+			target = vals[0]
+			vals.RemoveAt(0)
+			return {
+				Target = target,
+				Args = vals
+			}
+		}
+
+		function PrintInputCommand(!cmd)
+		{
+			printInput = GetEnv("SHELL_PRINT_INPUT")
+			if(printInput != null)
+			{
+				if(Convert.IsBoolean(printInput))
+				{
+					if(printInput)
+					{
+						Console.WriteLine($"Input: '{cmd.ToString()}'")
+					}
+				}
+			}
+		}
+
+		function Run(!parsedCommand, ?envs)
+		{
+			PrintInputCommand(parsedCommand)
+			if(envs == null)
+			{
+				envs = __envs
+			}
+			input = CreateInput(parsedCommand, envs)
+			target = FindTarget(input)
+			if(target != null)
+			{
+				target.RunCommand.Invoke(input.Args)
+			}
+			else
+			{
+				Console.WriteLine($"Unknown Command: '{input.Target}'")
+			}
+		}
+	}
+}

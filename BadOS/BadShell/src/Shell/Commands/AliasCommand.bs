@@ -1,0 +1,78 @@
+namespace BadShell.Commands
+{
+	using BadShell.Runner
+	class AliasCommand : ShellCommand
+	{
+		__runner = null
+		Console = null
+		function AliasCommand(!console, !runner)
+		{
+			Console = console
+			__runner = runner
+		}
+
+		function GetName()
+		{
+			return "alias"
+		}
+
+		function GetHelp()
+		{
+			return "'add'/'remove'/'list' aliases."
+		}
+
+		
+		function RunCommand(?operation, ?key, ?value)
+		{
+			if(operation == "add")
+			{
+				if(key == null || value == null)
+				{
+					Console.WriteLine("Expected key and value as arguments.")
+				}
+				else
+				{
+					__runner.AddAlias(key, value)
+				}
+			}
+			else if(operation == "remove")
+			{
+				if(key == null)
+				{
+					Console.WriteLine("Expected key as argument.")
+				}
+				else if(value != null)
+				{
+					Console.WriteLine("Expected no value argument.")
+				}
+				else
+				{
+					__runner.RemoveAlias(key)
+				}
+			}
+			else if(operation == "list")
+			{
+				if(key != null || value != null)
+				{
+					Console.WriteLine("Expected no arguments.")
+				}
+				else
+				{
+					Console.WriteLine("Aliases:")
+					foreach alias in __runner.__aliasTable
+					{
+						Console.WriteLine($"\t- {alias.key} => {alias.value}")
+					}
+				}
+			}
+			else if(operation == null)
+			{
+				Console.WriteLine($"No Alias Operation specified")
+			}
+			else
+			{
+				Console.WriteLine($"Unknown Alias Operation: '{operation}'")
+			}
+		}
+	}
+}

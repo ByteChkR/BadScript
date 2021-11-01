@@ -1,0 +1,64 @@
+namespace BadShell.Commands
+{
+	class RunShellScriptCustomAliasResolver : CustomAliasResolver
+	{
+		FileSystem = null
+		Console = null
+		ProcessInfo = null
+		function RunShellScriptCustomAliasResolver(!fileSystem, !console, !pinfo)
+		{
+			FileSystem = fileSystem
+			Console = console
+			ProcessInfo = pinfo
+		}
+
+		function Resolve(!target)
+		{
+			target.Args.Insert(0, target.Target)
+			target.Target = "bsh"
+		}
+
+		function CanResolve(!target)
+		{
+			if(FileSystem.Exists(FileSystem.GetRootNode(), ProcessInfo.ResolvePath(target.Target)) && String.EndsWith(target.Target, ".bsh"))
+			{
+				return true
+			}
+			return false
+		}
+	}
+
+	class RunShellScriptCommand : ShellCommand
+	{
+		FileSystem = null
+		__runner = null
+		__parser = null
+		__user = null
+		function RunShellScriptCommand(!user, !parser, !runner, !fileSystem)
+		{
+			__user = user
+			__parser = parser
+			__runner = runner
+			FileSystem = fileSystem
+		}
+		function GetName()
+		{
+			return "bsh"
+		}
+
+		function GetHelp()
+		{
+			return "Runs a BadShell Script"
+		}
+
+		function RunCommand(!file)
+		{
+			src = FileSystem.FindNode(FileSystem.GetRootNode(), file).ReadAllText(__user)
+			cmds = __parser.ParseCommands(src)
+			foreach cmd in cmds
+			{
+				__runner.Run(cmd)
+			}
+		}
+	}
+}

@@ -1,0 +1,9 @@
+
+Logger = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Logging").CreateLogger("SystemInfo")
+Console = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Console")
+args = ProcessInfo.GetArguments()
+if(args.Size() == 2)
+{
+	OS.SetMachineName(args[1])
+}
+return OS.GetMachineName()

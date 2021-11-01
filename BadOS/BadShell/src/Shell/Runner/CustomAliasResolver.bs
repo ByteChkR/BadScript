@@ -1,0 +1,16 @@
+namespace BadShell.Runner
+{
+	class CustomAliasResolver
+	{
+		
+		function Resolve(!target)
+		{
+			Environment.Error($"CustomAliasResolver '{GetType()}' does not implement 'Resolve(!target)'")
+		}
+
+		function CanResolve(!target)
+		{
+			Environment.Error($"CustomAliasResolver '{GetType()}' does not implement 'CanResolve(!target)'")
+		}
+	}
+}

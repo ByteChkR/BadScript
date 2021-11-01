@@ -1,0 +1,23 @@
+
+namespace BadOS.Extensions.FileSystem
+{
+
+	class Link : FileSystemNode
+	{
+		_LinkedNode = null
+		function IsLink() => return true
+		function IsDirectory() => return _LinkedNode.IsDirectory()
+		function IsFile() => return _LinkedNode.IsFile()
+		function IsFileSystemLink() => return _LinkedNode.IsFileSystemLink()
+		function IsDeleted() => return _LinkedNode.IsDeleted()
+		function ResolveLink()
+		{
+			return _LinkedNode
+		}
+		function ToString()
+		{
+			return GetDebugString(this)
+		}
+	}
+
+}

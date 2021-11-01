@@ -1,0 +1,39 @@
+namespace BadShell.Commands
+{
+	class ChangeDirectoryCommand: ShellCommand
+	{
+		FileSystem = null
+		ProcessInfo = null
+		Logger = null
+		function ChangeDirectoryCommand(!processInfo, !fileSystem, !logger)
+		{
+			ProcessInfo = processInfo
+			FileSystem = fileSystem
+			Logger = logger
+		}
+		function GetName()
+		{
+			return "cd"
+		}
+
+		function GetHelp()
+		{
+			return "Changes the current working directory"
+		}
+
+		function RunCommand(!dir)
+		{	
+			fullPath = FileSystem.ResolvePath(dir, ProcessInfo.GetWorkingDirectory())
+			
+			if(FileSystem.Exists(FileSystem.GetRootNode(), fullPath))
+			{
+				node = FileSystem.FindNode(FileSystem.GetRootNode(), fullPath)
+				ProcessInfo.SetWorkingDirectory(node.GetFullName())
+			}
+			else
+			{
+				Logger.Warn($"Can not Find Path: {fullPath}")
+			}
+		}
+	}
+}

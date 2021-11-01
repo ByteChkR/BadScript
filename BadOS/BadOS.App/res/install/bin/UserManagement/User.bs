@@ -1,0 +1,98 @@
+Logger = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Logging").CreateLogger("RUN_AS")
+Console = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Console")
+UserManagement = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.UserManagement")
+args = ProcessInfo.GetArguments()
+args.RemoveAt(0)
+
+
+function EnterPassword()
+{
+	Console.Write("Enter new Password: ")
+	pw = Console.ReadLine()
+	Console.Write("Repeat Password: ")
+	pw1 = Console.ReadLine()
+	if(pw == pw1)
+	{
+		return pw
+	}
+	else
+	{
+		Logger.Error("Passwords did not Match")
+		return null
+	}
+}
+
+function AddUserRight(userName, right)
+{
+	user = UserManagement.GetUser(ProcessInfo.GetUser(), UserManagement.NameToUID(userName))
+	ProcessInfo.GetUser().AddRight(right, user)
+}
+
+function AddUser(*args)
+{
+	if(args.Size() > 0)
+	{
+		name = args[0]
+		pw = null
+		if(args.Size() == 2)
+		{
+			pw = args[1]
+		}
+		else
+		{
+			pw = EnterPassword()
+		}
+		if(pw != null)
+		{
+			UserManagement.AddUser(ProcessInfo.GetUser(), name, pw)
+		}
+	}
+}
+
+function GetUserInfo()
+{
+	user = ProcessInfo.GetUser()
+	s = $"User {user.GetName()}({user.GetUID()})\n"
+	rights = user.GetRights()
+	foreach r in rights
+	{
+		s += $"\t- {r}\n"
+	}
+	Console.WriteLine(s)
+}
+
+function Run(systems)
+{
+	if(args.Size() == 0)
+	{
+		Logger.Error("Missing System Identifier")
+	}
+	else if(Collection.HasKey(systems, args[0]))
+	{
+		sys = systems[args[0]]
+		args.RemoveAt(0)
+		if(Convert.IsTable(sys))
+		{
+			Run(sys)
+		}
+		else
+		{
+			sys.Invoke(args)
+		}
+	}
+	else if(args.Size() == 0)
+	{
+		Logger.Error($"Unknown System Identifier '{args[0]}'")
+	}
+}
+
+
+subSystems = {
+	add = AddUser,
+	info = GetUserInfo,
+	rights = {
+		add = AddUserRight
+	}
+}
+
+Run(subSystems)

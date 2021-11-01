@@ -1,0 +1,59 @@
+ConcurrentSystem = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Concurrency")
+UserManagement = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.UserManagement")
+FileSystem = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.FileSystem")
+Logger = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Logging").CreateLogger("RUN_AS")
+Console = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Console")
+args = ProcessInfo.GetArguments()
+
+
+
+function Login(!userName)
+{
+	Console.Write($"Password for User '{userName}': ")
+	pw = Console.ReadLine()
+	return ProcessInfo.GetUser().Login(UserManagement.NameToUID(userName), pw)
+}
+
+function RunAs()
+{
+	args.RemoveAt(0)
+	userName = args[0]
+
+	if(UserManagement.NameToUID(userName) == -1)
+	{
+		Logger.Log($"User '{userName}' does not exist.")
+		return null
+	}
+
+	user = Login(userName)
+	if(user == null)
+	{
+		Logger.Log("Invalid Credentials.")
+		return null
+	}
+
+	args.RemoveAt(0)
+	file = args[0]
+	file = ProcessInfo.ResolvePath(file)
+	node = FileSystem.FindNode(FileSystem.GetRootNode(), file)
+	if(node.IsFile())
+	{
+		src = node.ReadAllText(user)
+		return ConcurrentSystem.StartSynchronousProcess(user, src, args, ProcessInfo.GetWorkingDirectory(), file)
+	}
+	else
+	{
+		Environment.Error($"{file} is not a File")
+	}
+	return null
+}
+
+if(args.Size() != 0)
+{
+	return RunAs()
+}
+else
+{
+	Logger.Error("No Arguments.")
+}
+return null

@@ -1,0 +1,4 @@
+
+eventSystem = OS.GetEventSystem()
+
+eventSystem.SendEvent(new OnShutdownEvent())

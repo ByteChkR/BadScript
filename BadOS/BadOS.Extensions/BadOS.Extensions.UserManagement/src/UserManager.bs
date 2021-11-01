@@ -1,0 +1,80 @@
+namespace BadOS.Core.UserManagement
+{
+	class UserManager
+	{
+		_Users = []
+
+		function ImportUsers(users)
+		{
+			foreach user in users
+			{
+				u = new User(user.UID, user.Name, user.Rights, user.Password)
+				_Users.Add(u)
+			}
+		}
+
+		function ExportUsers()
+		{
+			users = []
+			for i = 1 while< _Users.Size()
+			{
+				user = {
+					UID = _Users[i]._UserID,
+					Name = _Users[i]._UserName,
+					Password = _Users[i]._UserPass,
+					Rights = _Users[i]._UserRights
+				}
+				users.Add(user)
+			}
+			return users
+		}
+
+		function AddUser(!name)
+		{
+			#ASSERT_STRING(name)
+			user = new User(_Users.Size(), name, [])
+
+			_Users.Add(user)
+
+			return user
+		}
+
+		function GetUser(!id)
+		{
+			#ASSERT_NUMBER(id)
+			foreach user in _Users
+			{
+				if(user.GetUID() == id)
+				{
+					return user
+				}
+			}
+			return null
+		}
+
+		function UIDToName(!id)
+		{
+			#ASSERT_NUMBER(id)
+			foreach	user in _Users
+			{
+				if(user.GetUID() == id)
+				{
+					return user.GetName()
+				}
+			}
+			return null
+		}
+		function NameToUID(!userName)
+		{
+			#ASSERT_STRING(userName)
+			foreach	user in _Users
+			{
+				if(user.GetName() == userName)
+				{
+					return user.GetUID()
+				}
+			}
+			return -1
+		}
+	}
+}

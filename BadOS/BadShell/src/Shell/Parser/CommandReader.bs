@@ -1,0 +1,471 @@
+namespace BadShell.Parser
+{
+
+
+	class ParserCommand
+	{
+		__values = null
+		function ParserCommand( values)
+		{
+			__values = values
+		}
+
+		function GetResolvedValues(!envs)
+		{
+			v = []
+			foreach value in __values
+			{
+				v.Add(value.GetValue(envs))
+			}
+			return v
+		}
+
+		function ToString()
+		{
+			s = ""
+			first = true
+			foreach value in __values
+			{
+				if(first)
+				{
+					first = false
+				}
+				else
+				{
+					s += " "
+				}
+				s += value.ToString()
+			}
+			return s
+		}
+	}
+
+	class ParserValue
+	{
+		function GetValue(!envs)
+		{
+			Environment.Error($"{GetType()} does not implement GetValue(!envs)")
+		}
+
+	}
+
+	class ParserStringValue : ParserValue
+	{
+		__value = null
+		function ParserStringValue(!value)
+		{
+			__value = value
+		}
+
+		function GetValue(!envs)
+		{
+			return __value
+		}
+		function ToString()
+		{
+			return $"\"{__value}\""
+		}
+	}
+
+	class ParserWordValue : ParserValue
+	{
+		__word = null
+		function ParserWordValue(!word)
+		{
+			__word = word
+		}
+
+		function GetValue(!envs)
+		{
+			return __word
+		}
+
+		function ToString()
+		{
+			return __word
+		}
+	}
+
+	class ParserNumberValue : ParserValue
+	{
+
+		__value = null
+		function ParserNumberValue(!value)
+		{
+			__value = value
+		}
+		
+		function GetValue(!envs)
+		{
+			return Convert.ToNumber(__value)
+		}
+
+
+		function ToString()
+		{
+			return __value
+		}
+	}
+
+
+	class ParserBooleanValue : ParserValue
+	{
+
+		__value = null
+		function ParserBooleanValue(!value)
+		{
+			__value = value
+		}
+		
+		function GetValue(!envs)
+		{
+			return Convert.ToBoolean(__value)
+		}
+
+		function ToString()
+		{
+			return __value
+		}
+	}
+
+	class ParserEnvironmentVariable : ParserValue
+	{
+		__varName = null
+		function ParserEnvironmentVariable(!varName)
+		{
+			__varName = varName
+		}
+		
+		function GetValue(!envs)
+		{
+			return envs[__varName]
+		}
+
+		
+		function ToString()
+		{
+			return $"%{__varName}%"
+		}
+	}
+
+	class CommandReader
+	{
+		Console = null
+		__src = null
+		__current = 0
+		function CommandReader(!console, !src)
+		{
+			Console = console
+			__src = src
+		}
+
+		function IsEOF(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return String.Length(__src) <= __current + off
+		}
+
+		function Is(!c, ?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return String.CharAt(__src, __current+off) == c
+		}
+
+		function IsWhiteSpace(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			c = String.CharAt(__src, __current+off)
+			return String.IsWhiteSpace(c) && c != "\n"
+		}
+
+		function IsWordChar(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return IsLetter(off) || Is("_", off) || Is("\\", off) || Is("/", off) || Is("-", off) || Is(".", off)
+		}
+
+		function IsLetter(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return String.IsLetter(String.CharAt(__src, __current+off))
+		}
+
+		function IsDigit(?off)
+		{
+			if(off == null)
+			{
+				off = 0
+			}
+			#ASSERT_NUMBER(off)
+			return String.IsDigit(String.CharAt(__src, __current+ off))
+		}
+
+		function Get()
+		{
+			return String.CharAt(__src, __current)
+		}
+
+		function Eat(!c)
+		{
+			if(!Is(c))
+			{
+				Environment.Error($"Expected {c} but got {Get()}")
+			}
+			__current += 1
+			return c
+		}
+
+		function MoveNext()
+		{
+			return Eat(Get())
+		}
+
+		function EatWhiteSpace()
+		{
+			while(IsWhiteSpace())
+			{
+				MoveNext()
+				if(IsEOF())
+				{
+					break
+				}
+			}
+		}
+
+		function ParseWord()
+		{
+			EatWhiteSpace()
+
+			if(IsEOF())
+			{
+				Environment.Error($"Expected Word Begin but got EOF")
+			}
+			if(!IsWordChar())
+			{
+				Environment.Error($"Expected Word Begin but got {Get()}")
+			}
+			word = MoveNext()
+			if(IsEOF())
+			{
+				return word
+			}
+			while(IsWordChar())
+			{
+				word += MoveNext()
+				if(IsEOF())
+				{
+					break
+				}
+			}
+
+			return word
+		}
+
+		function ParseVariable()
+		{
+			EatWhiteSpace()
+			if(!Is("%"))
+			{
+				Environment.Error($"Expected % but got {Get()}")
+			}
+
+			MoveNext()
+			str = ParseWord()
+			EatWhiteSpace()
+			if(!Is("%"))
+			{
+				Environment.Error($"Expected % but got {Get()}")
+			}
+			MoveNext()
+			return str
+		}
+
+		function ParseNumber()
+		{
+			num = ""
+			if(Is("-"))
+			{
+				num += MoveNext()
+			}
+			isFraction = false
+			hasDecimalPlaces = false
+			while(IsDigit() || (!isFraction && Is(".")))
+			{
+				if(IsEOF())
+				{
+					break
+				}
+				if(Is("."))
+				{
+					isFraction =  true
+				}
+				else if(isFraction)
+				{
+					hasDecimalPlaces = true
+				}
+				num += MoveNext()
+
+				if(IsEOF())
+				{
+					break
+				}
+			}
+
+			if(isFraction && !hasDecimalPlaces)
+			{
+				__current -= 1
+				num = String.Remove(num, String.Length(num) - 1, 1)
+			}
+			Console.WriteLine("Parsed Number: " + num)
+			return num
+		}
+
+		function ParseString()
+		{
+			EatWhiteSpace()
+			if(!Is("\""))
+			{
+				Environment.Error($"Expected Word Begin but got {Get()}")
+			}
+			MoveNext()
+			str = ""
+			isEscaped = false
+			while(!Is("\""))
+			{
+				if(Is("\n"))
+				{
+					Environment.Error($"Missing '\"'")
+				}
+				else if(Is("\\"))
+				{
+					isEscaped = true
+					MoveNext()
+					escChar = MoveNext()
+					str += String.RegexUnescape($"\\{escChar}")
+				}
+				else
+				{
+					str += MoveNext()
+				}
+				if(IsEOF())
+				{
+					break
+				}
+			}
+			if(!IsEOF())
+			{
+				MoveNext()
+			}
+			return str
+		}
+
+		function ParseValue()
+		{
+			EatWhiteSpace()
+			if(Is("\""))
+			{
+				str = ParseString()
+				return new ParserStringValue(str)
+			}
+			if(Is("%"))
+			{
+				var = ParseVariable()
+				return new ParserEnvironmentVariable(var)
+			}
+			if(IsDigit() || (Is("-") && !IsEOF(1)))
+			{
+				if(Is("-") && !IsWordChar(1))
+				{
+					num = ParseNumber()
+					return new ParserNumberValue(num)
+				}
+			}
+			if(IsWordChar())
+			{
+				word = ParseWord()
+				if(	String.ToLower(word) == "true" ||
+					String.ToLower(word) == "false")
+				{
+					return new ParserBooleanValue(word)
+				}
+
+				return new ParserWordValue(word)
+			}
+
+			Environment.Error($"Can not Parse: {Get()}")
+		}
+
+		function ParseCommand()
+		{
+			EatWhiteSpace()
+			cmds = []
+
+			while(!Is("\n"))
+			{
+				if(IsEOF())
+				{
+					break
+				}
+				cmds.Add(ParseValue())
+				if(IsEOF())
+				{
+					break
+				}
+				EatWhiteSpace()
+				if(IsEOF())
+				{
+					break
+				}
+			}
+			cmd = new ParserCommand(cmds)
+			return cmd
+		}
+
+		function ParseToEnd()
+		{
+			EatWhiteSpace()
+			cmds = []
+			while(!IsEOF())
+			{
+				EatWhiteSpace()
+				while(Is("\n"))
+				{
+					MoveNext()
+					if(IsEOF())
+					{
+						break
+					}
+					EatWhiteSpace()
+				}
+				if(IsEOF())
+				{
+					break
+				}
+				cmds.Add(ParseCommand())
+				
+			}
+
+			return cmds
+		}
+	}
+}
