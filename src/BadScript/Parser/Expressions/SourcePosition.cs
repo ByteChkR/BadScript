@@ -37,6 +37,8 @@ namespace BadScript.Parser.Expressions
 
             for ( int i = 0; i < pos; i++ )
             {
+                if ( i >= src.Length )
+                    break;
                 if (src[i] == '\n' )
                     lines++;
             }
@@ -49,6 +51,8 @@ namespace BadScript.Parser.Expressions
             int index = 0;
             for ( int i = pos; i > 0; i-- )
             {
+                if ( i >= src.Length )
+                    continue;
                 if ( src[i] == '\n' )
                 {
                     index = i;
@@ -69,7 +73,7 @@ namespace BadScript.Parser.Expressions
 
             int start = pos;
             char[] str = src.ToCharArray();
-            int nextLine = src.IndexOf( '\n', start );
+            int nextLine = src.IndexOf( '\n', start+1 );
 
             if ( nextLine == -1 )
             {

@@ -96,7 +96,7 @@ namespace BadScript.IO
 
                                                  string path = o.ConvertString();
 
-                                                 if ( args.Length >= 1 )
+                                                 if ( args.Length > 1 )
                                                  {
                                                      string pattern = args[1].ResolveReference().ConvertString();
 
@@ -139,7 +139,7 @@ namespace BadScript.IO
 
                                                  string path = o.ConvertString();
 
-                                                 if ( args.Length >= 1 )
+                                                 if ( args.Length > 1 )
                                                  {
                                                      string pattern = args[1].ResolveReference().ConvertString();
 

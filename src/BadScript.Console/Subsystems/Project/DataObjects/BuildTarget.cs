@@ -17,6 +17,7 @@ namespace BadScript.Console.Subsystems.Project.DataObjects
         public string PreprocessorDirectives = "";
         public List < string > Include = new();
         public string SubTarget = "";
+        public bool TestOutput = true;
         public List < BuildTargetReference > References = new();
         public List < string > PreEvents = new();
         public List < string > PostEvents = new();

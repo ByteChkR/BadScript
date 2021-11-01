@@ -56,14 +56,19 @@ namespace BadScript.Console.AppPackage
             }
             catch ( Exception e )
             {
-                ConsoleWriter.ErrorLine( "App Crashed: " + e.Message );
+#if RELEASE
+
+                ConsoleWriter.ErrorLine("App Crashed: " + e.Message); 
+#elif DEBUG
+                ConsoleWriter.ErrorLine( "App Crashed: " + e );
+#endif
 
                 return -1;
             }
 
             if ( Directory.Exists( package.Manifest.GetTempDirectory() ) )
             {
-                Directory.Delete( package.Manifest.GetTempDirectory() );
+                Directory.Delete( package.Manifest.GetTempDirectory(), true );
             }
 
             if ( !settings.NoLogo )

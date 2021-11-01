@@ -162,7 +162,7 @@ namespace BadScript.Interfaces.Environment
                                                  {
                                                      ExceptionDispatchInfo.Capture( ex ).Throw();
                                                  }
-                                                 throw new BSRuntimeException("Environment.Throw Expects an exception object as second argument.");
+                                                 throw new BSRuntimeException($"Environment.Throw Expects an exception object as second argument. {exc.SafeToString()}");
                                              },
                                              1
                                             )

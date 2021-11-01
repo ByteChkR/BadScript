@@ -6,6 +6,7 @@ using BadScript.ConsoleUtils;
 using BadScript.Interfaces.Collection;
 using BadScript.Interfaces.Convert;
 using BadScript.Scopes;
+using BadScript.Threading;
 
 namespace BadScript.Testing
 {
@@ -21,7 +22,8 @@ namespace BadScript.Testing
             es.Interfaces.Add( new BSCollectionInterface() );
             es.Interfaces.Add( new BSConvertInterface() );
             es.Interfaces.Add( new BSSystemConsoleInterface() );
-            
+            es.Interfaces.Add(new BSThreadingInterface());
+
 
             BSEngine engine = es.Build();
 

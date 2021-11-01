@@ -26,7 +26,7 @@
 {
 	if(VAR != null)
 	{
-		Environment.Error("Assertion Failed. var is not NULL. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not NULL. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 
@@ -34,7 +34,7 @@
 {
 	if(VAR == null)
 	{
-		Environment.Error("Assertion Failed. var is NULL.")
+		Environment.Error("Assertion Failed. VAR is NULL.")
 	}
 }
 
@@ -43,7 +43,7 @@
 	#ASSERT_NOT_NULL(VAR)
 	if(!Convert.IsBoolean(VAR))
 	{
-		Environment.Error("Assertion Failed. var is not a boolean. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not a boolean. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 
@@ -52,7 +52,7 @@
 	#ASSERT_BOOL(VAR)
 	if(!VAR)
 	{
-		Environment.Error("Assertion Failed. var is not true. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not true. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 #macro ASSERT_FALSE(VAR)
@@ -60,7 +60,7 @@
 	#ASSERT_BOOL(VAR)
 	if(!VAR)
 	{
-		Environment.Error("Assertion Failed. var is not true. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not true. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 
@@ -69,7 +69,7 @@
 	#ASSERT_NOT_NULL(VAR)
 	if(!Convert.IsString(VAR))
 	{
-		Environment.Error("Assertion Failed. var is not a string. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not a string. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 
@@ -78,7 +78,7 @@
 	#ASSERT_NOT_NULL(VAR)
 	if(!Convert.IsNumber(VAR))
 	{
-		Environment.Error("Assertion Failed. var is not a number. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not a number. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 
@@ -87,7 +87,7 @@
 	#ASSERT_NOT_NULL(VAR)
 	if(!Convert.IsArray(VAR))
 	{
-		Environment.Error("Assertion Failed. var is not an Array. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not an Array. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 
@@ -96,7 +96,7 @@
 	#ASSERT_NOT_NULL(VAR)
 	if(!Convert.IsTable(VAR))
 	{
-		Environment.Error("Assertion Failed. var is not a Table. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not a Table. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 
@@ -105,7 +105,7 @@
 	#ASSERT_NOT_NULL(VAR)
 	if(!Convert.IsType(VAR))
 	{
-		Environment.Error("Assertion Failed. var is not a Type. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not a Type. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 
@@ -114,7 +114,7 @@
 	#ASSERT_TYPE(VAR)
 	if(!VAR.IsInstanceOf("NAME"))
 	{
-		Environment.Error("Assertion Failed. var is not an Instance of NAME. Actual Value: " + VAR.GetType())
+		Environment.Error("Assertion Failed. VAR is not an Instance of NAME. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 
@@ -123,7 +123,7 @@
 	#ASSERT_NOT_NULL(VAR)
 	if(!Convert.IsFunction(VAR))
 	{
-		Environment.Error("Assertion Failed. var is not a Type. Actual Value: " + VAR)
+		Environment.Error("Assertion Failed. VAR is not a Type. Actual Value: " + Environment.Debug(VAR))
 	}
 }
 

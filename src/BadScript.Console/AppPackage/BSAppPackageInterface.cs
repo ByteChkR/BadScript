@@ -25,7 +25,8 @@ namespace BadScript.Console.AppPackage
         {
             root.InsertElement( "Manifest", CreateManifestTable() );
             root.InsertElement( "GetResource", new BSFunction( "function GetResource(path)", GetResource, 1 ) );
-            root.InsertElement( "GetItem", new BSFunction( "function GetItem(path)", GetItem, 1 ) );
+            root.InsertElement("GetItem", new BSFunction("function GetItem(path)", GetItem, 1));
+            root.InsertElement("GetAllItemPaths", new BSFunction("function GetAllItemPaths()", GetAllItemPaths, 0));
         }
 
         #endregion
@@ -64,9 +65,13 @@ namespace BadScript.Console.AppPackage
             return table;
         }
 
-        private ABSObject GetItem( ABSObject[] arg )
+        private ABSObject GetItem(ABSObject[] arg)
         {
-            return new BSStreamObject( m_Package.GetResource( arg[0].ConvertString() ) );
+            return new BSStreamObject(m_Package.GetItem(arg[0].ConvertString()));
+        }
+        private ABSObject GetAllItemPaths(ABSObject[] arg)
+        {
+            return new BSArray(m_Package.GetAllItemPaths().Select(x=>new BSObject(x)));
         }
 
         private ABSObject GetResource( ABSObject[] arg )

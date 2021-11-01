@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 using Newtonsoft.Json;
 
@@ -27,6 +29,11 @@ namespace BadScript.Console.AppPackage
         public void Dispose()
         {
             m_Archive.Dispose();
+        }
+
+        public IEnumerable <string> GetAllItemPaths()
+        {
+            return m_Archive.Entries.Select( x => x.FullName );
         }
 
         public Stream GetItem( string path )

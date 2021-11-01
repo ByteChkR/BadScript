@@ -307,7 +307,10 @@ namespace BadScript.Types
                     RestoreStack( this );
                 }
                 PopStack();
-                ExceptionDispatchInfo.Capture( e ).Throw();
+                if(!(e is BSRuntimeException))
+                    throw new BSRuntimeException($"Execution Failed: {e.Message}", e);
+
+                throw;
             }
 
             if ( BSProfilerData.EnableProfiler )
@@ -481,7 +484,11 @@ namespace BadScript.Types
         {
             if ( s_Stacks.ContainsKey( Thread.CurrentThread ) )
             {
-                return s_Stacks[Thread.CurrentThread].Pop();
+                Stack < BSFunction > stack = s_Stacks[Thread.CurrentThread];
+
+                if ( stack.Count == 0 )
+                    return null;
+                return stack.Pop();
             }
 
             throw new BSRuntimeException( "Can not Pop a function off an empty stack." );

@@ -16,6 +16,7 @@ using BadScript.Math;
 using BadScript.Process;
 using BadScript.Reflection;
 using BadScript.StringUtils;
+using BadScript.Threading;
 using BadScript.Xml;
 using BadScript.Zip;
 
@@ -63,7 +64,8 @@ namespace BadScript.Console.Subsystems
             es.Interfaces.Add( new BSZipInterface() );
             es.Interfaces.Add( new BSDrawingInterface() );
             es.Interfaces.Add( new BSVersioningInterface() );
-            es.Interfaces.Add( new BSXmlInterface() );
+            es.Interfaces.Add(new BSXmlInterface());
+            es.Interfaces.Add(new BSThreadingInterface());
             es.Interfaces.Add( BSReflectionInterface.Instance );
 
             if ( Directory.Exists( EngineBuilderDirectories.Instance.IncludeDirectory ) )

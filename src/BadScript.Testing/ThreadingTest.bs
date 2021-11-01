@@ -1,0 +1,54 @@
+function MyFunction(!start, !end)
+{
+	Console.WriteLine($"Computing Sum: {start} - {end}")
+	sum = 0
+	for i = start while< end
+	{
+		sum += i
+	}
+	return sum
+}
+
+Theading = Environment.LoadInterface("Threading")
+count = 1000000
+tasks = 10
+step = count / tasks
+function RunSynchronous()
+{
+	return MyFunction(0, count)
+}
+
+function RunAsynchronous()
+{
+	taskList = []
+
+	for i = 0 while< count step step
+	{
+		Console.WriteLine($"Creating Task {i}")
+		task = Threading.CreateTask(MyFunction, i, i + step)
+		
+		taskList.Add(task)
+	}
+
+	sum = 0
+	while(taskList.Size() != 0)
+	{
+		for i = 0 while< taskList.Size()
+		{
+			task = taskList[i]
+			if(task.IsCompletedSuccessfully)
+			{
+				taskList.Remove(task)
+				sum += task.Result
+			}
+		}
+		Console.WriteLine($"Waiting for Tasks...")
+		Environment.Sleep(1000)
+	}
+
+	
+	return sum
+}
+
+Console.WriteLine("Sum: " + RunSynchronous())
+Console.WriteLine("Sum: " + RunAsynchronous())

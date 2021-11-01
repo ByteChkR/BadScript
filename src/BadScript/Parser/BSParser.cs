@@ -496,7 +496,7 @@ namespace BadScript.Parser
             ReadWhitespaceAndNewLine();
             int off = m_CurrentPosition + 1;
             string block = ParseBlock();
-            BSParser p = new BSParser( block, m_OriginalSource,m_SourcePositionOffset+ off, baseClass != null, false );
+            BSParser p = new BSParser( block, m_OffsetSource, m_SourcePositionOffset+ off, baseClass != null, false );
             BSExpression[] exprs = p.ParseToEnd();
 
             Dictionary < string, BSExpression > expressions = new Dictionary < string, BSExpression >();
@@ -1074,7 +1074,7 @@ namespace BadScript.Parser
             ReadWhitespaceAndNewLine();
             int off = m_CurrentPosition + 1;
             string block = ParseBlock();
-            BSParser p = new BSParser( block, m_OriginalSource, m_SourcePositionOffset + off );
+            BSParser p = new BSParser( block, m_OffsetSource, m_SourcePositionOffset + off );
             BSExpression[] exprs = p.ParseToEnd();
 
             return new BSNamespaceExpression( sp, fn.ToArray(), exprs );

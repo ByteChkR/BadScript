@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.NUnit.Utils", "Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadScript.UnitTests", "BadScript.UnitTests\BadScript.UnitTests.csproj", "{F6F343E4-B5B6-4402-B6A8-841DFFEFE1BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadScript.Threading", "BadScript.Threading\BadScript.Threading.csproj", "{9115E22E-94FE-4771-8E10-2DE288DD94DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{F6F343E4-B5B6-4402-B6A8-841DFFEFE1BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6F343E4-B5B6-4402-B6A8-841DFFEFE1BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6F343E4-B5B6-4402-B6A8-841DFFEFE1BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9115E22E-94FE-4771-8E10-2DE288DD94DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9115E22E-94FE-4771-8E10-2DE288DD94DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9115E22E-94FE-4771-8E10-2DE288DD94DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9115E22E-94FE-4771-8E10-2DE288DD94DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +143,7 @@ Global
 		{059EA3BF-D8CC-4797-ABB4-9E09BAB7F052} = {2D485240-A235-48C8-B695-BA989CE4E417}
 		{49541D15-5AEF-44A1-A0C9-F327E913F61A} = {0DC4EF05-C0A5-4EC7-9909-D8FA908A09A0}
 		{F6F343E4-B5B6-4402-B6A8-841DFFEFE1BF} = {0DC4EF05-C0A5-4EC7-9909-D8FA908A09A0}
+		{9115E22E-94FE-4771-8E10-2DE288DD94DC} = {CA37FB78-B2B0-4552-A7FC-A68ACB93BDE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15D6036D-F581-44C4-921D-D0F2E8DC8457}

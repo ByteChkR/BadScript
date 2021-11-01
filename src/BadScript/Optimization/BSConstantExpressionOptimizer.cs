@@ -14,7 +14,7 @@ using BadScript.Types.Implementations;
 namespace BadScript.Optimization
 {
 
-    public static class BSExpressionOptimizer
+    public static class BSConstantExpressionOptimizer
     {
 
         #region Public
@@ -113,15 +113,15 @@ namespace BadScript.Optimization
                     }
                     else
                     {
-                        ABSObject o = unary.Execute(null);
+                        ABSObject o = unary.Execute( null );
                         BSExpressionOptimizerMetaData md = null;
 
-                        if (o is IBSWrappedObject wo)
+                        if ( o is IBSWrappedObject wo )
                         {
-                            md = new BSExpressionOptimizerMetaData(wo.GetInternalObject());
+                            md = new BSExpressionOptimizerMetaData( wo.GetInternalObject() );
                         }
 
-                        if (BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS)
+                        if ( BSEngineSettings.ENABLE_OPTIMIZER_WRITE_LOGS )
                         {
                             Console.WriteLine(
                                               $"[Expression Optimizer] Optimizing {unary.GetType().Name}: " +
@@ -129,7 +129,7 @@ namespace BadScript.Optimization
                                              );
                         }
 
-                        return new BSProxyExpression(SourcePosition.Unknown, o, md);
+                        return new BSProxyExpression( SourcePosition.Unknown, o, md );
                     }
                 }
                 else

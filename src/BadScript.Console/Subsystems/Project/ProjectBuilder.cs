@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,10 @@ using BadScript.Console.Preprocessor;
 using BadScript.Console.Subsystems.Project.BuildFormats;
 using BadScript.Console.Subsystems.Project.DataObjects;
 using BadScript.Console.Subsystems.Project.Utils;
+using BadScript.Exceptions;
+using BadScript.Parser;
+using BadScript.Parser.Expressions;
+using BadScript.Types;
 
 namespace BadScript.Console.Subsystems.Project
 {
@@ -26,6 +31,7 @@ namespace BadScript.Console.Subsystems.Project
             BuildTarget t = ps.BuildTargets.GetTarget( settings.BuildTarget );
 
             Build( Path.GetDirectoryName( Path.GetFullPath( p ) ), ps, t );
+
             ConsoleWriter.SuccessLine( "Command 'project make' finished!" );
 
             return 0;
@@ -194,6 +200,36 @@ namespace BadScript.Console.Subsystems.Project
                 {
                     ConsoleWriter.ErrorLine( "\tPost Event Failed!" );
                 }
+            }
+
+            if ( t.TestOutput )
+            {
+
+                try
+                {
+                    if ( !string.IsNullOrWhiteSpace( outFile ) && outFile.EndsWith( ".bs" ) && File.Exists( outFile ) )
+                    {
+                        BSParser parser = new BSParser(File.ReadAllText(outFile));
+                        BSExpression[] exprs = parser.ParseToEnd();
+                        ConsoleWriter.SuccessLine(
+                                                  $"Parsing Test Completed: {s.ResolveValue("%Target.OutputFile%", t.Name)} ({exprs.Length} Expressions)"
+                                                 );
+                    }
+                    else
+                    {
+                        ConsoleWriter.WarnLine(
+                                                  $"Parsing Test Failed: No Output was Generated for Project {s.ResolveValue("%Target.OutputFile%", t.Name)}"
+                                                 );
+                    }
+                    
+                }
+                catch ( BSParserException e )
+                {
+                    ConsoleWriter.ErrorLine($"Parsing Test Failed: {s.ResolveValue("%Target.OutputFile%", t.Name)}\n{e}");
+
+                    throw;
+                }
+                
             }
 
             Directory.SetCurrentDirectory( oldDir );

@@ -11,8 +11,10 @@ namespace BadScript.Console.Subsystems.Project
     public class ProjectBuilderSettings : BSConsoleSettings
     {
 
-        [Option( 't', "target", HelpText = "The Build Target", Default = "build" )]
+        [Option('t', "target", HelpText = "The Build Target", Default = "build")]
         public string BuildTarget { get; set; }
+        
+
 
     }
 

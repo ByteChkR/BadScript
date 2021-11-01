@@ -29,7 +29,7 @@ namespace BadScript
     {
 
         private static readonly List < BSExpressionValidator > s_Validators =
-            new List < BSExpressionValidator > { new BSFunctionReturnExpressionValidator() };
+            new List < BSExpressionValidator > {/* new BSFunctionReturnExpressionValidator() */};
 
         private readonly Dictionary < string, ABSObject > m_Preprocessors;
 
@@ -393,13 +393,13 @@ namespace BadScript
         {
             if ( BSEngineSettings.ENABLE_OPTIMIZE_CONST_EXPRESSIONS )
             {
-                BSExpressionOptimizer.Optimize( exprs );
+                BSConstantExpressionOptimizer.Optimize( exprs );
             }
 
             scope.AddLocalVar(
                               "args",
                               args == null
-                                  ? ( ABSObject )BSObject.Null
+                                  ? BSObject.Null
                                   : new BSArray( args )
                              );
 
