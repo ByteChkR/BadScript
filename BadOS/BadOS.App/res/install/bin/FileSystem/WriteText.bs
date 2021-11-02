@@ -1,0 +1,47 @@
+FileSystem = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.FileSystem")
+Console = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Console")
+
+args = ProcessInfo.GetArguments()
+
+if(args.Size() <= 2)
+{
+	Console.WriteLine("No arguments.")
+}
+else if(args.Size() == 3)
+{
+	file = ProcessInfo.ResolvePath(args[1])
+	text = args[2]
+	if(FileSystem.Exists(FileSystem.GetRootNode(), file))
+	{
+		node = FileSystem.FindNode(FileSystem.GetRootNode(), file)
+		if(node.IsFile())
+		{
+			node.WriteAllText(ProcessInfo.GetUser(), text)
+		}
+		else
+		{
+			Console.WriteLine($"{file} Is not a file.")
+		}
+	}
+	else
+	{
+		fileName = FileSystem.GetFileName(file)
+		dir = FileSystem.GetDirectoryPath(file)
+		if(FileSystem.Exists(FileSystem.GetRootNode(), dir))
+		{
+			dirNode = FileSystem.FindNode(FileSystem.GetRootNode(), dir)
+			node = dirNode.CreateFile(ProcessInfo.GetUser(), fileName)
+			node.WriteAllText(ProcessInfo.GetUser(), text)
+		}
+		else
+		{
+			Console.WriteLine($"{dir} does not exist.")
+		}
+	}
+}
+else
+{
+	Console.WriteLine("Too many arguments.")
+}
+
+return ""

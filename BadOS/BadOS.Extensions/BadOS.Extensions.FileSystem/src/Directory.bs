@@ -56,6 +56,20 @@ namespace BadOS.Extensions.FileSystem
 			return null
 		}
 
+		function GetUnresolvedChild(!name)
+		{
+			#ASSERT_STRING(name)
+			for i = 0 while< _Children.Size()
+			{
+				child = _Children[i]
+				if(child.GetName() == name)
+				{
+					return child
+				}
+			}
+			return null
+		}
+
 		function ChangePublic(!user, ?recursive) : base(user, recursive)
 		{
 			if(recursive == null)
@@ -366,7 +380,7 @@ namespace BadOS.Extensions.FileSystem
 		function OnDeleteChild(!child)
 		{
 			_Logger.Log($"Deleting Child '{child.GetFullName()}' from '{GetFullName()}'")
-			hasChild = HasChild(child)
+			hasChild = HasChild(child.GetName())
 			#ASSERT_TRUE(hasChild)
 			for i = 0 while< _Children.Size()
 			{

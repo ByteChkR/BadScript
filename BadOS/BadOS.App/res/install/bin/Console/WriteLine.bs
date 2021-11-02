@@ -13,5 +13,5 @@ for i = 1 while< args.Size()
 		s += $" {args[i]}"
 	}
 }
-
-return Console.WriteLine(s)
+Console.WriteLine(s)
+return s

@@ -173,6 +173,7 @@ namespace BadShell.Parser.Expressions
 		}
 	}
 
+	
 
 	class WordExpression : Expression
 	{
@@ -219,6 +220,41 @@ namespace BadShell.Parser.Expressions
 		function Compute(scope) : base(scope)
 		{
 			return scope.Get(__name)
+		}
+
+		function ToString()
+		{
+			return $"$[{__name}]"
+		}
+	}
+
+	class PreResolvedVariableExpression : Expression
+	{
+		__name = null
+		function PreResolvedVariableExpression(name)
+		{
+			__name = name
+		}
+
+		function Compute(scope) : base(scope)
+		{
+			value = scope.Get(__name)
+			v = scope.GetFromHooks(value)
+			lastV = v
+			while(v != null)
+			{
+				lastV = v
+				if(!Convert.IsString(v))
+				{
+					break
+				}
+				v = scope.GetFromHooks(v)
+			}
+			if(lastV != null)
+			{
+				return lastV
+			}
+			return value
 		}
 
 		function ToString()
@@ -721,29 +757,36 @@ namespace BadShell.Parser.Expressions
 			EatWhiteSpace()
 			cmds = []
 			Eat("$")
-			Eat("(")
-			while(!Is(")"))
+			if(Is("("))
 			{
-				if(IsEOF())
+				Eat("(")
+				while(!Is(")"))
 				{
-					break
+					if(IsEOF())
+					{
+						break
+					}
+					cmds.Add(ParseValue())
+					if(IsEOF())
+					{
+						break
+					}
+					EatWhiteSpace()
+					if(IsEOF())
+					{
+						break
+					}
 				}
-				cmds.Add(ParseValue())
-				if(IsEOF())
-				{
-					break
-				}
-				EatWhiteSpace()
-				if(IsEOF())
-				{
-					break
-				}
+				Eat(")")
+				target = cmds[0]
+				cmds.RemoveAt(0)
+				cmd = new InvokeExpression(target, cmds)
+				return cmd
 			}
-			Eat(")")
-			target = cmds[0]
-			cmds.RemoveAt(0)
-			cmd = new InvokeExpression(target, cmds)
-			return cmd
+			Eat("[")
+			word = ParseWord()
+			Eat("]")
+			return new PreResolvedVariableExpression(word)
 		}
 
 		function ParseCommand()

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using BadScript.ConsoleUtils;
 using BadScript.Interfaces.Collection;
@@ -14,8 +16,13 @@ namespace BadScript.Testing
     public static class Program
     {
 
+        public static void Test()
+        {
+            System.Console.WriteLine( "Hello World!" );
+        }
         #region Public
 
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public static void Main( string[] args )
         {
             BSEngineSettings es = BSEngineSettings.MakeDefault();

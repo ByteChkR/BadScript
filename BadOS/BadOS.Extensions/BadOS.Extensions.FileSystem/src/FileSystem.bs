@@ -118,8 +118,9 @@ namespace BadOS.Extensions.FileSystem
 				#ASSERT_STRING(fsName)
 				_FsName = fsName
 			}
-			_RootPath = rootPath
 			_EnvFileSystem = environment.LoadInterface("FileSystem", {})
+			_RootPath = rootPath
+			_EnvFileSystem.CreateDir(rootPath)
 			_EnvPath = environment.LoadInterface("Path", {})
 		}
 
@@ -260,6 +261,20 @@ namespace BadOS.Extensions.FileSystem
 		{
 			#ASSERT_STRING(path)
 			return _EnvFileSystem.CreateDir(path)
+		}
+
+		function Delete(!path, ?recursive)
+		{
+			#ASSERT_STRING(path)
+			if(recursive == null)
+			{
+				recursive = false
+			}
+			#ASSERT_BOOL(recursive)
+			if(_EnvFileSystem.Exists(path))
+			{
+				_EnvFileSystem.Delete(path, true)
+			}
 		}
 	}
 }

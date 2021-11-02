@@ -1,7 +1,7 @@
 {
   "AppInfo": {
     "Name": "BadOS.App",
-    "Version": "0.0.0.1"
+    "Version": "2021.11.2.4"
   },
   "BuildTargets": {
     "Targets": [
@@ -67,7 +67,7 @@
         "OutputFile": "%SubTarget.OutputFile%",
         "PreprocessorDirectives": "",
         "Include": [],
-        "SubTarget": "build",
+        "SubTarget": "build_minify",
         "References": [],
         "PreEvents": [],
         "PostEvents": [
@@ -86,7 +86,8 @@
           "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
         ],
         "PostEvents": [
-          "%BS_EXEC% appbuilder --nologo -f %Target.OutputFile% -n %AppInfo.Name% -v %AppInfo.Version% -r ./res -o ./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.bsapp"
+          "%BS_EXEC% appbuilder --nologo -f %Target.OutputFile% -n %AppInfo.Name% -v %AppInfo.Version% -r ./res -o ./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.bsapp",
+          "%BS_EXEC% run --nologo -f ./tools/copy_file.bs -a ./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.bsapp ../../docs/projects/%AppInfo.Name%.bsapp"
         ]
       }
     ]

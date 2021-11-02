@@ -5,13 +5,48 @@ namespace BadOS.Extensions.FileSystem
 		function PathResolver()
 		{
 		}
+
+		function GetFileName(!path)
+		{
+			#ASSERT_STRING(path)
+			if(path == "/")
+			{
+				Environment.Error("Can not get parent directory path of '/'")
+			}
+
+			idx = String.LastIndexOf(path, "/")
+			if(idx == -1)
+			{
+				Environment.Error($"Can not get parent directory path of {path}")
+			}
+
+			return String.Remove(path, 0, idx+1)
+		}
+
+		function GetDirectoryPath(!path)
+		{
+			#ASSERT_STRING(path)
+			if(path == "/")
+			{
+				Environment.Error("Can not get parent directory path of '/'")
+			}
+
+			idx = String.LastIndexOf(path, "/")
+			if(idx == -1)
+			{
+				Environment.Error($"Can not get parent directory path of {path}")
+			}
+
+			return String.Substr(path, 0, idx)
+		}
+
 		function ResolvePath(!path, ?currentPath)
 		{
+			#ASSERT_STRING(path)
 			if(path == "/")
 			{
 				return path
 			}
-			#ASSERT_STRING(path)
 			if(currentPath == null)
 			{
 				currentPath = "/"

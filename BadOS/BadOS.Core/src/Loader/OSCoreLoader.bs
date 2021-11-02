@@ -3,7 +3,6 @@ namespace BadOS.Core.Loader
 	
 	class OSCoreLoader
 	{
-		//Gets Start Settings and Implementations
 		_Extensions = []
 
 		function OSCoreLoader()

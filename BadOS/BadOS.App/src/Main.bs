@@ -16,7 +16,7 @@ function CreateOSCore()
 
 
 
-	rootFS = new IOFileSystem(env, App.Manifest.PersistentPath, "fs")
+	rootFS = new IOFileSystem(env, App.Manifest.PersistentPath + "/rootfs", "fs")
 	osCore = new OSCoreLoader()
 				.AddExtension(new ConsoleExtension(env))
 				.AddExtension(new LoggingExtension())

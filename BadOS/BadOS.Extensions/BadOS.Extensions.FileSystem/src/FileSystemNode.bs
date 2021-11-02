@@ -101,6 +101,7 @@ namespace BadOS.Extensions.FileSystem
 			}
 		}
 
+
 		function Delete(!user, ?recursive)
 		{
 			if(user.GetUID() == GetOwnerUID())
@@ -114,7 +115,11 @@ namespace BadOS.Extensions.FileSystem
 					#ASSERT_BOOL(recursive)
 					parent = GetParent()
 
-					fs.Delete(fs.ResolveNode(this), recursive)
+					fs = GetFileSystem()
+					if(fs != null)
+					{
+						fs.Delete(fs.ResolveNode(this), recursive)
+					}
 					if(parent != null)
 					{
 						parent.OnDeleteChild(this)
@@ -136,7 +141,11 @@ namespace BadOS.Extensions.FileSystem
 					#ASSERT_BOOL(recursive)
 					parent = GetParent()
 
-					fs.Delete(fs.ResolveNode(this), recursive)
+					fs = GetFileSystem()
+					if(fs != null)
+					{
+						fs.Delete(fs.ResolveNode(this), recursive)
+					}
 					if(parent != null)
 					{
 						parent.OnDeleteChild(this)

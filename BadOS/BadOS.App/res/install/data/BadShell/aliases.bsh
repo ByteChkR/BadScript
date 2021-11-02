@@ -1,4 +1,9 @@
 {
+	set "bs" "/bin/BadShell.bs"
+	alias "bs" %bs%
+}
+
+{
 	set "echo" "/bin/Console/WriteLine.bs"
 	set "write_line" %echo%
 	alias "echo" %echo%
@@ -60,6 +65,27 @@
 
 	set "loadtext" "/bin/FileSystem/LoadText.bs"
 	alias "loadtext" %loadtext%
+
+	set "writetext" "/bin/FileSystem/WriteText.bs"
+	alias "writetext" %writetext%
+
+	set "appendtext" "/bin/FileSystem/AppendText.bs"
+	alias "appendtext" %appendtext%
+
+	set "delete" "/bin/FileSystem/DeleteNode.bs"
+	set "rm" %delete%
+	set "del" %delete%
+
+	alias "delete" %delete%
+	alias "rm" %delete%
+	alias "del" %delete%
+
+
+	set "symlink" "/bin/FileSystem/CreateLink.bs"
+	alias "symlink" %symlink%
+
+	set "unlink" "/bin/FileSystem/RemoveLink.bs"
+	alias "unlink" %unlink%
 }
 
 {

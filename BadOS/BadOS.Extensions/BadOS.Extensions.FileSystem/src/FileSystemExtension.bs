@@ -8,6 +8,7 @@ namespace BadOS.Extensions.FileSystem
 		_logger = null
 		_rootFS = null
 		_rootLink = null
+		_rootUser = null
 		_userManager = null
 		_additionalFs = []
 		_pathResolver = null
@@ -51,8 +52,124 @@ namespace BadOS.Extensions.FileSystem
 			_rootLink = node
 
 			_pathResolver = new PathResolver()
+
+			_rootUser = root
+
+			_Host.RegisterShutdownHandler(SaveFileSystemNodes)
+			ApplyFileSystemNodes()
 		}
 
+		function GetNodeDataFile()
+		{
+			return CreateFile(_rootUser, GetRootNode(), "/sys/FileSystem/NodeData.json")
+		}
+
+		function HasNodeDataFile()
+		{
+			return Exists(GetRootNode(), "/sys/FileSystem/NodeData.json")
+		}
+
+		function SaveFileSystemNodes()
+		{
+			_logger.Log($"Saving File System Nodes")
+			data = CreateRootData()
+			nodeFile = GetNodeDataFile()
+
+			nodeFile.WriteJson(_rootUser, data)
+		}
+
+		function ApplyFileSystemNodes()
+		{
+			_logger.Log($"Loading File System Nodes")
+			if(HasNodeDataFile())
+			{
+				nodeFile = GetNodeDataFile()
+				data = nodeFile.ReadJson(_rootUser)
+				node = GetRootNode()
+				InnerApplyNodeData(node, data)
+			}
+		}
+
+		function InnerApplyNodeData(!node, !data)
+		{
+			for i = 0 while< node.GetChildCount()
+			{
+				child = node.GetChildAt(i)
+				childData = null
+				foreach cData in data.Children
+				{
+					if(child.GetName() == cData.Name)
+					{
+						childData = cData
+						break
+					}
+				}
+				if(childData != null)
+				{
+					ApplyNodeData(child, childData)
+				}
+			}
+		}
+		function ApplyNodeData(!node, !data)
+		{
+			#ASSERT_INSTANCE_OF(FileSystemNode, node)
+			node._OwnerUID = data.UID
+			if(node.IsDirectory())
+			{
+				InnerApplyNodeData(node, data)
+			}
+		}
+
+
+		function CreateRootData()
+		{
+			node = GetRootNode()
+			data = {
+					Children = []
+				}
+			for i = 0 while< node.GetChildCount()
+			{
+				child = node.GetUnresolvedChildAt(i)
+				childData = CreateNodeData(child)
+				if(childData != null)
+				{
+					data.Children.Add(childData)
+				}
+			}
+			return data
+		}
+		function CreateNodeData(!node)
+		{
+			#ASSERT_INSTANCE_OF(FileSystemNode, node)
+
+			data = {
+					Name = node.GetName(),
+					UID = node.GetOwnerUID(),
+					Children = []
+				}
+
+			if(node.IsFile())
+			{
+				return data
+			}
+			else if(node.IsDirectory() && !node.IsFileSystemLink())
+			{
+				for i = 0 while< node.GetChildCount()
+				{
+					child = node.GetChildAt(i)
+					childData = CreateNodeData(child)
+					if(childData != null)
+					{
+						data.Children.Add(childData)
+					}
+				}
+				return data
+			}
+			else
+			{
+				return null
+			}
+		}
 
 		function GetRootFS()
 		{
@@ -61,6 +178,15 @@ namespace BadOS.Extensions.FileSystem
 		function GetRootNode()
 		{
 			return _rootLink
+		}
+
+		function GetFileName(!path)
+		{
+			return _pathResolver.GetFileName(path)
+		}
+		function GetDirectoryPath(!path)
+		{
+			return _pathResolver.GetDirectoryPath(path)
 		}
 
 		function CreateFile(!user, !startNode, !path)
@@ -236,6 +362,8 @@ namespace BadOS.Extensions.FileSystem
 			t.CreateDirectory = CreateDirectory
 			t.CreateFile = CreateFile
 			t.ResolvePath = ResolvePath
+			t.GetFileName = GetFileName
+			t.GetDirectoryPath = GetDirectoryPath
 			t.Exists = Exists
 			return t
 		}
