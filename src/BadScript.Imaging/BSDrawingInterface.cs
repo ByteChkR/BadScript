@@ -186,7 +186,6 @@ namespace BadScript.Imaging
                 return ConvertColor( Color.FromArgb( a, r, g, b ) );
             }
 
-            return null;
         }
 
         private ABSObject CreateEmptyBitmapApi( ABSObject[] arg )

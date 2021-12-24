@@ -30,7 +30,7 @@ namespace BadScript.Parser.Expressions.Implementations.Access
 
             ABSObject i = Right.Execute( scope ).ResolveReference();
 
-            if ( BSEngineSettings.ENABLE_CORE_FAST_TRACK )
+            if ( BSEngineSettings.EnableCoreFastTrack )
             {
                 if ( obj is BSArray arr )
                 {

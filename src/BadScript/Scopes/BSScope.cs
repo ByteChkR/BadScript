@@ -151,7 +151,7 @@ namespace BadScript.Scopes
 
         public IEnumerator < IForEachIteration > GetEnumerator()
         {
-            return m_LocalVars.GetEnumerator();
+            return ((IEnumerable < IForEachIteration >)m_LocalVars).GetEnumerator();
         }
 
         /// <summary>

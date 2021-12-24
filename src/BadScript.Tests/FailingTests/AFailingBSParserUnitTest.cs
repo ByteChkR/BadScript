@@ -25,7 +25,7 @@ namespace BadScript.Tests.FailingTests
                 BSExpression[] exprs = m_Engine.ParseFile( file );
                 Assert.Fail( $"The Test case: {key} does not fail as expected." );
             }
-            catch ( Exception e )
+            catch ( Exception )
             {
             }
 

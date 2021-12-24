@@ -29,7 +29,7 @@ namespace BadScript.Parser.Expressions.Implementations.Value
         {
             ABSObject obj = Left.Execute( scope );
 
-            if ( BSEngineSettings.ENABLE_CORE_FAST_TRACK && obj is BSFunction f )
+            if ( BSEngineSettings.EnableCoreFastTrack && obj is BSFunction f )
             {
                 ABSObject[] args = new ABSObject[Parameters.Length];
 

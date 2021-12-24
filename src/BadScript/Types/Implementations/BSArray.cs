@@ -68,7 +68,7 @@ namespace BadScript.Types.Implementations
             return new BSArrayReference( this, i, m_Locked );
         }
 
-        public IEnumerator < IForEachIteration > GetEnumerator()
+        IEnumerator < IForEachIteration > IEnumerable<IForEachIteration>.GetEnumerator()
         {
             ABSObject[] o = new ABSObject[1];
 

@@ -391,7 +391,7 @@ namespace BadScript
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public ABSObject LoadScript( BSExpression[] exprs, BSScope scope, ABSObject[] args, bool isBenchmark = false )
         {
-            if ( BSEngineSettings.ENABLE_OPTIMIZE_CONST_EXPRESSIONS )
+            if ( BSEngineSettings.EnableOptimizeConstExpressions )
             {
                 BSConstantExpressionOptimizer.Optimize( exprs );
             }

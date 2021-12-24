@@ -30,7 +30,7 @@ namespace BadScript.Parser.Expressions.Implementations.Access
             {
                 ABSObject l = Left.Execute( scope );
 
-                if ( BSEngineSettings.ENABLE_CORE_FAST_TRACK )
+                if ( BSEngineSettings.EnableCoreFastTrack )
                 {
                     if ( l is BSArray ||
                          l is BSTable ||

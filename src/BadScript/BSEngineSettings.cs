@@ -15,11 +15,11 @@ namespace BadScript
     public class BSEngineSettings
     {
 
-        public const bool ENABLE_OPTIMIZE_CONST_EXPRESSIONS = true;
-        public const bool ENABLE_OPTIMIZER_WRITE_LOGS = false;
-        public const bool ENABLE_SERIALIZER_WRITE_LOGS = false;
-        public const bool ENABLE_OPERATOR_OVERRIDES = true;
-        public const bool ENABLE_CORE_FAST_TRACK = true;
+        public static bool EnableOptimizeConstExpressions = true;
+        public static bool EnableOptimizerWriteLogs = false;
+        public static bool EnableSerializerWriteLogs = false;
+        public static bool EnableOperatorOverrides = true;
+        public static bool EnableCoreFastTrack = true;
 
         public readonly List < ABSScriptInterface > Interfaces;
         public readonly List < string > ActiveInterfaces;

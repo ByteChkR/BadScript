@@ -52,7 +52,7 @@ namespace BadScript.Types.Implementations
             return new BSTableReference( this, i, m_Locked );
         }
 
-        public IEnumerator < IForEachIteration > GetEnumerator()
+        IEnumerator < IForEachIteration > IEnumerable<IForEachIteration>.GetEnumerator()
         {
             foreach ( KeyValuePair < ABSObject, ABSObject > keyValuePair in m_InnerTable )
             {
