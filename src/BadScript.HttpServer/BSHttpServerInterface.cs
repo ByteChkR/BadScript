@@ -20,7 +20,6 @@ using OpenSSL.PrivateKeyDecoder;
 
 namespace BadScript.HttpServer
 {
-
     public class BSHttpServerInterface : ABSScriptInterface
     {
 

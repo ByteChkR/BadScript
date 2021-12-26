@@ -8,7 +8,6 @@ using BadScript.Types.References;
 
 namespace BadScript.IO
 {
-
     public class BSFileSystemInterface : ABSScriptInterface
     {
 

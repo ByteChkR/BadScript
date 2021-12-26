@@ -5,7 +5,6 @@ using BadScript.Types.References;
 
 namespace BadScript.Math
 {
-
     public class BSMathInterface : ABSScriptInterface
     {
 

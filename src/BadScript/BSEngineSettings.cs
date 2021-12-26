@@ -8,6 +8,7 @@ using BadScript.Parser.Expressions;
 using BadScript.Scopes;
 using BadScript.Types;
 using BadScript.Types.Implementations;
+using BadScript.Plugins;
 
 namespace BadScript
 {
@@ -48,6 +49,7 @@ namespace BadScript
             Interfaces = new List < ABSScriptInterface >();
             ActiveInterfaces = new List < string >();
             IncludeDirectories = new List < string >();
+            PluginManager.LoadPlugins(this);
         }
 
         public static BSEngineSettings MakeDefault()

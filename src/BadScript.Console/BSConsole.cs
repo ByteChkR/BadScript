@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using BadScript.Console.AppPackage;
 using BadScript.Console.Logging;
+using BadScript.Plugins;
 using BadScript.Console.Subsystems.Compile;
 using BadScript.Console.Subsystems.Include;
 using BadScript.Console.Subsystems.Project;
 using BadScript.Console.Subsystems.Run;
 using BadScript.Interfaces.Environment.Settings;
-
+using BadScript.Settings;
 using CommandLine;
 
 namespace BadScript.Console
@@ -24,9 +26,31 @@ namespace BadScript.Console
             return -1;
         }
 
+        private static void LoadPlugins()
+        {
+            SettingsCategory cat = BSSettings.BsRoot.FindCategory("core.settings.plugins", true);
+            bool enable = cat.GetSetting("enable", "true").Value == "true";
+            if (!enable) return;
+
+            if (!cat.HasSetting("path"))
+            {
+                cat.SetSetting("path", Path.Combine(BSConsoleDirectories.Instance.DataDirectory, "plugins"));
+            }
+
+            SettingsPair pair = cat.GetSetting("path");
+
+            Directory.CreateDirectory(pair.Value);
+            PluginManager.InitializePlugins(pair.Value);
+        }
+        
         private static int Main( string[] args )
         {
+            PluginManager.OnLog += ConsoleWriter.LogLine;
             BSSettings.BsRoot.LoadFromDirectory( BSConsoleDirectories.Instance.SettingsDirectory );
+
+            LoadPlugins();
+            
+
             int ret = 0;
 
             if ( args.Length > 0 && args[0] == "project" )

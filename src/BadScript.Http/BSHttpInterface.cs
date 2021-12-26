@@ -13,7 +13,6 @@ using BadScript.Types.References;
 
 namespace BadScript.Http
 {
-
     public class BSHttpInterface : ABSScriptInterface
     {
 
