@@ -1,0 +1,7 @@
+ 
+a = []
+
+a.Add(1)
+a.Add("Hello")
+
+return a.Contains(1) && !a.Contains(2) && a.Contains("Hello")
