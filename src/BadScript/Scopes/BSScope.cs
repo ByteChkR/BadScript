@@ -20,7 +20,7 @@ namespace BadScript.Scopes
     {
 
         private BSNamespace m_Namespace;
-
+        
         private readonly BSScopeFlags m_AllowedFlags;
         private BSScopeFlags m_CurrentFlag;
         private readonly BSEngine m_Instance;

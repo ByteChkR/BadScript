@@ -26,6 +26,11 @@ namespace BadScript.Types.Implementations
 
         public override ABSArray Values => new BSArray( m_InnerTable.Values );
 
+        public override void Remove(ABSObject k)
+        {
+            m_InnerTable.Remove(k.ResolveReference());
+        }
+
         #region Public
 
         public BSTable( SourcePosition pos ) : base( pos )
@@ -104,7 +109,15 @@ namespace BadScript.Types.Implementations
         public override void InsertElement( ABSObject k, ABSObject o )
         {
             ABSObject key = k.ResolveReference();
-            m_InnerTable[key] = o.ResolveReference();
+
+            if (m_InnerTable.TryGetValue(key, out ABSObject val) && val is ABSReference reference)
+            {
+                reference.Assign(o.ResolveReference());
+            }
+            else
+            {
+                m_InnerTable[key] = o.ResolveReference();
+            }
         }
 
         public override ABSObject Invoke( ABSObject[] args )

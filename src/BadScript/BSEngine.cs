@@ -601,7 +601,7 @@ namespace BadScript
 
             if ( arg.Length == 2 )
             {
-                return LoadInterface( key, ( ABSTable )arg[1] );
+                return LoadInterface( key, ( ABSTable )arg[1].ResolveReference() );
             }
 
             return LoadInterface( key );
