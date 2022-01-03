@@ -137,6 +137,30 @@
           "ReturnObjectAction": "return args[0] == false"
         }
       ]
+    },
+    {
+      "ReturnObjectAction": null,
+      "Name": "Collection.Remove",
+      "Tests": [
+        {
+          "Name": "NullArguments",
+          "CrashIsPass": true,
+          "Arguments": [
+            "null",
+            "null"
+          ],
+          "ReturnObjectAction": null
+        },
+        {
+          "Name": "Remove",
+          "CrashIsPass": false,
+          "Arguments": [
+            "{ABC = 1, DEF = 2}",
+            "\"ABC\""
+          ],
+          "ReturnObjectAction": null
+        }
+      ]
     }
   ]
 }
