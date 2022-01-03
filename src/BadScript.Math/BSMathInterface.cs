@@ -237,6 +237,7 @@ namespace BadScript.Math
                                                                          )
                                                                     );
                                              },
+                                             1,
                                              2
                                             )
                              );
@@ -387,7 +388,7 @@ namespace BadScript.Math
                                                                          )
                                                                     );
                                              },
-                                             1
+                                             2
                                             )
                              );
 
@@ -447,6 +448,25 @@ namespace BadScript.Math
                                              1
                                             )
                              );
+            
+            
+            
+            ret.InsertElement(
+                new BSObject( "Round" ),
+                new BSFunction(
+                    "function Round(x, decimalPlaces)",
+                    args =>
+                    {
+                        return new BSObject(
+                            System.Math.Round(
+                                args[0].ResolveReference().ConvertDecimal(),
+                                (int) args[1].ResolveReference().ConvertDecimal()
+                            )
+                        );
+                    },
+                    2
+                )
+            );
 
             ret.InsertElement( new BSObject( "IsPrime" ), new BSFunction( "function IsPrime(num)", PrimeTest, 1 ) );
         }
