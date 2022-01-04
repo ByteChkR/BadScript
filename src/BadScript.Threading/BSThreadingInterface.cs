@@ -97,7 +97,7 @@ namespace BadScript.Threading
             t.SetRawElement("IsFaulted", new BSReflectionReference(() => task.IsFaulted ? BSObject.True : BSObject.False, null));
             t.SetRawElement("IsCanceled", new BSReflectionReference(() => task.IsCanceled ? BSObject.True : BSObject.False, null));
             t.SetRawElement("IsCompletedSuccessfully", new BSReflectionReference(() =>
-                                task.IsCompletedSuccessfully ? BSObject.True : BSObject.False, null));
+                                task.Status == TaskStatus.RanToCompletion ? BSObject.True : BSObject.False, null));
             t.SetRawElement("Status", new BSReflectionReference(() => new BSObject(task.Status.ToString()), null));
             t.SetRawElement("StatusCode", new BSReflectionReference(() =>
                                                                         new BSObject((decimal)task.Status), null));

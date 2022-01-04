@@ -24,7 +24,7 @@ namespace BadScript.Tests.FailingTests
                 m_Engine.LoadFile( file );
                 Assert.Fail( $"The Test case: {key} does not fail as expected." );
             }
-            catch ( Exception e )
+            catch ( Exception )
             {
             }
 

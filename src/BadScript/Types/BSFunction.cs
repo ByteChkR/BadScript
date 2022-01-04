@@ -409,6 +409,10 @@ namespace BadScript.Types
 
             m_Properties["MinArgs"] =
                 new BSReflectionReference( () => new BSObject( ( decimal )m_ParameterCount.min ), null );
+            
+            
+            m_Properties["Name"] =
+                new BSReflectionReference( () => new BSObject( DebugData ), null );
 
             m_CachedFunctions["Invoke"] = new BSCachedFunction(
                                                                () => new BSFunctionReference(

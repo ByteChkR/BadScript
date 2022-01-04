@@ -77,6 +77,8 @@ namespace BadScript.Types
         /// <returns></returns>
         public abstract void SetRawElement( ABSObject k, ABSObject o );
 
+        public abstract void Remove(ABSObject k);
+
         #endregion
 
         #region Protected

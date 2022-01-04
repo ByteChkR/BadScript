@@ -8,7 +8,6 @@ using BadScript.Types.References;
 
 namespace BadScript.IO
 {
-
     public class BSFileSystemInterface : ABSScriptInterface
     {
 
@@ -354,7 +353,6 @@ namespace BadScript.IO
                                              {
                                                  ABSObject o = args[0].ResolveReference();
                                                  ABSObject d = args[1].ResolveReference();
-                                                 FileAccess m = FileAccess.ReadWrite;
 
                                                  File.WriteAllText( o.ConvertString(), d.ConvertString() );
 
@@ -372,7 +370,6 @@ namespace BadScript.IO
                                              args =>
                                              {
                                                  ABSObject o = args[0].ResolveReference();
-                                                 FileAccess m = FileAccess.ReadWrite;
 
                                                  return new BSObject( File.ReadAllText( o.ConvertString() ) );
                                              },

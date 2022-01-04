@@ -4,19 +4,11 @@ using System.Linq;
 
 using BadScript.Console.Preprocessor.Directives;
 using BadScript.Console.Subsystems.Project;
-using BadScript.ConsoleUtils;
-using BadScript.Http;
 using BadScript.Interfaces.Collection;
 using BadScript.Interfaces.Convert;
-using BadScript.IO;
-using BadScript.Json;
-using BadScript.Math;
+using BadScript.Interfaces.Versioning;
 using BadScript.Parser;
-using BadScript.Process;
-using BadScript.StringUtils;
 using BadScript.Types;
-using BadScript.Xml;
-using BadScript.Zip;
 
 namespace BadScript.Console.Preprocessor
 {
@@ -100,20 +92,9 @@ namespace BadScript.Console.Preprocessor
             settings.IncludeDirectories.Clear();
             settings.IncludeDirectories.Add( ProjectSystemDirectories.Instance.PreprocessorIncludeDirectory );
 
-            settings.Interfaces.Add( new BSSystemConsoleInterface() );
             settings.Interfaces.Add( new BSCollectionInterface() );
             settings.Interfaces.Add( new BSConvertInterface() );
-            settings.Interfaces.Add( new BSHttpInterface() );
-            settings.Interfaces.Add( new Json2BSInterface() );
-            settings.Interfaces.Add( new BS2JsonInterface() );
-            settings.Interfaces.Add( new BSXmlInterface() );
-            settings.Interfaces.Add( new BSZipInterface() );
-            settings.Interfaces.Add( new BSMathInterface() );
-            settings.Interfaces.Add( new BSProcessInterface() );
-            settings.Interfaces.Add( new BSFileSystemInterface() );
-            settings.Interfaces.Add( new BSFileSystemPathInterface( AppDomain.CurrentDomain.BaseDirectory ) );
-
-            settings.Interfaces.Add( new BSStringInterface() );
+            settings.Interfaces.Add( new BSVersioningInterface() );
             settings.ActiveInterfaces.Add( "string" );
 
             return settings.Build();

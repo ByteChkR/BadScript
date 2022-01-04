@@ -68,7 +68,7 @@ namespace BadScript.Types.Implementations
             return new BSArrayReference( this, i, m_Locked );
         }
 
-        public IEnumerator < IForEachIteration > GetEnumerator()
+        IEnumerator < IForEachIteration > IEnumerable<IForEachIteration>.GetEnumerator()
         {
             ABSObject[] o = new ABSObject[1];
 
@@ -341,7 +341,14 @@ namespace BadScript.Types.Implementations
                                                     0
                                                    );
 
+            m_Functions["Contains"] = new BSFunction("function Contains(item)", ArrayContains, 1);
+
             m_Functions["ContentEquals"] = new BSFunction( "function ContentEquals(array)", ArrayContentEquals, 1 );
+        }
+
+        private ABSObject ArrayContains(ABSObject[] arg)
+        {
+            return m_InnerArray.Contains(arg[0].ResolveReference())? BSObject.True : BSObject.False;
         }
 
         private ABSObject ArrayContentEquals( ABSObject[] arg )

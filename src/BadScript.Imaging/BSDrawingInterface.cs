@@ -2,7 +2,7 @@
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-
+using System.Net.Mime;
 using BadScript.Exceptions;
 using BadScript.Interfaces;
 using BadScript.Parser.Expressions;
@@ -13,7 +13,6 @@ using BadScript.Types.References;
 
 namespace BadScript.Imaging
 {
-
     public class BSDrawingInterface : ABSScriptInterface
     {
 
@@ -186,7 +185,6 @@ namespace BadScript.Imaging
                 return ConvertColor( Color.FromArgb( a, r, g, b ) );
             }
 
-            return null;
         }
 
         private ABSObject CreateEmptyBitmapApi( ABSObject[] arg )

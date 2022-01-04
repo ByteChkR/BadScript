@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -19,7 +20,6 @@ using OpenSSL.PrivateKeyDecoder;
 
 namespace BadScript.HttpServer
 {
-
     public class BSHttpServerInterface : ABSScriptInterface
     {
 
@@ -60,7 +60,7 @@ namespace BadScript.HttpServer
                 int port = int.Parse( configTable.GetRawElement( new BSObject( "port" ) ).ConvertString() );
 
                 if ( configTable.HasElement( new BSObject( "routes" ) ) &&
-                     configTable.GetRawElement( new BSObject( "routes" ) ) is BSTable routes )
+                     configTable.GetRawElement( new BSObject( "routes" ) ) is IEnumerable < IForEachIteration > routes )
                 {
                     foreach ( IForEachIteration route in routes )
                     {

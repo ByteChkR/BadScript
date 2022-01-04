@@ -7,7 +7,6 @@ using BadScript.Types.References;
 
 namespace BadScript.ConsoleUtils
 {
-
     public class BSConsoleInterface : ABSScriptInterface
     {
 

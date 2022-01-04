@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -12,7 +13,6 @@ using BadScript.Types.References;
 
 namespace BadScript.Http
 {
-
     public class BSHttpInterface : ABSScriptInterface
     {
 
@@ -85,7 +85,7 @@ namespace BadScript.Http
 
             if ( args.Length == 2 )
             {
-                BSTable headers = ( BSTable )args[1].ResolveReference();
+                IEnumerable < IForEachIteration > headers = ( IEnumerable < IForEachIteration > )args[1].ResolveReference();
 
                 foreach ( IForEachIteration forEachIteration in headers )
                 {

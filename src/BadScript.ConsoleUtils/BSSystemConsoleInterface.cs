@@ -126,8 +126,9 @@ namespace BadScript.ConsoleUtils
             root.SetRawElement(
                                "Title",
                                new BSReflectionReference(
-                                                         () => new BSObject( Console.Title ),
-                                                         x => Console.Title = x.ConvertString()
+                                   () => new BSObject(Console.Title),
+                                                         x => Console.Title = x.ConvertString(),
+                                   BSObject.EmptyString
                                                         )
                               );
 
@@ -135,7 +136,8 @@ namespace BadScript.ConsoleUtils
                                "CapsLock",
                                new BSReflectionReference(
                                                          () => Console.CapsLock ? BSObject.True : BSObject.False,
-                                                         null
+                                                         null,
+                                                         BSObject.False
                                                         )
                               );
 
@@ -143,7 +145,8 @@ namespace BadScript.ConsoleUtils
                                "NumberLock",
                                new BSReflectionReference(
                                                          () => Console.NumberLock ? BSObject.True : BSObject.False,
-                                                         null
+                                                         null,
+                                                         BSObject.False
                                                         )
                               );
 
@@ -153,7 +156,8 @@ namespace BadScript.ConsoleUtils
                                                          () => Console.IsErrorRedirected
                                                                    ? BSObject.True
                                                                    : BSObject.False,
-                                                         null
+                                                         null,
+                                                         BSObject.False
                                                         )
                               );
 
@@ -163,7 +167,8 @@ namespace BadScript.ConsoleUtils
                                                          () => Console.IsInputRedirected
                                                                    ? BSObject.True
                                                                    : BSObject.False,
-                                                         null
+                                                         null,
+                                                         BSObject.False
                                                         )
                               );
 
@@ -173,7 +178,8 @@ namespace BadScript.ConsoleUtils
                                                          () => Console.IsOutputRedirected
                                                                    ? BSObject.True
                                                                    : BSObject.False,
-                                                         null
+                                                         null,
+                                                         BSObject.False
                                                         )
                               );
 
@@ -192,7 +198,8 @@ namespace BadScript.ConsoleUtils
                                                          () => Console.TreatControlCAsInput
                                                                    ? BSObject.True
                                                                    : BSObject.False,
-                                                         null
+                                                         null,
+                                                         BSObject.False
                                                         )
                               );
 
@@ -202,7 +209,8 @@ namespace BadScript.ConsoleUtils
                                                          () => Console.CursorVisible
                                                                    ? BSObject.True
                                                                    : BSObject.False,
-                                                         null
+                                                         null,
+                                                         BSObject.False
                                                         )
                               );
 

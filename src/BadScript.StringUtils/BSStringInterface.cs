@@ -10,7 +10,6 @@ using BadScript.Types.References;
 
 namespace BadScript.StringUtils
 {
-
     public class BSStringInterface : ABSScriptInterface
     {
 

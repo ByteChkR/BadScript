@@ -80,9 +80,9 @@ namespace BadScript.Parser.OperatorImplementations
         {
             ABSObject firstO = args.First();
 
-            if ( !( BSEngineSettings.ENABLE_CORE_FAST_TRACK && firstO is BSObject o && o.IsLiteral() ) &&
+            if ( !( BSEngineSettings.EnableCoreFastTrack && firstO is BSObject o && o.IsLiteral() ) &&
                  allowOverrides &&
-                 BSEngineSettings.ENABLE_OPERATOR_OVERRIDES &&
+                 BSEngineSettings.EnableOperatorOverrides &&
                  HasKey( key ) )
             {
                 string opImplName = ResolveKey( key );

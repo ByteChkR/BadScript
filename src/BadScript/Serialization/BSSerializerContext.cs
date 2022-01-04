@@ -17,7 +17,7 @@ namespace BadScript.Serialization
         {
             List < string > cache = s.DeserializeStringArray( null ).ToList();
 
-            if ( BSEngineSettings.ENABLE_SERIALIZER_WRITE_LOGS )
+            if ( BSEngineSettings.EnableSerializerWriteLogs )
             {
                 Console.WriteLine( "Cached Strings: " + cache.Count );
             }
@@ -46,7 +46,7 @@ namespace BadScript.Serialization
 
         public void Serialize( Stream s )
         {
-            if ( BSEngineSettings.ENABLE_SERIALIZER_WRITE_LOGS )
+            if ( BSEngineSettings.EnableSerializerWriteLogs )
             {
                 Console.WriteLine( "Cached Strings: " + m_StringCache.Count );
             }
