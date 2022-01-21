@@ -77,7 +77,7 @@ namespace BadScript.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
-            if ( m_InternalObject != null )
+            if ( m_InternalObject != null && BSObjectExtensions.HasProperty( m_InternalObject.GetType(), propertyName ))
             {
                 return new BSReflectionReference(
                                                  () => BSObjectExtensions.GetProperty(

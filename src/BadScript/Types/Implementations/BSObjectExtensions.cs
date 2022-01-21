@@ -28,7 +28,7 @@ namespace BadScript.Types.Implementations
 
         public static bool HasProperty( Type t, string name )
         {
-            return s_Extensions[t].HasProperty( name );
+            return s_Extensions.ContainsKey(t) && s_Extensions[t].HasProperty( name );
         }
 
         #endregion
