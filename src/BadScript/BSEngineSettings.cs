@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 using BadScript.Interfaces;
 using BadScript.Interfaces.Environment;
 using BadScript.Parser.Expressions;
+using BadScript.Plugins;
 using BadScript.Scopes;
 using BadScript.Types;
 using BadScript.Types.Implementations;
-using BadScript.Plugins;
 
 namespace BadScript
 {
@@ -22,9 +23,11 @@ namespace BadScript
         public static bool EnableOperatorOverrides = true;
         public static bool EnableCoreFastTrack = true;
 
+        public bool EnableObjectExtensions = false;
         public readonly List < ABSScriptInterface > Interfaces;
         public readonly List < string > ActiveInterfaces;
         public readonly List < string > IncludeDirectories;
+        private readonly Dictionary < Type, BSObjectExtension > m_Extensions;
 
         public ABSScriptInterface[] ActiveGlobalInterfaces =>
             FindInterfaces(
@@ -49,7 +52,8 @@ namespace BadScript
             Interfaces = new List < ABSScriptInterface >();
             ActiveInterfaces = new List < string >();
             IncludeDirectories = new List < string >();
-            PluginManager.LoadPlugins(this);
+            m_Extensions = new Dictionary < Type, BSObjectExtension >();
+            PluginManager.LoadPlugins( this );
         }
 
         public static BSEngineSettings MakeDefault()
@@ -62,6 +66,11 @@ namespace BadScript
             return s;
         }
 
+        public void AddExtension < T >( BSObjectExtension extension )
+        {
+            m_Extensions.Add( typeof( T ), extension );
+        }
+
         public BSEngine Build( bool addEnvironmentApi = true )
         {
             BSEngine instance = new BSEngine(
@@ -70,6 +79,14 @@ namespace BadScript
                                             );
 
             AddGlobalInterfaces( instance, ActiveGlobalInterfaces );
+
+            if ( EnableObjectExtensions )
+            {
+                foreach ( KeyValuePair < Type, BSObjectExtension > extension in m_Extensions )
+                {
+                    BSObjectExtensions.AddExtension( extension.Key, extension.Value );
+                }
+            }
 
             if ( addEnvironmentApi )
             {

@@ -1,59 +1,73 @@
 ﻿using System;
+
 using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
 using BadScript.Types;
 using BadScript.Types.References;
 
-namespace BadScript.Reflection;
-
-public class BSReflectionReference : ABSReference
+namespace BadScript.Reflection
 {
-    private readonly ABSObject m_ErrorFallback;
 
-    private readonly Func<ABSObject> m_Getter;
-    private readonly Action<ABSObject> m_Setter;
-
-    #region Protected
-
-    protected override int GetHashCodeImpl()
+    public class BSReflectionReference : ABSReference
     {
-        return m_Getter.GetHashCode() ^ (m_Setter?.GetHashCode() ?? 0);
-    }
 
-    #endregion
+        private readonly ABSObject m_ErrorFallback;
 
-    #region Public
+        private readonly Func < ABSObject > m_Getter;
+        private readonly Action < ABSObject > m_Setter;
 
-    public BSReflectionReference(Func<ABSObject> get, Action<ABSObject> set, ABSObject mErrorFallback = null) : base(
-        SourcePosition.Unknown
-    )
-    {
-        m_Getter = get;
-        m_Setter = set;
-        m_ErrorFallback = mErrorFallback;
-    }
+        #region Public
 
-    public override void Assign(ABSObject obj)
-    {
-        if (m_Setter == null) throw new BSRuntimeException("Reflection Reference is Readonly");
+        public BSReflectionReference(
+            Func < ABSObject > get,
+            Action < ABSObject > set,
+            ABSObject mErrorFallback = null ) : base(
+                                                     SourcePosition.Unknown
+                                                    )
+        {
+            m_Getter = get;
+            m_Setter = set;
+            m_ErrorFallback = mErrorFallback;
+        }
 
-        m_Setter(obj);
-    }
-
-    public override ABSObject Get()
-    {
-        if (m_ErrorFallback != null)
-            try
+        public override void Assign( ABSObject obj )
+        {
+            if ( m_Setter == null )
             {
-                return m_Getter();
-            }
-            catch (Exception e)
-            {
-                return m_ErrorFallback;
+                throw new BSRuntimeException( "Reflection Reference is Readonly" );
             }
 
-        return m_Getter();
+            m_Setter( obj );
+        }
+
+        public override ABSObject Get()
+        {
+            if ( m_ErrorFallback != null )
+            {
+                try
+                {
+                    return m_Getter();
+                }
+                catch ( Exception )
+                {
+                    return m_ErrorFallback;
+                }
+            }
+
+            return m_Getter();
+        }
+
+        #endregion
+
+        #region Protected
+
+        protected override int GetHashCodeImpl()
+        {
+            return m_Getter.GetHashCode() ^ ( m_Setter?.GetHashCode() ?? 0 );
+        }
+
+        #endregion
+
     }
 
-    #endregion
 }

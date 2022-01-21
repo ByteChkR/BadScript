@@ -26,7 +26,7 @@ namespace BadScript.Console
             return -1;
         }
 
-        private static void LoadPlugins()
+        private static void LoadPlugins(bool logPlugins)
         {
             SettingsCategory cat = BSSettings.BsRoot.FindCategory("core.settings.plugins", true);
             bool enable = cat.GetSetting("enable", "true").Value == "true";
@@ -40,7 +40,7 @@ namespace BadScript.Console
             SettingsPair pair = cat.GetSetting("path");
 
             Directory.CreateDirectory(pair.Value);
-            PluginManager.InitializePlugins(pair.Value);
+            PluginManager.InitializePlugins(pair.Value,logPlugins );
         }
         
         private static int Main( string[] args )
@@ -48,7 +48,6 @@ namespace BadScript.Console
             PluginManager.OnLog += ConsoleWriter.LogLine;
             BSSettings.BsRoot.LoadFromDirectory( BSConsoleDirectories.Instance.SettingsDirectory );
 
-            LoadPlugins();
             
 
             int ret = 0;
@@ -62,6 +61,7 @@ namespace BadScript.Console
                                   MapResult(
                                             ( ProjectCreatorSettings o ) =>
                                             {
+                                                LoadPlugins(!o.NoLogo);
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -71,6 +71,7 @@ namespace BadScript.Console
                                             },
                                             ( ProjectBuilderSettings o ) =>
                                             {
+                                                LoadPlugins(!o.NoLogo);
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -89,6 +90,7 @@ namespace BadScript.Console
                                   MapResult(
                                             ( ScriptRunnerSettings o ) =>
                                             {
+                                                LoadPlugins(!o.NoLogo);
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -98,6 +100,7 @@ namespace BadScript.Console
                                             },
                                             ( ScriptCompilerSettings o ) =>
                                             {
+                                                LoadPlugins(!o.NoLogo);
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -107,6 +110,7 @@ namespace BadScript.Console
                                             },
                                             ( IncludeManagerSettings o ) =>
                                             {
+                                                LoadPlugins(!o.NoLogo);
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -116,6 +120,7 @@ namespace BadScript.Console
                                             },
                                             ( AppPackageRunnerSettings o ) =>
                                             {
+                                                LoadPlugins(!o.NoLogo);
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -125,6 +130,7 @@ namespace BadScript.Console
                                             },
                                             ( AppBuilderSettings o ) =>
                                             {
+                                                LoadPlugins(!o.NoLogo);
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();

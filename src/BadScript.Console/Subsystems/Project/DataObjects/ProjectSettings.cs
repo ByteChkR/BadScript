@@ -3,140 +3,167 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+
 using BadScript.Console.Subsystems.Project.BuildFormats;
 using BadScript.Console.Subsystems.Project.Utils;
+
 using Newtonsoft.Json;
 
-namespace BadScript.Console.Subsystems.Project.DataObjects;
-
-public class ProjectSettings : ReflectedObject
+namespace BadScript.Console.Subsystems.Project.DataObjects
 {
-    private static readonly List<BuildOutputFormat> s_Formats = new()
+
+    public class ProjectSettings : ReflectedObject
     {
-        new BinaryOutputFormat(),
-        new TextOutputFormat()
-    };
 
-    public AppInfo AppInfo = new();
-    public ProjectBuildTargetCollection BuildTargets;
-    public string PreprocessorDirectives = "";
-    public Dictionary<string, string> ReferenceResolvers = new();
+        public AppInfo AppInfo = new();
+        public ProjectBuildTargetCollection BuildTargets;
+        public string PreprocessorDirectives = "";
+        public Dictionary < string, string > ReferenceResolvers = new();
 
-    [JsonIgnore] public string SaveLocation { get; set; }
+        private static readonly List < BuildOutputFormat > s_Formats = new()
+                                                                       {
+                                                                           new BinaryOutputFormat(),
+                                                                           new TextOutputFormat()
+                                                                       };
 
-    public event Action<PropertyResolveEventArgs> OnResolveProperty;
+        [JsonIgnore]
+        public string SaveLocation { get; set; }
 
-    #region Unity Event Functions
+        public event Action < PropertyResolveEventArgs > OnResolveProperty;
 
-    public void Update(string data = null)
-    {
-        JsonConvert.PopulateObject(data ?? File.ReadAllText(SaveLocation), this);
-    }
+        #region Unity Event Functions
 
-    #endregion
-
-    #region Public
-
-    public ProjectSettings()
-    {
-    }
-
-    public ProjectSettings(AppInfo info, IEnumerable<BuildTarget> targets = null)
-    {
-        AppInfo = info;
-        BuildTargets = new ProjectBuildTargetCollection(targets?.ToList());
-    }
-
-    public static ProjectSettings Deserialize(string data)
-    {
-        return JsonConvert.DeserializeObject<ProjectSettings>(data);
-    }
-
-    public static BuildOutputFormat GetOutputFormat(string fmt)
-    {
-        return s_Formats.First(x => x.Name == fmt);
-    }
-
-    public override string ResolveProperty(int current, string[] parts, ReflectionResolveInfo info)
-    {
-        PropertyResolveEventArgs args = new(parts, current, info);
-        OnResolveProperty?.Invoke(args);
-
-        if (args.Cancel)
+        public void Update( string data = null )
         {
-            if (args.Result == null) throw new Exception("Property Resolver was Cancelled");
-
-            return args.Result;
+            JsonConvert.PopulateObject( data ?? File.ReadAllText( SaveLocation ), this );
         }
 
-        if (parts[current] == "Target")
-            return BuildTargets.GetTarget(info.CurrentTarget).ResolveProperty(current + 1, parts, info);
+        #endregion
 
-        if (parts[current] == "SubTarget")
+        #region Public
+
+        public ProjectSettings()
         {
-            var subTarget = BuildTargets.GetTarget(info.CurrentTarget).SubTarget;
-
-            return BuildTargets.GetTarget(subTarget).ResolveProperty(
-                current + 1,
-                parts,
-                new ReflectionResolveInfo(subTarget, info.Settings)
-            );
         }
 
-        if (parts[current] == "BS_DIR") return AppDomain.CurrentDomain.BaseDirectory;
-
-        if (parts[current] == "BS_EXEC")
+        public ProjectSettings( AppInfo info, IEnumerable < BuildTarget > targets = null )
         {
-            var isWindows = RuntimeInformation
-                .IsOSPlatform(OSPlatform.Windows);
-            if (isWindows)
-                return AppDomain.CurrentDomain.BaseDirectory + "bs.exe";
-            return AppDomain.CurrentDomain.BaseDirectory + "bs";
+            AppInfo = info;
+            BuildTargets = new ProjectBuildTargetCollection( targets?.ToList() );
         }
 
-        return base.ResolveProperty(current, parts, info);
-    }
+        public static ProjectSettings Deserialize( string data )
+        {
+            return JsonConvert.DeserializeObject < ProjectSettings >( data );
+        }
 
-    public string ResolveValue(string input, string target)
-    {
-        var original = input;
+        public static BuildOutputFormat GetOutputFormat( string fmt )
+        {
+            return s_Formats.First( x => x.Name == fmt );
+        }
 
-        for (var i = 0; i < input.Length; i++)
-            if (input[i] == '%')
+        public override string ResolveProperty( int current, string[] parts, ReflectionResolveInfo info )
+        {
+            PropertyResolveEventArgs args = new(parts, current, info);
+            OnResolveProperty?.Invoke( args );
+
+            if ( args.Cancel )
             {
-                var start = i + 1;
-                var end = -1;
+                if ( args.Result == null )
+                {
+                    throw new Exception( "Property Resolver was Cancelled" );
+                }
 
-                for (var j = i + 1; j < input.Length; j++)
-                    if (input[j] == '%')
-                    {
-                        end = j;
-
-                        break;
-                    }
-
-                if (end == -1) throw new Exception($"Invalid Project Settings Syntax: '{original}'");
-
-                var part = input.Substring(start, end - start);
-                input = input.Remove(start - 1, end - start + 2);
-
-                input = input.Insert(
-                    start - 1,
-                    ResolveProperty(
-                        0,
-                        part.Split('.'),
-                        new ReflectionResolveInfo(target, this)
-                    )
-                );
+                return args.Result;
             }
 
-        return input;
+            if ( parts[current] == "Target" )
+            {
+                return BuildTargets.GetTarget( info.CurrentTarget ).ResolveProperty( current + 1, parts, info );
+            }
+
+            if ( parts[current] == "SubTarget" )
+            {
+                string subTarget = BuildTargets.GetTarget( info.CurrentTarget ).SubTarget;
+
+                return BuildTargets.GetTarget( subTarget ).
+                                    ResolveProperty(
+                                                    current + 1,
+                                                    parts,
+                                                    new ReflectionResolveInfo( subTarget, info.Settings )
+                                                   );
+            }
+
+            if ( parts[current] == "BS_DIR" )
+            {
+                return AppDomain.CurrentDomain.BaseDirectory;
+            }
+
+            if ( parts[current] == "BS_EXEC" )
+            {
+                bool isWindows = RuntimeInformation.IsOSPlatform( OSPlatform.Windows );
+
+                if ( isWindows )
+                {
+                    return AppDomain.CurrentDomain.BaseDirectory + "bs.exe";
+                }
+
+                return AppDomain.CurrentDomain.BaseDirectory + "bs";
+            }
+
+            return base.ResolveProperty( current, parts, info );
+        }
+
+        public string ResolveValue( string input, string target )
+        {
+            string original = input;
+
+            for ( int i = 0; i < input.Length; i++ )
+            {
+                if ( input[i] == '%' )
+                {
+                    int start = i + 1;
+                    int end = -1;
+
+                    for ( int j = i + 1; j < input.Length; j++ )
+                    {
+                        if ( input[j] == '%' )
+                        {
+                            end = j;
+
+                            break;
+                        }
+                    }
+
+                    if ( end == -1 )
+                    {
+                        throw new Exception( $"Invalid Project Settings Syntax: '{original}'" );
+                    }
+
+                    string part = input.Substring( start, end - start );
+                    input = input.Remove( start - 1, end - start + 2 );
+
+                    input = input.Insert(
+                                         start - 1,
+                                         ResolveProperty(
+                                                         0,
+                                                         part.Split( '.' ),
+                                                         new ReflectionResolveInfo( target, this )
+                                                        )
+                                        );
+                }
+            }
+
+            return input;
+        }
+
+        public string Serialize()
+        {
+            return JsonConvert.SerializeObject( this, Formatting.Indented );
+        }
+
+        #endregion
+
     }
 
-    public string Serialize()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
-
-    #endregion
 }

@@ -1,4 +1,6 @@
-﻿using BadScript.Interfaces;
+﻿using System.Collections.Generic;
+
+using BadScript.Interfaces;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
@@ -11,7 +13,7 @@ namespace BadScript.Math
         #region Public
 
         public BSMathInterface() : base( "Math" )
-        {
+        { 
         }
 
         public override void AddApi( ABSTable root )
@@ -22,6 +24,7 @@ namespace BadScript.Math
         #endregion
 
         #region Private
+
 
         private static void GenerateMathApi( ABSTable ret )
         {

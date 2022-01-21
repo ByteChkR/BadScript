@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 
 using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
+using BadScript.Reflection;
 using BadScript.Types.References;
 
 namespace BadScript.Types.Implementations
@@ -11,6 +12,7 @@ namespace BadScript.Types.Implementations
     public class BSObject : ABSObject, IBSWrappedObject
     {
 
+        
 
         public static readonly BSObject Null = new BSObject(null);
         public static readonly BSObject EmptyString = new BSObject(string.Empty);
@@ -62,6 +64,14 @@ namespace BadScript.Types.Implementations
 
         public override ABSReference GetProperty( string propertyName )
         {
+            if ( m_InternalObject != null )
+                return new BSReflectionReference(
+                                                 () => BSObjectExtensions.GetProperty(
+                                                      this,
+                                                      propertyName
+                                                     ),
+                                                 null
+                                                );
             throw new BSRuntimeException(
                                          Position,
                                          $"Property {propertyName} does not exist in object {SafeToString()}"
@@ -70,7 +80,7 @@ namespace BadScript.Types.Implementations
 
         public override bool HasProperty( string propertyName )
         {
-            return false;
+            return m_InternalObject != null && BSObjectExtensions.HasProperty(m_InternalObject.GetType(), propertyName);
         }
 
         public override ABSObject Invoke( ABSObject[] args )

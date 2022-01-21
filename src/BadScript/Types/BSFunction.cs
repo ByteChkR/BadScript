@@ -23,7 +23,7 @@ namespace BadScript.Types
     public class BSFunction : ABSObject
     {
 
-        protected readonly string DebugData = null;
+        public readonly string DebugData = null;
 
         private class BSCachedFunction
         {

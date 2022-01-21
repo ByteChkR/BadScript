@@ -1,4 +1,5 @@
 using BadScript.Plugins;
+using BadScript.Types.Implementations;
 
 namespace BadScript.StringUtils
 {
@@ -9,7 +10,11 @@ namespace BadScript.StringUtils
         }
         public override void Load(BSEngineSettings settings)
         {
-            settings.Interfaces.Add(new BSStringInterface());
+            BSStringInterface api = new BSStringInterface();
+            settings.Interfaces.Add(api);
+
+            BSObjectExtension ext = new BSObjectExtension( api.Api );
+            settings.AddExtension<string>( ext );
         }
     }
 }

@@ -1,0 +1,6 @@
+
+Environment.LoadInterface("Console")
+
+a = "ABC"
+
+Console.WriteLine($"String Length: {a.Length()}")

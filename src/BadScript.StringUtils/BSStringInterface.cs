@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -13,26 +14,31 @@ namespace BadScript.StringUtils
     public class BSStringInterface : ABSScriptInterface
     {
 
+        public Dictionary < string, BSFunction > Api { get; }
+
         #region Public
+
 
         public BSStringInterface() : base( "String" )
         {
+            Api = GetApi();
         }
 
-        public override void AddApi( ABSTable apiRoot )
+        private Dictionary < string, BSFunction > GetApi()
         {
+            Dictionary < string, BSFunction > apiRoot = new Dictionary < string, BSFunction >();
             apiRoot.InsertElement(
-                                  new BSObject( "Escape" ),
+                                  "Escape" ,
                                   new BSFunction( "function Escape(str)", EscapeString, 1 )
                                  );
 
             apiRoot.InsertElement(
-                                  new BSObject( "RegexEscape" ),
+                                   "RegexEscape",
                                   new BSFunction( "function RegexEscape(str)", RegexEscapeString, 1 )
                                  );
 
             apiRoot.InsertElement(
-                                  new BSObject( "RegexUnescape" ),
+                                   "RegexUnescape" ,
                                   new BSFunction( "function RegexUnescape(str)", RegexUnescapeString, 1 )
                                  );
 
@@ -198,6 +204,18 @@ namespace BadScript.StringUtils
                                                  int.MaxValue
                                                 )
                                  );
+
+            return apiRoot;
+        }
+
+        public override void AddApi( ABSTable apiRoot )
+        {
+
+            foreach ( KeyValuePair<string,BSFunction> keyValuePair in Api )
+            {
+                apiRoot.InsertElement( keyValuePair.Key, keyValuePair.Value );
+            }
+           
         }
 
         #endregion
