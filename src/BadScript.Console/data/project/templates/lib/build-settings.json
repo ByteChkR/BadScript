@@ -62,7 +62,6 @@
       }
     ]
   },
-  "PreprocessorDirectives":
-    "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\"",
+  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\"",
   "ReferenceResolvers": {}
 }

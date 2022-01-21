@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
-
-using BadScript.Interfaces;
+﻿using BadScript.Interfaces;
 using BadScript.Types;
 using BadScript.Types.Implementations;
 using BadScript.Types.References;
 
 namespace BadScript.Math
 {
+
     public class BSMathInterface : ABSScriptInterface
     {
 
         #region Public
 
         public BSMathInterface() : base( "Math" )
-        { 
+        {
         }
 
         public override void AddApi( ABSTable root )
@@ -24,7 +23,6 @@ namespace BadScript.Math
         #endregion
 
         #region Private
-
 
         private static void GenerateMathApi( ABSTable ret )
         {
@@ -451,25 +449,25 @@ namespace BadScript.Math
                                              1
                                             )
                              );
-            
-            
-            
+
             ret.InsertElement(
-                new BSObject( "Round" ),
-                new BSFunction(
-                    "function Round(x, decimalPlaces)",
-                    args =>
-                    {
-                        return new BSObject(
-                            System.Math.Round(
-                                args[0].ResolveReference().ConvertDecimal(),
-                                (int) args[1].ResolveReference().ConvertDecimal()
-                            )
-                        );
-                    },
-                    2
-                )
-            );
+                              new BSObject( "Round" ),
+                              new BSFunction(
+                                             "function Round(x, decimalPlaces)",
+                                             args =>
+                                             {
+                                                 return new BSObject(
+                                                                     System.Math.Round(
+                                                                          args[0].ResolveReference().ConvertDecimal(),
+                                                                          ( int )args[1].
+                                                                              ResolveReference().
+                                                                              ConvertDecimal()
+                                                                         )
+                                                                    );
+                                             },
+                                             2
+                                            )
+                             );
 
             ret.InsertElement( new BSObject( "IsPrime" ), new BSFunction( "function IsPrime(num)", PrimeTest, 1 ) );
         }

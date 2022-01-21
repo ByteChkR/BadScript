@@ -26,11 +26,6 @@ namespace BadScript.Types.Implementations
 
         public override ABSArray Values => new BSArray( m_InnerTable.Values );
 
-        public override void Remove(ABSObject k)
-        {
-            m_InnerTable.Remove(k.ResolveReference());
-        }
-
         #region Public
 
         public BSTable( SourcePosition pos ) : base( pos )
@@ -55,14 +50,6 @@ namespace BadScript.Types.Implementations
         public override ABSReference GetElement( ABSObject i )
         {
             return new BSTableReference( this, i, m_Locked );
-        }
-
-        IEnumerator < IForEachIteration > IEnumerable<IForEachIteration>.GetEnumerator()
-        {
-            foreach ( KeyValuePair < ABSObject, ABSObject > keyValuePair in m_InnerTable )
-            {
-                yield return new ForEachIteration( new[] { keyValuePair.Key, keyValuePair.Value } );
-            }
         }
 
         public override int GetLength()
@@ -110,9 +97,9 @@ namespace BadScript.Types.Implementations
         {
             ABSObject key = k.ResolveReference();
 
-            if (m_InnerTable.TryGetValue(key, out ABSObject val) && val is ABSReference reference)
+            if ( m_InnerTable.TryGetValue( key, out ABSObject val ) && val is ABSReference reference )
             {
-                reference.Assign(o.ResolveReference());
+                reference.Assign( o.ResolveReference() );
             }
             else
             {
@@ -133,6 +120,11 @@ namespace BadScript.Types.Implementations
         public void Lock()
         {
             m_Locked = true;
+        }
+
+        public override void Remove( ABSObject k )
+        {
+            m_InnerTable.Remove( k.ResolveReference() );
         }
 
         public override void RemoveElement( ABSObject k )
@@ -248,6 +240,14 @@ namespace BadScript.Types.Implementations
         #endregion
 
         #region Private
+
+        IEnumerator < IForEachIteration > IEnumerable < IForEachIteration >.GetEnumerator()
+        {
+            foreach ( KeyValuePair < ABSObject, ABSObject > keyValuePair in m_InnerTable )
+            {
+                yield return new ForEachIteration( new[] { keyValuePair.Key, keyValuePair.Value } );
+            }
+        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {

@@ -2,14 +2,28 @@ using BadScript.Plugins;
 
 namespace BadScript.Imaging
 {
-    public class BSImagingPlugin : Plugin<BSEngineSettings>
+
+    public class BSImagingPlugin : Plugin < BSEngineSettings >
     {
-        public BSImagingPlugin() : base("BadScript.Imaging", "Image/Drawing API", "Tim Akermann", typeof(BSImagingPlugin).Assembly.GetName().Version)
+
+        #region Public
+
+        public BSImagingPlugin() : base(
+                                        "BadScript.Imaging",
+                                        "Image/Drawing API",
+                                        "Tim Akermann",
+                                        typeof( BSImagingPlugin ).Assembly.GetName().Version
+                                       )
         {
         }
-        public override void Load(BSEngineSettings settings)
+
+        public override void Load( BSEngineSettings settings )
         {
-            settings.Interfaces.Add(new BSDrawingInterface());
+            settings.Interfaces.Add( new BSDrawingInterface() );
         }
+
+        #endregion
+
     }
+
 }

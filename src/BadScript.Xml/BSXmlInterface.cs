@@ -6,6 +6,7 @@ using BadScript.Types.Implementations;
 
 namespace BadScript.Xml
 {
+
     public class BSXmlInterface : ABSScriptInterface
     {
 

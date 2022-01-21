@@ -15,9 +15,10 @@ namespace BadScript.StringUtils
         {
             t.InsertElement( new BSObject( name ), o );
         }
-        public static void InsertElement( this Dictionary <string, BSFunction> t, string name, BSFunction o )
+
+        public static void InsertElement( this Dictionary < string, BSFunction > t, string name, BSFunction o )
         {
-            t.Add( name , o );
+            t.Add( name, o );
         }
 
         #endregion

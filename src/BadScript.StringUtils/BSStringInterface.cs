@@ -11,6 +11,7 @@ using BadScript.Types.References;
 
 namespace BadScript.StringUtils
 {
+
     public class BSStringInterface : ABSScriptInterface
     {
 
@@ -18,27 +19,153 @@ namespace BadScript.StringUtils
 
         #region Public
 
-
         public BSStringInterface() : base( "String" )
         {
             Api = GetApi();
         }
 
+        public override void AddApi( ABSTable apiRoot )
+        {
+            foreach ( KeyValuePair < string, BSFunction > keyValuePair in Api )
+            {
+                apiRoot.InsertElement( keyValuePair.Key, keyValuePair.Value );
+            }
+        }
+
+        #endregion
+
+        #region Private
+
+        private static ABSObject CharAt( ABSObject[] arg )
+        {
+            return new BSObject( arg[0].ConvertString()[( int )arg[1].ConvertDecimal()].ToString() );
+        }
+
+        private static ABSObject EndsWith( ABSObject[] arg )
+        {
+            return arg[0].ConvertString().EndsWith( arg[1].ConvertString() ) ? BSObject.True : BSObject.False;
+        }
+
+        private static ABSObject IndexOf( ABSObject[] arg )
+        {
+            string str = arg[0].ConvertString();
+            string searchStr = arg[1].ConvertString();
+            int idx = str.IndexOf( searchStr );
+
+            return new BSObject( ( decimal )idx );
+        }
+
+        private static ABSObject Insert( ABSObject[] arg )
+        {
+            return new BSObject(
+                                arg[0].ConvertString().Insert( ( int )arg[1].ConvertDecimal(), arg[2].ConvertString() )
+                               );
+        }
+
+        private static ABSObject LastIndexOf( ABSObject[] arg )
+        {
+            return new BSObject( ( decimal )arg[0].ConvertString().LastIndexOf( arg[1].ConvertString() ) );
+        }
+
+        private static BSFunction MakeFunction( string data, Func < ABSObject[], ABSObject > f, int min, int max )
+        {
+            return new BSFunction(
+                                  data,
+                                  f,
+                                  min,
+                                  max
+                                 );
+        }
+
+        private static ABSObject Remove( ABSObject[] arg )
+        {
+            return new BSObject(
+                                arg[0].
+                                    ConvertString().
+                                    Remove( ( int )arg[1].ConvertDecimal(), ( int )arg[2].ConvertDecimal() )
+                               );
+        }
+
+        private static ABSObject Replace( ABSObject[] arg )
+        {
+            string str = arg[0].ConvertString();
+            string oldS = arg[1].ConvertString();
+            string newS = arg[2].ConvertString();
+
+            return new BSObject( str.Replace( oldS, newS ) );
+        }
+
+        private static ABSObject Split( ABSObject[] arg )
+        {
+            ABSObject str = arg[0].ResolveReference();
+
+            return new BSArray(
+                               str.ConvertString().
+                                   Split(
+                                         arg.Skip( 1 ).Select( x => x.ConvertString() ).ToArray(),
+                                         StringSplitOptions.None
+                                        ).
+                                   Select( x => new BSObject( x ) )
+                              );
+        }
+
+        private static ABSObject StartsWith( ABSObject[] arg )
+        {
+            return arg[0].ConvertString().StartsWith( arg[1].ConvertString() ) ? BSObject.True : BSObject.False;
+        }
+
+        private static ABSObject Substr( ABSObject[] arg )
+        {
+            if ( arg.Length == 2 )
+            {
+                return new BSObject( arg[0].ConvertString().Substring( ( int )arg[1].ConvertDecimal() ) );
+            }
+
+            return new BSObject(
+                                arg[0].
+                                    ConvertString().
+                                    Substring( ( int )arg[1].ConvertDecimal(), ( int )arg[2].ConvertDecimal() )
+                               );
+        }
+
+        private static ABSObject ToArray( ABSObject[] arg )
+        {
+            return new BSArray( arg[0].ConvertString().ToCharArray().Select( x => new BSObject( x.ToString() ) ) );
+        }
+
+        private static ABSObject ToLower( ABSObject[] arg )
+        {
+            return new BSObject( arg[0].ConvertString().ToLower() );
+        }
+
+        private static ABSObject ToUpper( ABSObject[] arg )
+        {
+            return new BSObject( arg[0].ConvertString().ToUpper() );
+        }
+
+        private ABSObject EscapeString( ABSObject[] arg )
+        {
+            string str = arg[0].ConvertString();
+
+            return new BSObject( Uri.EscapeDataString( str ) );
+        }
+
         private Dictionary < string, BSFunction > GetApi()
         {
             Dictionary < string, BSFunction > apiRoot = new Dictionary < string, BSFunction >();
+
             apiRoot.InsertElement(
-                                  "Escape" ,
+                                  "Escape",
                                   new BSFunction( "function Escape(str)", EscapeString, 1 )
                                  );
 
             apiRoot.InsertElement(
-                                   "RegexEscape",
+                                  "RegexEscape",
                                   new BSFunction( "function RegexEscape(str)", RegexEscapeString, 1 )
                                  );
 
             apiRoot.InsertElement(
-                                   "RegexUnescape" ,
+                                  "RegexUnescape",
                                   new BSFunction( "function RegexUnescape(str)", RegexUnescapeString, 1 )
                                  );
 
@@ -206,134 +333,6 @@ namespace BadScript.StringUtils
                                  );
 
             return apiRoot;
-        }
-
-        public override void AddApi( ABSTable apiRoot )
-        {
-
-            foreach ( KeyValuePair<string,BSFunction> keyValuePair in Api )
-            {
-                apiRoot.InsertElement( keyValuePair.Key, keyValuePair.Value );
-            }
-           
-        }
-
-        #endregion
-
-        #region Private
-
-        private static ABSObject CharAt( ABSObject[] arg )
-        {
-            return new BSObject( arg[0].ConvertString()[( int )arg[1].ConvertDecimal()].ToString() );
-        }
-
-        private static ABSObject EndsWith( ABSObject[] arg )
-        {
-            return arg[0].ConvertString().EndsWith( arg[1].ConvertString() ) ? BSObject.True : BSObject.False;
-        }
-
-        private static ABSObject IndexOf( ABSObject[] arg )
-        {
-            string str = arg[0].ConvertString();
-            string searchStr = arg[1].ConvertString();
-            int idx = str.IndexOf( searchStr );
-
-            return new BSObject( ( decimal )idx );
-        }
-
-        private static ABSObject Insert( ABSObject[] arg )
-        {
-            return new BSObject(
-                                arg[0].ConvertString().Insert( ( int )arg[1].ConvertDecimal(), arg[2].ConvertString() )
-                               );
-        }
-
-        private static ABSObject LastIndexOf( ABSObject[] arg )
-        {
-            return new BSObject( ( decimal )arg[0].ConvertString().LastIndexOf( arg[1].ConvertString() ) );
-        }
-
-        private static BSFunction MakeFunction( string data, Func < ABSObject[], ABSObject > f, int min, int max )
-        {
-            return new BSFunction(
-                                  data,
-                                  f,
-                                  min,
-                                  max
-                                 );
-        }
-
-        private static ABSObject Remove( ABSObject[] arg )
-        {
-            return new BSObject(
-                                arg[0].
-                                    ConvertString().
-                                    Remove( ( int )arg[1].ConvertDecimal(), ( int )arg[2].ConvertDecimal() )
-                               );
-        }
-
-        private static ABSObject Replace( ABSObject[] arg )
-        {
-            string str = arg[0].ConvertString();
-            string oldS = arg[1].ConvertString();
-            string newS = arg[2].ConvertString();
-
-            return new BSObject( str.Replace( oldS, newS ) );
-        }
-
-        private static ABSObject Split( ABSObject[] arg )
-        {
-            ABSObject str = arg[0].ResolveReference();
-
-            return new BSArray(
-                               str.ConvertString().
-                                   Split(
-                                         arg.Skip( 1 ).Select( x => x.ConvertString() ).ToArray(),
-                                         StringSplitOptions.None
-                                        ).
-                                   Select( x => new BSObject( x ) )
-                              );
-        }
-
-        private static ABSObject StartsWith( ABSObject[] arg )
-        {
-            return arg[0].ConvertString().StartsWith( arg[1].ConvertString() ) ? BSObject.True : BSObject.False;
-        }
-
-        private static ABSObject Substr( ABSObject[] arg )
-        {
-            if ( arg.Length == 2 )
-            {
-                return new BSObject( arg[0].ConvertString().Substring( ( int )arg[1].ConvertDecimal() ) );
-            }
-
-            return new BSObject(
-                                arg[0].
-                                    ConvertString().
-                                    Substring( ( int )arg[1].ConvertDecimal(), ( int )arg[2].ConvertDecimal() )
-                               );
-        }
-
-        private static ABSObject ToArray( ABSObject[] arg )
-        {
-            return new BSArray( arg[0].ConvertString().ToCharArray().Select( x => new BSObject( x.ToString() ) ) );
-        }
-
-        private static ABSObject ToLower( ABSObject[] arg )
-        {
-            return new BSObject( arg[0].ConvertString().ToLower() );
-        }
-
-        private static ABSObject ToUpper( ABSObject[] arg )
-        {
-            return new BSObject( arg[0].ConvertString().ToUpper() );
-        }
-
-        private ABSObject EscapeString( ABSObject[] arg )
-        {
-            string str = arg[0].ConvertString();
-
-            return new BSObject( Uri.EscapeDataString( str ) );
         }
 
         private ABSObject RegexEscapeString( ABSObject[] arg )

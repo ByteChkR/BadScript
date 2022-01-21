@@ -47,8 +47,10 @@ namespace BadScript.Plugins
                 }
             }
 
-            if(log)
+            if ( log )
+            {
                 OnLog?.Invoke( sb.ToString() );
+            }
         }
 
         public static IEnumerable < Plugin > LoadedPlugins( object i )

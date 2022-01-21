@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using BadScript.Interfaces.Collection;
 using BadScript.Interfaces.Convert;
 using BadScript.Interfaces.Versioning;
 using BadScript.Reflection;
+
 using CommandLine;
 
 namespace BadScript.Console.Subsystems
@@ -38,6 +39,7 @@ namespace BadScript.Console.Subsystems
             es.Interfaces.Add( new BSCollectionInterface() );
             es.Interfaces.Add( new BSConvertInterface() );
             es.Interfaces.Add( new BSVersioningInterface() );
+
             // es.Interfaces.Add( new BSCollectionInterface() );
             // es.Interfaces.Add( new BSConvertInterface() );
             // es.Interfaces.Add( new BSSystemConsoleInterface() );

@@ -17,7 +17,7 @@ namespace BadScript.NUnit.Utils
 
         private static BSRunnableTestCase[] s_Cases;
 
-        public static T Instance => s_Instance ?? (s_Instance = new T());
+        public static T Instance => s_Instance ?? ( s_Instance = new T() );
 
         #region Public
 

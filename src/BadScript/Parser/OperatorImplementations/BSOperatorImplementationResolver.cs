@@ -159,7 +159,6 @@ namespace BadScript.Parser.OperatorImplementations
             m_Implementations.Add( new BSPropertyExpressionImplementation() );
             m_Implementations.Add( new BSInvocationExpressionOperatorImplementation() );
             m_Implementations.Add( new BSRangeOperatorImplementation() );
-            
         }
 
         #endregion

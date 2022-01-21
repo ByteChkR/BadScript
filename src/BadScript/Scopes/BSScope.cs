@@ -20,7 +20,7 @@ namespace BadScript.Scopes
     {
 
         private BSNamespace m_Namespace;
-        
+
         private readonly BSScopeFlags m_AllowedFlags;
         private BSScopeFlags m_CurrentFlag;
         private readonly BSEngine m_Instance;
@@ -151,7 +151,7 @@ namespace BadScript.Scopes
 
         public IEnumerator < IForEachIteration > GetEnumerator()
         {
-            return ((IEnumerable < IForEachIteration >)m_LocalVars).GetEnumerator();
+            return ( ( IEnumerable < IForEachIteration > )m_LocalVars ).GetEnumerator();
         }
 
         /// <summary>

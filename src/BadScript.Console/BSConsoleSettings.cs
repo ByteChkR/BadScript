@@ -1,5 +1,4 @@
-﻿using BadScript.Plugins;
-using CommandLine;
+﻿using CommandLine;
 
 namespace BadScript.Console
 {
@@ -9,7 +8,6 @@ namespace BadScript.Console
 
         [Option( "nologo", HelpText = "Does not print the BS Console Header if specified" )]
         public bool NoLogo { get; set; }
-
 
     }
 

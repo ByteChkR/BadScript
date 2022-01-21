@@ -68,18 +68,6 @@ namespace BadScript.Types.Implementations
             return new BSArrayReference( this, i, m_Locked );
         }
 
-        IEnumerator < IForEachIteration > IEnumerable<IForEachIteration>.GetEnumerator()
-        {
-            ABSObject[] o = new ABSObject[1];
-
-            foreach ( ABSObject absObject in m_InnerArray )
-            {
-                o[0] = absObject;
-
-                yield return new ForEachIteration( o );
-            }
-        }
-
         public override int GetLength()
         {
             return m_InnerArray.Count;
@@ -341,14 +329,14 @@ namespace BadScript.Types.Implementations
                                                     0
                                                    );
 
-            m_Functions["Contains"] = new BSFunction("function Contains(item)", ArrayContains, 1);
+            m_Functions["Contains"] = new BSFunction( "function Contains(item)", ArrayContains, 1 );
 
             m_Functions["ContentEquals"] = new BSFunction( "function ContentEquals(array)", ArrayContentEquals, 1 );
         }
 
-        private ABSObject ArrayContains(ABSObject[] arg)
+        private ABSObject ArrayContains( ABSObject[] arg )
         {
-            return m_InnerArray.Contains(arg[0].ResolveReference())? BSObject.True : BSObject.False;
+            return m_InnerArray.Contains( arg[0].ResolveReference() ) ? BSObject.True : BSObject.False;
         }
 
         private ABSObject ArrayContentEquals( ABSObject[] arg )
@@ -369,6 +357,18 @@ namespace BadScript.Types.Implementations
             }
 
             return BSObject.True;
+        }
+
+        IEnumerator < IForEachIteration > IEnumerable < IForEachIteration >.GetEnumerator()
+        {
+            ABSObject[] o = new ABSObject[1];
+
+            foreach ( ABSObject absObject in m_InnerArray )
+            {
+                o[0] = absObject;
+
+                yield return new ForEachIteration( o );
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

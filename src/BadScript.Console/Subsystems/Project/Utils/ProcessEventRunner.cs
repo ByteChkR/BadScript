@@ -83,7 +83,7 @@ namespace BadScript.Console.Subsystems.Project.Utils
 
         public ProcessExitMode Run()
         {
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            Process p = new Process();
             p.StartInfo = StartInfo;
             p.EnableRaisingEvents = true;
 

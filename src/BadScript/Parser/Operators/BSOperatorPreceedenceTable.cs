@@ -205,7 +205,6 @@ namespace BadScript.Parser.Operators
 
         public static BSOperator Get( int p, string key )
         {
-            
             return Get( s_Operators, p, key );
         }
 

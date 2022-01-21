@@ -11,7 +11,7 @@ using BadScript.Types.References;
 namespace BadScript.Parser.OperatorImplementations.Implementations.Range
 {
 
-    public class BSRangeEnumerableObject : ABSObject, IEnumerable<IForEachIteration>
+    public class BSRangeEnumerableObject : ABSObject, IEnumerable < IForEachIteration >
     {
 
         private readonly int m_Start;
@@ -20,37 +20,37 @@ namespace BadScript.Parser.OperatorImplementations.Implementations.Range
 
         #region Public
 
-        public BSRangeEnumerableObject(SourcePosition pos, int start, int end) : base(pos)
+        public BSRangeEnumerableObject( SourcePosition pos, int start, int end ) : base( pos )
         {
             m_Start = start;
             m_End = end;
             m_Step = m_End < m_Start ? -1 : 1;
         }
 
-        public override bool Equals(ABSObject other)
+        public override bool Equals( ABSObject other )
         {
-            return other is BSRangeEnumerableObject o && ReferenceEquals(this, o);
+            return other is BSRangeEnumerableObject o && ReferenceEquals( this, o );
         }
 
-        public IEnumerator<IForEachIteration> GetEnumerator()
+        public IEnumerator < IForEachIteration > GetEnumerator()
         {
-            for (int i = m_Start; i <= m_End; i+= m_Step)
+            for ( int i = m_Start; i <= m_End; i += m_Step )
             {
-                yield return new ForEachIteration(new BSObject((decimal)i));
+                yield return new ForEachIteration( new BSObject( ( decimal )i ) );
             }
         }
 
-        public override ABSReference GetProperty(string propertyName)
+        public override ABSReference GetProperty( string propertyName )
         {
             throw new NotSupportedException();
         }
 
-        public override bool HasProperty(string propertyName)
+        public override bool HasProperty( string propertyName )
         {
             return false;
         }
 
-        public override ABSObject Invoke(ABSObject[] args)
+        public override ABSObject Invoke( ABSObject[] args )
         {
             throw new NotSupportedException();
         }
@@ -60,31 +60,31 @@ namespace BadScript.Parser.OperatorImplementations.Implementations.Range
             return false;
         }
 
-        public override string SafeToString(Dictionary<ABSObject, string> doneList)
+        public override string SafeToString( Dictionary < ABSObject, string > doneList )
         {
             return $"Range Enumerator({m_Start}..{m_End})";
         }
 
-        public override void SetProperty(string propertyName, ABSObject obj)
+        public override void SetProperty( string propertyName, ABSObject obj )
         {
             throw new NotSupportedException();
         }
 
-        public override bool TryConvertBool(out bool v)
+        public override bool TryConvertBool( out bool v )
         {
             v = false;
 
             return false;
         }
 
-        public override bool TryConvertDecimal(out decimal d)
+        public override bool TryConvertDecimal( out decimal d )
         {
             d = 0;
 
             return false;
         }
 
-        public override bool TryConvertString(out string v)
+        public override bool TryConvertString( out string v )
         {
             v = null;
 

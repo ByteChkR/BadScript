@@ -31,7 +31,7 @@ namespace BadScript.Console.AppPackage
             m_Archive.Dispose();
         }
 
-        public IEnumerable <string> GetAllItemPaths()
+        public IEnumerable < string > GetAllItemPaths()
         {
             return m_Archive.Entries.Select( x => x.FullName );
         }

@@ -50,53 +50,54 @@ namespace BadScript.Interfaces.Collection
                               );
 
             root.InsertElement(
-                new BSObject( "Keys" ),
-                new BSFunction(
-                    "function Keys(table)",
-                    objects =>
-                    {
-                        ABSObject a = objects[0].ResolveReference();
+                               new BSObject( "Keys" ),
+                               new BSFunction(
+                                              "function Keys(table)",
+                                              objects =>
+                                              {
+                                                  ABSObject a = objects[0].ResolveReference();
 
-                        if ( a is ABSTable t )
-                        {
-                            return t.Keys;
-                        }
+                                                  if ( a is ABSTable t )
+                                                  {
+                                                      return t.Keys;
+                                                  }
 
-                        throw new BSInvalidTypeException(
-                            a.Position,
-                            "Object is not a table",
-                            a,
-                            "Table"
-                        );
-                    },
-                    1
-                )
-            );
-            
+                                                  throw new BSInvalidTypeException(
+                                                       a.Position,
+                                                       "Object is not a table",
+                                                       a,
+                                                       "Table"
+                                                      );
+                                              },
+                                              1
+                                             )
+                              );
+
             root.InsertElement(
-                new BSObject( "Remove" ),
-                new BSFunction(
-                    "function Remove(table, key)",
-                    objects =>
-                    {
-                        ABSObject a = objects[0].ResolveReference();
+                               new BSObject( "Remove" ),
+                               new BSFunction(
+                                              "function Remove(table, key)",
+                                              objects =>
+                                              {
+                                                  ABSObject a = objects[0].ResolveReference();
 
-                        if ( a is ABSTable t )
-                        {
-                            t.Remove(objects[1].ResolveReference());
-                            return BSObject.Null;
-                        }
+                                                  if ( a is ABSTable t )
+                                                  {
+                                                      t.Remove( objects[1].ResolveReference() );
 
-                        throw new BSInvalidTypeException(
-                            a.Position,
-                            "Object is not a table",
-                            a,
-                            "Table"
-                        );
-                    },
-                    2
-                )
-            );
+                                                      return BSObject.Null;
+                                                  }
+
+                                                  throw new BSInvalidTypeException(
+                                                       a.Position,
+                                                       "Object is not a table",
+                                                       a,
+                                                       "Table"
+                                                      );
+                                              },
+                                              2
+                                             )
+                              );
 
             root.InsertElement(
                                new BSObject( "Values" ),

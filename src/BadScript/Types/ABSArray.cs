@@ -11,7 +11,7 @@ namespace BadScript.Types
     /// <summary>
     ///     Base Implementations for all arrays inside the language
     /// </summary>
-    public abstract class ABSArray : ABSObject, IEnumerable <ABSObject>
+    public abstract class ABSArray : ABSObject, IEnumerable < ABSObject >
     {
 
         #region Public
@@ -83,6 +83,14 @@ namespace BadScript.Types
             }
         }
 
+        public IEnumerator < ABSObject > GetEnumerator()
+        {
+            for ( int i = 0; i < GetLength(); i++ )
+            {
+                yield return GetRawElement( i );
+            }
+        }
+
         #endregion
 
         #region Protected
@@ -93,18 +101,14 @@ namespace BadScript.Types
 
         #endregion
 
-        public IEnumerator < ABSObject > GetEnumerator()
-        {
-            for ( int i = 0; i < GetLength(); i++ )
-            {
-                yield return GetRawElement( i );
-            }
-        }
+        #region Private
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
+
+        #endregion
 
     }
 

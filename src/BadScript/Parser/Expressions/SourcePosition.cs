@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace BadScript.Parser.Expressions
+﻿namespace BadScript.Parser.Expressions
 {
 
     public readonly struct SourcePosition
@@ -38,9 +35,14 @@ namespace BadScript.Parser.Expressions
             for ( int i = 0; i < pos; i++ )
             {
                 if ( i >= src.Length )
+                {
                     break;
-                if (src[i] == '\n' )
+                }
+
+                if ( src[i] == '\n' )
+                {
                     lines++;
+                }
             }
 
             return lines + 1;
@@ -49,10 +51,14 @@ namespace BadScript.Parser.Expressions
         private static int GetLineIndex( string src, int pos )
         {
             int index = 0;
+
             for ( int i = pos; i > 0; i-- )
             {
                 if ( i >= src.Length )
+                {
                     continue;
+                }
+
                 if ( src[i] == '\n' )
                 {
                     index = i;
@@ -60,8 +66,11 @@ namespace BadScript.Parser.Expressions
                     break;
                 }
             }
-            if(index != 0)
-            return index+1;
+
+            if ( index != 0 )
+            {
+                return index + 1;
+            }
 
             return index;
         }
@@ -73,13 +82,14 @@ namespace BadScript.Parser.Expressions
 
             int start = pos;
             char[] str = src.ToCharArray();
-            int nextLine = src.IndexOf( '\n', start+1 );
+            int nextLine = src.IndexOf( '\n', start + 1 );
 
             if ( nextLine == -1 )
             {
                 nextLine = src.Length;
             }
-            string line = src.Substring(lineIndex, nextLine - lineIndex);
+
+            string line = src.Substring( lineIndex, nextLine - lineIndex );
             int col = start - lineIndex;
 
             return new SourcePosition( src, line, lineCount, col, pos );

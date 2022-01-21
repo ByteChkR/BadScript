@@ -57,8 +57,7 @@ namespace BadScript.Console.AppPackage
             catch ( Exception e )
             {
 #if RELEASE
-
-                ConsoleWriter.ErrorLine("App Crashed: " + e.Message); 
+                ConsoleWriter.ErrorLine("App Crashed: " + e.Message);
 #elif DEBUG
                 ConsoleWriter.ErrorLine( "App Crashed: " + e );
 #endif

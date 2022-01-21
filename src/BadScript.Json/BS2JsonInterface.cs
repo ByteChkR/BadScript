@@ -4,6 +4,7 @@ using BadScript.Types.Implementations;
 
 namespace BadScript.Json
 {
+
     public class BS2JsonInterface : ABSScriptInterface
     {
 

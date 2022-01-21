@@ -7,6 +7,7 @@ using BadScript.Types.References;
 
 namespace BadScript.Zip
 {
+
     public class BSZipInterface : ABSScriptInterface
     {
 

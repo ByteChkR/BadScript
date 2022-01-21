@@ -4,13 +4,14 @@ using System.Linq;
 
 using BadScript.Console.AppPackage;
 using BadScript.Console.Logging;
-using BadScript.Plugins;
 using BadScript.Console.Subsystems.Compile;
 using BadScript.Console.Subsystems.Include;
 using BadScript.Console.Subsystems.Project;
 using BadScript.Console.Subsystems.Run;
 using BadScript.Interfaces.Environment.Settings;
+using BadScript.Plugins;
 using BadScript.Settings;
+
 using CommandLine;
 
 namespace BadScript.Console
@@ -26,29 +27,31 @@ namespace BadScript.Console
             return -1;
         }
 
-        private static void LoadPlugins(bool logPlugins)
+        private static void LoadPlugins( bool logPlugins )
         {
-            SettingsCategory cat = BSSettings.BsRoot.FindCategory("core.settings.plugins", true);
-            bool enable = cat.GetSetting("enable", "true").Value == "true";
-            if (!enable) return;
+            SettingsCategory cat = BSSettings.BsRoot.FindCategory( "core.settings.plugins", true );
+            bool enable = cat.GetSetting( "enable", "true" ).Value == "true";
 
-            if (!cat.HasSetting("path"))
+            if ( !enable )
             {
-                cat.SetSetting("path", Path.Combine(BSConsoleDirectories.Instance.DataDirectory, "plugins"));
+                return;
             }
 
-            SettingsPair pair = cat.GetSetting("path");
+            if ( !cat.HasSetting( "path" ) )
+            {
+                cat.SetSetting( "path", Path.Combine( BSConsoleDirectories.Instance.DataDirectory, "plugins" ) );
+            }
 
-            Directory.CreateDirectory(pair.Value);
-            PluginManager.InitializePlugins(pair.Value,logPlugins );
+            SettingsPair pair = cat.GetSetting( "path" );
+
+            Directory.CreateDirectory( pair.Value );
+            PluginManager.InitializePlugins( pair.Value, logPlugins );
         }
-        
+
         private static int Main( string[] args )
         {
             PluginManager.OnLog += ConsoleWriter.LogLine;
             BSSettings.BsRoot.LoadFromDirectory( BSConsoleDirectories.Instance.SettingsDirectory );
-
-            
 
             int ret = 0;
 
@@ -61,7 +64,8 @@ namespace BadScript.Console
                                   MapResult(
                                             ( ProjectCreatorSettings o ) =>
                                             {
-                                                LoadPlugins(!o.NoLogo);
+                                                LoadPlugins( !o.NoLogo );
+
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -71,7 +75,8 @@ namespace BadScript.Console
                                             },
                                             ( ProjectBuilderSettings o ) =>
                                             {
-                                                LoadPlugins(!o.NoLogo);
+                                                LoadPlugins( !o.NoLogo );
+
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -90,7 +95,8 @@ namespace BadScript.Console
                                   MapResult(
                                             ( ScriptRunnerSettings o ) =>
                                             {
-                                                LoadPlugins(!o.NoLogo);
+                                                LoadPlugins( !o.NoLogo );
+
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -100,7 +106,8 @@ namespace BadScript.Console
                                             },
                                             ( ScriptCompilerSettings o ) =>
                                             {
-                                                LoadPlugins(!o.NoLogo);
+                                                LoadPlugins( !o.NoLogo );
+
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -110,7 +117,8 @@ namespace BadScript.Console
                                             },
                                             ( IncludeManagerSettings o ) =>
                                             {
-                                                LoadPlugins(!o.NoLogo);
+                                                LoadPlugins( !o.NoLogo );
+
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -120,7 +128,8 @@ namespace BadScript.Console
                                             },
                                             ( AppPackageRunnerSettings o ) =>
                                             {
-                                                LoadPlugins(!o.NoLogo);
+                                                LoadPlugins( !o.NoLogo );
+
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();
@@ -130,7 +139,8 @@ namespace BadScript.Console
                                             },
                                             ( AppBuilderSettings o ) =>
                                             {
-                                                LoadPlugins(!o.NoLogo);
+                                                LoadPlugins( !o.NoLogo );
+
                                                 if ( !o.NoLogo )
                                                 {
                                                     PrintHeaderInfo();

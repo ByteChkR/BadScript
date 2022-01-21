@@ -17,6 +17,7 @@ namespace BadScript.Parser.Expressions
         protected readonly SourcePosition m_Position;
 
         public SourcePosition Position => m_Position;
+
         /// <summary>
         ///     True if an expression can be computed once because the result never changes
         /// </summary>

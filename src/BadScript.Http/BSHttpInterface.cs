@@ -13,6 +13,7 @@ using BadScript.Types.References;
 
 namespace BadScript.Http
 {
+
     public class BSHttpInterface : ABSScriptInterface
     {
 
@@ -85,7 +86,8 @@ namespace BadScript.Http
 
             if ( args.Length == 2 )
             {
-                IEnumerable < IForEachIteration > headers = ( IEnumerable < IForEachIteration > )args[1].ResolveReference();
+                IEnumerable < IForEachIteration > headers =
+                    ( IEnumerable < IForEachIteration > )args[1].ResolveReference();
 
                 foreach ( IForEachIteration forEachIteration in headers )
                 {

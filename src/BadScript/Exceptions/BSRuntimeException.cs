@@ -13,21 +13,28 @@ namespace BadScript.Exceptions
 
         #region Public
 
-        public BSRuntimeException( string msg ) : base($"{msg}\n{BSFunction.FlatTrace}")
+        public BSRuntimeException( string msg ) : base( $"{msg}\n{BSFunction.FlatTrace}" )
         {
             Position = SourcePosition.Unknown;
         }
 
-        public BSRuntimeException(string msg, Exception innerException) : base($"{msg}\n{BSFunction.FlatTrace}", innerException)
+        public BSRuntimeException( string msg, Exception innerException ) : base(
+             $"{msg}\n{BSFunction.FlatTrace}",
+             innerException
+            )
         {
             Position = SourcePosition.Unknown;
         }
-        public BSRuntimeException(SourcePosition pos, string msg) : base(GenerateMessage(pos, msg))
+
+        public BSRuntimeException( SourcePosition pos, string msg ) : base( GenerateMessage( pos, msg ) )
         {
             Position = pos;
         }
 
-        public BSRuntimeException(SourcePosition pos, string msg, Exception innerException) : base(GenerateMessage(pos, msg), innerException)
+        public BSRuntimeException( SourcePosition pos, string msg, Exception innerException ) : base(
+             GenerateMessage( pos, msg ),
+             innerException
+            )
         {
             Position = pos;
         }

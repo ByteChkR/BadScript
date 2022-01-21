@@ -126,9 +126,9 @@ namespace BadScript.ConsoleUtils
             root.SetRawElement(
                                "Title",
                                new BSReflectionReference(
-                                   () => new BSObject(Console.Title),
+                                                         () => new BSObject( Console.Title ),
                                                          x => Console.Title = x.ConvertString(),
-                                   BSObject.EmptyString
+                                                         BSObject.EmptyString
                                                         )
                               );
 

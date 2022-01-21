@@ -18,7 +18,11 @@ namespace BadScript.Parser.Operators.Implementations
             parser.ReadWhitespaceAndNewLine();
             string wordName = parser.GetNextWord();
 
-            return new BSNullCheckPropertyExpression( parser.CreateSourcePosition(parser.GetPosition()), left, wordName );
+            return new BSNullCheckPropertyExpression(
+                                                     parser.CreateSourcePosition( parser.GetPosition() ),
+                                                     left,
+                                                     wordName
+                                                    );
         }
 
         #endregion

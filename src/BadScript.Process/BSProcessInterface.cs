@@ -6,6 +6,7 @@ using BadScript.Types.References;
 
 namespace BadScript.Process
 {
+
     public class BSProcessInterface : ABSScriptInterface
     {
 

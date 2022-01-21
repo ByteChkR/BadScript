@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 
@@ -306,9 +305,13 @@ namespace BadScript.Types
                 {
                     RestoreStack( this );
                 }
+
                 PopStack();
-                if(!(e is BSRuntimeException))
-                    throw new BSRuntimeException($"Execution Failed: {e.Message}", e);
+
+                if ( !( e is BSRuntimeException ) )
+                {
+                    throw new BSRuntimeException( $"Execution Failed: {e.Message}", e );
+                }
 
                 throw;
             }
@@ -409,8 +412,7 @@ namespace BadScript.Types
 
             m_Properties["MinArgs"] =
                 new BSReflectionReference( () => new BSObject( ( decimal )m_ParameterCount.min ), null );
-            
-            
+
             m_Properties["Name"] =
                 new BSReflectionReference( () => new BSObject( DebugData ), null );
 
@@ -491,7 +493,10 @@ namespace BadScript.Types
                 Stack < BSFunction > stack = s_Stacks[Thread.CurrentThread];
 
                 if ( stack.Count == 0 )
+                {
                     return null;
+                }
+
                 return stack.Pop();
             }
 

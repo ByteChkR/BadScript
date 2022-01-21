@@ -25,7 +25,7 @@ namespace BadScript.Exceptions
 
         private static string GenerateErrorMessage( string msg, BSParser parser )
         {
-            SourcePosition p = parser.CreateSourcePosition(parser.GetPosition());
+            SourcePosition p = parser.CreateSourcePosition( parser.GetPosition() );
 
             return $"Parser Exception: '{msg}' at {p.Line}:{p.Collumn}\nLine: '{p.LineStr}'";
         }

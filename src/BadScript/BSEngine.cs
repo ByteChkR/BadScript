@@ -29,7 +29,10 @@ namespace BadScript
     {
 
         private static readonly List < BSExpressionValidator > s_Validators =
-            new List < BSExpressionValidator > {/* new BSFunctionReturnExpressionValidator() */};
+            new List < BSExpressionValidator >
+            {
+                /* new BSFunctionReturnExpressionValidator() */
+            };
 
         private readonly Dictionary < string, ABSObject > m_Preprocessors;
 

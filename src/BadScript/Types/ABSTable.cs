@@ -10,7 +10,7 @@ namespace BadScript.Types
     /// <summary>
     ///     Base Implementation for all tables inside the language
     /// </summary>
-    public abstract class ABSTable : ABSObject, IEnumerable <(ABSObject, ABSObject)>
+    public abstract class ABSTable : ABSObject, IEnumerable < (ABSObject, ABSObject) >
     {
 
         /// <summary>
@@ -64,6 +64,8 @@ namespace BadScript.Types
         /// <param name="o">Value</param>
         public abstract void InsertElement( ABSObject k, ABSObject o );
 
+        public abstract void Remove( ABSObject k );
+
         /// <summary>
         ///     Removes an element with the specified key
         /// </summary>
@@ -77,7 +79,15 @@ namespace BadScript.Types
         /// <returns></returns>
         public abstract void SetRawElement( ABSObject k, ABSObject o );
 
-        public abstract void Remove(ABSObject k);
+        public IEnumerator < (ABSObject, ABSObject) > GetEnumerator()
+        {
+            ABSArray keys = Keys;
+
+            foreach ( ABSObject key in keys )
+            {
+                yield return ( key, GetRawElement( key ) );
+            }
+        }
 
         #endregion
 
@@ -89,20 +99,14 @@ namespace BadScript.Types
 
         #endregion
 
-        public IEnumerator < (ABSObject, ABSObject) > GetEnumerator()
-        {
-            ABSArray keys = Keys;
-
-            foreach ( ABSObject key in keys )
-            {
-                yield return (key, GetRawElement(key));
-            }
-        }
+        #region Private
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
+
+        #endregion
 
     }
 
