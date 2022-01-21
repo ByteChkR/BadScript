@@ -1,7 +1,0 @@
-namespace BadOS.Core.EventSystem
-{
-	class EventHandler
-	{
-		
-	}
-}

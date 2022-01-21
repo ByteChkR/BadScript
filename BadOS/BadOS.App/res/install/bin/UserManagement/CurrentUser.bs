@@ -1,5 +1,0 @@
-
-Console = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Console")
-name = ProcessInfo.GetUser().GetName()
-
-return name

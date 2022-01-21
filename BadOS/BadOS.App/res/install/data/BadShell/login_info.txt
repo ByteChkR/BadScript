@@ -1,5 +1,0 @@
-BadShell(bsh) Login Script v0.1
-
-This is a prerelease.
-
-Modify '/data/BadShell/login_info.txt' to change this text.

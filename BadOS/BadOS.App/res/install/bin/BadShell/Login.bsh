@@ -1,9 +1,0 @@
-
-write "Login: "
-set LOGINUSER $(read_line)
-if $(test_user %LOGINUSER%) $({
-	runas tim %start% "/bin/BadShell.bs" "/data/BadShell/aliases.bsh" "/data/BadShell/user_login.bsh"
-	exit
-}) else $({
-	echo "User does not exist."
-})

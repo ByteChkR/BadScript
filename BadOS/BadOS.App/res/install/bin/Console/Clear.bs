@@ -1,5 +1,0 @@
-
-Console = Extensions.GetExtension(ProcessInfo.GetUser(), "BadOS.Extensions.Console")
-
-
-Console.Clear()

@@ -1,8 +1,0 @@
-namespace BadOS.Core.Events
-{
-
-	#EVENT_CREATE(OnShutdownEvent, OS_SHUTDOWN)
-
-	#EVENT_HANDLER_CREATE(OnShutdownHandler, OS_SHUTDOWN)
-
-}

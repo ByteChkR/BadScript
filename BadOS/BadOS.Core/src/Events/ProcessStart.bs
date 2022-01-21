@@ -1,7 +1,0 @@
-namespace BadOS.Core.Events
-{
-
-
-	#EVENT_HANDLER_CREATE(ProcessStartHandler, OS_PROC_START)
-
-}
