@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
 using BadScript.Types;
 using BadScript.Types.Implementations;
@@ -19,7 +18,11 @@ namespace BadScript.Json
 
         public static ABSObject Convert( ABSObject[] args )
         {
-            if(args.Length==2)return Populate(args);
+            if ( args.Length == 2 )
+            {
+                return Populate( args );
+            }
+
             ABSObject o = args[0].ResolveReference();
 
             JToken jsonO = ( JToken )JsonConvert.DeserializeObject( o.ConvertString() );
@@ -28,28 +31,18 @@ namespace BadScript.Json
 
             return ret;
         }
-        private static ABSObject Populate( ABSObject[] args )
-        {
-            ABSObject o = args[0].ResolveReference();
-            ABSObject b = args[1].ResolveReference();
-
-            JToken jsonO = ( JToken )JsonConvert.DeserializeObject( o.ConvertString() );
-
-            ABSObject ret = Convert( jsonO, b );
-
-            return ret;
-        }
 
         #endregion
 
         #region Private
 
-        private static ABSObject Convert( JToken jsonT, ABSObject baseObj =null )
+        private static ABSObject Convert( JToken jsonT, ABSObject baseObj = null )
         {
             if ( jsonT is JArray a )
             {
                 BSArray arr = baseObj as BSArray;
-                return Convert( a , arr);
+
+                return Convert( a, arr );
             }
 
             if ( jsonT is JObject o )
@@ -58,8 +51,6 @@ namespace BadScript.Json
 
                 return Convert( o, table );
             }
-
-            
 
             if ( jsonT.Type == JTokenType.Boolean )
             {
@@ -94,8 +85,11 @@ namespace BadScript.Json
             foreach ( KeyValuePair < string, JToken > kvp in jsonO )
             {
                 ABSObject key = new BSObject( kvp.Key );
-                if(!t.HasElement(key))
-                    t.InsertElement(key , Convert( kvp.Value ) );
+
+                if ( !t.HasElement( key ) )
+                {
+                    t.InsertElement( key, Convert( kvp.Value ) );
+                }
                 else
                 {
                     ABSObject o = t.GetRawElement( key );
@@ -131,6 +125,18 @@ namespace BadScript.Json
                 default:
                     throw new JsonConverterException( $"Expected Compatible Json Type. Got {token.Type}" );
             }
+        }
+
+        private static ABSObject Populate( ABSObject[] args )
+        {
+            ABSObject o = args[0].ResolveReference();
+            ABSObject b = args[1].ResolveReference();
+
+            JToken jsonO = ( JToken )JsonConvert.DeserializeObject( o.ConvertString() );
+
+            ABSObject ret = Convert( jsonO, b );
+
+            return ret;
         }
 
         #endregion
