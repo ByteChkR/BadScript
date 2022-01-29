@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using BadScript.Exceptions;
 using BadScript.Parser.Expressions;
 using BadScript.Types;
 using BadScript.Types.Implementations;
@@ -18,6 +19,7 @@ namespace BadScript.Json
 
         public static ABSObject Convert( ABSObject[] args )
         {
+            if(args.Length==2)return Populate(args);
             ABSObject o = args[0].ResolveReference();
 
             JToken jsonO = ( JToken )JsonConvert.DeserializeObject( o.ConvertString() );
@@ -26,26 +28,42 @@ namespace BadScript.Json
 
             return ret;
         }
+        private static ABSObject Populate( ABSObject[] args )
+        {
+            ABSObject o = args[0].ResolveReference();
+            ABSObject b = args[1].ResolveReference();
+
+            JToken jsonO = ( JToken )JsonConvert.DeserializeObject( o.ConvertString() );
+
+            ABSObject ret = Convert( jsonO, b );
+
+            return ret;
+        }
 
         #endregion
 
         #region Private
 
-        private static ABSObject Convert( JToken jsonT )
+        private static ABSObject Convert( JToken jsonT, ABSObject baseObj =null )
         {
             if ( jsonT is JArray a )
             {
-                return Convert( a );
+                BSArray arr = baseObj as BSArray;
+                return Convert( a , arr);
             }
 
             if ( jsonT is JObject o )
             {
-                return Convert( o );
+                BSTable table = baseObj as BSTable;
+
+                return Convert( o, table );
             }
+
+            
 
             if ( jsonT.Type == JTokenType.Boolean )
             {
-                return new BSObject( jsonT.Value < bool >() );
+                return jsonT.Value < bool >() ? BSObject.True : BSObject.False;
             }
 
             if ( jsonT.Type == JTokenType.Float || jsonT.Type == JTokenType.Integer )
@@ -56,9 +74,9 @@ namespace BadScript.Json
             return ConvertValue( jsonT );
         }
 
-        private static ABSArray Convert( JArray jsonA )
+        private static ABSArray Convert( JArray jsonA, BSArray a = null )
         {
-            BSArray a = new BSArray();
+            a = a ?? new BSArray();
 
             for ( int i = 0; i < jsonA.Count; i++ )
             {
@@ -69,13 +87,20 @@ namespace BadScript.Json
             return a;
         }
 
-        private static ABSObject Convert( JObject jsonO )
+        private static ABSObject Convert( JObject jsonO, BSTable t = null )
         {
-            BSTable t = new BSTable( SourcePosition.Unknown );
+            t = t ?? new BSTable( SourcePosition.Unknown );
 
             foreach ( KeyValuePair < string, JToken > kvp in jsonO )
             {
-                t.InsertElement( new BSObject( kvp.Key ), Convert( kvp.Value ) );
+                ABSObject key = new BSObject( kvp.Key );
+                if(!t.HasElement(key))
+                    t.InsertElement(key , Convert( kvp.Value ) );
+                else
+                {
+                    ABSObject o = t.GetRawElement( key );
+                    t.InsertElement( key, Convert( kvp.Value, o ) );
+                }
             }
 
             return t;
