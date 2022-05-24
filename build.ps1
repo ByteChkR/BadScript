@@ -4,7 +4,7 @@ mkdir "./build"
 
 echo "Building Console"
 dotnet publish -c Release "./src/BadScript.Console"
-Copy-Item -Path "./src/BadScript.Console/bin/Release/net5.0/publish/*" -Destination "./build" -Recurse
+Copy-Item -Path "./src/BadScript.Console/bin/Release/net6.0/publish/*" -Destination "./build" -Recurse
 
 echo "Creating Plugin Folders"
 mkdir "./build/data/plugins"
@@ -22,11 +22,11 @@ dotnet publish -c Release "./src/BadScript.Http"
 cp "src/BadScript.Http/bin/Release/netstandard2.0/publish/BadScript.Http.dll" "./build/data/plugins/Http/"
 
 dotnet publish -c Release "./src/BadScript.HttpServer"
-cp "src/BadScript.HttpServer/bin/Release/net5.0/publish/BadScript.HttpServer.dll" "./build/data/plugins/Http/"
-cp "src/BadScript.HttpServer/bin/Release/net5.0/publish/Ceen.Httpd.dll" "./build/data/plugins/Http/"
-cp "src/BadScript.HttpServer/bin/Release/net5.0/publish/Ceen.Common.dll" "./build/data/plugins/Http/"
-cp "src/BadScript.HttpServer/bin/Release/net5.0/publish/OpenSSL.PrivateKeyDecoder.dll" "./build/data/plugins/Http/"
-cp "src/BadScript.HttpServer/bin/Release/net5.0/publish/OpenSSL.X509Certificate2.Provider.dll" "./build/data/plugins/Http/"
+cp "src/BadScript.HttpServer/bin/Release/net6.0/publish/BadScript.HttpServer.dll" "./build/data/plugins/Http/"
+cp "src/BadScript.HttpServer/bin/Release/net6.0/publish/Ceen.Httpd.dll" "./build/data/plugins/Http/"
+cp "src/BadScript.HttpServer/bin/Release/net6.0/publish/Ceen.Common.dll" "./build/data/plugins/Http/"
+cp "src/BadScript.HttpServer/bin/Release/net6.0/publish/OpenSSL.PrivateKeyDecoder.dll" "./build/data/plugins/Http/"
+cp "src/BadScript.HttpServer/bin/Release/net6.0/publish/OpenSSL.X509Certificate2.Provider.dll" "./build/data/plugins/Http/"
 
 dotnet publish -c Release "./src/BadScript.Imaging"
 cp "src/BadScript.Imaging/bin/Release/netstandard2.0/publish/BadScript.Imaging.dll" "./build/data/plugins/Serialization/Drawing/"

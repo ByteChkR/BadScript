@@ -1,4 +1,4 @@
-$bs = "$pwd/../src/BadScript.Console/bin/Release/net5.0/"
+$bs = "$pwd/../build/"
 $bsFile = $bs + 'bs.exe'
 
 if (!(Test-Path $bsFile)) {
