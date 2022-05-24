@@ -44,6 +44,14 @@ namespace BadScript.Parser.Expressions.Implementations.Block.ForEach
 
                 Enumerate( scope, foreachScope, mnext, gcurr );
             }
+            else if (eObj.HasProperty("GetEnumerator"))
+            {
+                ABSObject enumerator = eObj.GetProperty("GetEnumerator").Invoke(Array.Empty<ABSObject>());
+                ABSObject mnext = enumerator.GetProperty( "MoveNext" );
+                ABSObject gcurr = enumerator.GetProperty( "GetCurrent" );
+
+                Enumerate( scope, foreachScope, mnext, gcurr );
+            }
             else if ( eObj is IEnumerable < IForEachIteration > forEach )
             {
                 Enumerate( scope, foreachScope, forEach );
