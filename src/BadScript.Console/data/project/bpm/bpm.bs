@@ -1,0 +1,39 @@
+Environment.LoadInterface("Path")
+Environment.LoadInterface("String")
+Environment.LoadInterface("FileSystem")
+
+repoPath = "bpm_modules"
+
+FileSystem.CreateDir(repoPath)
+
+function Resolve()
+{
+	moduleName = String.Remove(args[1], 0, String.Length("bpm://"))
+	modulePath = Path.Combine(repoPath, moduleName, moduleName + ".bs")
+
+	Console.WriteLine(modulePath)
+
+	if(!FileSystem.Exists(modulePath))
+	{
+		Environment.Error($"Can not find module '{args[1]}'")
+	}
+
+}
+
+function Fetch()
+{
+	//Read build-settings.json
+	//	Find all References
+	//Connect to Module Mirror
+	//	Download all Required References
+}
+
+
+if(args[0] == "resolve")
+{
+	Resolve()
+}
+else if(args[0] == "fetch")
+{
+	Fetch()	
+}

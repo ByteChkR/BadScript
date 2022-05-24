@@ -63,5 +63,7 @@
     ]
   },
   "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\"",
-  "ReferenceResolvers": {}
+  "ReferenceResolvers": {
+    "bpm://": "%BS_EXEC% run --nologo -f %BS_DIR%/data/project/bpm/bpm.bs -a resolve %Reference.Path%"
+  }
 }
