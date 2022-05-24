@@ -1,0 +1,10 @@
+Environment.LoadInterface("FileSystem")
+Environment.LoadInterface("Path")
+Environment.LoadInterface("Console")
+
+in = args[0]
+outDir = args[1]
+FileSystem.CreateDir(outDir)
+out = Path.Combine(outDir, Path.GetFileName(in))
+Console.WriteLine($"{in} => {out}")
+FileSystem.Copy(in, out)

@@ -1,0 +1,11 @@
+
+
+
+a = ["A", "B", "C"]
+e = Linq.FromArray(a)
+
+foreach elem in e
+{
+	Console.WriteLine(elem)
+}
+

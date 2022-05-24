@@ -1,0 +1,27 @@
+
+interfaces = {}
+
+function IsLoaded(!interfaceName) => return Collection.HasKey(interfaces, interfaceName)
+function HasInterface(!interfaceName) => return Environment.GetInterfaceNames().Contains(interfaceName)
+
+function Load(!interfaceName)
+{
+	if(HasInterface(interfaceName))
+	{
+		return interfaces[interfaceName]
+	}
+
+	interface = {}
+
+	interfaces[interfaceName] = Environment.LoadInterface(interfaceName, interface)
+
+	return interface
+}
+
+__G.Interface = {
+	IsLoaded = IsLoaded,
+	HasInterface = HasInterface,
+	Load = Load
+}
+
+Collection.Lock(Interface)

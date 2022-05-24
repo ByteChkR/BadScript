@@ -1,0 +1,75 @@
+{
+  "AppInfo": {
+    "Name": "Linq",
+    "Version": "2022.5.24.2"
+  },
+  "BuildTargets": {
+    "Targets": [
+      {
+        "Name": "build",
+        "OutputFormat": "text",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "PreprocessorDirectives": "",
+        "Include": [
+          "./src/*.bs"
+        ],
+        "SubTarget": "",
+        "TestOutput": true,
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": []
+      },
+      {
+        "Name": "build_minify",
+        "OutputFormat": "none",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%SubTarget.Output.OutputExtension%",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "build",
+        "TestOutput": true,
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": [
+          "%BS_EXEC% run --nologo -f ./tools/minify.bs -a %SubTarget.OutputFile% %Target.OutputFile%"
+        ]
+      },
+      {
+        "Name": "test",
+        "OutputFormat": "text",
+        "OutputFile": "./bin/%Target.Name%/%AppInfo.Name%%AppInfo.Version%.%Target.Output.OutputExtension%",
+        "PreprocessorDirectives": "",
+        "Include": [
+          "./tests/*.bs",
+          "./src/*.bs"
+        ],
+        "SubTarget": "",
+        "TestOutput": true,
+        "References": [],
+        "PreEvents": [],
+        "PostEvents": [
+          "%BS_EXEC% run --nologo -f %Target.OutputFile%"
+        ]
+      },
+      {
+        "Name": "publish",
+        "OutputFormat": "none",
+        "OutputFile": "%SubTarget.OutputFile%",
+        "PreprocessorDirectives": "",
+        "Include": [],
+        "SubTarget": "build_minify",
+        "TestOutput": true,
+        "References": [],
+        "PreEvents": [
+          "%BS_EXEC% run --nologo -f ./tools/increment_build.bs"
+        ],
+        "PostEvents": [
+          "%BS_EXEC% run --nologo -f ./tools/copy_output.bs -a %SubTarget.OutputFile% ./bin/%Target.Name%/"
+        ]
+      }
+    ]
+  },
+  "PreprocessorDirectives": "TARGET=\"%Target.Name%\" NAME=\"%AppInfo.Name%\" VERSION=\"%AppInfo.Version%\" FULLNAME=\"%AppInfo.Name%@%AppInfo.Version%\"",
+  "ReferenceResolvers": {
+    "bpm://": "%BS_EXEC% run --nologo -f %BS_DIR%/data/project/bpm/bpm.bs -a resolve %Reference.Path%"
+  }
+}

@@ -1,0 +1,302 @@
+
+
+class Enumerable
+{
+	
+}
+
+class RepeatEnumerator
+{
+	value = null
+	count = null
+	function RepeatEnumerator(v, ?c)
+	{
+		value = v
+		count = c
+	}
+
+	function GetCurrent() => return value
+
+	function MoveNext()
+	{
+		if(count != null)
+		{
+			count -= 1
+			return count != 0
+		}
+
+		return true
+	}
+}
+
+class RepeatEnumerable : Enumerable
+{
+
+	value = null
+	count = null
+	function RepeatEnumerable(v, ?c)
+	{
+		value = v
+		count = c
+	}
+	function GetEnumerator() => return new RepeatEnumerator(value, count)
+	function Select(!func) => return new SelectEnumerable(this, func)
+	function Where(!func) => return new WhereEnumerable(this, func)
+	function ToArray() => return Linq.ToArray(this)
+	function All(!cond) => return Linq.All(this, cond)
+	function Any(?cond) => return Linq.Any(this, cond)
+	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
+	function Concat(!other) => return Linq.Concat(this, other),
+	function ForEach(!func) => Linq.ForEach(this, func)
+}
+
+class WhereEnumerator
+{
+	enumerator = null
+	condition = null
+	function WhereEnumerator(!enum, !cond)
+	{
+		enumerator = enum
+		condition = cond
+	}
+
+	function MoveNext()
+	{
+		r = enumerator.MoveNext()
+		if(r == false)
+		{
+			return false
+		}
+		while(condition(GetCurrent()) != true)
+		{
+			r = enumerator.MoveNext()
+			if(r == false)
+			{
+				return false
+			}
+		}
+
+		return r
+	}
+
+	function GetCurrent()
+	{
+		return enumerator.GetCurrent()
+	}
+
+}
+
+class WhereEnumerable : Enumerable
+{
+	enumerable = null
+	condition = null
+	function WhereEnumerable(!enum, !cond)
+	{
+		enumerable = enum
+		condition = cond
+	}
+	function GetEnumerator() => return new WhereEnumerator(enumerable.GetEnumerator(), condition)
+	function Select(!func) => return new SelectEnumerable(this, func)
+	function Where(!func) => return new WhereEnumerable(this, func)
+	function ToArray() => return Linq.ToArray(this)
+	function All(!cond) => return Linq.All(this, cond)
+	function Any(?cond) => return Linq.Any(this, cond)
+	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
+	function Concat(!other) => return Linq.Concat(this, other),
+	function ForEach(!func) => Linq.ForEach(this, func)
+}
+
+
+class SelectEnumerator
+{
+	enumerator = null
+	condition = null
+	function SelectEnumerator(!enum, !cond)
+	{
+		enumerator = enum
+		condition = cond
+	}
+
+	function MoveNext()
+	{
+		return enumerator.MoveNext()
+	}
+
+	function GetCurrent()
+	{
+		return condition(enumerator.GetCurrent())
+	}
+}
+
+class SelectEnumerable : Enumerable
+{
+	enumerable = null
+	condition = null
+	function SelectEnumerable(!enum, !cond)
+	{
+		enumerable = enum
+		condition = cond
+	}
+
+	function GetEnumerator() => return new SelectEnumerator(enumerable.GetEnumerator(), condition)
+	function Select(!func) => return new SelectEnumerable(this, func)
+	function Where(!func) => return new WhereEnumerable(this, func)
+	function ToArray() => return Linq.ToArray(this)
+	function All(!cond) => return Linq.All(this, cond)
+	function Any(?cond) => return Linq.Any(this, cond)
+	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
+	function Concat(!other) => return Linq.Concat(this, other),
+	function ForEach(!func) => Linq.ForEach(this, func)
+}
+
+class ArrayEnumerator
+{
+	array = null
+	current = -1
+	function ArrayEnumerator(!arr)
+	{
+		array = arr
+	}
+
+	function MoveNext()
+	{
+		current += 1
+		return current < array.Size()
+	}
+
+	function GetCurrent() => return array[current]
+}
+
+class ArrayEnumerable : Enumerable
+{
+	array = null
+	function ArrayEnumerable(!arr)
+	{
+		array = arr
+	}
+
+	function GetEnumerator() => return new ArrayEnumerator(array)
+	function Select(!func) => return new SelectEnumerable(this, func)
+	function Where(!func) => return new WhereEnumerable(this, func)
+	function ToArray() => return Linq.ToArray(this)
+	function All(!cond) => return Linq.All(this, cond)
+	function Any(?cond) => return Linq.Any(this, cond)
+	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
+	function Concat(!other) => return Linq.Concat(this, other),
+	function ForEach(!func) => Linq.ForEach(this, func)
+}
+
+class ConcatEnumerator
+{
+	array2 = null
+	current = null
+	function ConcatEnumerator(!arr1, !arr2)
+	{
+		current = arr1
+		array2 = arr2
+	}
+
+	function MoveNext()
+	{
+		r = current.MoveNext()
+		if(r == false)
+		{
+			if(array2 == null)
+			{
+				return false
+			}
+			current = array2
+			array2 = null
+			r = current.MoveNext()
+		}
+
+		return r
+	}
+
+	function GetCurrent() => return current.GetCurrent()
+}
+
+class ConcatEnumerable : Enumerable
+{
+	array1 = null
+	array2 = null
+	function ConcatEnumerable(!arr1, !arr2)
+	{
+		array1 = arr1
+		array2 = arr2
+	}
+
+	function GetEnumerable() => return new ConcatEnumerator(array1.GetEnumerator(), array2.GetEnumerator())
+
+	function Select(!func) => return new SelectEnumerable(this, func)
+	function Where(!func) => return new WhereEnumerable(this, func)
+	function ToArray() => return Linq.ToArray(this)
+	function All(!cond) => return Linq.All(this, cond)
+	function Any(?cond) => return Linq.Any(this, cond)
+	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
+	function Concat(!other) => return Linq.Concat(this, other),
+	function ForEach(!func) => Linq.ForEach(this, func)
+}
+
+
+__G.Linq = {
+	Repeat = function(value, ?count) => return new RepeatEnumerable(value, count),
+	Where = function(!enum, !cond) => return new WhereEnumerable(enum, cond),
+	Select = function(!enum, !cond) => return new SelectEnumerable(enum, cond),
+	Concat = function(!enum1, !enum2) => return new ConcatEnumerable(enum1, enum2),
+	FromArray = function(!array) => return new ArrayEnumerable(array),
+	ToArray = function(!enum)
+	{
+		a = []
+		foreach e in enum.GetEnumerator()
+		{
+			a.Add(e)
+		}
+		return a
+	},
+	Any = function(!enum, ?cond)
+	{
+		if(cond == null)
+		{
+			cond = function(e) => return true
+		}
+		foreach e in enum.GetEnumerator()
+		{
+			if(cond(e))
+			{
+				return true
+			}
+		}
+		return false
+	},
+	All = function(!enum, !cond)
+	{
+		foreach e in enum.GetEnumerator()
+		{
+			if(cond(e) != true)
+			{
+				return false
+			}
+		}
+		return true
+	},
+	ToTable = function(!enum, !keySelector, !valueSelector)
+	{
+		t = {}
+		foreach e in enum.GetEnumerator()
+		{
+			t[keySelector(e)] = valueSelector(e)
+		}
+		return t
+	},
+	ForEach = function(!enum, !func)
+	{
+		foreach e in enum.GetEnumerator()
+		{
+			func(e)
+		}
+	}
+}
+
+
+Collection.Lock(Linq)
