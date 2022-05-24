@@ -115,3 +115,75 @@ foreach (key, value) in T
 	
 }
 ```
+
+### Special Cases
+The user may create custom objects that can be enumerated on.
+
+`range` operator in a for loop
+```js
+foreach i in 1..4 //range 1(inclusive) to 4(inclusive)
+{
+
+}
+```
+
+`GetCurrent/MoveNext` Enumerator Methods can be used to allow custom objects to be enumerated on.
+Those objects are one time use only unless their inner state is reset.
+```js
+
+class RangeEnumerator
+{
+    _from = 0
+    _to = 0
+    _current = 0
+    function RangeEnumerator(!from, !to)
+    {
+        _from = from
+        _to = to
+        _current = _from - 1
+    }
+
+    function MoveNext()
+    {
+        _current += 1 //Increase current
+        if(_current > _to)
+        {
+            return false
+        }
+        return true
+    }
+    
+    function GetCurrent() => return _current;
+}
+
+foreach i in new RangeEnumerator(1, 4) //Create new range object
+{
+
+}
+
+```
+
+`GetEnumerator` Method can be used to create reusable enumerable objects by saving the initial state and constructing the enumerator in `GetEnumerator()`
+```js
+
+
+class Range
+{
+    _from = 0
+    _to = 0
+    function Range(!from, !to)
+    {
+        _from = from
+        _to = to
+    }
+
+    function GetEnumerator() => return new RangeEnumerator(_from, _to);
+}
+
+r = new Range(1, 4)
+foreach i in r //Calls GetEnumerator() implicitly
+{
+
+}
+
+```
