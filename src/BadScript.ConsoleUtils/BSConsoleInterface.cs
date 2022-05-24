@@ -37,9 +37,17 @@ namespace BadScript.ConsoleUtils
         {
             if ( addDefaultHandlers )
             {
-                WriteLine = Console.WriteLine;
+                WriteLine = obj =>
+                {
+                    if (obj.TryConvertString(out string s)) Console.WriteLine(s);
+                    else Console.WriteLine(obj);
+                };
                 ReadLine = () => new BSObject( Console.ReadLine() );
-                Write = Console.Write;
+                Write = obj =>
+                {
+                    if (obj.TryConvertString(out string s)) Console.Write(s);
+                    else Console.Write(obj);
+                };
                 Clear = Console.Clear;
             }
         }
@@ -53,7 +61,7 @@ namespace BadScript.ConsoleUtils
                                               ( args ) =>
                                               {
                                                   ABSObject arg = args[0].ResolveReference();
-
+                                                  
                                                   WriteLine?.Invoke( arg );
 
                                                   return BSObject.Null;

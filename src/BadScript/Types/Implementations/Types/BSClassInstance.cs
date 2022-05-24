@@ -185,6 +185,12 @@ namespace BadScript.Types.Implementations.Types
 
         public override bool TryConvertString( out string v )
         {
+            if (HasProperty("ToString"))
+            {
+                v = GetProperty("ToString").Invoke(Array.Empty<ABSObject>()).ConvertString();
+                return true;
+            }
+            
             v = null;
 
             return false;
