@@ -1,8 +1,12 @@
 Environment.LoadInterface("Path")
 Environment.LoadInterface("String")
 Environment.LoadInterface("FileSystem")
+Environment.LoadInterface("Http")
+Environment.LoadInterface("Json")
+
 
 repoPath = "bpm_modules"
+repoOrigin = "https://byt3.dev/BadScript/bpm/"
 
 FileSystem.CreateDir(repoPath)
 
@@ -22,8 +26,21 @@ function Resolve()
 
 function Fetch()
 {
-	//Read build-settings.json
-	//	Find all References
+	indexUrl = Path.Combine(repoOrigin, "index.json")
+	Console.WriteLine("Downloading Index")
+	index = Json.FromJson(Http.DownloadString(indexUrl))
+	foreach (name, url) in index
+	{
+		localDir = Path.Combine(repoPath, name)
+		FileSystem.CreateDir(localDir)
+		local = Path.Combine(localDir, name+".bs")
+		if(FileSystem.Exists(local))
+		{
+			FileSystem.Delete(local)
+		}
+		Console.WriteLine($"Downloading '{name}': '{url}'")
+		Http.DownloadFile(url, local)
+	}
 	//Connect to Module Mirror
 	//	Download all Required References
 }

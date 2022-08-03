@@ -46,7 +46,7 @@ class RepeatEnumerable : Enumerable
 	function All(!cond) => return Linq.All(this, cond)
 	function Any(?cond) => return Linq.Any(this, cond)
 	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
-	function Concat(!other) => return Linq.Concat(this, other),
+	function Concat(!other) => return Linq.Concat(this, other)
 	function ForEach(!func) => Linq.ForEach(this, func)
 }
 
@@ -102,7 +102,7 @@ class WhereEnumerable : Enumerable
 	function All(!cond) => return Linq.All(this, cond)
 	function Any(?cond) => return Linq.Any(this, cond)
 	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
-	function Concat(!other) => return Linq.Concat(this, other),
+	function Concat(!other) => return Linq.Concat(this, other)
 	function ForEach(!func) => Linq.ForEach(this, func)
 }
 
@@ -145,7 +145,7 @@ class SelectEnumerable : Enumerable
 	function All(!cond) => return Linq.All(this, cond)
 	function Any(?cond) => return Linq.Any(this, cond)
 	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
-	function Concat(!other) => return Linq.Concat(this, other),
+	function Concat(!other) => return Linq.Concat(this, other)
 	function ForEach(!func) => Linq.ForEach(this, func)
 }
 
@@ -182,7 +182,7 @@ class ArrayEnumerable : Enumerable
 	function All(!cond) => return Linq.All(this, cond)
 	function Any(?cond) => return Linq.Any(this, cond)
 	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
-	function Concat(!other) => return Linq.Concat(this, other),
+	function Concat(!other) => return Linq.Concat(this, other)
 	function ForEach(!func) => Linq.ForEach(this, func)
 }
 
@@ -234,7 +234,7 @@ class ConcatEnumerable : Enumerable
 	function All(!cond) => return Linq.All(this, cond)
 	function Any(?cond) => return Linq.Any(this, cond)
 	function ToTable(!keySelector, !valueSelector) => return Linq.ToTable(this, keySelector, valueSelector)
-	function Concat(!other) => return Linq.Concat(this, other),
+	function Concat(!other) => return Linq.Concat(this, other)
 	function ForEach(!func) => Linq.ForEach(this, func)
 }
 
